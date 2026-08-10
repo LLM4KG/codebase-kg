@@ -1,0 +1,44 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { useKey } from '@/utils/hooks'\nimport {\n  permanentlyEmptyTrash,\n  pruneNotes,\n  updateActiveNote,\n  searchNotes,\n",
+      "content": "import { useKey } from '@/utils/hooks'\nimport {\n  permanentlyEmptyTrash,\n  restoreAllTrash,\n  pruneNotes,\n  updateActiveNote,\n  searchNotes,\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>\n    dispatch(updateSelectedNotes({ noteId, multiSelect }))\n  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())\n  const _pruneNotes = () => dispatch(pruneNotes())\n  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>\n    dispatch(updateActiveNote({ noteId, multiSelect }))\n",
+      "content": "  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>\n    dispatch(updateSelectedNotes({ noteId, multiSelect }))\n  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())\n  const _restoreAllTrash = () => dispatch(restoreAllTrash())\n  const _pruneNotes = () => dispatch(pruneNotes())\n  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>\n    dispatch(updateActiveNote({ noteId, multiSelect }))\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "    <aside className=\"note-sidebar\">\n      <div className=\"note-sidebar-header\">\n        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />\n        {showEmptyTrash && (\n          <NoteListButton\n            dataTestID={TestID.EMPTY_TRASH_BUTTON}\n",
+      "content": "    <aside className=\"note-sidebar\">\n      <div className=\"note-sidebar-header\">\n        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />\n        {showEmptyTrash && (\n          <NoteListButton\n            dataTestID={TestID.RESTORE_ALL_TRASH_BUTTON}\n            label=\"Restore All\"\n            handler={() => _restoreAllTrash()}\n          >\n            Restore All\n          </NoteListButton>\n        )}\n        {showEmptyTrash && (\n          <NoteListButton\n            dataTestID={TestID.EMPTY_TRASH_BUTTON}\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "      state.notes = state.notes.filter((note) => !note.trash)\n    },\n\n    pruneNotes: (state) => {\n      state.notes = state.notes.filter(\n        (note) => note.scratchpad || note.text !== '' || state.selectedNotesIds.includes(note.id)\n",
+      "content": "      state.notes = state.notes.filter((note) => !note.trash)\n    },\n\n    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) =>\n        note.trash ? { ...note, trash: false } : note\n      )\n    },\n\n    pruneNotes: (state) => {\n      state.notes = state.notes.filter(\n        (note) => note.scratchpad || note.text !== '' || state.selectedNotesIds.includes(note.id)\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "  unassignTrashFromNotes,\n  updateSelectedNotes,\n  permanentlyEmptyTrash,\n  pruneNotes,\n  searchNotes,\n  loadNotes,\n",
+      "content": "  unassignTrashFromNotes,\n  updateSelectedNotes,\n  permanentlyEmptyTrash,\n  restoreAllTrash,\n  pruneNotes,\n  searchNotes,\n  loadNotes,\n"
+    },
+    {
+      "path": "src/resources/TestID.ts",
+      "op": "replace",
+      "search": "  CATEGORY_OPTION_DELETE_PERMANENTLY = 'category-option-delete-permanently',\n  EDIT_CATEGORY = 'edit-category',\n  EMPTY_TRASH_BUTTON = 'empty-trash-button',\n  FOLDER_NOTES = 'notes',\n  FOLDER_FAVORITES = 'favorites',\n  FOLDER_TRASH = 'trash',\n",
+      "content": "  CATEGORY_OPTION_DELETE_PERMANENTLY = 'category-option-delete-permanently',\n  EDIT_CATEGORY = 'edit-category',\n  EMPTY_TRASH_BUTTON = 'empty-trash-button',\n  RESTORE_ALL_TRASH_BUTTON = 'restore-all-trash-button',\n  FOLDER_NOTES = 'notes',\n  FOLDER_FAVORITES = 'favorites',\n  FOLDER_TRASH = 'trash',\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

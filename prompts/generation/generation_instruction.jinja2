@@ -1,0 +1,12 @@
+## Instructions
+
+Produce your solution as a single unified diff (git patch format) against the
+project files. Requirements:
+
+- Output ONLY the diff, inside one ```diff fenced code block. No prose before or after.
+- Use standard `diff --git a/<path> b/<path>` headers with correct `---`/`+++`
+  lines and `@@` hunks, so the patch applies cleanly with `git apply`.
+- Paths are repo-relative (e.g. `src/components/Cart/Cart.tsx`).
+- Include full, correct context lines in each hunk.
+- If you create a new file, use `/dev/null` as the original path.
+- Keep the change minimal and focused on the task.

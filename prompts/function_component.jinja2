@@ -1,0 +1,259 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract React function components from a given `.js` or `.jsx` file and provide detailed metadata for each component.
+
+Only consider React function components that appear directly in the current input file.
+
+Do not include any function components that are assumed or inferred unless they are explicitly present in the provided content.
+
+A function counts as a React component if:
+- Its name is PascalCase AND it returns JSX (or React.createElement), OR
+- It is used as `<Identifier .../>` within the same file and is defined as a function or arrow function.
+
+Exclude helper functions and HOC factories unless they return JSX directly.
+
+For each function component, return a JSON object with the following fields:
+
+- "name": The component name (string).
+- "syntax": "function" or "arrow" (indicating declaration type).
+- "usesHooks": true if the component calls any React hook (built-in or custom), false otherwise.
+- "hookDetails": An array of objects describing each hook used, with:
+    - "name": The hook name (e.g., "useState", "useAuth").
+    - "category": "library" if the hook is imported from an external package (node_modules), or "custom" if imported from a project-local file (relative path) or defined in the same file.
+    - "source": The import source string (e.g., "react", "react-router-dom", "./hooks/useAuth"). Use "local" if the hook is defined in the same file.
+- "returnsJSX": true if the function component returns JSX, false otherwise.
+- "exportType": "default", "named", or "none" (based on how it is exported).
+
+Return a JSON object containing a list of all components found in the file.
+
+---
+
+### Example 1
+Input:
+import React from 'react';
+
+function Header() {
+  return <h1>Welcome</h1>;
+}
+
+const Footer = () => {
+  return <footer>All rights reserved</footer>;
+};
+
+export default Footer;
+
+Output:
+{
+  "components": [
+    {
+      "name": "Header",
+      "syntax": "function",
+      "usesHooks": false,
+      "hookDetails": [],
+      "returnsJSX": true,
+      "exportType": "none"
+    },
+    {
+      "name": "Footer",
+      "syntax": "arrow",
+      "usesHooks": false,
+      "hookDetails": [],
+      "returnsJSX": true,
+      "exportType": "default"
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  return <div>{count}</div>;
+}
+
+export { Counter };
+
+Output:
+{
+  "components": [
+    {
+      "name": "Counter",
+      "syntax": "function",
+      "usesHooks": true,
+      "hookDetails": [
+        { "name": "useState", "category": "library", "source": "react" }
+      ],
+      "returnsJSX": true,
+      "exportType": "named"
+    }
+  ]
+}
+
+---
+
+### Example 3
+Input:
+import React from 'react';
+import useAuth from './hooks/useAuth';
+
+const AuthStatus = () => {
+  const { user } = useAuth();
+  return <span>{user.name}</span>;
+};
+
+export default AuthStatus;
+
+Output:
+{
+  "components": [
+    {
+      "name": "AuthStatus",
+      "syntax": "arrow",
+      "usesHooks": true,
+      "hookDetails": [
+        { "name": "useAuth", "category": "custom", "source": "./hooks/useAuth" }
+      ],
+      "returnsJSX": true,
+      "exportType": "default"
+    }
+  ]
+}
+
+---
+
+### Example 4
+Input:
+import React, { useEffect } from 'react';
+import { useNetworkState } from 'react-use';
+
+function StatusBar() {
+  const network = useNetworkState();
+
+  useEffect(() => {
+    console.log("Online:", network.online);
+  }, []);
+
+  return <div>{network.online ? "Online" : "Offline"}</div>;
+}
+
+Output:
+{
+  "components": [
+    {
+      "name": "StatusBar",
+      "syntax": "function",
+      "usesHooks": true,
+      "hookDetails": [
+        { "name": "useEffect", "category": "library", "source": "react" },
+        { "name": "useNetworkState", "category": "library", "source": "react-use" }
+      ],
+      "returnsJSX": true,
+      "exportType": "none"
+    }
+  ]
+}
+
+---
+
+### Example 5
+Input:
+import React from 'react';
+
+function Card() {
+  return <div className="card">Card</div>;
+}
+
+const Button = () => {
+  return <button>Click</button>;
+};
+
+export { Card, Button };
+
+Output:
+{
+  "components": [
+    {
+      "name": "Card",
+      "syntax": "function",
+      "usesHooks": false,
+      "hookDetails": [],
+      "returnsJSX": true,
+      "exportType": "named"
+    },
+    {
+      "name": "Button",
+      "syntax": "arrow",
+      "usesHooks": false,
+      "hookDetails": [],
+      "returnsJSX": true,
+      "exportType": "named"
+    }
+  ]
+}
+
+---
+
+### Example 6
+Input:
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { CartContext } from '../context/CartContext';
+import useLocalStorage from './hooks/useLocalStorage';
+
+function ProductDetail() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart } = useContext(CartContext);
+  const [product, setProduct] = useState(null);
+  const [savedItems, setSavedItems] = useLocalStorage('saved', []);
+
+  useEffect(() => {
+    fetch(`/api/products/${id}`).then(r => r.json()).then(setProduct);
+  }, [id]);
+
+  return (
+    <div>
+      <h1>{product?.name}</h1>
+      <button onClick={() => addToCart(product)}>Add to Cart</button>
+      <button onClick={() => navigate(-1)}>Back</button>
+    </div>
+  );
+}
+
+export default ProductDetail;
+
+Output:
+{
+  "components": [
+    {
+      "name": "ProductDetail",
+      "syntax": "function",
+      "usesHooks": true,
+      "hookDetails": [
+        { "name": "useParams", "category": "library", "source": "react-router-dom" },
+        { "name": "useNavigate", "category": "library", "source": "react-router-dom" },
+        { "name": "useContext", "category": "library", "source": "react" },
+        { "name": "useState", "category": "library", "source": "react" },
+        { "name": "useLocalStorage", "category": "custom", "source": "./hooks/useLocalStorage" },
+        { "name": "useEffect", "category": "library", "source": "react" }
+      ],
+      "returnsJSX": true,
+      "exportType": "default"
+    }
+  ]
+}
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Only extract function components (PascalCase + returns JSX). Exclude plain helper functions.
+- For each hook, determine its category ("library" or "custom") and its source from the import statements.
+- If a hook is defined in the same file, set source to "local".
+- List hooks in the order they appear in the component body.
+
+Output:

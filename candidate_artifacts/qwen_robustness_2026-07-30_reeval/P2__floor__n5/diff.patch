@@ -1,0 +1,38 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "export const noteSlice = createSlice({\n  name: '@@app/note',\n  initialState,\n  reducers: {\n    addNote(state, action: PayloadAction<Note>) {\n      state.notes.push(action.payload)\n    },\n    updateNote(state, action: PayloadAction<Note>) {\n      const index = state.notes.findIndex(note => note.id === action.payload.id)\n      if (index !== -1) {\n        state.notes[index] = action.payload\n      }\n    },\n    deleteNote(state, action: PayloadAction<string>) {\n      const index = state.notes.findIndex(note => note.id === action.payload)\n      if (index !== -1) {\n        state.notes.splice(index, 1)\n      }\n    },\n    trashNote(state, action: PayloadAction<string>) {\n      const note = state.notes.find(note => note.id === action.payload)\n      if (note) {\n        note.trash = true\n      }\n    },\n    restoreNote(state, action: PayloadAction<string>) {\n      const note = state.notes.find(note => note.id === action.payload)\n      if (note) {\n        note.trash = false\n      }\n    },\n    emptyTrash(state) {\n      state.notes = state.notes.filter(note => !note.trash)\n    },\n",
+      "content": "export const noteSlice = createSlice({\n  name: '@@app/note',\n  initialState,\n  reducers: {\n    addNote(state, action: PayloadAction<Note>) {\n      state.notes.push(action.payload)\n    },\n    updateNote(state, action: PayloadAction<Note>) {\n      const index = state.notes.findIndex(note => note.id === action.payload.id)\n      if (index !== -1) {\n        state.notes[index] = action.payload\n      }\n    },\n    deleteNote(state, action: PayloadAction<string>) {\n      const index = state.notes.findIndex(note => note.id === action.payload)\n      if (index !== -1) {\n        state.notes.splice(index, 1)\n      }\n    },\n    trashNote(state, action: PayloadAction<string>) {\n      const note = state.notes.find(note => note.id === action.payload)\n      if (note) {\n        note.trash = true\n      }\n    },\n    restoreNote(state, action: PayloadAction<string>) {\n      const note = state.notes.find(note => note.id === action.payload)\n      if (note) {\n        note.trash = false\n      }\n    },\n    restoreAllTrash(state) {\n      state.notes\n        .filter(note => note.trash)\n        .forEach(note => {\n          note.trash = false\n        })\n    },\n    emptyTrash(state) {\n      state.notes = state.notes.filter(note => !note.trash)\n    },\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "  },\n  extraReducers: builder => {\n    builder.addCase(fetchNotes.fulfilled, (state, { payload }) => {\n      state.notes = payload\n    })\n  }\n})\n",
+      "content": "  },\n  extraReducers: builder => {\n    builder.addCase(fetchNotes.fulfilled, (state, { payload }) => {\n      state.notes = payload\n    })\n  }\n})\n\nexport const { addNote, updateNote, deleteNote, trashNote, restoreNote, restoreAllTrash, emptyTrash } = noteSlice.actions\n\nexport default noteSlice.reducer\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { deleteNote, trashNote, restoreNote, emptyTrash } from '../slices/note'\nimport { Note } from '../types'\nimport { getNotesFromFolder } from '../utils'\n",
+      "content": "import { deleteNote, trashNote, restoreNote, restoreAllTrash, emptyTrash } from '../slices/note'\nimport { Note } from '../types'\nimport { getNotesFromFolder } from '../utils'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const handleEmptyTrash = useCallback(() => {\n    dispatch(emptyTrash())\n  }, [dispatch])\n",
+      "content": "  const handleEmptyTrash = useCallback(() => {\n    dispatch(emptyTrash())\n  }, [dispatch])\n\n  const handleRestoreAll = useCallback(() => {\n    dispatch(restoreAllTrash())\n  }, [dispatch])\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          <div className=\"note-list__toolbar\">\n            <Button\n              variant=\"outlined\"\n              startIcon={<DeleteIcon />}\n              onClick={handleEmptyTrash}\n            >\n              Empty Trash\n            </Button>\n          </div>\n",
+      "content": "          <div className=\"note-list__toolbar\">\n            <Button\n              variant=\"outlined\"\n              startIcon={<RestoreFromTrashIcon />}\n              onClick={handleRestoreAll}\n              style={{ marginRight: '8px' }}\n            >\n              Restore All\n            </Button>\n            <Button\n              variant=\"outlined\"\n              startIcon={<DeleteIcon />}\n              onClick={handleEmptyTrash}\n            >\n              Empty Trash\n            </Button>\n          </div>\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

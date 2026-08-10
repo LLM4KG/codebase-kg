@@ -1,0 +1,14 @@
+{
+  "task_id": "P1",
+  "candidate_id": "P1__kg_augmented__n3",
+  "condition": "kg_augmented",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 310.2125810000871,
+  "timeout_used_ms": 9805,
+  "stage_detail": "error: corrupt patch at line 25\nstrict git apply failed; retrying with --recount -C0\n/harness/candidate.diff:30: trailing whitespace.\n  \nerror: src/hooks/useCartProducts.ts: No such file or directory",
+  "apply_mode": null
+}

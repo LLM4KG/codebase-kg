@@ -1,0 +1,31 @@
+--git a/src/hooks/useCartProducts.ts b/src/hooks/useCartProducts.ts
+--- a/src/hooks/useCartProducts.ts
++++ b/src/hooks/useCartProducts.ts
+@@ -1,6 +1,6 @@
+ import { useState } from 'react';
+ import { Product, CartProduct } from '../types';
+ 
+ const useCartProducts = () => {
+   const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
+ 
+@@ -20,13 +20,15 @@ const useCartProducts = () => {
+   };
+ 
+   const decreaseProductQuantity = (productId: string) => {
+     setCartProducts((prevCartProducts) =>
+-      prevCartProducts.map((cartProduct) =>
+-        cartProduct.id === productId
+-          ? { ...cartProduct, quantity: cartProduct.quantity - 1 }
+-          : cartProduct
+-      )
++      prevCartProducts
++        .map((cartProduct) =>
++          cartProduct.id === productId
++            ? { ...cartProduct, quantity: cartProduct.quantity - 1 }
++            : cartProduct
++        )
++        .filter((cartProduct) => cartProduct.quantity > 0)
+     );
+   };
+ 
+   return {

@@ -1,0 +1,113 @@
+I need to look at the NoteMenuBar component to understand the existing code structure before making changes.
+
+Based on the task description, I'll create the custom hook and update NoteMenuBar to use it.
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+
+    const timer = setTimeout(() => {
+      setCopiedText('')
+    }, timeout)
+
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(successMessage)
+    })
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copySuccess, setCopySuccess] = useState('')
+
+  useEffect(() => {
+    if (!copySuccess) return
+
+    const timer = setTimeout(() => {
+      setCopySuccess('')
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [copySuccess])
+=======
+  const { copiedText: copySuccess, handleCopy } = useCopyToClipboard('Copied!')
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { useCopyToClipboard } from 'client/utils/useCopyToClipboard'
+=======
+>>>>>>> REPLACE
+```
+
+Wait, I need to be more careful. Let me reconsider - I don't know the exact file contents. Let me produce the blocks based on what the task describes, being careful about the import addition.
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+
+    const timer = setTimeout(() => {
+      setCopiedText('')
+    }, timeout)
+
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(successMessage)
+    })
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copySuccess, setCopySuccess] = useState('')
+
+  useEffect(() => {
+    if (!copySuccess) return
+
+    const timer = setTimeout(() => {
+      setCopySuccess('')
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [copySuccess])
+=======
+  const { copiedText: copySuccess, handleCopy } = useCopyToClipboard('Copied!')
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useEffect, useState } from 'react'
+=======
+import React, { useState } from 'react'
+import { useCopyToClipboard } from 'client/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+```

@@ -1,0 +1,42 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "CartProducts",
+        "childComponent": "CartProduct",
+        "importSource": "./CartProduct",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "product",
+            "valueExpression": "p"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CartProducts",
+        "childComponent": "S.Container",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "CartProducts",
+        "childComponent": "S.CartProductsEmpty",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

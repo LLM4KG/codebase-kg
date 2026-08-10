@@ -1,0 +1,6 @@
+# Candidate timeouts (ms) — WI5 calibration: 3x the 95th-pctile
+# reference-patch runtime per task. Regenerate: `pipeline pilot calibrate`.
+[timeouts]
+"P1" = 9805
+"P2" = 154105
+"P3" = 174803

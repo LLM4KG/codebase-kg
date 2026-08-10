@@ -1,0 +1,15 @@
+{
+  "task_id": "P3",
+  "candidate_id": "P3__floor__n5",
+  "condition": "floor",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1398.7464199999522,
+  "timeout_used_ms": 158497,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/containers/NoteMenuBar.tsx\n--- SEARCH ---\n  const [copySuccess, setCopySuccess] = useState('')\n\n  useEffect(() => {\n    if (!copySuccess) return\n\n    const timer = setTimeout(() => {\n      setCopySuccess('')\n    }, 3000)\n\n    return () => clearTimeout(timer)\n  }, [copySuccess])",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

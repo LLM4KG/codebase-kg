@@ -1,0 +1,23 @@
+## Instructions
+
+Produce your solution as the complete new contents of every file you change.
+Requirements:
+
+- For each file, output its repo-relative path on its own line, then one fenced
+  code block holding the file's **entire** new contents:
+
+      src/components/Cart/Cart.tsx
+      ```tsx
+      <the complete file, from its first line to its last>
+      ```
+
+- No prose before, between, or after the blocks.
+- **Emit every line of the file, including the parts you did not change.** Never
+  abbreviate with `// ...`, `// rest of the file unchanged`, `// existing code`,
+  or any other placeholder. The block replaces the file wholesale, so anything
+  you leave out is deleted.
+- Only include files you actually change. Do not re-emit untouched files.
+- To create a new file, give its path and its complete contents the same way.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change itself minimal and focused on the task, even though the output
+  is the whole file.

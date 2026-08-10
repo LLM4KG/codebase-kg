@@ -1,0 +1,38 @@
+```text
+src/hooks/useCartProducts.ts
+<<<<<<< SEARCH
+  const decreaseProductQuantity = (productId: string, quantity: number) => {
+    setCartProducts(prevCartProducts => {
+      return prevCartProducts.map(cartProduct => {
+        if (cartProduct.product.id === productId) {
+          return {
+            ...cartProduct,
+            quantity: cartProduct.quantity - quantity
+          };
+        }
+        return cartProduct;
+      });
+    });
+  };
+=======
+  const decreaseProductQuantity = (productId: string, quantity: number) => {
+    setCartProducts(prevCartProducts => {
+      return prevCartProducts.reduce((acc, cartProduct) => {
+        if (cartProduct.product.id === productId) {
+          const newQuantity = cartProduct.quantity - quantity;
+          if (newQuantity > 0) {
+            acc.push({
+              ...cartProduct,
+              quantity: newQuantity
+            });
+          }
+          // If newQuantity is <= 0, we simply don't add it back to the cart
+        } else {
+          acc.push(cartProduct);
+        }
+        return acc;
+      }, [] as CartProduct[]);
+    });
+  };
+>>>>>>> REPLACE
+```

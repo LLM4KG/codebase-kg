@@ -1,0 +1,93 @@
+[llm]
+model = "anthropic/claude-sonnet-4-6"
+temperature = 0.0
+max_retries = 3
+concurrency = 1          # Max parallel LLM calls (asyncio Semaphore)
+# EXTRACTION ONLY (src/extraction/llm_extractor.py). Phase 2 has its own key below —
+# these are deliberately separate: 20 s applied to Phase 2 would turn a ~3-minute
+# pilot leg into ~15 minutes, and ~4,200 Phase 5 generations into ~23 h of sleep.
+call_delay = 20.0        # Seconds between LLM calls to stay under tokens/min limit
+
+# PHASE 2 ONLY (src/llm/logger.py) — retrieval + generation calls.
+#
+# 0.0 = unthrottled. As of 2026-07-30 this is a DERIVED value, not an unexamined
+# default: `scripts/rate_limit_probe.py` read the account's real ceilings from the
+# provider's own response headers.
+#
+#   Anthropic ceiling   10,000 req/min · 10,000,000 input tok/min · 2,000,000 output tok/min
+#   pilot peak demand        14 req/min ·     24,133 input tok/min (0.24% of the ceiling)
+#   unthrottled steady state ~13 req/min ·    ~46,000 input tok/min at concurrency 2
+#
+# Saturating 10M input tok/min at ~3,500 tokens per KG-augmented call would need
+# ~2,857 req/min — concurrency ~430 at the measured p50 latency of 9.1 s. We run at 2.
+# OpenRouter (the open-model legs) sends no rate-limit headers at all and its key
+# endpoint reports no cap on a paid key, so there is nothing to size against there.
+#
+# Re-derive rather than re-guess if the account tier changes:
+#     uv run python scripts/rate_limit_probe.py
+# Every Phase 2 call now logs a `rate_limit` block, so headroom is observable per run.
+# See docs/decision-log.md and docs/phase_2/phase-2-1a-reevaluation-plan.md (step 0).
+phase2_call_delay = 0.0  # Seconds between Phase 2 LLM calls
+
+[db]
+uri = "bolt://localhost:7687"
+user = ""
+password = ""
+
+[pipeline]
+cache_dir = ".cache/llm"
+checkpoint_db = ".cache/checkpoint.db"
+raw_output_dir = "graph_export"
+
+[extraction]
+repos_root = "~/Study/Implementation/sample-projects"
+
+[projects.takenote]
+repo_path = "medium/takenote"
+exclude_paths = ["src/server", "tests"]
+
+[projects.takenote.aliases]
+"@" = "src/client"
+"@resources" = "src/resources"
+
+[projects.react-shopping-cart]
+repo_path = "small/react-shopping-cart"
+# tsconfig.json sets "baseUrl": "src", so bare specifiers are project-local:
+#   import { useCart } from 'contexts/cart-context'  ->  src/contexts/cart-context
+# Without this the resolvers treated them as npm packages, which is what produced
+# orphan Library_Hook nodes and USES_COMPONENT = 0 for this project.
+base_url = "src"
+
+[projects.SnapShot]
+repo_path = "small/SnapShot"
+# Plain Create-React-App: no tsconfig/jsconfig, no baseUrl, no aliases, all
+# imports relative — so no resolver overrides. All 15 source files live under
+# src/; the repo's knowledge_graph/ directory holds only .json/.cypherl and is
+# already skipped by the extension filter, so no exclude_paths either.
+# Registered so the control project is invocable the same way as the other two.
+
+[harness]
+default_timeout_ms = 60000       # Work item 5 overwrites this after calibration
+memory_limit = "4g"
+cpu_limit = 2.0
+network_mode = "none"
+results_dir = "harness_results"
+work_dir = ".cache/harness_runs"
+docker_context_dir = ".cache/docker_context"
+
+[harness.projects.react-shopping-cart]
+image_tag = "codebase-kg-harness/react-shopping-cart:pilot"
+dockerfile = "docker/react-shopping-cart/Dockerfile"
+node_version = "14-bullseye"
+run_build = false
+test_command = "npm test -- --testPathPattern=$TASK_TEST_PATTERN"
+test_env = { CI = "true" }
+
+[harness.projects.takenote]
+image_tag = "codebase-kg-harness/takenote:pilot"
+dockerfile = "docker/takenote/Dockerfile"
+node_version = "14-bullseye"
+run_build = true
+build_command = "npm run build"
+test_command = "npx jest --config config/jest.config.js --testPathPattern=$TASK_TEST_PATTERN"
+test_env = {}

@@ -1,0 +1,15 @@
+{
+  "task_id": "P3",
+  "candidate_id": "P3__floor__n1",
+  "condition": "floor",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 67373.9222209988,
+  "timeout_used_ms": 158497,
+  "stage_detail": null,
+  "apply_mode": "strict",
+  "apply_reason": null
+}

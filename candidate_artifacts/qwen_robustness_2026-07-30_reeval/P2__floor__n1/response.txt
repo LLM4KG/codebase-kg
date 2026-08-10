@@ -1,0 +1,142 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const noteSlice = createSlice({
+  name: 'note',
+  initialState,
+  reducers: {
+    addNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = [...state.notes, action.payload]
+    },
+    updateNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === action.payload.id ? action.payload : note
+      )
+    },
+    deleteNote: (state, action: PayloadAction<string>) => {
+      state.notes = state.notes.filter((note) => note.id !== action.payload)
+    },
+    trashNote: (state, action: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === action.payload ? { ...note, trash: true } : note
+      )
+    },
+    restoreNote: (state, action: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === action.payload ? { ...note, trash: false } : note
+      )
+    },
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+export const noteSlice = createSlice({
+  name: 'note',
+  initialState,
+  reducers: {
+    addNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = [...state.notes, action.payload]
+    },
+    updateNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === action.payload.id ? action.payload : note
+      )
+    },
+    deleteNote: (state, action: PayloadAction<string>) => {
+      state.notes = state.notes.filter((note) => note.id !== action.payload)
+    },
+    trashNote: (state, action: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === action.payload ? { ...note, trash: true } : note
+      )
+    },
+    restoreNote: (state, action: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === action.payload ? { ...note, trash: false } : note
+      )
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  trashNote,
+  restoreNote,
+  emptyTrash,
+} = noteSlice.actions
+=======
+  trashNote,
+  restoreNote,
+  restoreAllTrash,
+  emptyTrash,
+} = noteSlice.actions
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  addNote,
+  deleteNote,
+  trashNote,
+  restoreNote,
+  emptyTrash,
+} from '../slices/note'
+import { NoteItem } from '../types'
+=======
+import {
+  addNote,
+  deleteNote,
+  trashNote,
+  restoreNote,
+  restoreAllTrash,
+  emptyTrash,
+} from '../slices/note'
+import { NoteItem } from '../types'
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const handleEmptyTrash = () => {
+    dispatch(emptyTrash())
+  }
+=======
+  const handleEmptyTrash = () => {
+    dispatch(emptyTrash())
+  }
+
+  const handleRestoreAll = () => {
+    dispatch(restoreAllTrash())
+  }
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+            <button className="btn btn-danger" onClick={handleEmptyTrash}>
+              Empty Trash
+            </button>
+=======
+            <>
+              <button className="btn btn-primary mr-2" onClick={handleRestoreAll}>
+                Restore All
+              </button>
+              <button className="btn btn-danger" onClick={handleEmptyTrash}>
+                Empty Trash
+              </button>
+            </>
+>>>>>>> REPLACE
+```

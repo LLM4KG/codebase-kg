@@ -1,0 +1,95 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+=======
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+    emptyTrash: (state) => {
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  emptyTrash,
+=======
+  restoreAllTrash,
+  emptyTrash,
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+=======
+import { restoreAllTrash } from 'slices/note'
+import {
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const dispatch = useDispatch()
+=======
+  const dispatch = useDispatch<AppDispatch>()
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+      {activeFolder === Folder.TRASH && (
+        <button
+=======
+      {activeFolder === Folder.TRASH && (
+        <button
+          className="restore-all-notes-button"
+          onClick={() => dispatch(restoreAllTrash())}
+        >
+          Restore All
+        </button>
+        <button
+>>>>>>> REPLACE
+```
+
+Wait, I need to check the actual file contents more carefully. Let me reconsider the NoteList.tsx changes, particularly around the dispatch type and the existing button structure.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+=======
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+    emptyTrash: (state) => {
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  emptyTrash,
+=======
+  restoreAllTrash,
+  emptyTrash,
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { emptyTrash } from 'slices/note'
+=======
+import { emptyTrash, restoreAllTrash } from 'slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          <button className="empty-trash-button" onClick={() => dispatch(emptyTrash())}>
+=======
+          <button
+            className="restore-all-notes-button"
+            onClick={() => dispatch(restoreAllTrash())}
+          >
+            Restore All
+          </button>
+          <button className="empty-trash-button" onClick={() => dispatch(emptyTrash())}>
+>>>>>>> REPLACE
+```

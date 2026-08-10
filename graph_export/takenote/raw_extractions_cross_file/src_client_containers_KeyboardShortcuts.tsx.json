@@ -1,0 +1,23 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": [
+      {
+        "consumerName": "KeyboardShortcuts",
+        "consumerType": "function_component",
+        "contextName": "TempStateContext",
+        "contextSource": "@/contexts/TempStateContext",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

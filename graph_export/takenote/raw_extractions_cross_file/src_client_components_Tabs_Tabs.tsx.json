@@ -1,0 +1,40 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Tabs",
+        "childComponent": "Tab",
+        "importSource": "./Tab",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "icon",
+            "valueExpression": "icon"
+          },
+          {
+            "propName": "activeTab",
+            "valueExpression": "activeTab"
+          },
+          {
+            "propName": "label",
+            "valueExpression": "label"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "setActiveTab"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

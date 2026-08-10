@@ -1,0 +1,13 @@
+{
+  "format": "whole_file",
+  "edits": [
+    {
+      "path": "src/hooks/useCartProducts.ts",
+      "op": "write",
+      "content": "import { useCallback, useState } from \"react\";\nimport { Product } from \"../models\";\n\ninterface CartProduct {\n  product: Product;\n  quantity: number;\n}\n\nconst useCartProducts = () => {\n  const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);\n\n  const addProduct = useCallback(\n    (product: Product) => {\n      const existingProduct = cartProducts.find(\n        (cp) => cp.product.id === product.id\n      );\n      if (existingProduct) {\n        setCartProducts(\n          cartProducts.map((cp) =>\n            cp.product.id === product.id\n              ? { ...cp, quantity: cp.quantity + 1 }\n              : cp\n          )\n        );\n      } else {\n        setCartProducts([...cartProducts, { product, quantity: 1 }]);\n      }\n    },\n    [cartProducts]\n  );\n\n  const removeProduct = useCallback(\n    (product: Product) => {\n      setCartProducts(\n        cartProducts.filter((cp) => cp.product.id !== product.id)\n      );\n    },\n    [cartProducts]\n  );\n\n  const increaseProductQuantity = useCallback(\n    (product: Product) => {\n      setCartProducts(\n        cartProducts.map((cp) =>\n          cp.product.id === product.id\n            ? { ...cp, quantity: cp.quantity + 1 }\n            : cp\n        )\n      );\n    },\n    [cartProducts]\n  );\n\n  const decreaseProductQuantity = useCallback(\n    (product: Product) => {\n      setCartProducts(\n        cartProducts\n          .map((cp) =>\n            cp.product.id === product.id\n              ? { ...cp, quantity: cp.quantity - 1 }\n              : cp\n          )\n          .filter((cp) => cp.quantity > 0)\n      );\n    },\n    [cartProducts]\n  );\n\n  return {\n    cartProducts,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  };\n};\n\nexport default useCartProducts;\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

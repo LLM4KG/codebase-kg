@@ -1,0 +1,42 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useEffect, useState } from 'react'\n\nexport const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {\n  const [copiedText, setCopiedText] = useState('')\n\n  useEffect(() => {\n    if (!copiedText) return\n\n    const timer = setTimeout(() => {\n      setCopiedText('')\n    }, timeout)\n\n    return () => clearTimeout(timer)\n  }, [copiedText, timeout])\n\n  const handleCopy = (text: string) => {\n    navigator.clipboard.writeText(text).then(() => {\n      setCopiedText(successMessage)\n    })\n  }\n\n  return { copiedText, handleCopy }\n}\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "  const [copied, setCopied] = useState('')\n\n  useEffect(() => {\n    if (!copied) return\n\n    const timer = setTimeout(() => {\n      setCopied('')\n    }, 3000)\n\n    return () => clearTimeout(timer)\n  }, [copied])\n",
+      "content": "  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!')\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import { useCopyToClipboard } from 'client/utils/useCopyToClipboard'\n",
+      "content": ""
+    },
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useEffect, useState } from 'react'\n\nexport const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {\n  const [copiedText, setCopiedText] = useState('')\n\n  useEffect(() => {\n    if (!copiedText) return\n\n    const timer = setTimeout(() => {\n      setCopiedText('')\n    }, timeout)\n\n    return () => clearTimeout(timer)\n  }, [copiedText, timeout])\n\n  const handleCopy = (text: string) => {\n    navigator.clipboard.writeText(text).then(() => {\n      setCopiedText(successMessage)\n    })\n  }\n\n  return { copiedText, handleCopy }\n}\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "  const [copied, setCopied] = useState('')\n\n  useEffect(() => {\n    if (!copied) return\n\n    const timer = setTimeout(() => {\n      setCopied('')\n    }, 3000)\n\n    return () => clearTimeout(timer)\n  }, [copied])\n",
+      "content": "  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!')\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "      onClick={() => {\n            copyToClipboard(activeNote?.text ?? '')\n            setCopied('Copied!')\n          }}\n",
+      "content": "      onClick={() => {\n            handleCopy(activeNote?.text ?? '')\n          }}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,19 @@
+{
+  "candidate_id": "P2__kg_augmented__n4",
+  "run_id": "claude_primary",
+  "run_name": "claude_primary",
+  "task_id": "P2",
+  "project_name": "takenote",
+  "condition": "kg_augmented",
+  "index": 4,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "build_fail",
+  "timestamp": "2026-07-22T18:03:21.404363+00:00",
+  "retrieval_token_count": 1163,
+  "generator_usage": {
+    "input_tokens": 3453,
+    "output_tokens": 1650
+  },
+  "generator_latency_ms": 19277.462292000564,
+  "mock": false
+}

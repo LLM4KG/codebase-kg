@@ -1,0 +1,64 @@
+# Task P2 — TakeNote feature-addition: Add restoreAllTrash action + Restore All button
+#
+# Exercises: feature_addition Cypher template
+#   - Query A: NoteList composition context (children, hooks, Redux selectors)
+#   - Query B: full project routing table (/ → LandingPage, /app → TakeNoteApp)
+# Project:   TakeNote (React Router DOM v5, PrivateRoute/PublicRoute patterns)
+
+task_id: P2
+project_id: takenote
+project_repo: https://github.com/taniarascia/takenote
+git_commit: e0eddbb9a21ae4cf4c4c7c183f29cfd666e08331
+task_type: feature_addition
+
+spec: >
+  TakeNote has a "permanently empty trash" action but no way to restore all
+  trashed notes at once. Add a `restoreAllTrash` reducer action to the note
+  slice (`src/client/slices/note.ts`) that sets `trash: false` on every
+  trashed note. Then add a "Restore All" button to the NoteList component
+  (`src/client/containers/NoteList.tsx`) that appears alongside the existing
+  "Empty Trash" button when the user is viewing the Trash folder.
+
+# Anchor components the classifier should extract from the spec:
+expected_anchors:
+  anchor_names:
+    - NoteList          # the container that shows the Restore All button
+  anchor_routes: []     # no new route added, but Query B still provides context
+
+# Reference solution
+reference_patch: patches/P2.diff
+
+# Test file — placed in project before candidate diff is applied.
+# The harness runs: npx jest --config config/jest.config.js --testPathPattern=P2_restore_all_trash
+test_files:
+  - tests/unit/client/slices/P2_restore_all_trash.test.ts
+
+# Files the reference patch modifies (for retrieval recall computation)
+files_modified:
+  - src/client/slices/note.ts
+  - src/client/containers/NoteList.tsx
+  - src/resources/TestID.ts
+
+# Why this task exercises the feature_addition template:
+# - Query A retrieves NoteList's composition context: its children (SearchBar,
+#   NoteListButton, ContextMenu), hooks (useDispatch, useSelector, useEffect,
+#   useKey), and Redux connections (getNotes, getSettings, getCategories).
+#   This tells the LLM how NoteList is structured and how dispatch wrappers
+#   are created for existing actions like permanentlyEmptyTrash.
+# - Query B returns the routing table: / → LandingPage (PublicRoute),
+#   /app → TakeNoteApp (PrivateRoute). This gives the LLM architectural
+#   awareness of where NoteList sits (inside TakeNoteApp, which is behind
+#   PrivateRoute) and how the app is structured.
+
+# Adversarial notes:
+# - Tests target the reducer only — no component rendering tests.
+#   This means a valid solution that adds restoreAllTrash to the slice but
+#   wires the button differently (different label, different position) still
+#   passes. The test validates the core logic, not the UI wiring.
+# - On unpatched code, `restoreAllTrash` resolves to undefined at import
+#   (ts-jest diagnostics:false suppresses the TS error). The first test
+#   checks toBeDefined(), and subsequent tests crash on `undefined()`.
+#   Both failure modes correctly fail the test suite.
+# - Valid alternatives: inline the logic in the reducer differently (e.g.,
+#   forEach mutation instead of map), or name the action differently IF
+#   the export is still `restoreAllTrash`. The test imports by name.

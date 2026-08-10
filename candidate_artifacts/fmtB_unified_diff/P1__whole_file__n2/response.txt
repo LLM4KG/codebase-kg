@@ -1,0 +1,19 @@
+```diff
+--- a/src/contexts/cart-context/useCartProducts.ts
++++ b/src/contexts/cart-context/useCartProducts.ts
+@@ -42,9 +42,13 @@ const useCartProducts = () => {
+   };
+ 
+   const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+-    const updatedProducts = products.map((product: ICartProduct) => {
+-      return updateQuantitySafely(product, productToDecrease, -1);
+-    });
++    const updatedProducts = products
++      .map((product: ICartProduct) => {
++        return updateQuantitySafely(product, productToDecrease, -1);
++      })
++      .filter((product: ICartProduct) => product.quantity > 0);
+ 
+     setProducts(updatedProducts);
+     updateCartTotal(updatedProducts);
+```

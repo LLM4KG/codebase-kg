@@ -1,0 +1,76 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "FolderOption",
+        "childComponent": "Star",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "15"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"app-sidebar-icon\""
+          },
+          {
+            "propName": "color",
+            "valueExpression": "iconColor"
+          }
+        ]
+      },
+      {
+        "parentComponent": "FolderOption",
+        "childComponent": "Book",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "15"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"app-sidebar-icon\""
+          },
+          {
+            "propName": "color",
+            "valueExpression": "iconColor"
+          }
+        ]
+      },
+      {
+        "parentComponent": "FolderOption",
+        "childComponent": "Trash2",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "15"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"app-sidebar-icon\""
+          },
+          {
+            "propName": "color",
+            "valueExpression": "iconColor"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

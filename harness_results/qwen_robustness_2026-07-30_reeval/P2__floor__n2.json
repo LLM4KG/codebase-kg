@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__floor__n2",
+  "condition": "floor",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1469.932727000014,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: no applicable edits (malformed_blocks=1)",
+  "apply_mode": null,
+  "apply_reason": "malformed_blocks"
+}

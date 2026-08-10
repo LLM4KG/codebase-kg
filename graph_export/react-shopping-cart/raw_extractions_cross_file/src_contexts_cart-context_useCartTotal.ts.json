@@ -1,0 +1,26 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useCartTotal",
+        "libraryHooks": [],
+        "customHooks": [
+          {
+            "name": "useCartContext",
+            "source": "./CartContextProvider"
+          }
+        ]
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

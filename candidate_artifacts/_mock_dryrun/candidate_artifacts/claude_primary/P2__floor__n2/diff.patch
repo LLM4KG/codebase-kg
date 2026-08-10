@@ -1,0 +1,73 @@
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+index c8aac1c..41d7253 100644
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -11,6 +11,7 @@ import { getNoteTitle, shouldOpenContextMenu, debounceEvent, isDraftNote } from
+ import { useKey } from '@/utils/hooks'
+ import {
+   permanentlyEmptyTrash,
++  restoreAllTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+@@ -39,6 +40,7 @@ export const NoteList: React.FC = () => {
+   const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateSelectedNotes({ noteId, multiSelect }))
+   const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
++  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+   const _pruneNotes = () => dispatch(pruneNotes())
+   const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateActiveNote({ noteId, multiSelect }))
+@@ -158,6 +160,15 @@ export const NoteList: React.FC = () => {
+     <aside className="note-sidebar">
+       <div className="note-sidebar-header">
+         <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
++        {showEmptyTrash && (
++          <NoteListButton
++            dataTestID={TestID.RESTORE_ALL_TRASH_BUTTON}
++            label="Restore All"
++            handler={() => _restoreAllTrash()}
++          >
++            Restore All
++          </NoteListButton>
++        )}
+         {showEmptyTrash && (
+           <NoteListButton
+             dataTestID={TestID.EMPTY_TRASH_BUTTON}
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+index 04c6158..e1d92a0 100644
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -286,6 +286,12 @@ const noteSlice = createSlice({
+       state.notes = state.notes.filter((note) => !note.trash)
+     },
+ 
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
++
+     pruneNotes: (state) => {
+       state.notes = state.notes.filter(
+         (note) => note.scratchpad || note.text !== '' || state.selectedNotesIds.includes(note.id)
+@@ -341,6 +347,7 @@ export const {
+   unassignTrashFromNotes,
+   updateSelectedNotes,
+   permanentlyEmptyTrash,
++  restoreAllTrash,
+   pruneNotes,
+   searchNotes,
+   loadNotes,
+diff --git a/src/resources/TestID.ts b/src/resources/TestID.ts
+index 5f165e5..41a20a3 100644
+--- a/src/resources/TestID.ts
++++ b/src/resources/TestID.ts
+@@ -10,6 +10,7 @@ export enum TestID {
+   CATEGORY_OPTION_DELETE_PERMANENTLY = 'category-option-delete-permanently',
+   EDIT_CATEGORY = 'edit-category',
+   EMPTY_TRASH_BUTTON = 'empty-trash-button',
++  RESTORE_ALL_TRASH_BUTTON = 'restore-all-trash-button',
+   FOLDER_NOTES = 'notes',
+   FOLDER_FAVORITES = 'favorites',
+   FOLDER_TRASH = 'trash',

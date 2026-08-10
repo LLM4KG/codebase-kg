@@ -1,0 +1,19 @@
+{
+  "candidate_id": "P1__kg_augmented__n2",
+  "run_id": "claude_primary",
+  "run_name": "claude_primary",
+  "task_id": "P1",
+  "project_name": "react-shopping-cart",
+  "condition": "kg_augmented",
+  "index": 2,
+  "model_id": "claude-sonnet-4-20250514",
+  "stage": "test_pass",
+  "timestamp": "2026-07-01T15:42:30.565421+00:00",
+  "retrieval_token_count": 0,
+  "generator_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0
+  },
+  "generator_latency_ms": 0.0,
+  "mock": true
+}

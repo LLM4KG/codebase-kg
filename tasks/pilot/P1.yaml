@@ -1,0 +1,47 @@
+# Task P1 — Shopping Cart bug-fix: decreaseProductQuantity zero-quantity bug
+#
+# Exercises: bug_fix Cypher template (anchor-scoped, state + hooks + event handlers)
+# Project:   react-shopping-cart (no React Router — bug_fix template only)
+
+task_id: P1
+project_id: react-shopping-cart
+project_repo: https://github.com/jeffersonRibeiro/react-shopping-cart
+git_commit: 9fa56244d0f0c0d363cab744a3305c50eabc08cb
+task_type: bug_fix
+
+spec: >
+  The `decreaseProductQuantity` function in `useCartProducts.ts` allows a
+  product's quantity to reach zero when decreased. The product remains in the
+  cart with quantity 0 and displays a $0.00 line item. Fix
+  `decreaseProductQuantity` so that when a product's quantity would drop to
+  zero or below, the product is removed from the cart entirely instead.
+
+# Anchor components the classifier should extract from the spec:
+expected_anchors:
+  anchor_names:
+    - CartProduct        # the UI component that calls decreaseProductQuantity
+  anchor_routes: []      # Shopping Cart has no React Router
+
+# Reference solution
+reference_patch: patches/P1.diff
+
+# Test file — placed in project before candidate diff is applied.
+# The harness runs: npm test -- --testPathPattern=P1_decrease_removes_product
+test_files:
+  - src/contexts/cart-context/__tests__/P1_decrease_removes_product.test.tsx
+
+# Files the reference patch modifies (for retrieval recall computation)
+files_modified:
+  - src/contexts/cart-context/useCartProducts.ts
+
+# Adversarial notes (for thesis documentation):
+# - Tests written BEFORE reference patch (adversarial mode).
+# - Tests verify behavior, not implementation: multiple valid solutions pass.
+# - Valid alternatives: (1) guard + delegate to removeProduct,
+#   (2) decrease then filter out zero-quantity products,
+#   (3) check === 1 instead of <= 1.
+# - Invalid alternative: clamping to minimum 1 without removing — fails the
+#   "should remove product from cart" test and violates the spec.
+# - The existing project test (useCartProducts.test.tsx line 150-153) expects
+#   quantity to reach 0 — it will break with the fix. This is intentional;
+#   the harness runs only P1's test file, not the project's existing tests.

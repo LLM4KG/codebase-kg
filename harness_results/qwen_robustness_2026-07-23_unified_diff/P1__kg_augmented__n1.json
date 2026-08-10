@@ -1,0 +1,14 @@
+{
+  "task_id": "P1",
+  "candidate_id": "P1__kg_augmented__n1",
+  "condition": "kg_augmented",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 322.4877419997938,
+  "timeout_used_ms": 9805,
+  "stage_detail": "error: src/hooks/useCartProducts.ts: No such file or directory\nstrict git apply failed; retrying with --recount -C0\nerror: src/hooks/useCartProducts.ts: No such file or directory",
+  "apply_mode": null
+}

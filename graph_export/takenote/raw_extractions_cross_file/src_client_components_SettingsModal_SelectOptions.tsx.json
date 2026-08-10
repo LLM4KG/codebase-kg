@@ -1,0 +1,40 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "SelectOptions",
+        "childComponent": "Select",
+        "importSource": "../Select",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "options",
+            "valueExpression": "options"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "onChange"
+          },
+          {
+            "propName": "selectedValue",
+            "valueExpression": "selectedValue"
+          },
+          {
+            "propName": "testId",
+            "valueExpression": "testId"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

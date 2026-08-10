@@ -1,0 +1,62 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    emptyTrash: (state) => {\n",
+      "content": "    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) =>\n        note.trash ? { ...note, trash: false } : note\n      )\n    },\n    emptyTrash: (state) => {\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "  emptyTrash,\n",
+      "content": "  restoreAllTrash,\n  emptyTrash,\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import {\n",
+      "content": "import { restoreAllTrash } from 'slices/note'\nimport {\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const dispatch = useDispatch()\n",
+      "content": "  const dispatch = useDispatch<AppDispatch>()\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "      {activeFolder === Folder.TRASH && (\n        <button\n",
+      "content": "      {activeFolder === Folder.TRASH && (\n        <button\n          className=\"restore-all-notes-button\"\n          onClick={() => dispatch(restoreAllTrash())}\n        >\n          Restore All\n        </button>\n        <button\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    emptyTrash: (state) => {\n",
+      "content": "    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) =>\n        note.trash ? { ...note, trash: false } : note\n      )\n    },\n    emptyTrash: (state) => {\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "  emptyTrash,\n",
+      "content": "  restoreAllTrash,\n  emptyTrash,\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { emptyTrash } from 'slices/note'\n",
+      "content": "import { emptyTrash, restoreAllTrash } from 'slices/note'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          <button className=\"empty-trash-button\" onClick={() => dispatch(emptyTrash())}>\n",
+      "content": "          <button\n            className=\"restore-all-notes-button\"\n            onClick={() => dispatch(restoreAllTrash())}\n          >\n            Restore All\n          </button>\n          <button className=\"empty-trash-button\" onClick={() => dispatch(emptyTrash())}>\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

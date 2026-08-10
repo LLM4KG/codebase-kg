@@ -1,0 +1,7 @@
+# Dense retrieval condition — OpenAI text-embedding-3-large
+condition_id = "text_emb_3_large"
+retriever = "text_emb_3_large"
+format_variant = "A"
+max_rounds = 1
+
+[retriever_params]

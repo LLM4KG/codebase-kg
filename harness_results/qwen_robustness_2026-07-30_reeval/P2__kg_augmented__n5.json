@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__kg_augmented__n5",
+  "condition": "kg_augmented",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1381.3213850003194,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/slices/note.ts\n--- SEARCH ---\nexport const noteSlice = createSlice({\n  name: '@@app/note',\n  initialState,\n  reducers: {",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

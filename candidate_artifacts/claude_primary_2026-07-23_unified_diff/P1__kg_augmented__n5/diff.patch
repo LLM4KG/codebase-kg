@@ -1,0 +1,25 @@
+--git a/src/hooks/useCartProducts.ts b/src/hooks/useCartProducts.ts
+--- a/src/hooks/useCartProducts.ts
++++ b/src/hooks/useCartProducts.ts
+@@ -1,4 +1,4 @@
+-import { useCallback } from 'react';
++import { useCallback } from 'react';
+ import { useCartContext } from 'contexts/CartContext';
+ import { ICartProduct } from 'types';
+ 
+@@ -40,10 +40,13 @@ const useCartProducts = () => {
+   const decreaseProductQuantity = useCallback(
+     (product: ICartProduct) => {
+       const updatedProducts = products.reduce(
+         (acc: ICartProduct[], p: ICartProduct) => {
+           if (p.id === product.id) {
+-            acc.push({ ...p, quantity: p.quantity - 1 });
++            const newQuantity = p.quantity - 1;
++            if (newQuantity > 0) {
++              acc.push({ ...p, quantity: newQuantity });
++            }
+           } else {
+             acc.push(p);
+           }
+           return acc;
+         },

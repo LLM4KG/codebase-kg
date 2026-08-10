@@ -1,0 +1,23 @@
+{
+  "format": "whole_file",
+  "edits": [
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useState, useEffect } from 'react'\n\nexport const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {\n  const [copiedText, setCopiedText] = useState('')\n\n  useEffect(() => {\n    if (!copiedText) return\n    const timer = setTimeout(() => {\n      setCopiedText('')\n    }, timeout)\n    return () => clearTimeout(timer)\n  }, [copiedText, timeout])\n\n  const handleCopy = (text: string) => {\n    navigator.clipboard.writeText(text).then(() => {\n      setCopiedText(successMessage)\n    })\n  }\n\n  return { copiedText, handleCopy }\n}\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "write",
+      "content": "import React from 'react'\nimport { useDispatch, useSelector } from 'react-redux'\nimport { copyToClipboard } from '@/utils/helpers'\nimport { useCopyToClipboard } from '@/utils/useCopyToClipboard'\nimport { LabelText } from '@resources/LabelText'\nimport { getActiveNote } from '@/selectors'\nimport { NoteItem } from '@/types'\n\nconst NoteMenuBar: React.FC = () => {\n  const dispatch = useDispatch()\n  const activeNote = useSelector(getActiveNote)\n\n  const { copiedText, handleCopy } = useCopyToClipboard(LabelText.COPIED, 3000)\n\n  return (\n    <div className=\"note-menu-bar\">\n      <button\n        onClick={() => {\n          if (activeNote) {\n            handleCopy(activeNote.text)\n          }\n        }}\n      >\n        {copiedText || LabelText.COPY_TO_CLIPBOARD}\n      </button>\n    </div>\n  )\n}\n\nexport default NoteMenuBar\n"
+    },
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useState, useEffect } from 'react'\n\nexport const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {\n  const [copiedText, setCopiedText] = useState('')\n\n  useEffect(() => {\n    if (!copiedText) return\n    const timer = setTimeout(() => {\n      setCopiedText('')\n    }, timeout)\n    return () => clearTimeout(timer)\n  }, [copiedText, timeout])\n\n  const handleCopy = (text: string) => {\n    navigator.clipboard.writeText(text).then(() => {\n      setCopiedText(successMessage)\n    })\n  }\n\n  return { copiedText, handleCopy }\n}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

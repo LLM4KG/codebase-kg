@@ -1,0 +1,25 @@
+{
+  "candidate_id": "P1__floor__n4",
+  "run_id": "qwen_robustness_2026-07-30_reeval",
+  "run_name": "qwen_robustness",
+  "task_id": "P1",
+  "project_name": "react-shopping-cart",
+  "condition": "floor",
+  "index": 4,
+  "model_id": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "timestamp": "2026-07-30T02:34:24.060836+00:00",
+  "retrieval_token_count": 0,
+  "generator_usage": {
+    "input_tokens": 528,
+    "output_tokens": 183
+  },
+  "generator_latency_ms": 5619.7524469998825,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": null,
+  "apply_reason": "file_not_found",
+  "edit_count": 1,
+  "malformed_blocks": 0,
+  "elided": false
+}

@@ -1,0 +1,35 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "PhotoContextProvider",
+        "childComponent": "PhotoContext.Provider",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "{ images, loading, runSearch }"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [
+      {
+        "componentName": "PhotoContextProvider",
+        "contextName": "PhotoContext",
+        "contextSource": "same_file",
+        "valueExpression": "{ images, loading, runSearch }"
+      }
+    ],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}
