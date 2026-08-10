@@ -1,0 +1,169 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote(state, action: PayloadAction<Note>) {
+      state.notes.push(action.payload)
+    },
+    updateNote(state, action: PayloadAction<Note>) {
+      const index = state.notes.findIndex(note => note.id === action.payload.id)
+      if (index !== -1) {
+        state.notes[index] = action.payload
+      }
+    },
+    deleteNote(state, action: PayloadAction<string>) {
+      const index = state.notes.findIndex(note => note.id === action.payload)
+      if (index !== -1) {
+        state.notes.splice(index, 1)
+      }
+    },
+    trashNote(state, action: PayloadAction<string>) {
+      const note = state.notes.find(note => note.id === action.payload)
+      if (note) {
+        note.trash = true
+      }
+    },
+    restoreNote(state, action: PayloadAction<string>) {
+      const note = state.notes.find(note => note.id === action.payload)
+      if (note) {
+        note.trash = false
+      }
+    },
+    emptyTrash(state) {
+      state.notes = state.notes.filter(note => !note.trash)
+    },
+=======
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote(state, action: PayloadAction<Note>) {
+      state.notes.push(action.payload)
+    },
+    updateNote(state, action: PayloadAction<Note>) {
+      const index = state.notes.findIndex(note => note.id === action.payload.id)
+      if (index !== -1) {
+        state.notes[index] = action.payload
+      }
+    },
+    deleteNote(state, action: PayloadAction<string>) {
+      const index = state.notes.findIndex(note => note.id === action.payload)
+      if (index !== -1) {
+        state.notes.splice(index, 1)
+      }
+    },
+    trashNote(state, action: PayloadAction<string>) {
+      const note = state.notes.find(note => note.id === action.payload)
+      if (note) {
+        note.trash = true
+      }
+    },
+    restoreNote(state, action: PayloadAction<string>) {
+      const note = state.notes.find(note => note.id === action.payload)
+      if (note) {
+        note.trash = false
+      }
+    },
+    restoreAllTrash(state) {
+      state.notes
+        .filter(note => note.trash)
+        .forEach(note => {
+          note.trash = false
+        })
+    },
+    emptyTrash(state) {
+      state.notes = state.notes.filter(note => !note.trash)
+    },
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  },
+  extraReducers: builder => {
+    builder.addCase(fetchNotes.fulfilled, (state, { payload }) => {
+      state.notes = payload
+    })
+  }
+})
+=======
+  },
+  extraReducers: builder => {
+    builder.addCase(fetchNotes.fulfilled, (state, { payload }) => {
+      state.notes = payload
+    })
+  }
+})
+
+export const { addNote, updateNote, deleteNote, trashNote, restoreNote, restoreAllTrash, emptyTrash } = noteSlice.actions
+
+export default noteSlice.reducer
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { deleteNote, trashNote, restoreNote, emptyTrash } from '../slices/note'
+import { Note } from '../types'
+import { getNotesFromFolder } from '../utils'
+=======
+import { deleteNote, trashNote, restoreNote, restoreAllTrash, emptyTrash } from '../slices/note'
+import { Note } from '../types'
+import { getNotesFromFolder } from '../utils'
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const handleEmptyTrash = useCallback(() => {
+    dispatch(emptyTrash())
+  }, [dispatch])
+=======
+  const handleEmptyTrash = useCallback(() => {
+    dispatch(emptyTrash())
+  }, [dispatch])
+
+  const handleRestoreAll = useCallback(() => {
+    dispatch(restoreAllTrash())
+  }, [dispatch])
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          <div className="note-list__toolbar">
+            <Button
+              variant="outlined"
+              startIcon={<DeleteIcon />}
+              onClick={handleEmptyTrash}
+            >
+              Empty Trash
+            </Button>
+          </div>
+=======
+          <div className="note-list__toolbar">
+            <Button
+              variant="outlined"
+              startIcon={<RestoreFromTrashIcon />}
+              onClick={handleRestoreAll}
+              style={{ marginRight: '8px' }}
+            >
+              Restore All
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<DeleteIcon />}
+              onClick={handleEmptyTrash}
+            >
+              Empty Trash
+            </Button>
+          </div>
+>>>>>>> REPLACE
+```

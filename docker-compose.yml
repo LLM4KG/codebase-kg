@@ -1,0 +1,33 @@
+services:
+  memgraph:
+    image: memgraph/memgraph-mage:3.8.1
+    ports:
+      - "7687:7687"    # Bolt protocol
+      - "7444:7444"    # Log streaming for Lab
+    volumes:
+      - mg_data:/var/lib/memgraph
+      - ./import:/usr/lib/memgraph/import
+    command: ["--log-level=INFO", "--storage-snapshot-on-exit=true",
+              "--storage-wal-enabled=true", "--query-execution-timeout-sec=0",
+              "--also-log-to-stderr=true"]
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'RETURN 0;' | mgconsole || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  lab:
+    image: memgraph/lab:3.8.0
+    ports:
+      - "3000:3000"    # Memgraph Lab UI
+    environment:
+      - QUICK_CONNECT_MG_HOST=memgraph
+      - QUICK_CONNECT_MG_PORT=7687
+    depends_on:
+      memgraph:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mg_data:

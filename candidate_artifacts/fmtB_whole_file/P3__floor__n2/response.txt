@@ -1,0 +1,91 @@
+I need to see the current NoteMenuBar.tsx file to make precise changes. Let me work with what I can infer from the task description.
+
+src/client/utils/useCopyToClipboard.ts
+```ts
+import { useState, useEffect } from 'react'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+    const timer = setTimeout(() => {
+      setCopiedText('')
+    }, timeout)
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(successMessage)
+    })
+  }
+
+  return { copiedText, handleCopy }
+}
+```
+
+Now I need to update NoteMenuBar.tsx. Based on the task description, I'll extract the inline clipboard logic and replace it with the new hook. Since I don't have the full file contents, I'll reconstruct it based on the described patterns:
+
+src/client/containers/NoteMenuBar.tsx
+```tsx
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { copyToClipboard } from '@/utils/helpers'
+import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+import { LabelText } from '@resources/LabelText'
+import { getActiveNote } from '@/selectors'
+import { NoteItem } from '@/types'
+
+const NoteMenuBar: React.FC = () => {
+  const dispatch = useDispatch()
+  const activeNote = useSelector(getActiveNote)
+
+  const { copiedText, handleCopy } = useCopyToClipboard(LabelText.COPIED, 3000)
+
+  return (
+    <div className="note-menu-bar">
+      <button
+        onClick={() => {
+          if (activeNote) {
+            handleCopy(activeNote.text)
+          }
+        }}
+      >
+        {copiedText || LabelText.COPY_TO_CLIPBOARD}
+      </button>
+    </div>
+  )
+}
+
+export default NoteMenuBar
+```
+
+Wait — I should not guess at the full file contents since I could delete important code. Let me re-read the instructions: "Emit every line of the file, including the parts you did not change." I need the actual file. Since I don't have it, I'll provide the hook file and a note that NoteMenuBar needs the actual source. But the instructions say to produce complete file contents.
+
+Given the constraint, I'll provide the hook file which I can write completely, and acknowledge I need to be careful with NoteMenuBar. I'll provide the hook file only since I cannot safely reconstruct NoteMenuBar without its source.
+
+src/client/utils/useCopyToClipboard.ts
+```ts
+import { useState, useEffect } from 'react'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+    const timer = setTimeout(() => {
+      setCopiedText('')
+    }, timeout)
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(successMessage)
+    })
+  }
+
+  return { copiedText, handleCopy }
+}
+```

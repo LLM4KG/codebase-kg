@@ -1,0 +1,67 @@
+```diff
+--git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
++import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { NoteItem, NoteState } from '@/types'
+ import { Folder } from '@/utils/enums'
+ import { newNote } from '@/utils/helpers'
+@@ -100,6 +100,12 @@ const noteSlice = createSlice({
+         state.notes = state.notes.filter((note) => !note.trash)
+       }
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+     updateActiveNote: (state, action: PayloadAction<{ noteId: string; multiSelect: boolean }>) => {
+       state.activeNoteId = action.payload.noteId
+     },
+@@ -200,6 +206,7 @@ export const {
+   pruneNotes,
+   searchNotes,
+   permanentlyEmptyTrash,
++  restoreAllTrash,
+   updateActiveNote,
+   updateSelectedNotes,
+   updateNote,
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -13,6 +13,7 @@ import {
+   permanentlyEmptyTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+   updateSelectedNotes,
++  restoreAllTrash,
+ } from '@/slices/note'
+ import { NoteItem, ReactDragEvent, ReactMouseEvent } from '@/types'
+ import { getNotes, getSettings, getCategories } from '@/selectors'
+@@ -40,6 +41,7 @@ export const NoteList: React.FC = () => {
+   const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+   const _pruneNotes = () => dispatch(pruneNotes())
++  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+   const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateActiveNote({ noteId, multiSelect }))
+   const _searchNotes = debounceEvent(
+@@ -110,6 +112,13 @@ export const NoteList: React.FC = () => {
+           <NoteListButton
+             dataTestID={TestID.EMPTY_TRASH_BUTTON}
+             label="Empty"
+             handler={() => _permanentlyEmptyTrash()}
+           >
+             Empty Trash
+           </NoteListButton>
++          <NoteListButton
++            label="Restore All"
++            handler={() => _restoreAllTrash()}
++          >
++            Restore All
++          </NoteListButton>
+         )}
+       </div>
+```

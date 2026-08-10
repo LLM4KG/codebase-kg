@@ -1,0 +1,81 @@
+```diff
+--git a/src/client/utils/useCopyToClipboard.ts b/src/client/utils/useCopyToClipboard.ts
+new file mode 100644
+--- /dev/null
++++ b/src/client/utils/useCopyToClipboard.ts
+@@ -0,0 +1,24 @@
++import { useState, useEffect } from 'react'
++
++const useCopyToClipboard = (
++  successMessage: string,
++  timeout: number = 3000
++): { copiedText: string; handleCopy: (text: string) => void } => {
++  const [copiedText, setCopiedText] = useState('')
++
++  useEffect(() => {
++    if (!copiedText) return
++    const timer = setTimeout(() => {
++      setCopiedText('')
++    }, timeout)
++    return () => clearTimeout(timer)
++  }, [copiedText, timeout])
++
++  const handleCopy = (text: string) => {
++    navigator.clipboard.writeText(text).then(() => {
++      setCopiedText(successMessage)
++    })
++  }
++
++  return { copiedText, handleCopy }
++}
++
++export default useCopyToClipboard
+diff --git a/src/client/containers/NoteMenuBar.tsx b/src/client/containers/NoteMenuBar.tsx
+--- a/src/client/containers/NoteMenuBar.tsx
++++ b/src/client/containers/NoteMenuBar.tsx
+@@ -1,5 +1,5 @@
+-import React, { useState, useEffect } from 'react'
++import React from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ 
+ import { LabelText } from '@resources/LabelText'
+@@ -10,6 +10,7 @@ import { copyToClipboard } from '@utils/helpers'
+ import { getActiveNote } from '@/selectors'
+ import { NoteMenuBarProps } from '@/types'
+ import { Dispatch } from '@/types'
++import useCopyToClipboard from '@utils/useCopyToClipboard'
+ 
+ const NoteMenuBar: React.FC<NoteMenuBarProps> = ({ noteRef }) => {
+   const dispatch = useDispatch<Dispatch>()
+@@ -17,16 +18,7 @@ const NoteMenuBar: React.FC<NoteMenuBarProps> = ({ noteRef }) => {
+ 
+   const activeNote = useSelector(getActiveNote)
+ 
+-  const [copyText, setCopyText] = useState(LabelText.COPY_TO_CLIPBOARD)
+-
+-  useEffect(() => {
+-    if (copyText === LabelText.COPIED) {
+-      const timer = setTimeout(() => {
+-        setCopyText(LabelText.COPY_TO_CLIPBOARD)
+-      }, 3000)
+-      return () => clearTimeout(timer)
+-    }
+-  }, [copyText])
++  const { copiedText, handleCopy } = useCopyToClipboard(LabelText.COPIED, 3000)
+ 
+   return (
+     <div className='note-menu-bar'>
+@@ -34,9 +26,9 @@ const NoteMenuBar: React.FC<NoteMenuBarProps> = ({ noteRef }) => {
+         <button
+           className='note-menu-bar-button'
+           onClick={() => {
+-            copyToClipboard(activeNote, setCopyText)
++            handleCopy(activeNote?.text ?? '')
+           }}
+         >
+-          {copyText}
++          {copiedText || LabelText.COPY_TO_CLIPBOARD}
+         </button>
+       </nav>
+     </div>
+```

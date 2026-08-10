@@ -1,0 +1,69 @@
+Looking at the task, I need to:
+
+1. Create a new `useCopyToClipboard` hook
+2. Update `NoteMenuBar.tsx` to use it
+
+Let me analyze the existing pattern from the task description - there's a `useState` for copied feedback text, a `useEffect` that clears it after 3 seconds, and a `copyToClipboard` call in an onClick handler.
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+import { copyToClipboard } from './helpers'
+
+export const useCopyToClipboard = (successMessage: string, timeout = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+    const timer = setTimeout(() => setCopiedText(''), timeout)
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    copyToClipboard(text)
+    setCopiedText(successMessage)
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useEffect, useState } from 'react'
+=======
+import React from 'react'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { copyToClipboard } from '@/utils/helpers'
+=======
+import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copied, setCopied] = useState('')
+
+  useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(''), 3000)
+    return () => clearTimeout(timer)
+  }, [copied])
+=======
+  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!', 3000)
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+        onClick={() => {
+            copyToClipboard(note.content)
+            setCopied('Copied!')
+          }}
+=======
+        onClick={() => handleCopy(note.content)}
+>>>>>>> REPLACE
+```

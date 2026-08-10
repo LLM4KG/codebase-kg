@@ -1,0 +1,122 @@
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { useKey } from '@/utils/hooks'
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+=======
+import { useKey } from '@/utils/hooks'
+import {
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+=======
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+    <aside className="note-sidebar">
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+=======
+    <aside className="note-sidebar">
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.RESTORE_ALL_TRASH_BUTTON}
+            label="Restore All"
+            handler={() => _restoreAllTrash()}
+          >
+            Restore All
+          </NoteListButton>
+        )}
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+
+    pruneNotes: (state) => {
+      state.notes = state.notes.filter(
+        (note) => note.scratchpad || note.text !== '' || state.selectedNotesIds.includes(note.id)
+=======
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+
+    pruneNotes: (state) => {
+      state.notes = state.notes.filter(
+        (note) => note.scratchpad || note.text !== '' || state.selectedNotesIds.includes(note.id)
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  unassignTrashFromNotes,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+=======
+  unassignTrashFromNotes,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+>>>>>>> REPLACE
+
+src/resources/TestID.ts
+<<<<<<< SEARCH
+  CATEGORY_OPTION_DELETE_PERMANENTLY = 'category-option-delete-permanently',
+  EDIT_CATEGORY = 'edit-category',
+  EMPTY_TRASH_BUTTON = 'empty-trash-button',
+  FOLDER_NOTES = 'notes',
+  FOLDER_FAVORITES = 'favorites',
+  FOLDER_TRASH = 'trash',
+=======
+  CATEGORY_OPTION_DELETE_PERMANENTLY = 'category-option-delete-permanently',
+  EDIT_CATEGORY = 'edit-category',
+  EMPTY_TRASH_BUTTON = 'empty-trash-button',
+  RESTORE_ALL_TRASH_BUTTON = 'restore-all-trash-button',
+  FOLDER_NOTES = 'notes',
+  FOLDER_FAVORITES = 'favorites',
+  FOLDER_TRASH = 'trash',
+>>>>>>> REPLACE
+```

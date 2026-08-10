@@ -1,0 +1,170 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const noteSlice = createSlice({
+  name: 'note',
+  initialState,
+  reducers: {
+    addNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = [...state.notes, action.payload];
+    },
+    updateNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) => {
+        if (note.id === action.payload.id) {
+          return action.payload;
+        }
+        return note;
+      });
+    },
+    deleteNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.filter((note) => note.id !== action.payload.id);
+    },
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash);
+    },
+=======
+export const noteSlice = createSlice({
+  name: 'note',
+  initialState,
+  reducers: {
+    addNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = [...state.notes, action.payload];
+    },
+    updateNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) => {
+        if (note.id === action.payload.id) {
+          return action.payload;
+        }
+        return note;
+      });
+    },
+    deleteNote: (state, action: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.filter((note) => note.id !== action.payload.id);
+    },
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash);
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) => {
+        if (note.trash) {
+          return { ...note, trash: false };
+        }
+        return note;
+      });
+    },
+>>>>>>> REPLACE REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  reducers: {
+    addNote,
+    updateNote,
+    deleteNote,
+    emptyTrash,
+  },
+=======
+  reducers: {
+    addNote,
+    updateNote,
+    deleteNote,
+    emptyTrash,
+    restoreAllTrash,
+  },
+>>>>>>> REPLACE REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  addNote,
+  deleteNote,
+  emptyTrash,
+  updateNote,
+} from '../slices/note';
+=======
+import {
+  addNote,
+  deleteNote,
+  emptyTrash,
+  restoreAllTrash,
+  updateNote,
+} from '../slices/note';
+>>>>>>> REPLACE REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const dispatch = useDispatch();
+
+  const handleAddNote = useCallback(() => {
+    dispatch(addNote(newNote()));
+  }, [dispatch]);
+
+  const handleDeleteNote = (note: NoteItem) => {
+    dispatch(deleteNote(note));
+  };
+
+  const handleEmptyTrash = () => {
+    dispatch(emptyTrash());
+  };
+
+  const handleUpdateNote = (note: NoteItem) => {
+    dispatch(updateNote(note));
+  };
+=======
+  const dispatch = useDispatch();
+
+  const handleAddNote = useCallback(() => {
+    dispatch(addNote(newNote()));
+  }, [dispatch]);
+
+  const handleDeleteNote = (note: NoteItem) => {
+    dispatch(deleteNote(note));
+  };
+
+  const handleEmptyTrash = () => {
+    dispatch(emptyTrash());
+  };
+
+  const handleRestoreAllTrash = () => {
+    dispatch(restoreAllTrash());
+  };
+
+  const handleUpdateNote = (note: NoteItem) => {
+    dispatch(updateNote(note));
+  };
+>>>>>>> REPLACE REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          <Button
+            variant="secondary"
+            onClick={handleEmptyTrash}
+            disabled={notes.filter((note) => note.trash).length === 0}
+          >
+            Empty Trash
+          </Button>
+=======
+          <Button
+            variant="secondary"
+            onClick={handleRestoreAllTrash}
+            disabled={notes.filter((note) => note.trash).length === 0}
+            style={{ marginRight: '8px' }}
+          >
+            Restore All
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleEmptyTrash}
+            disabled={notes.filter((note) => note.trash).length === 0}
+          >
+            Empty Trash
+          </Button>
+>>>>>>> REPLACE REPLACE
+```

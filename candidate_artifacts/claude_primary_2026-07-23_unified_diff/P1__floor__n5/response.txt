@@ -1,0 +1,90 @@
+Looking at the task, I need to fix `decreaseProductQuantity` in `useCartProducts.ts` so that when a product's quantity would reach zero or below, it removes the product from the cart instead.
+
+Based on typical patterns in cart implementations, here's the fix:
+
+```diff
+--- a/src/hooks/useCartProducts.ts
++++ b/src/hooks/useCartProducts.ts
+@@ -1,6 +1,6 @@
+ import { useCallback } from 'react';
+ import { useCartContext } from '../contexts/CartContext';
+ 
+ export const useCartProducts = () => {
+   const { cartProducts, setCartProducts } = useCartContext();
+ 
+   const increaseProductQuantity = useCallback(
+     (productId: string) => {
+       setCartProducts((prevProducts) =>
+         prevProducts.map((product) =>
+           product.id === productId
+             ? { ...product, quantity: product.quantity + 1 }
+             : product
+         )
+       );
+     },
+     [setCartProducts]
+   );
+ 
+   const decreaseProductQuantity = useCallback(
+     (productId: string) => {
+       setCartProducts((prevProducts) =>
+-        prevProducts.map((product) =>
+-          product.id === productId
+-            ? { ...product, quantity: product.quantity - 1 }
+-            : product
+-        )
++        prevProducts.reduce<typeof prevProducts>((acc, product) => {
++          if (product.id === productId) {
++            if (product.quantity - 1 <= 0) {
++              return acc;
++            }
++            return [...acc, { ...product, quantity: product.quantity - 1 }];
++          }
++          return [...acc, product];
++        }, [])
+       );
+     },
+     [setCartProducts]
+   );
+ 
+   const removeProductFromCart = useCallback(
+     (productId: string) => {
+       setCartProducts((prevProducts) =>
+         prevProducts.filter((product) => product.id !== productId)
+       );
+     },
+     [setCartProducts]
+   );
+ 
+   return { cartProducts, increaseProductQuantity, decreaseProductQuantity, removeProductFromCart };
+ };
+```
+
+Wait, I don't have the exact file content. Let me produce a more targeted diff focused only on the `decreaseProductQuantity` function change:
+
+```diff
+--- a/src/hooks/useCartProducts.ts
++++ b/src/hooks/useCartProducts.ts
+@@ -20,11 +20,13 @@ export const useCartProducts = () => {
+ 
+   const decreaseProductQuantity = useCallback(
+     (productId: string) => {
+       setCartProducts((prevProducts) =>
+-        prevProducts.map((product) =>
+-          product.id === productId
+-            ? { ...product, quantity: product.quantity - 1 }
+-            : product
+-        )
++        prevProducts.reduce<typeof prevProducts>((acc, product) => {
++          if (product.id === productId) {
++            if (product.quantity - 1 <= 0) {
++              return acc;
++            }
++            return [...acc, { ...product, quantity: product.quantity - 1 }];
++          }
++          return [...acc, product];
++        }, [])
+       );
+     },
+     [setCartProducts]
+```

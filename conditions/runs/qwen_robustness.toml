@@ -1,0 +1,63 @@
+# ──────────────────────────────────────────────────────────────────
+# Run config: Qwen3-Coder-480B-A35B-Instruct — robustness check (Phase 5b)
+# ──────────────────────────────────────────────────────────────────
+# Open-weight model, distinct family from Claude and DeepSeek.
+# 480B MoE (~35B active) code-specialist, API-accessible via OpenRouter.
+#
+# Replaces Qwen2.5-Coder-32B-Instruct, which is unusable on OpenRouter:
+# its sole provider (Cloudflare) returns an upstream 500 on any generation
+# past ~100 output tokens, so no candidate diff can ever complete.
+# See decision log entry D-LLM2-qwen-amended (2026-07-23).
+#
+# Per D-LLM3: all pipeline LLM calls (classifier, anchor extractor,
+# reformulator, generator) use this model.  Zero Anthropic API calls
+# during this run.
+#
+# Per D-LLM2: same six conditions × full task set × n=20.
+# ──────────────────────────────────────────────────────────────────
+
+[run]
+run_id          = "qwen_robustness"
+description     = "Robustness check — Qwen3-Coder-480B-A35B-Instruct via OpenRouter"
+
+[run.model]
+# LiteLLM model string: prefix "openrouter/" routes through OpenRouter.
+model_id            = "openrouter/qwen/qwen3-coder"
+model_provider      = "openrouter"
+model_family        = "qwen"
+model_version       = "qwen/qwen3-coder"                     # OpenRouter model string
+model_architecture  = "moe"                                  # 480B total, ~35B active
+context_window      = 262144                                 # 256K context
+
+[run.generation]
+temperature     = 0.0       # EXPLICIT — OpenRouter may default to nonzero
+max_tokens      = 8192      # Match Claude run; adjust after pilot calibration
+
+# Same output format as the Claude run — the robustness check tests whether the
+# direction of condition results holds across model families, which requires the
+# generator's task to be identical. See docs/decision-log.md (2026-07-30).
+output_format   = "search_replace"
+
+[run.provider]
+# OpenRouter — OpenAI-compatible proxy.
+api_base        = "https://openrouter.ai/api/v1"
+# api_key sourced from env: OPENROUTER_API_KEY
+#
+# Reproducibility: OpenRouter may route to different underlying providers
+# (e.g., Together AI, Fireworks, DeepInfra).  Log the response header
+# "X-OpenRouter-Provider" per call for audit trail.
+#
+# Backend health is NOT stable across sessions — run a 1-candidate probe
+# (`pipeline pilot run --run qwen_robustness --n 1`) before any full leg.
+
+[run.provider.extra_headers]
+# Optional — uncomment and fill for OpenRouter rankings.
+# HTTP-Referer      = "https://your-project-url"
+# X-OpenRouter-Title = "KG-Augmented-CodeGen-Thesis"
+
+[run.notes]
+locked_at       = ""        # ISO timestamp filled at Phase 5b start
+locked_by       = ""        # Git commit SHA at lock time
+rationale       = "Strong coding benchmark scores, open weights, distinct model family from Claude. Code-specialist MoE; verified end-to-end on the real P1 generator prompt (275 output tokens, finish_reason=stop, well-formed unified diff)."
+original_model  = "Qwen2.5-Coder-32B-Instruct"
+change_reason   = "Sole OpenRouter provider (Cloudflare) returns upstream 500 beyond ~100 output tokens; no alternate provider exists for that model, so every generator call fails. Detected by the 2026-07-23 pre-run probe."

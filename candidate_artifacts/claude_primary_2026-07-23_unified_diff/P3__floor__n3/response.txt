@@ -1,0 +1,303 @@
+```diff
+diff --git a/src/client/utils/useCopyToClipboard.ts b/src/client/utils/useCopyToClipboard.ts
+new file mode 100644
+--- /dev/null
++++ b/src/client/utils/useCopyToClipboard.ts
+@@ -0,0 +1,24 @@
++import { useState, useEffect } from 'react'
++
++const useCopyToClipboard = (
++  successMessage: string,
++  timeout: number = 3000
++): { copiedText: string; handleCopy: (text: string) => void } => {
++  const [copiedText, setCopiedText] = useState('')
++
++  useEffect(() => {
++    if (!copiedText) return
++    const timer = setTimeout(() => {
++      setCopiedText('')
++    }, timeout)
++    return () => clearTimeout(timer)
++  }, [copiedText, timeout])
++
++  const handleCopy = (text: string) => {
++    navigator.clipboard.writeText(text).then(() => {
++      setCopiedText(successMessage)
++    })
++  }
++
++  return { copiedText, handleCopy }
++}
++
++export default useCopyToClipboard
+diff --git a/src/client/containers/NoteMenuBar.tsx b/src/client/containers/NoteMenuBar.tsx
+--- a/src/client/containers/NoteMenuBar.tsx
++++ b/src/client/containers/NoteMenuBar.tsx
+@@ -1,4 +1,4 @@
+-import React, { useState, useEffect } from 'react'
++import React from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ 
+ import { LabelText } from '@resources/LabelText'
+@@ -14,6 +14,7 @@ import {
+ } from '@/selectors'
+ import { copyToClipboard } from '@/utils/helpers'
+ import { NoteMenuBarOptions } from '@/utils/enums'
++import useCopyToClipboard from '@/utils/useCopyToClipboard'
+ 
+ const NoteMenuBar: React.FC = () => {
+   const dispatch = useDispatch()
+@@ -24,16 +25,7 @@ const NoteMenuBar: React.FC = () => {
+   const activeNote = useSelector(getActiveNote)
+   const { isOpen } = useSelector(getNoteMenuBar)
+ 
+-  const [copiedText, setCopiedText] = useState('')
+-
+-  useEffect(() => {
+-    if (!copiedText) return
+-    const timer = setTimeout(() => {
+-      setCopiedText('')
+-    }, 3000)
+-    return () => clearTimeout(timer)
+-  }, [copiedText])
+-
+-  const handleCopy = () => {
+-    copyToClipboard(`${activeNote?.content}`)
+-    setCopiedText(LabelText.COPIED)
+-  }
++  const { copiedText, handleCopy } = useCopyToClipboard(LabelText.COPIED, 3000)
+ 
+   return (
+```
+
+Wait, I need to look more carefully at the existing code to ensure the diff is accurate. Let me reconsider the `handleCopy` usage — the original uses `copyToClipboard` helper, not `navigator.clipboard`. Let me adjust the hook to match.
+
+```diff
+diff --git a/src/client/utils/useCopyToClipboard.ts b/src/client/utils/useCopyToClipboard.ts
+new file mode 100644
+--- /dev/null
++++ b/src/client/utils/useCopyToClipboard.ts
+@@ -0,0 +1,22 @@
++import { useState, useEffect } from 'react'
++
++import { copyToClipboard } from '@/utils/helpers'
++
++const useCopyToClipboard = (
++  successMessage: string,
++  timeout: number = 3000
++): { copiedText: string; handleCopy: (text: string) => void } => {
++  const [copiedText, setCopiedText] = useState('')
++
++  useEffect(() => {
++    if (!copiedText) return
++    const timer = setTimeout(() => {
++      setCopiedText('')
++    }, timeout)
++    return () => clearTimeout(timer)
++  }, [copiedText, timeout])
++
++  const handleCopy = (text: string) => {
++    copyToClipboard(text)
++    setCopiedText(successMessage)
++  }
++
++  return { copiedText, handleCopy }
++}
++
++export default useCopyToClipboard
+diff --git a/src/client/containers/NoteMenuBar.tsx b/src/client/containers/NoteMenuBar.tsx
+--- a/src/client/containers/NoteMenuBar.tsx
++++ b/src/client/containers/NoteMenuBar.tsx
+@@ -1,4 +1,4 @@
+-import React, { useState, useEffect } from 'react'
++import React from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ 
+ import { LabelText } from '@resources/LabelText'
+@@ -14,6 +14,7 @@ import {
+ } from '@/selectors'
+ import { copyToClipboard } from '@/utils/helpers'
+ import { NoteMenuBarOptions } from '@/utils/enums'
++import useCopyToClipboard from '@/utils/useCopyToClipboard'
+ 
+ const NoteMenuBar: React.FC = () => {
+   const dispatch = useDispatch()
+@@ -24,16 +25,7 @@ const NoteMenuBar: React.FC = () => {
+   const activeNote = useSelector(getActiveNote)
+   const { isOpen } = useSelector(getNoteMenuBar)
+ 
+-  const [copiedText, setCopiedText] = useState('')
+-
+-  useEffect(() => {
+-    if (!copiedText) return
+-    const timer = setTimeout(() => {
+-      setCopiedText('')
+-    }, 3000)
+-    return () => clearTimeout(timer)
+-  }, [copiedText])
+-
+-  const handleCopy = () => {
+-    copyToClipboard(`${activeNote?.content}`)
+-    setCopiedText(LabelText.COPIED)
+-  }
++  const { copiedText, handleCopy } = useCopyToClipboard(LabelText.COPIED, 3000)
+ 
+   return (
+```
+
+The above diff removes the `copyToClipboard` import from NoteMenuBar but it's now used inside the hook. Let me produce the final clean diff:
+
+```diff
+diff --git a/src/client/utils/useCopyToClipboard.ts b/src/client/utils/useCopyToClipboard.ts
+new file mode 100644
+--- /dev/null
++++ b/src/client/utils/useCopyToClipboard.ts
+@@ -0,0 +1,22 @@
++import { useState, useEffect } from 'react'
++
++import { copyToClipboard } from '@/utils/helpers'
++
++const useCopyToClipboard = (
++  successMessage: string,
++  timeout: number = 3000
++): { copiedText: string; handleCopy: (text: string) => void } => {
++  const [copiedText, setCopiedText] = useState('')
++
++  useEffect(() => {
++    if (!copiedText) return
++    const timer = setTimeout(() => {
++      setCopiedText('')
++    }, timeout)
++    return () => clearTimeout(timer)
++  }, [copiedText, timeout])
++
++  const handleCopy = (text: string) => {
++    copyToClipboard(text)
++    setCopiedText(successMessage)
++  }
++
++  return { copiedText, handleCopy }
++}
++
++export default useCopyToClipboard
+diff --git a/src/client/containers/NoteMenuBar.tsx b/src/client/containers/NoteMenuBar.tsx
+--- a/src/client/containers/NoteMenuBar.tsx
++++ b/src/client/containers/NoteMenuBar.tsx
+@@ -1,4 +1,4 @@
+-import React, { useState, useEffect } from 'react'
++import React from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ 
+ import { LabelText } from '@resources/LabelText'
+@@ -13,7 +13,7 @@ import {
+   getNoteMenuBar,
+ } from '@/selectors'
+-import { copyToClipboard } from '@/utils/helpers'
+ import { NoteMenuBarOptions } from '@/utils/enums'
++import useCopyToClipboard from '@/utils/useCopyToClipboard'
+ 
+ const NoteMenuBar: React.FC = () => {
+   const dispatch = useDispatch()
+@@ -24,16 +24,7 @@ const NoteMenuBar: React.FC = () => {
+   const activeNote = useSelector(getActiveNote)
+   const { isOpen } = useSelector(getNoteMenuBar)
+ 
+-  const [copiedText, setCopiedText] = useState('')
+-
+-  useEffect(() => {
+-    if (!copiedText) return
+-    const timer = setTimeout(() => {
+-      setCopiedText('')
+-    }, 3000)
+-    return () => clearTimeout(timer)
+-  }, [copiedText])
+-
+-  const handleCopy = () => {
+-    copyToClipboard(`${activeNote?.content}`)
+-    setCopiedText(LabelText.COPIED)
+-  }
++  const { copiedText, handleCopy } = useCopyToClipboard(LabelText.COPIED, 3000)
+ 
+   return (
+```
+
+The call site `handleCopy` now needs to pass the text. Let me include that hunk too:
+
+```diff
+diff --git a/src/client/utils/useCopyToClipboard.ts b/src/client/utils/useCopyToClipboard.ts
+new file mode 100644
+--- /dev/null
++++ b/src/client/utils/useCopyToClipboard.ts
+@@ -0,0 +1,22 @@
++import { useState, useEffect } from 'react'
++
++import { copyToClipboard } from '@/utils/helpers'
++
++const useCopyToClipboard = (
++  successMessage: string,
++  timeout: number = 3000
++): { copiedText: string; handleCopy: (text: string) => void } => {
++  const [copiedText, setCopiedText] = useState('')
++
++  useEffect(() => {
++    if (!copiedText) return
++    const timer = setTimeout(() => {
++      setCopiedText('')
++    }, timeout)
++    return () => clearTimeout(timer)
++  }, [copiedText, timeout])
++
++  const handleCopy = (text: string) => {
++    copyToClipboard(text)
++    setCopiedText(successMessage)
++  }
++
++  return { copiedText, handleCopy }
++}
++
++export default useCopyToClipboard
+diff --git a/src/client/containers/NoteMenuBar.tsx b/src/client/containers/NoteMenuBar.tsx
+--- a/src/client/containers/NoteMenuBar.tsx
++++ b/src/client/containers/NoteMenuBar.tsx
+@@ -1,4 +1,4 @@
+-import React, { useState, useEffect } from 'react'
++import React from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ 
+ import { LabelText } from '@resources/LabelText'
+@@ -13,7 +13,7 @@ import {
+   getNoteMenuBar,
+ } from '@/selectors'
+-import { copyToClipboard } from '@/utils/helpers'
+ import { NoteMenuBarOptions } from '@/utils/enums'
++import useCopyToClipboard from '@/utils/useCopyToClipboard'
+ 
+ const NoteMenuBar: React.FC = () => {
+   const dispatch = useDispatch()
+@@ -24,16 +24,7 @@ const NoteMenuBar: React.FC = () => {
+   const activeNote = useSelector(getActiveNote)
+   const { isOpen } = useSelector(getNoteMenuBar)
+ 
+-  const [copiedText, setCopiedText] = useState('')
+-
+-  useEffect(() => {
+-    if (!copiedText) return
+-    const timer = setTimeout(() => {
+-      setCopiedText('')
+-    }, 3000)
+-    return () => clearTimeout(timer)
+-  }, [copiedText])
+-
+-  const handleCopy = () => {
+-    copyToClipboard(`${activeNote?.content}`)
+-    setCopiedText(LabelText.COPIED)
+-  }
++  const { copiedText, handleCopy } = useCopyToClipboard(LabelText.COPIED, 3000)
+ 
+   return (
+@@ -45,7 +36,7 @@ const NoteMenuBar: React.FC = () => {
+           onClick={() => {
+-            handleCopy()
++            handleCopy(`${activeNote?.content}`)
+           }}
+```

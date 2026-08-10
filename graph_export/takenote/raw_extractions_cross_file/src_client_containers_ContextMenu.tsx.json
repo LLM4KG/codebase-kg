@@ -1,0 +1,119 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ContextMenu",
+        "childComponent": "MenuUtilitiesContext.Provider",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "contextValues"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ContextMenu",
+        "childComponent": "CategoryMenu",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "category",
+            "valueExpression": "item as CategoryItem"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ContextMenu",
+        "childComponent": "NotesMenu",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "note",
+            "valueExpression": "item as NoteItem"
+          },
+          {
+            "propName": "setOptionsId",
+            "valueExpression": "setOptionsId"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryMenu",
+        "childComponent": "ContextMenuOptions",
+        "importSource": "@/containers/ContextMenuOptions",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "clickedItem",
+            "valueExpression": "category"
+          },
+          {
+            "propName": "type",
+            "valueExpression": "ContextMenuEnum.CATEGORY"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesMenu",
+        "childComponent": "SelectCategory",
+        "importSource": "@/components/NoteList/SelectCategory",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onChange",
+            "valueExpression": "(event) => { _addCategoryToNote(event.target.value, note.id); ... }"
+          },
+          {
+            "propName": "categories",
+            "valueExpression": "categories"
+          },
+          {
+            "propName": "activeCategoryId",
+            "valueExpression": "activeCategoryId"
+          },
+          {
+            "propName": "note",
+            "valueExpression": "note"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesMenu",
+        "childComponent": "ContextMenuOptions",
+        "importSource": "@/containers/ContextMenuOptions",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "ContextMenuEnum.NOTE"
+          },
+          {
+            "propName": "clickedItem",
+            "valueExpression": "note"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [
+      {
+        "componentName": "ContextMenu",
+        "contextName": "MenuUtilitiesContext",
+        "contextSource": "same_file",
+        "valueExpression": "contextValues"
+      }
+    ],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

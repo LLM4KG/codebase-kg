@@ -1,0 +1,234 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract **React Context definitions** from a given `.js` or `.jsx` file.
+
+Only consider context definitions that appear directly in the current input file.
+
+Do not include any context objects that are assumed or inferred unless they are explicitly present in the provided content.
+
+---
+
+## Detection Rules
+
+A React Context is created by one of the following patterns:
+
+1. `const XyzContext = createContext(defaultValue);` — using the named import.
+2. `const XyzContext = React.createContext(defaultValue);` — using the namespace.
+3. Variations with `export`: `export const XyzContext = createContext(...)` or exported separately.
+
+For each context definition, return:
+- "name": The variable name bound to the created context (e.g., "CartContext", "ThemeContext").
+- "defaultValue": A short string representation of the initial value passed to `createContext(...)`. Use `"undefined"` if no argument is provided (i.e., `createContext()` with no args). For complex objects or functions, provide a brief summary (e.g., `"{ theme: 'light' }"`, `"null"`).
+- "exportType": "default", "named", or "none" — based on how the context is exported from the file.
+
+**Important:**
+- Only extract the **definition** of the context (the `createContext(...)` call). Do NOT extract `useContext(...)` consumers or `<XyzContext.Provider>` usages — those are captured by relationship extraction prompts.
+- A file may define multiple contexts — extract all of them.
+- If the file does not contain any `createContext` calls, return an empty array.
+
+---
+
+## Output Format
+
+Return a JSON object with the following structure:
+{
+  "contexts": [
+    {
+      "name": "<context variable name>",
+      "defaultValue": "<short representation>",
+      "exportType": "default" | "named" | "none"
+    }
+  ]
+}
+
+---
+
+### Example 1
+Input:
+import { createContext } from 'react';
+
+const ThemeContext = createContext('light');
+
+export default ThemeContext;
+
+Output:
+{
+  "contexts": [
+    {
+      "name": "ThemeContext",
+      "defaultValue": "'light'",
+      "exportType": "default"
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import React, { createContext, useState } from 'react';
+
+const CartContext = createContext(null);
+
+const CartProvider = ({ children }) => {
+  const [items, setItems] = useState([]);
+
+  const addItem = (item) => setItems(prev => [...prev, item]);
+  const removeItem = (id) => setItems(prev => prev.filter(i => i.id !== id));
+
+  return (
+    <CartContext.Provider value={{ items, addItem, removeItem }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+export { CartContext, CartProvider };
+
+Output:
+{
+  "contexts": [
+    {
+      "name": "CartContext",
+      "defaultValue": "null",
+      "exportType": "named"
+    }
+  ]
+}
+
+Note: `CartProvider` is a function component, not a context definition. Only the `createContext` call is extracted here.
+
+---
+
+### Example 3
+Input:
+import React from 'react';
+
+export const AuthContext = React.createContext({
+  user: null,
+  isAuthenticated: false,
+  login: () => {},
+  logout: () => {},
+});
+
+Output:
+{
+  "contexts": [
+    {
+      "name": "AuthContext",
+      "defaultValue": "{ user: null, isAuthenticated: false, login: () => {}, logout: () => {} }",
+      "exportType": "named"
+    }
+  ]
+}
+
+---
+
+### Example 4
+Input:
+import { createContext } from 'react';
+
+const SidebarContext = createContext();
+const ModalContext = createContext(false);
+
+export { SidebarContext, ModalContext };
+
+Output:
+{
+  "contexts": [
+    {
+      "name": "SidebarContext",
+      "defaultValue": "undefined",
+      "exportType": "named"
+    },
+    {
+      "name": "ModalContext",
+      "defaultValue": "false",
+      "exportType": "named"
+    }
+  ]
+}
+
+Note: `SidebarContext` is created with no argument, so `defaultValue` is `"undefined"`.
+
+---
+
+### Example 5
+Input:
+import React, { createContext, useReducer } from 'react';
+
+const initialState = { notifications: [], unreadCount: 0 };
+
+const NotificationContext = createContext(initialState);
+
+function notificationReducer(state, action) {
+  switch (action.type) {
+    case 'ADD':
+      return {
+        notifications: [...state.notifications, action.payload],
+        unreadCount: state.unreadCount + 1,
+      };
+    case 'MARK_READ':
+      return { ...state, unreadCount: 0 };
+    default:
+      return state;
+  }
+}
+
+const NotificationProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(notificationReducer, initialState);
+
+  return (
+    <NotificationContext.Provider value={{ state, dispatch }}>
+      {children}
+    </NotificationContext.Provider>
+  );
+};
+
+export { NotificationContext, NotificationProvider };
+
+Output:
+{
+  "contexts": [
+    {
+      "name": "NotificationContext",
+      "defaultValue": "initialState",
+      "exportType": "named"
+    }
+  ]
+}
+
+Note: The default value is the variable name `initialState` as written in the code. The provider component and reducer are not part of the context definition extraction.
+
+---
+
+### Example 6
+Input:
+import React, { useState } from 'react';
+
+function App() {
+  const [theme, setTheme] = useState('light');
+  return <div className={theme}>Hello</div>;
+}
+
+export default App;
+
+Output:
+{
+  "contexts": []
+}
+
+Note: This file contains no `createContext` calls, so the output is an empty array.
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Only extract `createContext(...)` or `React.createContext(...)` calls.
+- Capture the variable name, default value, and export type.
+- For default values that are variable references, capture the variable name (not its resolved value).
+- For `createContext()` with no arguments, use `"undefined"` as the default value.
+- Do NOT extract context consumers (`useContext`) or providers (`<Context.Provider>`) — those are relationships, not node definitions.
+- If the file has no context definitions, return an empty array.
+
+Output:

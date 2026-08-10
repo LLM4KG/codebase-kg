@@ -1,0 +1,56 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    emptyTrash: (state) => {\n      return {\n        ...state,\n        notes: state.notes.filter((note) => !note.trash),\n      }\n    },\n",
+      "content": "    emptyTrash: (state) => {\n      return {\n        ...state,\n        notes: state.notes.filter((note) => !note.trash),\n      }\n    },\n    restoreAllTrash: (state) => {\n      return {\n        ...state,\n        notes: state.notes.map((note) => (note.trash ? { ...note, trash: false } : note)),\n      }\n    },\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { addNote, emptyTrash } from '@/slices/note'\n",
+      "content": "import { addNote, emptyTrash, restoreAllTrash } from '@/slices/note'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const _emptyTrash = () => dispatch(emptyTrash())\n",
+      "content": "  const _emptyTrash = () => dispatch(emptyTrash())\n  const _restoreAllTrash = () => dispatch(restoreAllTrash())\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          {activeFolder === Folder.TRASH && (\n            <button className=\"trash-button\" onClick={_emptyTrash}>\n              <Icon size={15} icon={deleteIcon} />\n              Empty Trash\n            </button>\n          )}\n",
+      "content": "          {activeFolder === Folder.TRASH && (\n            <>\n              <button className=\"trash-button\" onClick={_restoreAllTrash}>\n                <Icon size={15} icon={refreshCcw} />\n                Restore All\n              </button>\n              <button className=\"trash-button\" onClick={_emptyTrash}>\n                <Icon size={15} icon={deleteIcon} />\n                Empty Trash\n              </button>\n            </>\n          )}\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { deleteIcon } from '@/utils/constants'\n",
+      "content": "import { deleteIcon, refreshCcw } from '@/utils/constants'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { deleteIcon, refreshCcw } from '@/utils/constants'\n",
+      "content": "import { deleteIcon } from '@/utils/constants'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { Icon } from 'react-feather'\n",
+      "content": "import { Icon, RefreshCw } from 'react-feather'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "              <button className=\"trash-button\" onClick={_restoreAllTrash}>\n                <Icon size={15} icon={refreshCcw} />\n                Restore All\n              </button>\n",
+      "content": "              <button className=\"trash-button\" onClick={_restoreAllTrash}>\n                <RefreshCw size={15} />\n                Restore All\n              </button>\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

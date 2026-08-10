@@ -1,0 +1,141 @@
+I need to look at the NoteMenuBar component to understand the existing code structure before making changes.
+
+Based on the task description, I'll create the custom hook and update NoteMenuBar to use it.
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+
+    const timer = setTimeout(() => {
+      setCopiedText('')
+    }, timeout)
+
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(successMessage)
+    })
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copied, setCopied] = useState('')
+
+  useEffect(() => {
+    if (!copied) return
+
+    const timer = setTimeout(() => {
+      setCopied('')
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [copied])
+=======
+  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!')
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+            onClick={() => {
+              copyToClipboard(noteRef.current?.innerHTML ?? '')
+              setCopied('Copied!')
+            }}
+=======
+            onClick={() => {
+              handleCopy(noteRef.current?.innerHTML ?? '')
+            }}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { copyToClipboard } from '@/utils/helpers'
+=======
+import { copyToClipboard } from '@/utils/helpers'
+import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+```
+
+Wait, I need to be more careful. Let me reconsider the import block and whether `copyToClipboard` is still needed after the refactor. Since `handleCopy` in the hook uses `navigator.clipboard.writeText` directly, the `copyToClipboard` import from helpers may no longer be needed. But I don't know the exact file contents, so let me be conservative and keep it, or check if the hook should use the existing `copyToClipboard` helper.
+
+Let me revise to use the existing `copyToClipboard` helper inside the hook for consistency:
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+
+import { copyToClipboard } from '@/utils/helpers'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+
+    const timer = setTimeout(() => {
+      setCopiedText('')
+    }, timeout)
+
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    copyToClipboard(text)
+    setCopiedText(successMessage)
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copied, setCopied] = useState('')
+
+  useEffect(() => {
+    if (!copied) return
+
+    const timer = setTimeout(() => {
+      setCopied('')
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [copied])
+=======
+  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!')
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+            onClick={() => {
+              copyToClipboard(noteRef.current?.innerHTML ?? '')
+              setCopied('Copied!')
+            }}
+=======
+            onClick={() => {
+              handleCopy(noteRef.current?.innerHTML ?? '')
+            }}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { copyToClipboard } from '@/utils/helpers'
+=======
+import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+```

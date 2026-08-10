@@ -1,0 +1,145 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer to `src/client/slices/note.ts`
+2. Add a "Restore All" button to `src/client/containers/NoteList.tsx`
+
+Let me analyze the existing patterns based on what I know about TakeNote's codebase structure.
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
++import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { NoteItem, NoteState } from '@/types'
+ import { getWeightedCategoryOptions } from '@/utils/helpers'
+ import {
+@@ -100,6 +100,13 @@ const noteSlice = createSlice({
+         note.trash = false
+       })
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+     deleteNote: (state, action: PayloadAction<string>) => {
+       state.notes = state.notes.filter((note) => note.id !== action.payload)
+     },
+@@ -200,6 +207,7 @@ export const {
+   addNote,
+   deleteNote,
+   emptyTrash,
++  restoreAllTrash,
+   pruneNotes,
+   restoreNote,
+   swapCategory,
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -1,7 +1,7 @@
+ import React, { useState, useEffect, useRef } from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ import { Trash2, Book, Star } from 'react-feather'
+-import { emptyTrash, addNote, swapNote, searchNotes } from '@/slices/note'
++import { emptyTrash, restoreAllTrash, addNote, swapNote, searchNotes } from '@/slices/note'
+ import { NoteItem, ReactDragEvent, ReactMouseEvent, RootState } from '@/types'
+ import { getActiveNote } from '@/utils/helpers'
+ import { Folder } from '@/utils/enums'
+@@ -30,6 +30,9 @@ const NoteList: React.FC = () => {
+   const _emptyTrash = () => {
+     dispatch(emptyTrash())
+   }
++  const _restoreAllTrash = () => {
++    dispatch(restoreAllTrash())
++  }
+ 
+   const _addNote = () => {
+     dispatch(
+@@ -80,6 +83,11 @@ const NoteList: React.FC = () => {
+               onClick={_emptyTrash}
+             >
+               <Trash2 size={15} />
+-              Empty Trash
++              &nbsp;Empty Trash
+             </button>
++            <button
++              className="note-list-trash-button"
++              onClick={_restoreAllTrash}
++            >
++              <Trash2 size={15} />
++              &nbsp;Restore All
++            </button>
+           </div>
+         )}
+       </div>
+```
+
+Wait, I need to be more careful about the exact file contents. Let me produce a cleaner diff based on the known TakeNote structure:
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -97,6 +97,11 @@ const noteSlice = createSlice({
+         note.trash = false
+       })
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+     deleteNote: (state, action: PayloadAction<string>) => {
+       state.notes = state.notes.filter((note) => note.id !== action.payload)
+     },
+@@ -200,6 +205,7 @@ export const {
+   addNote,
+   deleteNote,
+   emptyTrash,
++  restoreAllTrash,
+   pruneNotes,
+   restoreNote,
+   swapCategory,
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -1,7 +1,7 @@
+ import React, { useState, useEffect, useRef } from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ import { Trash2, Book, Star } from 'react-feather'
+-import { emptyTrash, addNote, swapNote, searchNotes } from '@/slices/note'
++import { emptyTrash, restoreAllTrash, addNote, swapNote, searchNotes } from '@/slices/note'
+ import { NoteItem, ReactDragEvent, ReactMouseEvent, RootState } from '@/types'
+ import { getActiveNote } from '@/utils/helpers'
+ import { Folder } from '@/utils/enums'
+@@ -30,6 +30,10 @@ const NoteList: React.FC = () => {
+   const _emptyTrash = () => {
+     dispatch(emptyTrash())
+   }
++
++  const _restoreAllTrash = () => {
++    dispatch(restoreAllTrash())
++  }
+ 
+   const _addNote = () => {
+     dispatch(
+@@ -80,7 +84,14 @@ const NoteList: React.FC = () => {
+               onClick={_emptyTrash}
+             >
+               <Trash2 size={15} />
+-              Empty Trash
++              &nbsp;Empty Trash
+             </button>
++            <button
++              className="note-list-trash-button"
++              onClick={_restoreAllTrash}
++            >
++              <Trash2 size={15} />
++              &nbsp;Restore All
++            </button>
+           </div>
+         )}
+       </div>
+```

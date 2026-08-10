@@ -1,0 +1,152 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "NoteList",
+        "childComponent": "SearchBar",
+        "importSource": "@/components/NoteList/SearchBar",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "searchRef",
+            "valueExpression": "searchRef"
+          },
+          {
+            "propName": "searchNotes",
+            "valueExpression": "_searchNotes"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteList",
+        "childComponent": "NoteListButton",
+        "importSource": "@/components/NoteList/NoteListButton",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.EMPTY_TRASH_BUTTON"
+          },
+          {
+            "propName": "label",
+            "valueExpression": "\"Empty\""
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "() => _permanentlyEmptyTrash()"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteList",
+        "childComponent": "Star",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"note-favorite\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "12"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteList",
+        "childComponent": "MoreHorizontal",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "15"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"context-menu-action\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteList",
+        "childComponent": "FolderIcon",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "12"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"context-menu-action\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteList",
+        "childComponent": "Book",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "12"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"context-menu-action\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteList",
+        "childComponent": "ContextMenu",
+        "importSource": "@/containers/ContextMenu",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "contextMenuRef",
+            "valueExpression": "contextMenuRef"
+          },
+          {
+            "propName": "item",
+            "valueExpression": "note"
+          },
+          {
+            "propName": "optionsPosition",
+            "valueExpression": "optionsPosition"
+          },
+          {
+            "propName": "setOptionsId",
+            "valueExpression": "setOptionsId"
+          },
+          {
+            "propName": "type",
+            "valueExpression": "ContextMenuEnum.NOTE"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

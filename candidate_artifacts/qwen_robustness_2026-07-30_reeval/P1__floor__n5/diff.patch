@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/hooks/useCartProducts.ts",
+      "op": "replace",
+      "search": "  const decreaseProductQuantity = (productId: string, quantity: number) => {\n    setCartProducts(prevCartProducts => {\n      return prevCartProducts.map(cartProduct => {\n        if (cartProduct.product.id === productId) {\n          return {\n            ...cartProduct,\n            quantity: cartProduct.quantity - quantity\n          };\n        }\n        return cartProduct;\n      });\n    });\n  };\n",
+      "content": "  const decreaseProductQuantity = (productId: string, quantity: number) => {\n    setCartProducts(prevCartProducts => {\n      return prevCartProducts.reduce((acc, cartProduct) => {\n        if (cartProduct.product.id === productId) {\n          const newQuantity = cartProduct.quantity - quantity;\n          if (newQuantity > 0) {\n            acc.push({\n              ...cartProduct,\n              quantity: newQuantity\n            });\n          }\n          // If newQuantity is <= 0, we simply don't add it back to the cart\n        } else {\n          acc.push(cartProduct);\n        }\n        return acc;\n      }, [] as CartProduct[]);\n    });\n  };\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

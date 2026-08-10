@@ -1,0 +1,314 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract **Props** and **Event Handlers** from each React component (function or class) in a given `.js` or `.jsx` file.
+
+Only consider props and event handlers that appear directly in the current input file.
+
+Do not include any props or event handlers that are assumed or inferred unless they are explicitly present in the provided content.
+
+---
+
+## Part A — Props
+
+A **Prop** is a named property accepted by a component. Detect props from any of the following evidence:
+- Destructuring in the function parameter list: `function Foo({ title, onClick }) { ... }`
+- Accessing `props.xxx` in a function component body.
+- Accessing `this.props.xxx` in a class component body.
+- PropTypes declaration: `Foo.propTypes = { title: PropTypes.string.isRequired }`.
+- TypeScript interface or type annotation on props.
+
+For each prop, return:
+- "name": The prop name (string).
+- "componentName": The name of the receiving component (string).
+- "type": The inferred or declared type. Use one of: "string", "number", "boolean", "object", "array", "function", "node", "element", "any", or "unknown". Use "unknown" if the type cannot be determined.
+- "isRequired": true if the prop is marked as required (via `.isRequired` in PropTypes, absence of `?` in TypeScript, or a default value NOT being provided). false otherwise. null if it cannot be determined.
+
+Do **NOT** include:
+- The `children` prop (unless it is explicitly declared in PropTypes or TypeScript types).
+- The `key` or `ref` pseudo-props.
+- Spread props (`...rest`) — only extract individually named props.
+
+---
+
+## Part B — Event Handlers
+
+An **Event Handler** is a named function that is referenced in a JSX event attribute (e.g., `onClick`, `onChange`, `onSubmit`).
+
+For each event handler, return:
+- "name": The handler function name (string). For inline arrows, use the event attribute name prefixed with "inline_" (e.g., "inline_onClick").
+- "eventType": The JSX event attribute where it is used (e.g., "onClick", "onChange", "onSubmit", "onKeyDown").
+- "componentName": The name of the component that owns this handler (string).
+- "isInline": true if the handler is defined as an inline arrow function directly in the JSX attribute. false if it references a named function or class method.
+
+Detection rules:
+- In function components: look for functions or consts defined in the component body and referenced in JSX event attributes, or inline arrow functions in JSX.
+- In class components: look for class methods or arrow-function class fields referenced via `this.methodName` in JSX event attributes (e.g., `onClick={this.handleClick}`).
+- If the same handler is bound to multiple event types, create a separate entry for each binding.
+
+Do **NOT** include:
+- Event handlers passed down as props to child components (these are captured as props, not handlers).
+- Lifecycle methods or hooks — only JSX event bindings.
+
+---
+
+## Output Format
+
+Return a JSON object with the following structure:
+{
+  "props": [
+    {
+      "name": "<prop name>",
+      "componentName": "<component name>",
+      "type": "<type>",
+      "isRequired": true | false | null
+    }
+  ],
+  "eventHandlers": [
+    {
+      "name": "<handler name>",
+      "eventType": "<JSX event attribute>",
+      "componentName": "<component name>",
+      "isInline": true | false
+    }
+  ]
+}
+
+---
+
+### Example 1
+Input:
+import React from 'react';
+
+function Greeting({ name, age }) {
+  return (
+    <div>
+      <h1>Hello, {name}!</h1>
+      <p>Age: {age}</p>
+    </div>
+  );
+}
+
+export default Greeting;
+
+Output:
+{
+  "props": [
+    { "name": "name", "componentName": "Greeting", "type": "unknown", "isRequired": null },
+    { "name": "age", "componentName": "Greeting", "type": "unknown", "isRequired": null }
+  ],
+  "eventHandlers": []
+}
+
+---
+
+### Example 2
+Input:
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
+function LoginForm({ onSubmitCredentials, initialUsername }) {
+  const [username, setUsername] = useState(initialUsername || '');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmitCredentials({ username, password });
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={username}
+        onChange={handleUsernameChange}
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button type="submit">Login</button>
+    </form>
+  );
+}
+
+LoginForm.propTypes = {
+  onSubmitCredentials: PropTypes.func.isRequired,
+  initialUsername: PropTypes.string,
+};
+
+export default LoginForm;
+
+Output:
+{
+  "props": [
+    { "name": "onSubmitCredentials", "componentName": "LoginForm", "type": "function", "isRequired": true },
+    { "name": "initialUsername", "componentName": "LoginForm", "type": "string", "isRequired": false }
+  ],
+  "eventHandlers": [
+    { "name": "handleSubmit", "eventType": "onSubmit", "componentName": "LoginForm", "isInline": false },
+    { "name": "handleUsernameChange", "eventType": "onChange", "componentName": "LoginForm", "isInline": false },
+    { "name": "inline_onChange", "eventType": "onChange", "componentName": "LoginForm", "isInline": true }
+  ]
+}
+
+---
+
+### Example 3
+Input:
+import React, { Component } from 'react';
+
+class Counter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: this.props.initialCount || 0 };
+    this.handleIncrement = this.handleIncrement.bind(this);
+  }
+
+  handleIncrement() {
+    this.setState(prev => ({ count: prev.count + 1 }));
+    if (this.props.onChange) {
+      this.props.onChange(this.state.count + 1);
+    }
+  }
+
+  handleReset = () => {
+    this.setState({ count: 0 });
+  };
+
+  render() {
+    return (
+      <div>
+        <span>{this.state.count}</span>
+        <button onClick={this.handleIncrement}>+</button>
+        <button onClick={this.handleReset}>Reset</button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+
+Output:
+{
+  "props": [
+    { "name": "initialCount", "componentName": "Counter", "type": "unknown", "isRequired": null },
+    { "name": "onChange", "componentName": "Counter", "type": "function", "isRequired": null }
+  ],
+  "eventHandlers": [
+    { "name": "handleIncrement", "eventType": "onClick", "componentName": "Counter", "isInline": false },
+    { "name": "handleReset", "eventType": "onClick", "componentName": "Counter", "isInline": false }
+  ]
+}
+
+Note: `onChange` is detected as a prop because it is accessed via `this.props.onChange`. Its type is inferred as "function" because it is invoked as a callback.
+
+---
+
+### Example 4
+Input:
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
+  const handleAddClick = () => {
+    onAddToCart(product.id);
+  };
+
+  return (
+    <div className="card">
+      <h3>{product.name}</h3>
+      <p>${product.price}</p>
+      <button onClick={handleAddClick}>Add to Cart</button>
+      <button onClick={() => onViewDetails(product.id)}>View Details</button>
+    </div>
+  );
+};
+
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  }).isRequired,
+  onAddToCart: PropTypes.func.isRequired,
+  onViewDetails: PropTypes.func.isRequired,
+};
+
+export default ProductCard;
+
+Output:
+{
+  "props": [
+    { "name": "product", "componentName": "ProductCard", "type": "object", "isRequired": true },
+    { "name": "onAddToCart", "componentName": "ProductCard", "type": "function", "isRequired": true },
+    { "name": "onViewDetails", "componentName": "ProductCard", "type": "function", "isRequired": true }
+  ],
+  "eventHandlers": [
+    { "name": "handleAddClick", "eventType": "onClick", "componentName": "ProductCard", "isInline": false },
+    { "name": "inline_onClick", "eventType": "onClick", "componentName": "ProductCard", "isInline": true }
+  ]
+}
+
+---
+
+### Example 5
+Input:
+import React from 'react';
+
+function SearchBar(props) {
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      props.onSearch(props.query);
+    }
+  };
+
+  return (
+    <input
+      type="text"
+      value={props.query}
+      placeholder={props.placeholder}
+      onChange={props.onQueryChange}
+      onKeyDown={handleKeyDown}
+    />
+  );
+}
+
+function EmptyState() {
+  return <p>No results found.</p>;
+}
+
+export { SearchBar, EmptyState };
+
+Output:
+{
+  "props": [
+    { "name": "onSearch", "componentName": "SearchBar", "type": "function", "isRequired": null },
+    { "name": "query", "componentName": "SearchBar", "type": "unknown", "isRequired": null },
+    { "name": "placeholder", "componentName": "SearchBar", "type": "unknown", "isRequired": null },
+    { "name": "onQueryChange", "componentName": "SearchBar", "type": "function", "isRequired": null }
+  ],
+  "eventHandlers": [
+    { "name": "onQueryChange", "eventType": "onChange", "componentName": "SearchBar", "isInline": false },
+    { "name": "handleKeyDown", "eventType": "onKeyDown", "componentName": "SearchBar", "isInline": false }
+  ]
+}
+
+Note: `onQueryChange` appears as both a prop (accepted by SearchBar) and an event handler (bound to `onChange` on the input). This is correct — it is a callback prop that also serves as an event handler in this component's JSX. `EmptyState` has no props and no event handlers, so it does not appear in either array.
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Extract props from destructuring, `props.xxx`, `this.props.xxx`, PropTypes, or TypeScript types.
+- Extract event handlers from JSX event attribute bindings only.
+- For inline arrow handlers, use the naming convention "inline_<eventType>".
+- If a callback prop is directly bound to a JSX event (e.g., `onChange={props.onQueryChange}`), list it in BOTH props and eventHandlers.
+- Exclude `children`, `key`, and `ref` from props.
+- Components with no props and no handlers should not appear in the output arrays.
+
+Output:

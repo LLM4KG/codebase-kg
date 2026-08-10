@@ -1,0 +1,54 @@
+{
+  "format": "cypherl",
+  "nodes": {
+    "File": 55,
+    "Library": 21,
+    "Prop": 14,
+    "Function_Component": 14,
+    "EventHandler": 8,
+    "State_Variable": 7,
+    "Custom_Hook": 6,
+    "Library_Hook": 4,
+    "Context": 2,
+    "Project": 1
+  },
+  "relationships": {
+    "BELONGS_TO": 55,
+    "DEPENDS_ON": 21,
+    "DEFINED_IN": 20,
+    "USES_CUSTOM_HOOK": 12,
+    "USES_COMPONENT": 8,
+    "ACCEPTS_PROP": 8,
+    "HAS_HANDLER": 8,
+    "DECLARES_STATE": 7,
+    "USES_LIBRARY_HOOK": 7,
+    "PROVIDED_BY": 4,
+    "PASSES_PROP": 4,
+    "CONSUMES_CONTEXT": 2,
+    "PROVIDES_CONTEXT": 2,
+    "RENDERS_ROOT_COMPONENT": 1
+  },
+  "provenance": {
+    "project_id": "eff3cf336442",
+    "extraction_model": "anthropic/claude-sonnet-4-6",
+    "prompt_set_version": "72ef9f041851",
+    "prompt_ids": [
+      "class_components",
+      "composition",
+      "context_provider_consumer",
+      "contexts",
+      "custom_hook_internal",
+      "custom_hooks",
+      "function_components",
+      "library_usage",
+      "props_and_handlers",
+      "route_definitions",
+      "state_class",
+      "state_function"
+    ],
+    "extracted_at": "2026-07-29T13:54:09+00:00",
+    "file_count": 55,
+    "repo_commit_sha": "9fa56244d0f0c0d363cab744a3305c50eabc08cb",
+    "repo_dirty": false
+  }
+}

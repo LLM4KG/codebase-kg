@@ -1,0 +1,90 @@
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+
+=======
+import { useState, useCallback } from 'react';
+
+export function useCopyToClipboard(successMessage: string, timeout: number = 3000) {
+  const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  const handleCopy = useCallback(async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(successMessage);
+      
+      setTimeout(() => {
+        setCopiedText(null);
+      }, timeout);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  }, [successMessage, timeout]);
+
+  return { copiedText, handleCopy };
+}
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useState, useEffect, useCallback } from 'react';
+=======
+import React, { useCallback } from 'react';
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { useNoteContext } from '../contexts/NoteContext';
+import { copyToClipboard } from '../utils/clipboard';
+=======
+import { useNoteContext } from '../contexts/NoteContext';
+import { copyToClipboard } from '../utils/clipboard';
+import { useCopyToClipboard } from '../utils/useCopyToClipboard';
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const { note } = useNoteContext();
+  const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (copiedText) {
+      const timer = setTimeout(() => {
+        setCopiedText(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [copiedText]);
+
+  const handleCopyNote = useCallback(async () => {
+    if (note) {
+      try {
+        await copyToClipboard(note.content);
+        setCopiedText('Copied to clipboard!');
+      } catch (err) {
+        console.error('Failed to copy note: ', err);
+      }
+    }
+  }, [note]);
+=======
+  const { note } = useNoteContext();
+  const { copiedText, handleCopy } = useCopyToClipboard('Copied to clipboard!', 3000);
+
+  const handleCopyNote = useCallback(async () => {
+    if (note) {
+      try {
+        await copyToClipboard(note.content);
+        handleCopy(note.content);
+      } catch (err) {
+        console.error('Failed to copy note: ', err);
+      }
+    }
+  }, [note, handleCopy]);
+>>>>>>> REPLACE
+```

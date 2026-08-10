@@ -1,0 +1,347 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract the **internal hook usage** of each custom hook defined in a given `.js` or `.jsx` file.
+
+Only consider custom hook definitions that appear directly in the current input file.
+
+Do not include any custom hooks that are assumed or inferred unless they are explicitly defined in the provided content.
+
+---
+
+## What is a Custom Hook?
+
+A custom hook is a JavaScript function whose name starts with `use` followed by an uppercase letter (e.g., `useCart`, `useAuth`, `useLocalStorage`). It typically calls other hooks internally (library hooks like `useState`, `useEffect`, or other custom hooks).
+
+Detection rules:
+- The function name matches the pattern `use[A-Z]...`.
+- It is defined in the file as a function declaration, arrow function, or function expression.
+- It calls at least one other hook in its body.
+
+---
+
+## What to Extract
+
+For each custom hook defined in the file, extract:
+- The hook's name.
+- All hooks it calls internally, classified as "library" or "custom" with their source.
+- The call count for each library hook (how many times it appears in the hook body).
+
+---
+
+## Output Format
+
+Return a JSON object:
+{
+  "customHookUsages": [
+    {
+      "hookName": "<name of the custom hook>",
+      "libraryHooks": [
+        {
+          "name": "<library hook name>",
+          "source": "<package name>",
+          "count": <number of call sites>
+        }
+      ],
+      "customHooks": [
+        {
+          "name": "<custom hook name>",
+          "source": "<import source or 'same_file'>"
+        }
+      ]
+    }
+  ]
+}
+
+---
+
+### Example 1
+Input:
+import { useState, useCallback } from 'react';
+
+function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+
+  const increment = useCallback(() => setCount(c => c + 1), []);
+  const decrement = useCallback(() => setCount(c => c - 1), []);
+  const reset = useCallback(() => setCount(initialValue), [initialValue]);
+
+  return { count, increment, decrement, reset };
+}
+
+export default useCounter;
+
+Output:
+{
+  "customHookUsages": [
+    {
+      "hookName": "useCounter",
+      "libraryHooks": [
+        { "name": "useState", "source": "react", "count": 1 },
+        { "name": "useCallback", "source": "react", "count": 3 }
+      ],
+      "customHooks": []
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+
+const useAuth = () => {
+  const auth = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (auth.token) {
+      auth.verifyToken().finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, [auth]);
+
+  return { ...auth, isLoading };
+};
+
+export default useAuth;
+
+Output:
+{
+  "customHookUsages": [
+    {
+      "hookName": "useAuth",
+      "libraryHooks": [
+        { "name": "useContext", "source": "react", "count": 1 },
+        { "name": "useState", "source": "react", "count": 1 },
+        { "name": "useEffect", "source": "react", "count": 1 }
+      ],
+      "customHooks": []
+    }
+  ]
+}
+
+---
+
+### Example 3
+Input:
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useAuth from './useAuth';
+import useLocalStorage from './useLocalStorage';
+
+function useProtectedResource(resourceUrl) {
+  const { user, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
+  const [cachedData, setCachedData] = useLocalStorage(resourceUrl, null);
+  const [data, setData] = useState(cachedData);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/login');
+      return;
+    }
+    if (user) {
+      fetch(resourceUrl, {
+        headers: { Authorization: `Bearer ${user.token}` }
+      })
+        .then(r => r.json())
+        .then(d => { setData(d); setCachedData(d); })
+        .catch(setError);
+    }
+  }, [user, authLoading, resourceUrl]);
+
+  return { data, error, isLoading: authLoading || data === null };
+}
+
+export default useProtectedResource;
+
+Output:
+{
+  "customHookUsages": [
+    {
+      "hookName": "useProtectedResource",
+      "libraryHooks": [
+        { "name": "useNavigate", "source": "react-router-dom", "count": 1 },
+        { "name": "useState", "source": "react", "count": 2 },
+        { "name": "useEffect", "source": "react", "count": 1 }
+      ],
+      "customHooks": [
+        { "name": "useAuth", "source": "./useAuth" },
+        { "name": "useLocalStorage", "source": "./useLocalStorage" }
+      ]
+    }
+  ]
+}
+
+Note: `useAuth` and `useLocalStorage` are custom hooks imported from local files. `useNavigate` is a library hook from `react-router-dom`.
+
+---
+
+### Example 4
+Input:
+import { useState, useCallback, useMemo } from 'react';
+
+function useFilters(initialFilters = {}) {
+  const [filters, setFilters] = useState(initialFilters);
+
+  const updateFilter = useCallback((key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  }, []);
+
+  const clearFilters = useCallback(() => {
+    setFilters(initialFilters);
+  }, [initialFilters]);
+
+  const activeCount = useMemo(
+    () => Object.values(filters).filter(Boolean).length,
+    [filters]
+  );
+
+  return { filters, updateFilter, clearFilters, activeCount };
+}
+
+function usePagination(totalItems, itemsPerPage = 10) {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = useMemo(
+    () => Math.ceil(totalItems / itemsPerPage),
+    [totalItems, itemsPerPage]
+  );
+
+  const goToPage = useCallback((page) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  }, [totalPages]);
+
+  return { currentPage, totalPages, goToPage };
+}
+
+export { useFilters, usePagination };
+
+Output:
+{
+  "customHookUsages": [
+    {
+      "hookName": "useFilters",
+      "libraryHooks": [
+        { "name": "useState", "source": "react", "count": 1 },
+        { "name": "useCallback", "source": "react", "count": 2 },
+        { "name": "useMemo", "source": "react", "count": 1 }
+      ],
+      "customHooks": []
+    },
+    {
+      "hookName": "usePagination",
+      "libraryHooks": [
+        { "name": "useState", "source": "react", "count": 1 },
+        { "name": "useMemo", "source": "react", "count": 1 },
+        { "name": "useCallback", "source": "react", "count": 1 }
+      ],
+      "customHooks": []
+    }
+  ]
+}
+
+Note: Two custom hooks defined in the same file, each with independent internal hook usage.
+
+---
+
+### Example 5
+Input:
+import { useReducer, useCallback } from 'react';
+import useLogger from './useLogger';
+
+const formReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_FIELD':
+      return { ...state, [action.field]: action.value };
+    case 'SET_ERRORS':
+      return { ...state, errors: action.errors };
+    case 'RESET':
+      return action.initialState;
+    default:
+      return state;
+  }
+};
+
+export const useForm = (initialState, validate) => {
+  const [state, dispatch] = useReducer(formReducer, initialState);
+  const { log } = useLogger('useForm');
+
+  const setField = useCallback((field, value) => {
+    dispatch({ type: 'SET_FIELD', field, value });
+    log(`Field updated: ${field}`);
+  }, [log]);
+
+  const handleSubmit = useCallback((onSubmit) => {
+    const errors = validate ? validate(state) : {};
+    if (Object.keys(errors).length > 0) {
+      dispatch({ type: 'SET_ERRORS', errors });
+    } else {
+      onSubmit(state);
+    }
+  }, [state, validate]);
+
+  const reset = useCallback(() => {
+    dispatch({ type: 'RESET', initialState });
+  }, [initialState]);
+
+  return { ...state, setField, handleSubmit, reset };
+};
+
+Output:
+{
+  "customHookUsages": [
+    {
+      "hookName": "useForm",
+      "libraryHooks": [
+        { "name": "useReducer", "source": "react", "count": 1 },
+        { "name": "useCallback", "source": "react", "count": 3 }
+      ],
+      "customHooks": [
+        { "name": "useLogger", "source": "./useLogger" }
+      ]
+    }
+  ]
+}
+
+---
+
+### Example 6
+Input:
+import React from 'react';
+
+function ProductCard({ product }) {
+  return (
+    <div>
+      <h3>{product.name}</h3>
+      <p>${product.price}</p>
+    </div>
+  );
+}
+
+export default ProductCard;
+
+Output:
+{
+  "customHookUsages": []
+}
+
+Note: This file contains only a function component, no custom hook definitions. The output is an empty array.
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Only extract custom hooks DEFINED in this file (functions named useXxx that call other hooks).
+- Do NOT extract hooks used by components — those are handled by the function component prompt.
+- For each library hook, include the call count within the custom hook's body.
+- For custom hooks calling other custom hooks, provide the import source.
+- If a custom hook is defined in the same file, set source to "same_file".
+- Files with no custom hook definitions should return an empty array.
+- List library hooks in the order they first appear in the hook body.
+
+Output:

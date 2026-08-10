@@ -1,0 +1,73 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer to `src/client/slices/note.ts`
+2. Add a "Restore All" button to `src/client/containers/NoteList.tsx`
+
+Let me analyze the existing patterns based on what I know about TakeNote's codebase structure.
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
++import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { NoteItem, NoteState } from '@/types'
+ import { getWebsiteTitle, isDraftNote } from '@/utils/helpers'
+ import { newNote } from '@/utils/newNote'
+@@ -100,6 +100,13 @@ const noteSlice = createSlice({
+         state.notes = state.notes.filter((note) => !note.trash)
+       }
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+     pruneNotes: (state) => {
+       state.notes = state.notes.filter((note) => !isDraftNote(note))
+     },
+@@ -200,6 +207,7 @@ export const {
+   emptyTrash,
+   pruneNotes,
+   restoreNote,
++  restoreAllTrash,
+   searchNotes,
+   swapCategory,
+   swapFolder,
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -1,7 +1,7 @@
+ import React, { useState, useEffect, useRef } from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ import { Droppable } from 'react-beautiful-dnd'
+-import { emptyTrash, pruneNotes, searchNotes, swapNote } from '@/slices/note'
++import { emptyTrash, pruneNotes, restoreAllTrash, searchNotes, swapNote } from '@/slices/note'
+ import { NoteItem, ApplicationState } from '@/types'
+ import { Folder } from '@/utils/enums'
+ import { getNoteTitle, sortByLastUpdated } from '@/utils/helpers'
+@@ -50,6 +50,10 @@ const NoteList: React.FC = () => {
+     dispatch(emptyTrash())
+   }
+ 
++  const handleRestoreAllTrash = () => {
++    dispatch(restoreAllTrash())
++  }
++
+   const handleSearchNote = (event: React.ChangeEvent<HTMLInputElement>) => {
+     dispatch(searchNotes(event.target.value))
+   }
+@@ -90,6 +94,11 @@ const NoteList: React.FC = () => {
+             {activeFolder === Folder.TRASH && (
+               <button className="trash-button" onClick={handleEmptyTrash}>
+                 <span>Empty Trash</span>
++              </button>
++            )}
++            {activeFolder === Folder.TRASH && (
++              <button className="trash-button" onClick={handleRestoreAllTrash}>
++                <span>Restore All</span>
+               </button>
+             )}
+           </div>
+```

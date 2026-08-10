@@ -1,0 +1,44 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "IconButton",
+        "childComponent": "IconCmp",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"button-icon\""
+          },
+          {
+            "propName": "color",
+            "valueExpression": "iconColor"
+          },
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "focusable",
+            "valueExpression": "\"false\""
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

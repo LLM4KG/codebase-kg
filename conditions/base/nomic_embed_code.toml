@@ -1,0 +1,7 @@
+# Dense retrieval condition — Nomic code-specific embedding model
+condition_id = "nomic_embed_code"
+retriever = "nomic_embed_code"
+format_variant = "A"
+max_rounds = 1
+
+[retriever_params]

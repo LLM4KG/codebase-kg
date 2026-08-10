@@ -1,0 +1,62 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const { addNote, deleteNote, updateNote, emptyTrash, pruneNotes, swapNote, swapCategory, swapFolder, toggleFavoriteNote, toggleTrashedNote, updateNoteState } = noteSlice.actions
+=======
+export const { addNote, deleteNote, updateNote, emptyTrash, restoreAllTrash, pruneNotes, swapNote, swapCategory, swapFolder, toggleFavoriteNote, toggleTrashedNote, updateNoteState } = noteSlice.actions
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { addNote, deleteNote, pruneNotes, swapNote, emptyTrash } from 'slices/note'
+=======
+import { addNote, deleteNote, pruneNotes, swapNote, emptyTrash, restoreAllTrash } from 'slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _emptyTrash = () => dispatch(emptyTrash())
+=======
+  const _emptyTrash = () => dispatch(emptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          {activeFolder === Folder.TRASH && (
+            <button className="trash-button" onClick={_emptyTrash}>
+              <Icon size={12} icon={deleteSweep} />
+              Empty Trash
+            </button>
+          )}
+=======
+          {activeFolder === Folder.TRASH && (
+            <>
+              <button className="trash-button" onClick={_restoreAllTrash}>
+                <Icon size={12} icon={deleteSweep} />
+                Restore All
+              </button>
+              <button className="trash-button" onClick={_emptyTrash}>
+                <Icon size={12} icon={deleteSweep} />
+                Empty Trash
+              </button>
+            </>
+          )}
+>>>>>>> REPLACE
+```

@@ -1,0 +1,219 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract **custom hook definitions** from a given `.js`, `.jsx`, `.ts`, or `.tsx` file and provide detailed metadata for each hook.
+
+Only consider custom hooks that are **defined** directly in the current input file. Hooks that are merely imported or called are NOT definitions and must be excluded.
+
+Do not include any hooks that are assumed or inferred unless they are explicitly defined in the provided content.
+
+---
+
+## What is a Custom Hook?
+
+A custom hook is a JavaScript/TypeScript function whose name starts with `use` followed by an uppercase letter (e.g., `useCart`, `useAuth`, `useLocalStorage`).
+
+Detection rules:
+- The function name matches the pattern `use[A-Z]...`.
+- It is defined in the file as a function declaration, arrow function, or function expression.
+
+**Important:** unlike a React component, a custom hook usually does **not** return JSX. It commonly returns an object, an array, a primitive, or nothing at all. Do not skip a function just because it returns no JSX — that is the normal case for a hook.
+
+A custom hook typically calls other hooks internally, but a `useXxx` helper that calls none still counts as a custom hook definition if the project exports it as one.
+
+---
+
+## What to Extract
+
+For each custom hook definition, return a JSON object with the following fields:
+
+- "name": The hook name (string, e.g., "useCartProducts").
+- "syntax": "function" or "arrow" (indicating declaration type).
+- "exportType": "default", "named", or "none" (based on how it is exported).
+- "parameters": An array of the hook's parameter names, in order. Use an empty array if it takes none. For destructured parameters, list the destructured property names.
+- "returnShape": One of "object", "array", "primitive", "function", "void", or "unknown" — describing what the hook returns.
+
+Return a JSON object containing a list of all custom hooks defined in the file.
+
+---
+
+### Example 1
+Input:
+import { useState } from 'react';
+
+export const useCounter = (initial) => {
+  const [count, setCount] = useState(initial);
+  const increment = () => setCount(c => c + 1);
+  return { count, increment };
+};
+
+Output:
+{
+  "customHooks": [
+    {
+      "name": "useCounter",
+      "syntax": "arrow",
+      "exportType": "named",
+      "parameters": ["initial"],
+      "returnShape": "object"
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import { useContext } from 'react';
+import { CartContext } from './CartContextProvider';
+
+const useCartProducts = () => {
+  const { products, setProducts } = useContext(CartContext);
+
+  const addProduct = (newProduct) => {
+    setProducts([...products, newProduct]);
+  };
+
+  const removeProduct = (productToRemove) => {
+    setProducts(products.filter(p => p.id !== productToRemove.id));
+  };
+
+  return { products, addProduct, removeProduct };
+};
+
+export default useCartProducts;
+
+Output:
+{
+  "customHooks": [
+    {
+      "name": "useCartProducts",
+      "syntax": "arrow",
+      "exportType": "default",
+      "parameters": [],
+      "returnShape": "object"
+    }
+  ]
+}
+
+Note: this file defines a hook and returns an object, not JSX. It is still a custom hook definition.
+
+---
+
+### Example 3
+Input:
+import { useEffect, useRef } from 'react';
+
+export function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    const id = setInterval(() => savedCallback.current(), delay);
+    return () => clearInterval(id);
+  }, [delay]);
+}
+
+export function useBeforeUnload(handler) {
+  useEffect(() => {
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [handler]);
+}
+
+Output:
+{
+  "customHooks": [
+    {
+      "name": "useInterval",
+      "syntax": "function",
+      "exportType": "named",
+      "parameters": ["callback", "delay"],
+      "returnShape": "void"
+    },
+    {
+      "name": "useBeforeUnload",
+      "syntax": "function",
+      "exportType": "named",
+      "parameters": ["handler"],
+      "returnShape": "void"
+    }
+  ]
+}
+
+Note: multiple hooks may be defined in one file. Neither returns a value.
+
+---
+
+### Example 4
+Input:
+import React, { useState } from 'react';
+import useAuth from './hooks/useAuth';
+
+const Dashboard = () => {
+  const { user } = useAuth();
+  const [open, setOpen] = useState(false);
+  return <div>{user.name}</div>;
+};
+
+export default Dashboard;
+
+Output:
+{
+  "customHooks": []
+}
+
+Note: `useAuth` is imported and called, not defined here. `Dashboard` is a component, not a hook. Nothing to extract.
+
+---
+
+### Example 5
+Input:
+import { useState, useCallback } from 'react';
+
+export const useToggle = (initial = false) => {
+  const [value, setValue] = useState(initial);
+  const toggle = useCallback(() => setValue(v => !v), []);
+  return [value, toggle];
+};
+
+function useDebouncedValue({ value, delay }) {
+  const [debounced, setDebounced] = useState(value);
+  return debounced;
+}
+
+Output:
+{
+  "customHooks": [
+    {
+      "name": "useToggle",
+      "syntax": "arrow",
+      "exportType": "named",
+      "parameters": ["initial"],
+      "returnShape": "array"
+    },
+    {
+      "name": "useDebouncedValue",
+      "syntax": "function",
+      "exportType": "none",
+      "parameters": ["value", "delay"],
+      "returnShape": "primitive"
+    }
+  ]
+}
+
+Note: destructured parameters are listed by their property names. `useDebouncedValue` is not exported, so `exportType` is "none".
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Only extract hooks **defined** in this file. Imported or called hooks do not count.
+- A hook name matches `use[A-Z]...`. Functions not matching this pattern are excluded.
+- Do NOT require JSX — hooks normally return objects, arrays, or nothing.
+- Do NOT extract React components, even if they call hooks.
+- A file with no custom hook definitions must return an empty list.
+
+Output:

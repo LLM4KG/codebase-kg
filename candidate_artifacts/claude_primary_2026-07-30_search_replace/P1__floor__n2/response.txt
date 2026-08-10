@@ -1,0 +1,26 @@
+```text
+src/hooks/useCartProducts.ts
+<<<<<<< SEARCH
+  const decreaseProductQuantity = (productId: Products["id"]) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId
+          ? { ...product, quantity: product.quantity - 1 }
+          : product
+      )
+    );
+  };
+=======
+  const decreaseProductQuantity = (productId: Products["id"]) => {
+    setProducts((prevProducts) =>
+      prevProducts
+        .map((product) =>
+          product.id === productId
+            ? { ...product, quantity: product.quantity - 1 }
+            : product
+        )
+        .filter((product) => product.quantity > 0)
+    );
+  };
+>>>>>>> REPLACE
+```

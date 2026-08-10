@@ -1,0 +1,59 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProductsProvider",
+        "childComponent": "ProductsContext.Provider",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "ProductContextValue"
+          },
+          {
+            "propName": "...props",
+            "valueExpression": "{...props}"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useProductsContext",
+        "libraryHooks": [
+          {
+            "name": "useContext",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": []
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [
+      {
+        "componentName": "ProductsProvider",
+        "contextName": "ProductsContext",
+        "contextSource": "same_file",
+        "valueExpression": "ProductContextValue"
+      }
+    ],
+    "contextConsumers": [
+      {
+        "consumerName": "useProductsContext",
+        "consumerType": "custom_hook",
+        "contextName": "ProductsContext",
+        "contextSource": "same_file",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

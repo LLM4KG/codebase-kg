@@ -1,0 +1,23 @@
+{
+  "project_id": "46e1e7c383ab",
+  "extraction_model": "anthropic/claude-sonnet-4-6",
+  "prompt_set_version": "72ef9f041851",
+  "prompt_ids": [
+    "class_components",
+    "composition",
+    "context_provider_consumer",
+    "contexts",
+    "custom_hook_internal",
+    "custom_hooks",
+    "function_components",
+    "library_usage",
+    "props_and_handlers",
+    "route_definitions",
+    "state_class",
+    "state_function"
+  ],
+  "extracted_at": "2026-07-29T14:04:55+00:00",
+  "file_count": 60,
+  "repo_commit_sha": "e0eddbb9a21ae4cf4c4c7c183f29cfd666e08331",
+  "repo_dirty": false
+}

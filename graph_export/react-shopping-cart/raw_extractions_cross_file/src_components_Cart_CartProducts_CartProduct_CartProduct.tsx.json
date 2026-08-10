@@ -1,0 +1,111 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.Container",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.DeleteButton",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "handleRemoveProduct"
+          },
+          {
+            "propName": "title",
+            "valueExpression": "\"remove product from cart\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.Image",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "src",
+            "valueExpression": "require(`static/products/${sku}-1-cart.webp`)"
+          },
+          {
+            "propName": "alt",
+            "valueExpression": "title"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.Details",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.Title",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.Desc",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.Price",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.ChangeQuantity",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "handleDecreaseProductQuantity"
+          },
+          {
+            "propName": "disabled",
+            "valueExpression": "quantity === 1 ? true : false"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CartProduct",
+        "childComponent": "S.ChangeQuantity",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "handleIncreaseProductQuantity"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

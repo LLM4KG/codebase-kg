@@ -1,0 +1,316 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract **state variables** declared inside React function components (and custom hooks) from a given `.js` or `.jsx` file.
+
+Only consider state declarations that appear directly in the current input file.
+
+Do not include any state declarations that are assumed or inferred unless they are explicitly present in the provided content.
+
+---
+
+## Detection Rules
+
+A state variable is created by one of the following patterns:
+
+1. **`useState`**: `const [name, setterName] = useState(defaultValue);`
+2. **`useReducer`**: `const [name, dispatchName] = useReducer(reducer, initialArg);`
+
+For each state variable, return:
+- "name": The state variable name (string) — the first element of the destructured array.
+- "setterName": The setter or dispatch function name (string) — the second element of the destructured array.
+- "type": The inferred type based on the default value. Use one of: "string", "number", "boolean", "object", "array", "null", "function", or "unknown". If the default value is ambiguous or a variable reference, use "unknown".
+- "defaultValue": A short string representation of the initial value (e.g., `"0"`, `"''"`, `"[]"`, `"null"`, `"false"`). For complex expressions, provide a brief summary (e.g., `"initialCount || 0"`, `"getInitialState()"`). If no default is provided, use `"undefined"`.
+- "componentName": The name of the function component or custom hook that owns this state variable (string).
+- "declarationPattern": "useState" or "useReducer" — indicating which hook was used.
+
+**Important:**
+- Extract state from function components AND from custom hooks (functions named `useXxx`).
+- If a component declares multiple `useState` calls, create a separate entry for each.
+- If `useReducer` is used, the "name" is the state variable and the "setterName" is the dispatch function.
+- Do NOT extract state from class components (those are handled by a separate prompt).
+
+---
+
+## Output Format
+
+Return a JSON object with the following structure:
+{
+  "stateVariables": [
+    {
+      "name": "<state variable name>",
+      "setterName": "<setter or dispatch name>",
+      "type": "<inferred type>",
+      "defaultValue": "<short representation>",
+      "componentName": "<component or hook name>",
+      "declarationPattern": "useState" | "useReducer"
+    }
+  ]
+}
+
+---
+
+### Example 1
+Input:
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+    </div>
+  );
+}
+
+export default Counter;
+
+Output:
+{
+  "stateVariables": [
+    {
+      "name": "count",
+      "setterName": "setCount",
+      "type": "number",
+      "defaultValue": "0",
+      "componentName": "Counter",
+      "declarationPattern": "useState"
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import React, { useState } from 'react';
+
+const LoginForm = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  return (
+    <form>
+      <input value={username} onChange={(e) => setUsername(e.target.value)} />
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+    </form>
+  );
+};
+
+export default LoginForm;
+
+Output:
+{
+  "stateVariables": [
+    {
+      "name": "username",
+      "setterName": "setUsername",
+      "type": "string",
+      "defaultValue": "''",
+      "componentName": "LoginForm",
+      "declarationPattern": "useState"
+    },
+    {
+      "name": "password",
+      "setterName": "setPassword",
+      "type": "string",
+      "defaultValue": "''",
+      "componentName": "LoginForm",
+      "declarationPattern": "useState"
+    },
+    {
+      "name": "rememberMe",
+      "setterName": "setRememberMe",
+      "type": "boolean",
+      "defaultValue": "false",
+      "componentName": "LoginForm",
+      "declarationPattern": "useState"
+    },
+    {
+      "name": "errors",
+      "setterName": "setErrors",
+      "type": "object",
+      "defaultValue": "{}",
+      "componentName": "LoginForm",
+      "declarationPattern": "useState"
+    }
+  ]
+}
+
+---
+
+### Example 3
+Input:
+import React, { useReducer } from 'react';
+
+const initialState = { count: 0, step: 1 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { ...state, count: state.count + state.step };
+    case 'setStep':
+      return { ...state, step: action.payload };
+    default:
+      return state;
+  }
+}
+
+function StepCounter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+{state.step}</button>
+    </div>
+  );
+}
+
+export default StepCounter;
+
+Output:
+{
+  "stateVariables": [
+    {
+      "name": "state",
+      "setterName": "dispatch",
+      "type": "object",
+      "defaultValue": "initialState",
+      "componentName": "StepCounter",
+      "declarationPattern": "useReducer"
+    }
+  ]
+}
+
+Note: The default value is the variable name `initialState` as written in the code, not its resolved value.
+
+---
+
+### Example 4
+Input:
+import { useState, useCallback } from 'react';
+
+function useCart() {
+  const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  const addItem = useCallback((item) => {
+    setItems(prev => [...prev, item]);
+    setTotal(prev => prev + item.price);
+  }, []);
+
+  return { items, total, addItem };
+}
+
+export default useCart;
+
+Output:
+{
+  "stateVariables": [
+    {
+      "name": "items",
+      "setterName": "setItems",
+      "type": "array",
+      "defaultValue": "[]",
+      "componentName": "useCart",
+      "declarationPattern": "useState"
+    },
+    {
+      "name": "total",
+      "setterName": "setTotal",
+      "type": "number",
+      "defaultValue": "0",
+      "componentName": "useCart",
+      "declarationPattern": "useState"
+    }
+  ]
+}
+
+Note: `useCart` is a custom hook, not a component. State declared inside custom hooks is extracted with the same structure, using the hook name as `componentName`.
+
+---
+
+### Example 5
+Input:
+import React, { useState } from 'react';
+
+function ProductPage({ productId }) {
+  const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState('M');
+  const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  return <div>...</div>;
+}
+
+function EmptyComponent() {
+  return <p>Nothing here</p>;
+}
+
+export { ProductPage, EmptyComponent };
+
+Output:
+{
+  "stateVariables": [
+    {
+      "name": "product",
+      "setterName": "setProduct",
+      "type": "null",
+      "defaultValue": "null",
+      "componentName": "ProductPage",
+      "declarationPattern": "useState"
+    },
+    {
+      "name": "quantity",
+      "setterName": "setQuantity",
+      "type": "number",
+      "defaultValue": "1",
+      "componentName": "ProductPage",
+      "declarationPattern": "useState"
+    },
+    {
+      "name": "selectedSize",
+      "setterName": "setSelectedSize",
+      "type": "string",
+      "defaultValue": "'M'",
+      "componentName": "ProductPage",
+      "declarationPattern": "useState"
+    },
+    {
+      "name": "reviews",
+      "setterName": "setReviews",
+      "type": "array",
+      "defaultValue": "[]",
+      "componentName": "ProductPage",
+      "declarationPattern": "useState"
+    },
+    {
+      "name": "isLoading",
+      "setterName": "setIsLoading",
+      "type": "boolean",
+      "defaultValue": "true",
+      "componentName": "ProductPage",
+      "declarationPattern": "useState"
+    }
+  ]
+}
+
+Note: `EmptyComponent` declares no state, so it does not appear in the output.
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Extract state from both function components and custom hooks (functions named `useXxx`).
+- Each `useState` or `useReducer` call produces one entry.
+- Infer the type from the default value where possible; use "unknown" otherwise.
+- For `defaultValue`, provide a short string representation as written in the code.
+- Do NOT extract `this.state` from class components — this prompt is for function components and custom hooks only.
+- Components or hooks with no state declarations should not appear in the output.
+
+Output:

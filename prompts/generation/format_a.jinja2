@@ -1,0 +1,80 @@
+## Project Context
+
+You are working on the **{{ project_name }}** React project.
+
+**Task type:** {{ task_type }}
+
+---
+
+### Target Components
+{% for comp in target_components %}
+
+#### {{ comp.name }} (`{{ comp.file_path }}`)
+
+{% if comp.source_code %}
+```{{ "tsx" if comp.file_path.endswith(".tsx") else "jsx" }}
+{{ comp.source_code }}
+```
+{% endif %}
+{% if comp.props %}
+**Props:** {{ comp.props | map(attribute='name') | join(', ') }}
+{% endif %}
+{% if comp.hooks %}
+**Hooks used:** {{ comp.hooks | map(attribute='name') | join(', ') }}
+{% endif %}
+{% if comp.state_variables %}
+**State:** {{ comp.state_variables | map(attribute='name') | join(', ') }}
+{% endif %}
+{% if comp.contexts_consumed %}
+**Consumes context:** {{ comp.contexts_consumed | join(', ') }}
+{% endif %}
+{% if comp.contexts_provided %}
+**Provides context:** {{ comp.contexts_provided | join(', ') }}
+{% endif %}
+{% endfor %}
+{% if neighbor_components %}
+
+---
+
+### Related Components
+{%- set relation_labels = {
+  "parent": "renders the target and passes props to it",
+  "child": "is rendered by the target",
+  "caller": "calls the target",
+  "used_by": "calls this hook"
+} %}
+{%- for comp in neighbor_components %}
+
+**{{ comp.name }}** (`{{ comp.file_path }}`)
+{%- if comp.relation in relation_labels %}
+- {{ relation_labels[comp.relation] }}
+{%- endif %}
+{%- if comp.props %}
+- Props: {{ comp.props | map(attribute='name') | join(', ') }}
+{%- endif %}
+{%- if comp.required_props %}
+- Required: {{ comp.required_props | join(', ') }}
+{%- endif %}
+{%- if comp.hooks %}
+- Hooks: {{ comp.hooks | map(attribute='name') | join(', ') }}
+{%- endif %}
+{%- if comp.state_variables %}
+- State: {{ comp.state_variables | map(attribute='name') | join(', ') }}
+{%- endif %}
+{%- if comp.contexts_consumed %}
+- Consumes: {{ comp.contexts_consumed | join(', ') }}
+{%- endif %}
+{%- if comp.contexts_provided %}
+- Provides: {{ comp.contexts_provided | join(', ') }}
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+{% if cross_cutting_notes %}
+
+---
+
+### Cross-Cutting Notes
+{% for note in cross_cutting_notes %}
+- {{ note }}
+{%- endfor %}
+{% endif %}

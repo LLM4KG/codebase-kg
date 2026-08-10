@@ -1,0 +1,18 @@
+```diff
+diff --git a/src/contexts/cart-context/useCartProducts.ts b/src/contexts/cart-context/useCartProducts.ts
+index 661d692..5cd6a29 100644
+--- a/src/contexts/cart-context/useCartProducts.ts
++++ b/src/contexts/cart-context/useCartProducts.ts
+@@ -58,6 +58,11 @@ const useCartProducts = () => {
+   };
+ 
+   const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
++    if (productToDecrease.quantity <= 1) {
++      removeProduct(productToDecrease);
++      return;
++    }
++
+     const updatedProducts = products.map((product: ICartProduct) => {
+       return updateQuantitySafely(product, productToDecrease, -1);
+     });
+```

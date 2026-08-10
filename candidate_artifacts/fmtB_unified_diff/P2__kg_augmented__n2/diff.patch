@@ -1,0 +1,33 @@
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
++import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+ import { LabelText } from '@resources/LabelText'
+@@ -1,6 +1,6 @@
+ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+ import { LabelText } from '@resources/LabelText'
+ import { Folder, NotesSortKey } from '@/utils/enums'
+ import { NoteItem, NoteState } from '@/types'
+ import { getWeightedFavorites, isDraftNote } from '@/utils/helpers'
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,3 +1,3 @@
+ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,6 +1,6 @@
+ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+ import { LabelText } from '@resources/LabelText'
+ import { Folder, NotesSortKey } from '@/utils/enums'
+ import { NoteItem, NoteState } from '@/types'

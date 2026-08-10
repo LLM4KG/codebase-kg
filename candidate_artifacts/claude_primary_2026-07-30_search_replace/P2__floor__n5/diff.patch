@@ -1,0 +1,32 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    emptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n",
+      "content": "    emptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) =>\n        note.trash ? { ...note, trash: false } : note\n      )\n    },\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "export const { addNote, deleteNote, updateNote, emptyTrash, pruneNotes, swapNote, swapCategory, swapFolder, toggleFavoriteNote, toggleTrashedNote, updateNoteState } = noteSlice.actions\n",
+      "content": "export const { addNote, deleteNote, updateNote, emptyTrash, restoreAllTrash, pruneNotes, swapNote, swapCategory, swapFolder, toggleFavoriteNote, toggleTrashedNote, updateNoteState } = noteSlice.actions\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { addNote, pruneNotes, swapNote, emptyTrash } from 'slices/note'\n",
+      "content": "import { addNote, pruneNotes, swapNote, emptyTrash, restoreAllTrash } from 'slices/note'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          {activeFolder === Folder.TRASH && (\n            <button\n              className=\"trash-button\"\n              onClick={() => {\n                dispatch(emptyTrash())\n              }}\n            >\n              <Trash2 size={15} />\n              Empty Trash\n            </button>\n          )}\n",
+      "content": "          {activeFolder === Folder.TRASH && (\n            <>\n              <button\n                className=\"trash-button\"\n                onClick={() => {\n                  dispatch(restoreAllTrash())\n                }}\n              >\n                Restore All\n              </button>\n              <button\n                className=\"trash-button\"\n                onClick={() => {\n                  dispatch(emptyTrash())\n                }}\n              >\n                <Trash2 size={15} />\n                Empty Trash\n              </button>\n            </>\n          )}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

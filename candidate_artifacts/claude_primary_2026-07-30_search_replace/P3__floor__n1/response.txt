@@ -1,0 +1,74 @@
+Looking at the task, I need to:
+
+1. Create a new file `src/client/utils/useCopyToClipboard.ts` with the custom hook
+2. Update `NoteMenuBar.tsx` to use the new hook
+
+Let me analyze what the hook should contain based on the task description:
+- A `useState` for the "copied" feedback text
+- A `useEffect` that auto-clears it after the timeout
+- A `handleCopy` function that calls `copyToClipboard`
+- Returns `{ copiedText, handleCopy }`
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+
+import copyToClipboard from 'copy-to-clipboard'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+    const timer = setTimeout(() => setCopiedText(''), timeout)
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    copyToClipboard(text)
+    setCopiedText(successMessage)
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { useEffect, useState } from 'react'
+=======
+import { useState } from 'react'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import copyToClipboard from 'copy-to-clipboard'
+=======
+import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copied, setCopied] = useState('')
+
+  useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(''), 3000)
+    return () => clearTimeout(timer)
+  }, [copied])
+=======
+  const { copiedText: copied, handleCopy } = useCopyToClipboard(copyAsMarkdownLabel, 3000)
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+          onClick={() => {
+            copyToClipboard(noteValue)
+            setCopied(copyAsMarkdownLabel)
+          }}
+=======
+          onClick={() => handleCopy(noteValue)}
+>>>>>>> REPLACE
+```

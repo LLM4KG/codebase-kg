@@ -1,0 +1,235 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = [...state.notes, payload]
+    },
+    deleteNotes: (state, { payload }: PayloadAction<string[]>) => {
+      state.notes = state.notes.filter((note) => !payload.includes(note.id))
+    },
+    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload.id ? { ...note, ...payload } : note
+      )
+    },
+    setNotes: (state, { payload }: PayloadAction<NoteItem[]>) => {
+      state.notes = payload
+    },
+    setSearchValue: (state, { payload }: PayloadAction<string>) => {
+      state.searchValue = payload
+    },
+    setActiveNote: (state, { payload }: PayloadAction<string>) => {
+      state.activeNoteId = payload
+    },
+    setActiveFolder: (state, { payload }: PayloadAction<Folder>) => {
+      state.activeFolder = payload
+    },
+    setActiveCategoryId: (state, { payload }: PayloadAction<string>) => {
+      state.activeCategoryId = payload
+    },
+    updateSelectedNotes: (
+      state,
+      { payload }: PayloadAction<{ noteId: string; multiSelect: boolean }>
+    ) => {
+      const { noteId, multiSelect } = payload
+
+      if (multiSelect) {
+        state.selectedNotesIds = state.selectedNotesIds.includes(noteId)
+          ? state.selectedNotesIds.filter((id) => id !== noteId)
+          : [...state.selectedNotesIds, noteId]
+      } else {
+        state.selectedNotesIds = [noteId]
+      }
+    },
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+    pruneNotes: (state) => {
+      state.notes = state.notes.filter((note) => note.text !== '' || note.id === state.activeNoteId)
+    },
+  },
+})
+=======
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = [...state.notes, payload]
+    },
+    deleteNotes: (state, { payload }: PayloadAction<string[]>) => {
+      state.notes = state.notes.filter((note) => !payload.includes(note.id))
+    },
+    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload.id ? { ...note, ...payload } : note
+      )
+    },
+    setNotes: (state, { payload }: PayloadAction<NoteItem[]>) => {
+      state.notes = payload
+    },
+    setSearchValue: (state, { payload }: PayloadAction<string>) => {
+      state.searchValue = payload
+    },
+    setActiveNote: (state, { payload }: PayloadAction<string>) => {
+      state.activeNoteId = payload
+    },
+    setActiveFolder: (state, { payload }: PayloadAction<Folder>) => {
+      state.activeFolder = payload
+    },
+    setActiveCategoryId: (state, { payload }: PayloadAction<string>) => {
+      state.activeCategoryId = payload
+    },
+    updateSelectedNotes: (
+      state,
+      { payload }: PayloadAction<{ noteId: string; multiSelect: boolean }>
+    ) => {
+      const { noteId, multiSelect } = payload
+
+      if (multiSelect) {
+        state.selectedNotesIds = state.selectedNotesIds.includes(noteId)
+          ? state.selectedNotesIds.filter((id) => id !== noteId)
+          : [...state.selectedNotesIds, noteId]
+      } else {
+        state.selectedNotesIds = [noteId]
+      }
+    },
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+    pruneNotes: (state) => {
+      state.notes = state.notes.filter((note) => note.text !== '' || note.id === state.activeNoteId)
+    },
+  },
+})
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const {
+  addNote,
+  deleteNotes,
+  updateNote,
+  setNotes,
+  setSearchValue,
+  setActiveNote,
+  setActiveFolder,
+  setActiveCategoryId,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  pruneNotes,
+} = noteSlice.actions
+=======
+export const {
+  addNote,
+  deleteNotes,
+  updateNote,
+  setNotes,
+  setSearchValue,
+  setActiveNote,
+  setActiveFolder,
+  setActiveCategoryId,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+  pruneNotes,
+} = noteSlice.actions
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+=======
+import {
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+=======
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            label="Empty"
+            handler={() => _permanentlyEmptyTrash()}
+          >
+            Empty Trash
+          </NoteListButton>
+        )}
+      </div>
+=======
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <>
+            <NoteListButton
+              dataTestID={TestID.EMPTY_TRASH_BUTTON}
+              label="Empty"
+              handler={() => _permanentlyEmptyTrash()}
+            >
+              Empty Trash
+            </NoteListButton>
+            <NoteListButton
+              dataTestID="restore-all-trash-button"
+              label="Restore"
+              handler={() => _restoreAllTrash()}
+            >
+              Restore All
+            </NoteListButton>
+          </>
+        )}
+      </div>
+>>>>>>> REPLACE
+```

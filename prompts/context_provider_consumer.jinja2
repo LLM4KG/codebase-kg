@@ -1,0 +1,424 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract **Context provider** and **Context consumer** relationships from a given `.js` or `.jsx` file.
+
+Only consider context usage that appears directly in the current input file.
+
+Do not include any context relationships that are assumed or inferred unless they are explicitly present in the provided content.
+
+---
+
+## What to Extract
+
+For each React component (function or class) and each custom hook defined in this file, identify:
+
+1. **Context it provides** — the component renders `<XyzContext.Provider value={...}>`.
+2. **Context it consumes** — via one of these patterns:
+   a. `useContext(XyzContext)` — in function components or custom hooks.
+   b. `static contextType = XyzContext` — in class components.
+   c. `<XyzContext.Consumer>` — in class or function component JSX (rare in modern React).
+
+---
+
+## Detection Rules
+
+**Provider detection:**
+- Look for JSX elements matching `<SomeVariable.Provider value={...}>` in the component's returned JSX (or in the `render()` method for class components).
+- The Context variable is the part before `.Provider` (e.g., in `<CartContext.Provider>`, the context is `CartContext`).
+- Capture a short summary of the `value` prop expression.
+
+**Consumer detection via `useContext`:**
+- Look for calls to `useContext(SomeVariable)` in the body of function components or custom hooks.
+- The argument to `useContext()` is the Context variable.
+
+**Consumer detection in class components:**
+- Look for `static contextType = SomeVariable` as a class field.
+- Also look for `<SomeVariable.Consumer>` in the render method JSX.
+
+**Determining context source:**
+- If the Context is imported via a relative path (e.g., `import { CartContext } from '../context/CartContext'`), set `contextSource` to that import path.
+- If the Context is imported from an external library, set `contextSource` to the library name.
+- If the Context is created in the same file via `createContext(...)`, set `contextSource` to `"same_file"`.
+
+---
+
+## Output Format
+
+Return a JSON object:
+{
+  "contextProviders": [
+    {
+      "componentName": "<name of the providing component>",
+      "contextName": "<Context variable name>",
+      "contextSource": "<import path or 'same_file'>",
+      "valueExpression": "<short summary of the value prop>"
+    }
+  ],
+  "contextConsumers": [
+    {
+      "consumerName": "<name of the component or custom hook>",
+      "consumerType": "function_component" | "class_component" | "custom_hook",
+      "contextName": "<Context variable name>",
+      "contextSource": "<import path or 'same_file'>",
+      "consumptionMethod": "useContext" | "contextType" | "Consumer"
+    }
+  ]
+}
+
+---
+
+### Example 1
+Input:
+import React, { createContext, useState } from 'react';
+
+const ThemeContext = createContext('light');
+
+function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export { ThemeContext, ThemeProvider };
+
+Output:
+{
+  "contextProviders": [
+    {
+      "componentName": "ThemeProvider",
+      "contextName": "ThemeContext",
+      "contextSource": "same_file",
+      "valueExpression": "{ theme, toggleTheme }"
+    }
+  ],
+  "contextConsumers": []
+}
+
+Note: `ThemeContext` is created in the same file. `ThemeProvider` provides it but does not consume it.
+
+---
+
+### Example 2
+Input:
+import React, { useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
+
+function ThemedButton({ label, onClick }) {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  return (
+    <button
+      className={`btn btn-${theme}`}
+      onClick={onClick}
+    >
+      {label}
+    </button>
+  );
+}
+
+export default ThemedButton;
+
+Output:
+{
+  "contextProviders": [],
+  "contextConsumers": [
+    {
+      "consumerName": "ThemedButton",
+      "consumerType": "function_component",
+      "contextName": "ThemeContext",
+      "contextSource": "../context/ThemeContext",
+      "consumptionMethod": "useContext"
+    }
+  ]
+}
+
+---
+
+### Example 3
+Input:
+import React, { useContext, useState, useCallback } from 'react';
+import { CartContext } from './CartContext';
+
+function useCart() {
+  const { items, dispatch } = useContext(CartContext);
+
+  const addItem = useCallback((product) => {
+    dispatch({ type: 'ADD_ITEM', payload: product });
+  }, [dispatch]);
+
+  const removeItem = useCallback((productId) => {
+    dispatch({ type: 'REMOVE_ITEM', payload: productId });
+  }, [dispatch]);
+
+  const totalPrice = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+  return { items, addItem, removeItem, totalPrice };
+}
+
+export default useCart;
+
+Output:
+{
+  "contextProviders": [],
+  "contextConsumers": [
+    {
+      "consumerName": "useCart",
+      "consumerType": "custom_hook",
+      "contextName": "CartContext",
+      "contextSource": "./CartContext",
+      "consumptionMethod": "useContext"
+    }
+  ]
+}
+
+Note: `useCart` is a custom hook (not a component) that consumes `CartContext`.
+
+---
+
+### Example 4
+Input:
+import React, { Component } from 'react';
+import { AuthContext } from '../context/AuthContext';
+
+class UserGreeting extends Component {
+  static contextType = AuthContext;
+
+  render() {
+    const user = this.context;
+    if (!user) return <p>Please log in.</p>;
+    return <h2>Welcome, {user.name}!</h2>;
+  }
+}
+
+export default UserGreeting;
+
+Output:
+{
+  "contextProviders": [],
+  "contextConsumers": [
+    {
+      "consumerName": "UserGreeting",
+      "consumerType": "class_component",
+      "contextName": "AuthContext",
+      "contextSource": "../context/AuthContext",
+      "consumptionMethod": "contextType"
+    }
+  ]
+}
+
+---
+
+### Example 5
+Input:
+import React, { createContext, useReducer, useContext } from 'react';
+
+const initialState = { notifications: [], unreadCount: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'ADD':
+      return {
+        notifications: [...state.notifications, action.payload],
+        unreadCount: state.unreadCount + 1,
+      };
+    case 'MARK_READ':
+      return { ...state, unreadCount: 0 };
+    default:
+      return state;
+  }
+}
+
+const NotificationContext = createContext(null);
+
+function NotificationProvider({ children }) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <NotificationContext.Provider value={{ state, dispatch }}>
+      {children}
+    </NotificationContext.Provider>
+  );
+}
+
+function useNotifications() {
+  const context = useContext(NotificationContext);
+  if (!context) {
+    throw new Error('useNotifications must be used within a NotificationProvider');
+  }
+  return context;
+}
+
+function NotificationBadge() {
+  const { state } = useNotifications();
+  if (state.unreadCount === 0) return null;
+  return <span className="badge">{state.unreadCount}</span>;
+}
+
+export { NotificationContext, NotificationProvider, useNotifications, NotificationBadge };
+
+Output:
+{
+  "contextProviders": [
+    {
+      "componentName": "NotificationProvider",
+      "contextName": "NotificationContext",
+      "contextSource": "same_file",
+      "valueExpression": "{ state, dispatch }"
+    }
+  ],
+  "contextConsumers": [
+    {
+      "consumerName": "useNotifications",
+      "consumerType": "custom_hook",
+      "contextName": "NotificationContext",
+      "contextSource": "same_file",
+      "consumptionMethod": "useContext"
+    }
+  ]
+}
+
+Note: `NotificationBadge` calls `useNotifications()` (a custom hook), but it does NOT directly call `useContext`. Therefore `NotificationBadge` is NOT listed as a context consumer. The `CONSUMES_CONTEXT` edge for `NotificationBadge` would be indirect — only direct evidence qualifies. `useNotifications` is the direct consumer.
+
+---
+
+### Example 6
+Input:
+import React, { createContext, useState, useContext } from 'react';
+
+const SidebarContext = createContext({ isOpen: false, toggle: () => {} });
+
+function SidebarProvider({ children }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(prev => !prev);
+
+  return (
+    <SidebarContext.Provider value={{ isOpen, toggle }}>
+      {children}
+    </SidebarContext.Provider>
+  );
+}
+
+function SidebarToggle() {
+  const { toggle } = useContext(SidebarContext);
+  return <button onClick={toggle}>Toggle Sidebar</button>;
+}
+
+function SidebarPanel() {
+  const { isOpen } = useContext(SidebarContext);
+  if (!isOpen) return null;
+  return <aside className="sidebar">Sidebar Content</aside>;
+}
+
+export { SidebarContext, SidebarProvider, SidebarToggle, SidebarPanel };
+
+Output:
+{
+  "contextProviders": [
+    {
+      "componentName": "SidebarProvider",
+      "contextName": "SidebarContext",
+      "contextSource": "same_file",
+      "valueExpression": "{ isOpen, toggle }"
+    }
+  ],
+  "contextConsumers": [
+    {
+      "consumerName": "SidebarToggle",
+      "consumerType": "function_component",
+      "contextName": "SidebarContext",
+      "contextSource": "same_file",
+      "consumptionMethod": "useContext"
+    },
+    {
+      "consumerName": "SidebarPanel",
+      "consumerType": "function_component",
+      "contextName": "SidebarContext",
+      "contextSource": "same_file",
+      "consumptionMethod": "useContext"
+    }
+  ]
+}
+
+Note: One provider and two consumers, all in the same file referencing the same context.
+
+---
+
+### Example 7
+Input:
+import React from 'react';
+import { CartContext } from '../context/CartContext';
+
+class CartSummary extends React.Component {
+  render() {
+    return (
+      <CartContext.Consumer>
+        {({ items, totalPrice }) => (
+          <div className="cart-summary">
+            <p>{items.length} items</p>
+            <p>Total: ${totalPrice}</p>
+          </div>
+        )}
+      </CartContext.Consumer>
+    );
+  }
+}
+
+export default CartSummary;
+
+Output:
+{
+  "contextProviders": [],
+  "contextConsumers": [
+    {
+      "consumerName": "CartSummary",
+      "consumerType": "class_component",
+      "contextName": "CartContext",
+      "contextSource": "../context/CartContext",
+      "consumptionMethod": "Consumer"
+    }
+  ]
+}
+
+Note: This class component uses the `<CartContext.Consumer>` render prop pattern (older approach, still valid).
+
+---
+
+### Example 8
+Input:
+import React from 'react';
+
+function StaticHeader() {
+  return <header><h1>My App</h1></header>;
+}
+
+export default StaticHeader;
+
+Output:
+{
+  "contextProviders": [],
+  "contextConsumers": []
+}
+
+Note: No context usage in this file.
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Extract providers: look for `<XyzContext.Provider value={...}>` in component JSX.
+- Extract consumers: look for `useContext(Xyz)`, `static contextType = Xyz`, or `<Xyz.Consumer>`.
+- Only capture DIRECT context usage. If a component calls a custom hook that internally uses `useContext`, the component is NOT a direct consumer — only the hook is.
+- For `consumerType`, use `"function_component"`, `"class_component"`, or `"custom_hook"`.
+- For `consumptionMethod`, use `"useContext"`, `"contextType"`, or `"Consumer"`.
+- If the Context is created in the same file, set `contextSource` to `"same_file"`.
+- Components or hooks with no context usage should not appear in either array.
+
+Output:

@@ -1,0 +1,49 @@
+```diff
+--git a/src/hooks/useCartProducts.ts b/src/hooks/useCartProducts.ts
+--- a/src/hooks/useCartProducts.ts
++++ b/src/hooks/useCartProducts.ts
+@@ -1,6 +1,6 @@
+ import { useCallback } from 'react';
+ import { useCartContext } from '../contexts/CartContext';
+ 
+ const useCartProducts = () => {
+   const { products, setProducts } = useCartContext();
+ 
+   const increaseProductQuantity = useCallback(
+     (productId: number) => {
+       setProducts((prevProducts) =>
+         prevProducts.map((product) =>
+           product.id === productId
+             ? { ...product, quantity: product.quantity + 1 }
+             : product
+         )
+       );
+     },
+     [setProducts]
+   );
+ 
+   const decreaseProductQuantity = useCallback(
+     (productId: number) => {
+       setProducts((prevProducts) =>
+-        prevProducts.map((product) =>
+-          product.id === productId
+-            ? { ...product, quantity: product.quantity - 1 }
+-            : product
+-        )
++        prevProducts
++          .map((product) =>
++            product.id === productId
++              ? { ...product, quantity: product.quantity - 1 }
++              : product
++          )
++          .filter((product) => product.quantity > 0)
+       );
+     },
+     [setProducts]
+   );
+ 
+   return { products, increaseProductQuantity, decreaseProductQuantity };
+ };
+ 
+ export default useCartProducts;
+```

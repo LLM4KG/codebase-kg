@@ -1,0 +1,13 @@
+{
+  "format": "whole_file",
+  "edits": [
+    {
+      "path": "src/hooks/useCartProducts.ts",
+      "op": "write",
+      "content": "import { useState } from \"react\";\n\nexport interface CartProduct {\n  id: number;\n  title: string;\n  price: number;\n  quantity: number;\n  image: string;\n}\n\nconst useCartProducts = () => {\n  const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);\n\n  const addProduct = (product: CartProduct) => {\n    const productAlreadyInCart = cartProducts.some(\n      (cartProduct) => cartProduct.id === product.id\n    );\n\n    if (productAlreadyInCart) {\n      setCartProducts(\n        cartProducts.map((cartProduct) =>\n          cartProduct.id === product.id\n            ? { ...cartProduct, quantity: cartProduct.quantity + 1 }\n            : cartProduct\n        )\n      );\n    } else {\n      setCartProducts([...cartProducts, { ...product, quantity: 1 }]);\n    }\n  };\n\n  const removeProduct = (product: CartProduct) => {\n    const newCartProducts = cartProducts.filter(\n      (cartProduct) => cartProduct.id !== product.id\n    );\n    setCartProducts(newCartProducts);\n  };\n\n  const increaseProductQuantity = (product: CartProduct) => {\n    setCartProducts(\n      cartProducts.map((cartProduct) =>\n        cartProduct.id === product.id\n          ? { ...cartProduct, quantity: cartProduct.quantity + 1 }\n          : cartProduct\n      )\n    );\n  };\n\n  const decreaseProductQuantity = (product: CartProduct) => {\n    setCartProducts(\n      cartProducts\n        .map((cartProduct) =>\n          cartProduct.id === product.id\n            ? { ...cartProduct, quantity: cartProduct.quantity - 1 }\n            : cartProduct\n        )\n        .filter((cartProduct) => cartProduct.quantity > 0)\n    );\n  };\n\n  return {\n    cartProducts,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  };\n};\n\nexport default useCartProducts;\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

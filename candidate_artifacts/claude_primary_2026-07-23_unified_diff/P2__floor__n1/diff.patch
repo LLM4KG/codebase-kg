@@ -1,0 +1,55 @@
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
++import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { NoteItem, NoteState } from '@/types'
+ import { getWeightedCategoryOptions } from '@/utils/helpers'
+ import { loadState } from '@/utils/storage'
+@@ -100,6 +100,13 @@ const noteSlice = createSlice({
+       state.notes = state.notes.filter(({ id }) => !trashedNoteIds.includes(id))
+     },
+ 
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
++
+     addCategory: (state, action: PayloadAction<string>) => {
+       state.notes = state.notes.map((note) => {
+         if (note.category === action.payload) {
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -1,7 +1,7 @@
+ import React, { useState, useEffect, useRef } from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ import { Folder, ReactMouseEvent, NoteItem, RootState } from '@/types'
+-import { pruneNotes, searchNotes, swapNote, swapFolder } from '@/slices/note'
++import { pruneNotes, restoreAllTrash, searchNotes, swapNote, swapFolder } from '@/slices/note'
+ import { getNoteTitle, sortByLastUpdated } from '@/utils/helpers'
+ 
+ const NoteList: React.FC = () => {
+@@ -30,6 +30,10 @@ const NoteList: React.FC = () => {
+     dispatch(pruneNotes())
+   }
+ 
++  const handleRestoreAllTrash = () => {
++    dispatch(restoreAllTrash())
++  }
++
+   return (
+     <div className="note-list">
+       {activeFolder === Folder.TRASH && (
+@@ -37,6 +41,9 @@ const NoteList: React.FC = () => {
+           <button className="trash-button" onClick={handleEmptyTrash}>
+             Empty Trash
+           </button>
++          <button className="trash-button" onClick={handleRestoreAllTrash}>
++            Restore All
++          </button>
+         </div>
+       )}
+       <div

@@ -1,0 +1,25 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useState } from 'react';\n\nexport const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {\n  const [copiedText, setCopiedText] = useState('');\n\n  const handleCopy = async (text: string) => {\n    try {\n      await navigator.clipboard.writeText(text);\n      setCopiedText(successMessage);\n      setTimeout(() => setCopiedText(''), timeout);\n    } catch (err) {\n      setCopiedText('Failed to copy');\n    }\n  };\n\n  return { copiedText, handleCopy };\n};\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import React, { useState, useEffect } from 'react';\n",
+      "content": "import React from 'react';\nimport { useCopyToClipboard } from '../utils/useCopyToClipboard';\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "  const [copied, setCopied] = useState('');\n  \n  useEffect(() => {\n    if (copied) {\n      const timer = setTimeout(() => {\n        setCopied('');\n      }, 3000);\n      return () => clearTimeout(timer);\n    }\n  }, [copied]);\n\n  const handleCopyNote = async () => {\n    try {\n      await copyToClipboard(noteContent);\n      setCopied('Copied!');\n    } catch (err) {\n      setCopied('Failed to copy');\n    }\n  };\n",
+      "content": "  const { copiedText: copied, handleCopy: handleCopyNote } = useCopyToClipboard('Copied!', 3000);\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

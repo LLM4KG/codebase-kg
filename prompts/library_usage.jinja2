@@ -1,0 +1,133 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract library usage details from JavaScript or JSX files. For each import statement, return a structured list of the imported symbols and their source library.
+
+Only consider import statements that appear directly in the current input file.
+
+Do not include any imports that are assumed, inferred, or commonly used unless they are explicitly present in the file.
+
+Do **NOT** include:
+- Any **relative imports** whose source path starts with `./` or `../` (e.g., `'./App.css'`, `'../ProductList'`).
+- CSS or asset imports (e.g., `'./App.css'`, `'./logo.svg'`).
+
+For each non-relative import, classify every imported symbol into one of two categories:
+- **"symbols"**: Regular (non-hook) identifiers — default imports, named exports, etc.
+- **"hooks"**: Any identifier whose name starts with `use` (e.g., `useState`, `useEffect`, `useSelector`, `useNavigate`).
+
+This distinction is critical because hooks and non-hook symbols map to different node types in the knowledge graph.
+
+Format your output as a JSON object with the following structure:
+{
+  "imports": [
+    {
+      "from": "<library>",
+      "symbols": [<non-hook imported identifiers>],
+      "hooks": [<hook identifiers starting with use>]
+    }
+  ]
+}
+
+Rules:
+- If an import has only hooks and no other symbols, "symbols" should be an empty array.
+- If an import has only non-hook symbols, "hooks" should be an empty array.
+- If a default import is `React`, include it in "symbols".
+- Namespace imports like `import * as X from '...'` should list the alias (e.g., "X") in "symbols".
+- Skip the import entirely if it is a bare side-effect import with no symbols (e.g., `import 'some-polyfill'`).
+
+---
+
+### Example 1
+Input:
+import React from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
+Output:
+{
+  "imports": [
+    { "from": "react", "symbols": ["React"], "hooks": ["useEffect", "useState"] },
+    { "from": "axios", "symbols": ["axios"], "hooks": [] }
+  ]
+}
+
+Note: The two `react` imports are merged into one entry.
+
+---
+
+### Example 2
+Input:
+import { MapContainer, TileLayer } from 'react-leaflet';
+import { Button } from '@mui/material';
+
+Output:
+{
+  "imports": [
+    { "from": "react-leaflet", "symbols": ["MapContainer", "TileLayer"], "hooks": [] },
+    { "from": "@mui/material", "symbols": ["Button"], "hooks": [] }
+  ]
+}
+
+---
+
+### Example 3
+Input:
+import React, { useState } from 'react';
+import CourseList from './CourseList';
+import './App.css';
+import AboutUs from './AboutUs';
+
+Output:
+{
+  "imports": [
+    { "from": "react", "symbols": ["React"], "hooks": ["useState"] }
+  ]
+}
+
+Note: `./CourseList`, `./App.css`, and `./AboutUs` are relative imports and are excluded.
+
+---
+
+### Example 4
+Input:
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import './Bill.css';
+import BillItem from './BillItem';
+
+Output:
+{
+  "imports": [
+    { "from": "react", "symbols": ["React"], "hooks": ["useState", "useEffect"] },
+    { "from": "react-redux", "symbols": [], "hooks": ["useSelector", "useDispatch"] },
+    { "from": "react-router-dom", "symbols": [], "hooks": ["useNavigate"] }
+  ]
+}
+
+---
+
+### Example 5
+Input:
+import * as Yup from 'yup';
+import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
+import React from 'react';
+
+Output:
+{
+  "imports": [
+    { "from": "yup", "symbols": ["Yup"], "hooks": [] },
+    { "from": "formik", "symbols": ["Formik", "Form", "Field", "ErrorMessage"], "hooks": ["useFormikContext"] },
+    { "from": "react", "symbols": ["React"], "hooks": [] }
+  ]
+}
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Exclude all relative imports (paths starting with `./` or `../`).
+- Exclude bare side-effect imports with no symbols.
+- Separate hooks (identifiers starting with `use`) from other symbols.
+- Merge multiple imports from the same library into one entry.
+
+Output:

@@ -1,0 +1,341 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "App",
+        "childComponent": "PhotoContextProvider",
+        "importSource": "./context/PhotoContext",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "HashRouter",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "basename",
+            "valueExpression": "\"/SnapScout\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "render",
+            "valueExpression": "props => <Header handleSubmit={this.handleSubmit} history={props.history} />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Header",
+        "importSource": "./components/Header",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "handleSubmit",
+            "valueExpression": "this.handleSubmit"
+          },
+          {
+            "propName": "history",
+            "valueExpression": "props.history"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Switch",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "exact",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "path",
+            "valueExpression": "\"/\""
+          },
+          {
+            "propName": "render",
+            "valueExpression": "() => <Redirect to=\"/mountain\" />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Redirect",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "\"/mountain\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/mountain\""
+          },
+          {
+            "propName": "render",
+            "valueExpression": "() => <Item searchTerm=\"mountain\" />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Item",
+        "importSource": "./components/Item",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "searchTerm",
+            "valueExpression": "\"mountain\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/beach\""
+          },
+          {
+            "propName": "render",
+            "valueExpression": "() => <Item searchTerm=\"beach\" />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Item",
+        "importSource": "./components/Item",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "searchTerm",
+            "valueExpression": "\"beach\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/bird\""
+          },
+          {
+            "propName": "render",
+            "valueExpression": "() => <Item searchTerm=\"bird\" />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Item",
+        "importSource": "./components/Item",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "searchTerm",
+            "valueExpression": "\"bird\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/food\""
+          },
+          {
+            "propName": "render",
+            "valueExpression": "() => <Item searchTerm=\"food\" />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Item",
+        "importSource": "./components/Item",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "searchTerm",
+            "valueExpression": "\"food\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/search/:searchInput\""
+          },
+          {
+            "propName": "render",
+            "valueExpression": "props => <Search searchTerm={props.match.params.searchInput} />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Search",
+        "importSource": "./components/Search",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "searchTerm",
+            "valueExpression": "props.match.params.searchInput"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "component",
+            "valueExpression": "NotFound"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "NotFound",
+        "importSource": "./components/NotFound",
+        "usage": "prop_value",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [
+      {
+        "componentName": "App",
+        "contextName": "PhotoContextProvider",
+        "contextSource": "./context/PhotoContext",
+        "valueExpression": ""
+      }
+    ],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": [
+      {
+        "routingComponent": "App",
+        "targetComponent": "Header",
+        "importSource": "./components/Header",
+        "path": "<UNKNOWN>",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "Redirect",
+        "importSource": "react-router-dom",
+        "path": "/",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "Item",
+        "importSource": "./components/Item",
+        "path": "/mountain",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "Item",
+        "importSource": "./components/Item",
+        "path": "/beach",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "Item",
+        "importSource": "./components/Item",
+        "path": "/bird",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "Item",
+        "importSource": "./components/Item",
+        "path": "/food",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "Search",
+        "importSource": "./components/Search",
+        "path": "/search/:searchInput",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "NotFound",
+        "importSource": "./components/NotFound",
+        "path": "*",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      }
+    ]
+  }
+}

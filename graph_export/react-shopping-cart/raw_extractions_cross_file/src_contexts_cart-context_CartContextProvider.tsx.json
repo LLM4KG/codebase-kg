@@ -1,0 +1,59 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "CartProvider",
+        "childComponent": "CartContext.Provider",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "CartContextValue"
+          },
+          {
+            "propName": "...props",
+            "valueExpression": "{...props}"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useCartContext",
+        "libraryHooks": [
+          {
+            "name": "useContext",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": []
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [
+      {
+        "componentName": "CartProvider",
+        "contextName": "CartContext",
+        "contextSource": "same_file",
+        "valueExpression": "CartContextValue"
+      }
+    ],
+    "contextConsumers": [
+      {
+        "consumerName": "useCartContext",
+        "consumerType": "custom_hook",
+        "contextName": "CartContext",
+        "contextSource": "same_file",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

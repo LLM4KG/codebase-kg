@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/hooks/useCartProducts.ts",
+      "op": "replace",
+      "search": "  const decreaseProductQuantity = (productId: string) => {\n    setCartProducts(prev => prev.map(item => \n      item.id === productId \n        ? { ...item, quantity: Math.max(0, item.quantity - 1) } \n        : item\n    ));\n  };\n",
+      "content": "  const decreaseProductQuantity = (productId: string) => {\n    setCartProducts(prev => {\n      const updatedCart = prev.map(item => \n        item.id === productId \n          ? { ...item, quantity: item.quantity - 1 } \n          : item\n      );\n      return updatedCart.filter(item => item.quantity > 0);\n    });\n  };\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

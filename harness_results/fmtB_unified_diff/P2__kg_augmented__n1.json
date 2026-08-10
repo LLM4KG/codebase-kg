@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__kg_augmented__n1",
+  "condition": "kg_augmented",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "build_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 45781.118532999244,
+  "timeout_used_ms": 154105,
+  "stage_detail": "> takenote@0.7.2 build /app\n> cross-env NODE_ENV=production webpack --config config/webpack.prod.js\n\nGetting environment variables from build args for production\nassets by status 12.2 MiB [cached] 17 assets\nEntrypoint main = runtime~main.03228f243647bd124711.bundle.js vendors.03228f243647bd124711.bundle.js main.03228f243647bd124711.bundle.js styles/main.52709cf85c4fb31aa08d.css 5 auxiliary assets\norphan modules 818 KiB [orphan] 339 modules\nruntime modules 3.99 KiB 8 modules\njavascript modules 3.69 MiB 397 modules\nasset modules 210 bytes (javascript) 1.59 MiB (asset)\n  modules by path ./src/resources/assets/*.png 126 bytes (javascript) 1.59 MiB (asset) 3 modules\n  modules by path ./src/resources/assets/*.svg 84 bytes (javascript) 3.66 KiB (asset) 2 modules\ncss modules 39.5 KiB\n  css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/sass-loader/dist/cjs.js!./src/client/styles/index.scss 31.9 KiB [code generated]\n  css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/sass-loader/dist/cjs.js!./node_modules/codemirror/lib/codemirror.css 5.96 KiB [code generated]\n  css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/sass-loader/dist/cjs.js!./node_modules/codemirror/theme/base16-light.css 1.63 KiB [code generated]\njson modules 2.03 KiB\n  ./node_modules/remark-parse/lib/block-elements.json 521 bytes [built] [code generated]\n  ./node_modules/character-entities-legacy/index.json 1.24 KiB [built] [code generated]\n  ./node_modules/character-reference-invalid/index.json 289 bytes [built] [code generated]\n\nERROR in /app/src/client/containers/NoteList.tsx\n./src/client/containers/NoteList.tsx\n[tsl] ERROR in /app/src/client/containers/NoteList.tsx(173,12)\n      TS2741: Property 'dataTestID' is missing in type '{ children: string; label: string; handler: () => { payload: undefined; type: string; }; }' but required in type 'NoteListButtonProps'.\n @ ./src/client/containers/TakeNoteApp.tsx 47:17-49\n @ ./src/client/containers/App.tsx 28:20-55\n @ ./src/client/index.tsx 19:12-39\n\nwebpack 5.1.3 compiled with 1 error in 42758 ms\n\nnpm ERR! code ELIFECYCLE\nnpm ERR! errno 1\nnpm ERR! takenote@0.7.2 build: `cross-env NODE_ENV=production webpack --config config/webpack.prod.js`\nnpm ERR! Exit status 1\nnpm ERR! \nnpm ERR! Failed at the takenote@0.7.2 build script.\nnpm ERR! This is probably not a problem with npm. There is likely additional logging output above.\n\nnpm ERR! A complete log of this run can be found in:\nnpm ERR!     /root/.npm/_logs/2026-07-29T16_57_54_907Z-debug.log",
+  "apply_mode": "recount_c0",
+  "apply_reason": null
+}

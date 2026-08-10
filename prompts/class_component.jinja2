@@ -1,0 +1,318 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to identify and extract detailed metadata for all React class components in a given JavaScript or JSX file.
+
+Only consider class definitions that appear directly in the current input file.
+
+Do not include any class definitions that are assumed or inferred unless they are explicitly present in the provided content.
+
+A class counts as a React class component if:
+- It extends `React.Component`, `React.PureComponent`, `Component`, or `PureComponent`, AND
+- It contains a `render()` method that returns JSX.
+
+Exclude non-component classes (utility classes, plain ES6 classes that do not extend a React base class, or classes whose render method does not return JSX).
+
+For each class component, return a JSON object with the following fields:
+
+- "name": The class name (string).
+- "extendsClass": The superclass as written in the code (e.g., "React.Component", "Component", "React.PureComponent", "PureComponent", or a user-defined class name).
+- "from": "react" if the superclass originates from the React library (directly or transitively). "local" if the class extends another user-defined class within the project.
+- "exportType": "default", "named", or "none" (based on how the class is exported).
+- "hasConstructor": true if the class defines a `constructor()` method, false otherwise.
+- "lifecycleMethods": An array of lifecycle method names found in the class. Only include standard React lifecycle methods: `componentDidMount`, `componentDidUpdate`, `shouldComponentUpdate`, `componentWillUnmount`, `getSnapshotBeforeUpdate`, `componentDidCatch`, `getDerivedStateFromProps`, `getDerivedStateFromError`. Use an empty array if none are present.
+- "returnsJSX": true if the `render()` method returns JSX, false otherwise.
+
+Return a JSON object containing a list of all class components found in the file.
+
+---
+
+### Example 1
+Input:
+import React, { Component } from 'react';
+
+class Header extends Component {
+  render() {
+    return <h1>Welcome to My App</h1>;
+  }
+}
+
+export default Header;
+
+Output:
+{
+  "classComponents": [
+    {
+      "name": "Header",
+      "extendsClass": "Component",
+      "from": "react",
+      "exportType": "default",
+      "hasConstructor": false,
+      "lifecycleMethods": [],
+      "returnsJSX": true
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import React from 'react';
+
+class LoginForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { username: '', password: '' };
+  }
+
+  componentDidMount() {
+    document.title = 'Login';
+  }
+
+  render() {
+    return (
+      <form>
+        <input type="text" placeholder="Username" />
+        <input type="password" placeholder="Password" />
+      </form>
+    );
+  }
+}
+
+export default LoginForm;
+
+Output:
+{
+  "classComponents": [
+    {
+      "name": "LoginForm",
+      "extendsClass": "React.Component",
+      "from": "react",
+      "exportType": "default",
+      "hasConstructor": true,
+      "lifecycleMethods": ["componentDidMount"],
+      "returnsJSX": true
+    }
+  ]
+}
+
+---
+
+### Example 3
+Input:
+import { Component } from 'react';
+
+class Counter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.count !== this.state.count;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('Count changed from', prevState.count, 'to', this.state.count);
+  }
+
+  render() {
+    return <p>{this.state.count}</p>;
+  }
+}
+
+export default Counter;
+
+Output:
+{
+  "classComponents": [
+    {
+      "name": "Counter",
+      "extendsClass": "Component",
+      "from": "react",
+      "exportType": "default",
+      "hasConstructor": true,
+      "lifecycleMethods": ["shouldComponentUpdate", "componentDidUpdate"],
+      "returnsJSX": true
+    }
+  ]
+}
+
+---
+
+### Example 4
+Input:
+import React from 'react';
+
+class NotFoundPage extends React.PureComponent {
+  render() {
+    return <div>404 - Page Not Found</div>;
+  }
+}
+
+export default NotFoundPage;
+
+Output:
+{
+  "classComponents": [
+    {
+      "name": "NotFoundPage",
+      "extendsClass": "React.PureComponent",
+      "from": "react",
+      "exportType": "default",
+      "hasConstructor": false,
+      "lifecycleMethods": [],
+      "returnsJSX": true
+    }
+  ]
+}
+
+---
+
+### Example 5
+Input:
+import { PureComponent } from 'react';
+
+class OptimizedList extends PureComponent {
+  render() {
+    return (
+      <ul>
+        {this.props.items.map(item => <li key={item.id}>{item.name}</li>)}
+      </ul>
+    );
+  }
+}
+
+export { OptimizedList };
+
+Output:
+{
+  "classComponents": [
+    {
+      "name": "OptimizedList",
+      "extendsClass": "PureComponent",
+      "from": "react",
+      "exportType": "named",
+      "hasConstructor": false,
+      "lifecycleMethods": [],
+      "returnsJSX": true
+    }
+  ]
+}
+
+---
+
+### Example 6
+Input:
+import React from 'react';
+
+class BaseComponent extends React.Component {
+  log(message) {
+    console.log(message);
+  }
+}
+
+class FeatureComponent extends BaseComponent {
+  constructor(props) {
+    super(props);
+    this.state = { active: false };
+  }
+
+  componentDidMount() {
+    this.log("FeatureComponent mounted");
+  }
+
+  componentWillUnmount() {
+    this.log("FeatureComponent will unmount");
+  }
+
+  render() {
+    this.log("Rendering FeatureComponent");
+    return <div>Feature</div>;
+  }
+}
+
+export default FeatureComponent;
+
+Output:
+{
+  "classComponents": [
+    {
+      "name": "BaseComponent",
+      "extendsClass": "React.Component",
+      "from": "react",
+      "exportType": "none",
+      "hasConstructor": false,
+      "lifecycleMethods": [],
+      "returnsJSX": false
+    },
+    {
+      "name": "FeatureComponent",
+      "extendsClass": "BaseComponent",
+      "from": "local",
+      "exportType": "default",
+      "hasConstructor": true,
+      "lifecycleMethods": ["componentDidMount", "componentWillUnmount"],
+      "returnsJSX": true
+    }
+  ]
+}
+
+Note: BaseComponent has `returnsJSX: false` because it does not define a `render()` method that returns JSX. FeatureComponent extends a local class, so `from` is "local".
+
+---
+
+### Example 7
+Input:
+import React from 'react';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+
+export default ErrorBoundary;
+
+Output:
+{
+  "classComponents": [
+    {
+      "name": "ErrorBoundary",
+      "extendsClass": "React.Component",
+      "from": "react",
+      "exportType": "default",
+      "hasConstructor": true,
+      "lifecycleMethods": ["getDerivedStateFromError", "componentDidCatch"],
+      "returnsJSX": true
+    }
+  ]
+}
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Only extract classes that extend a React base class (Component, PureComponent, or their React.* variants) or a local class that transitively extends one.
+- Include all standard React lifecycle methods found in the class.
+- Report `hasConstructor` based on whether a `constructor()` is explicitly defined.
+- `returnsJSX` should be false if the class has no `render()` method or if `render()` does not return JSX.
+- Set `from` to "local" only when the class extends another user-defined class.
+
+Output:

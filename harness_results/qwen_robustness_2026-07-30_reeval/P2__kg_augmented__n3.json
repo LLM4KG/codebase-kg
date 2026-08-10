@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__kg_augmented__n3",
+  "condition": "kg_augmented",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1426.3957020002636,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/slices/note.ts\n--- SEARCH ---\nexport const noteSlice = createSlice({\n  name: '@@app/note',\n  initialState,\n  reducers: {\n    addNote: (state, { payload }: PayloadAction<NoteItem>) => {\n      state.notes = [...state.notes, payload]\n    },\n    deleteNotes: (state, { payload }: PayloadAction<string[]>) => {\n      state.notes = state.notes.filter((note) => !payload.includes(note.id))\n    },\n    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {\n      state.notes = state.notes.map((note) =>\n        note.id === payload.id ? { ...note, ...payload } : note\n      )\n    },\n    setNotes: (state, { payload }: PayloadAction<NoteItem[]>) => {\n      state.notes = payload\n    },\n    setSearchValue: (state, { payload }: PayloadAction<string>) => {\n      state.searchValue = payload\n    },\n    setActiveNote: (state, { payload }: PayloadAction<string>) => {\n      state.activeNoteId = payload\n    },\n    setActiveFolder: (state, { payload }: PayloadAction<Folder>) => {\n      state.activeFolder = payload\n    },\n    setActiveCategoryId: (state, { payload }: PayloadAction<string>) => {\n      state.activeCategoryId = payload\n    },\n    updateSelectedNotes: (\n      state,\n      { payload }: PayloadAction<{ noteId: string; multiSelect: boolean }>\n    ) => {\n      const { noteId, multiSelect } = payload\n\n      if (multiSelect) {\n        state.selectedNotesIds = state.selectedNotesIds.includes(noteId)\n          ? state.selectedNotesIds.filter((id) => id !== noteId)\n          : [...state.selectedNotesIds, noteId]\n      } else {\n        state.selectedNotesIds = [noteId]\n      }\n    },\n    permanentlyEmptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n    pruneNotes: (state) => {\n      state.notes = state.notes.filter((note) => note.text !== '' || note.id === state.activeNoteId)\n    },\n  },\n})",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

@@ -1,0 +1,25 @@
+{
+  "candidate_id": "P1__floor__n1",
+  "run_id": "claude_primary",
+  "run_name": "claude_primary",
+  "task_id": "P1",
+  "project_name": "react-shopping-cart",
+  "condition": "floor",
+  "index": 1,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "test_fail",
+  "timestamp": "2026-07-29T17:10:53.430103+00:00",
+  "retrieval_token_count": 0,
+  "generator_usage": {
+    "input_tokens": 494,
+    "output_tokens": 542
+  },
+  "generator_latency_ms": 6875.550450000446,
+  "mock": false,
+  "output_format": "whole_file",
+  "apply_mode": "whole_file",
+  "apply_reason": null,
+  "edit_count": 1,
+  "malformed_blocks": 0,
+  "elided": false
+}
