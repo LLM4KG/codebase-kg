@@ -1,0 +1,107 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer to `src/client/slices/note.ts`
+2. Add a "Restore All" button to `src/client/containers/NoteList.tsx`
+
+Let me analyze the existing patterns in the codebase based on the task description. The `emptyTrash` action likely sets `trash: true` notes to deleted, so `restoreAllTrash` should set `trash: false` on all trashed notes. The NoteList component shows an "Empty Trash" button when viewing Trash folder.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+      return {
+        ...state,
+        notes: state.notes.filter((note) => !note.trash),
+      }
+    },
+=======
+    emptyTrash: (state) => {
+      return {
+        ...state,
+        notes: state.notes.filter((note) => !note.trash),
+      }
+    },
+    restoreAllTrash: (state) => {
+      return {
+        ...state,
+        notes: state.notes.map((note) => (note.trash ? { ...note, trash: false } : note)),
+      }
+    },
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { addNote, emptyTrash } from '@/slices/note'
+=======
+import { addNote, emptyTrash, restoreAllTrash } from '@/slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _emptyTrash = () => dispatch(emptyTrash())
+=======
+  const _emptyTrash = () => dispatch(emptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          {activeFolder === Folder.TRASH && (
+            <button className="trash-button" onClick={_emptyTrash}>
+              <Icon size={15} icon={deleteIcon} />
+              Empty Trash
+            </button>
+          )}
+=======
+          {activeFolder === Folder.TRASH && (
+            <>
+              <button className="trash-button" onClick={_restoreAllTrash}>
+                <Icon size={15} icon={refreshCcw} />
+                Restore All
+              </button>
+              <button className="trash-button" onClick={_emptyTrash}>
+                <Icon size={15} icon={deleteIcon} />
+                Empty Trash
+              </button>
+            </>
+          )}
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { deleteIcon } from '@/utils/constants'
+=======
+import { deleteIcon, refreshCcw } from '@/utils/constants'
+>>>>>>> REPLACE
+```
+
+Wait, I'm not sure about the exact icon import. Let me reconsider - I should use an existing icon from the project rather than assuming `refreshCcw` is in constants. Let me use a safer approach with the `refreshCw` icon from feather-icons which is commonly available:
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { deleteIcon, refreshCcw } from '@/utils/constants'
+=======
+import { deleteIcon } from '@/utils/constants'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { Icon } from 'react-feather'
+=======
+import { Icon, RefreshCw } from 'react-feather'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+              <button className="trash-button" onClick={_restoreAllTrash}>
+                <Icon size={15} icon={refreshCcw} />
+                Restore All
+              </button>
+=======
+              <button className="trash-button" onClick={_restoreAllTrash}>
+                <RefreshCw size={15} />
+                Restore All
+              </button>
+>>>>>>> REPLACE
+```

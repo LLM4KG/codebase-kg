@@ -1,0 +1,7 @@
+# Floor condition — no context at all (ablation baseline)
+condition_id = "floor"
+retriever = "floor"
+format_variant = "A"
+max_rounds = 1
+
+[retriever_params]

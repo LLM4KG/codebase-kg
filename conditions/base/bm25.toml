@@ -1,0 +1,7 @@
+# BM25 condition — file-level chunks, rank_bm25 library
+condition_id = "bm25"
+retriever = "bm25"
+format_variant = "A"
+max_rounds = 1
+
+[retriever_params]

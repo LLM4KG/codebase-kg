@@ -1,0 +1,14 @@
+{
+  "task_id": "P1",
+  "candidate_id": "P1__kg_augmented__n4",
+  "condition": "kg_augmented",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 362.44331799753127,
+  "timeout_used_ms": 9805,
+  "stage_detail": "error: corrupt patch at line 31\nstrict git apply failed; retrying with --recount (context preserved)\nerror: src/hooks/useCartProducts.ts: No such file or directory\n--recount failed; retrying with --recount -C0 (placement UNVERIFIED)\nerror: src/hooks/useCartProducts.ts: No such file or directory",
+  "apply_mode": null
+}

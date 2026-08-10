@@ -1,0 +1,66 @@
+# Task P3 — TakeNote refactoring: Extract useCopyToClipboard hook from NoteMenuBar
+#
+# Exercises: refactoring Cypher template
+#   - Single query: caller blast-radius + internal hook/state structure
+#   - Cross-cutting warning: "NoteMenuBar is rendered by 1 caller: NoteEditor"
+# Project:   TakeNote
+
+task_id: P3
+project_id: takenote
+project_repo: https://github.com/taniarascia/takenote
+git_commit: e0eddbb9a21ae4cf4c4c7c183f29cfd666e08331
+task_type: refactoring
+
+spec: >
+  The NoteMenuBar component (`src/client/containers/NoteMenuBar.tsx`) has
+  inline clipboard copy logic: a useState for the "copied" feedback text,
+  a useEffect that auto-clears it after 3 seconds, and a copyToClipboard
+  call in the onClick handler. Extract this into a reusable custom hook
+  `useCopyToClipboard(successMessage, timeout)` in a new file
+  `src/client/utils/useCopyToClipboard.ts`. The hook should return
+  `{ copiedText, handleCopy }`. Update NoteMenuBar to use the new hook.
+
+# Anchor components the classifier should extract from the spec:
+expected_anchors:
+  anchor_names:
+    - NoteMenuBar       # the component being refactored
+  anchor_routes: []
+
+# Reference solution
+reference_patch: patches/P3.diff
+
+# Test file — placed in project before candidate diff is applied.
+# The harness runs: npx jest --config config/jest.config.js --testPathPattern=P3_extract_copy_hook
+test_files:
+  - tests/unit/client/utils/P3_extract_copy_hook.test.tsx
+
+# Files the reference patch modifies (for retrieval recall computation)
+files_modified:
+  - src/client/containers/NoteMenuBar.tsx
+files_created:
+  - src/client/utils/useCopyToClipboard.ts
+
+# Why this task exercises the refactoring template:
+# - The template retrieves NoteMenuBar's internal structure: its hooks
+#   (useEffect, useState, useDispatch, useSelector), its state variables,
+#   and its event handlers. This shows the LLM exactly which pieces of
+#   logic are currently inline and need extraction.
+# - The template reports NoteMenuBar's callers: NoteEditor (N=1). The
+#   cross-cutting note says: "Refactoring NoteMenuBar's prop interface
+#   will require updating 1 caller: NoteEditor." In this case the prop
+#   interface doesn't change (internal refactoring only), but the context
+#   is still useful — the LLM knows not to change the component's exports.
+# - The template also returns NoteMenuBar's internal hook dependencies
+#   (which selectors, which actions), helping the LLM understand what
+#   stays in NoteMenuBar vs what moves to the new hook.
+
+# Adversarial notes:
+# - Tests verify the hook module exists and its observable behavior
+#   (copiedText state management + auto-clear timer), NOT the NoteMenuBar
+#   refactoring itself. This means a valid solution that places the hook
+#   in a different file path would fail (test imports by path).
+# - Tests use jest.useFakeTimers() to test the timeout behavior
+#   deterministically without waiting 3 seconds.
+# - The mock for copyToClipboard avoids needing a real clipboard API.
+# - On unpatched code, the import of useCopyToClipboard fails (module not
+#   found), causing all tests to fail immediately.

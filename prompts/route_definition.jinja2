@@ -1,0 +1,559 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract **route definitions** from a given `.js` or `.jsx` file.
+
+Only consider route definitions that appear directly in the current input file.
+
+Do not include any routes that are assumed or inferred unless they are explicitly present in the provided content.
+
+---
+
+## What to Extract
+
+For each React component (function or class) defined in this file, identify all route definitions in its JSX (typically using `react-router-dom`). Each route maps a URL path to a target component.
+
+---
+
+## Detection Rules
+
+**Route patterns to recognize:**
+
+React Router v6+ (modern):
+- `<Route path="..." element={<Component />} />`
+- `<Route index element={<Component />} />`
+- `<Route path="..." element={<Component />}>` with nested `<Route>` children
+
+React Router v5 (legacy):
+- `<Route path="..." component={Component} />`
+- `<Route path="..." render={() => <Component />} />`
+- `<Route exact path="..." component={Component} />`
+
+React Router v5 with `<Switch>`, v6+ with `<Routes>`.
+
+**Path composition for nested routes:**
+- If routes are nested (a `<Route>` inside another `<Route>`), compose the full path.
+- Example: parent `path="/dashboard"` + child `path="settings"` → full path `"/dashboard/settings"`.
+- For index routes (`<Route index ...>`), the path is the parent's path.
+
+**Determining the target component:**
+- Extract the component name from `element={<Component />}`, `component={Component}`, or `render={() => <Component />}`.
+- Set `importSource` to the import path of the target component.
+- If the target is defined in the same file, set `importSource` to `"same_file"`.
+
+**Boolean properties:**
+- `isNested`: true if this route is defined inside another `<Route>` element (not at the top level of `<Routes>` or `<Switch>`).
+- `isLazy`: true if the target component is loaded via `React.lazy(() => import(...))` or a similar dynamic import pattern. Look for `const Component = lazy(() => import('...'))` or `React.lazy(...)` earlier in the file.
+- `isProtected`: true if the route is wrapped in an authentication guard component. Common patterns include:
+  - The route's parent element is a guard component (e.g., `<Route element={<ProtectedRoute />}>` wrapping child routes)
+  - The route is wrapped in a component with names like `PrivateRoute`, `ProtectedRoute`, `RequireAuth`, `AuthGuard`, `ProtectedLayout`
+  - The route's element is wrapped: `element={<PrivateRoute><Dashboard /></PrivateRoute>}`
+
+---
+
+## Output Format
+
+Return a JSON object:
+{
+  "routeDefinitions": [
+    {
+      "routingComponent": "<name of the component that defines the routes>",
+      "targetComponent": "<name of the routed target component>",
+      "importSource": "<import path of the target component or 'same_file'>",
+      "path": "<fully composed URL path pattern>",
+      "isNested": true | false,
+      "isLazy": true | false,
+      "isProtected": true | false
+    }
+  ]
+}
+
+---
+
+### Example 1
+Input:
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+Output:
+{
+  "routeDefinitions": [
+    {
+      "routingComponent": "App",
+      "targetComponent": "Home",
+      "importSource": "./pages/Home",
+      "path": "/",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "About",
+      "importSource": "./pages/About",
+      "path": "/about",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Contact",
+      "importSource": "./pages/Contact",
+      "path": "/contact",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import Home from './Home';
+import Profile from './Profile';
+import Settings from './Settings';
+import NotFound from './NotFound';
+
+function AppRouter() {
+  return (
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route path="/profile/:userId" component={Profile} />
+      <Route path="/settings" render={() => <Settings darkMode={true} />} />
+      <Route path="*" component={NotFound} />
+    </Switch>
+  );
+}
+
+export default AppRouter;
+
+Output:
+{
+  "routeDefinitions": [
+    {
+      "routingComponent": "AppRouter",
+      "targetComponent": "Home",
+      "importSource": "./Home",
+      "path": "/",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "AppRouter",
+      "targetComponent": "Profile",
+      "importSource": "./Profile",
+      "path": "/profile/:userId",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "AppRouter",
+      "targetComponent": "Settings",
+      "importSource": "./Settings",
+      "path": "/settings",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "AppRouter",
+      "targetComponent": "NotFound",
+      "importSource": "./NotFound",
+      "path": "*",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    }
+  ]
+}
+
+Note: React Router v5 syntax with `<Switch>`, `component={}`, and `render={}`. Dynamic parameter `:userId` and wildcard `*` are captured as-is.
+
+---
+
+### Example 3
+Input:
+import React from 'react';
+import { Routes, Route, Outlet } from 'react-router-dom';
+import DashboardLayout from './layouts/DashboardLayout';
+import Overview from './pages/Overview';
+import Analytics from './pages/Analytics';
+import UserList from './pages/UserList';
+import UserDetail from './pages/UserDetail';
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route index element={<Overview />} />
+        <Route path="analytics" element={<Analytics />} />
+        <Route path="users" element={<UserList />} />
+        <Route path="users/:id" element={<UserDetail />} />
+      </Route>
+    </Routes>
+  );
+}
+
+export default App;
+
+Output:
+{
+  "routeDefinitions": [
+    {
+      "routingComponent": "App",
+      "targetComponent": "DashboardLayout",
+      "importSource": "./layouts/DashboardLayout",
+      "path": "/dashboard",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Overview",
+      "importSource": "./pages/Overview",
+      "path": "/dashboard",
+      "isNested": true,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Analytics",
+      "importSource": "./pages/Analytics",
+      "path": "/dashboard/analytics",
+      "isNested": true,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "UserList",
+      "importSource": "./pages/UserList",
+      "path": "/dashboard/users",
+      "isNested": true,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "UserDetail",
+      "importSource": "./pages/UserDetail",
+      "path": "/dashboard/users/:id",
+      "isNested": true,
+      "isLazy": false,
+      "isProtected": false
+    }
+  ]
+}
+
+Note: Nested routes under `/dashboard`. The `index` route for `Overview` inherits the parent path `/dashboard`. All child routes have `isNested: true`. `DashboardLayout` is the layout component that renders `<Outlet />` for its children — it is itself a route target at `/dashboard`.
+
+---
+
+### Example 4
+Input:
+import React, { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+
+const MovieDetail = lazy(() => import('./pages/MovieDetail'));
+const SearchResults = lazy(() => import('./pages/SearchResults'));
+const Explore = lazy(() => import('./pages/Explore'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/movie/:id" element={<MovieDetail />} />
+        <Route path="/search/:query" element={<SearchResults />} />
+        <Route path="/explore" element={<Explore />} />
+      </Routes>
+    </Suspense>
+  );
+}
+
+export default App;
+
+Output:
+{
+  "routeDefinitions": [
+    {
+      "routingComponent": "App",
+      "targetComponent": "Home",
+      "importSource": "./pages/Home",
+      "path": "/",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "MovieDetail",
+      "importSource": "./pages/MovieDetail",
+      "path": "/movie/:id",
+      "isNested": false,
+      "isLazy": true,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "SearchResults",
+      "importSource": "./pages/SearchResults",
+      "path": "/search/:query",
+      "isNested": false,
+      "isLazy": true,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Explore",
+      "importSource": "./pages/Explore",
+      "path": "/explore",
+      "isNested": false,
+      "isLazy": true,
+      "isProtected": false
+    }
+  ]
+}
+
+Note: `MovieDetail`, `SearchResults`, and `Explore` are loaded via `React.lazy`, so `isLazy: true`. `Home` is imported statically, so `isLazy: false`. The `importSource` for lazy components uses the dynamic import path.
+
+---
+
+### Example 5
+Input:
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import useAuth from './hooks/useAuth';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import AdminPanel from './pages/AdminPanel';
+import PublicHome from './pages/PublicHome';
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  if (!user) return <Navigate to="/login" replace />;
+  return children;
+}
+
+function AdminRoute({ children }) {
+  const { user } = useAuth();
+  if (!user?.isAdmin) return <Navigate to="/dashboard" replace />;
+  return children;
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<PublicHome />} />
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminPanel />
+          </AdminRoute>
+        }
+      />
+    </Routes>
+  );
+}
+
+export default App;
+
+Output:
+{
+  "routeDefinitions": [
+    {
+      "routingComponent": "App",
+      "targetComponent": "PublicHome",
+      "importSource": "./pages/PublicHome",
+      "path": "/",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Login",
+      "importSource": "./pages/Login",
+      "path": "/login",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Dashboard",
+      "importSource": "./pages/Dashboard",
+      "path": "/dashboard",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": true
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "AdminPanel",
+      "importSource": "./pages/AdminPanel",
+      "path": "/admin",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": true
+    }
+  ]
+}
+
+Note: `Dashboard` is wrapped in `<ProtectedRoute>` and `AdminPanel` in `<AdminRoute>` — both are auth guards that redirect if the user is not authenticated/authorized. Both have `isProtected: true`. The guard components themselves are NOT listed as route targets — the actual page component inside the guard is the target.
+
+---
+
+### Example 6
+Input:
+import React, { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import RequireAuth from './components/RequireAuth';
+import Home from './pages/Home';
+
+const Profile = lazy(() => import('./pages/Profile'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Billing = lazy(() => import('./pages/Billing'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route element={<RequireAuth />}>
+          <Route element={<Layout />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />}>
+              <Route path="billing" element={<Billing />} />
+            </Route>
+          </Route>
+        </Route>
+      </Routes>
+    </Suspense>
+  );
+}
+
+export default App;
+
+Output:
+{
+  "routeDefinitions": [
+    {
+      "routingComponent": "App",
+      "targetComponent": "Home",
+      "importSource": "./pages/Home",
+      "path": "/",
+      "isNested": false,
+      "isLazy": false,
+      "isProtected": false
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Profile",
+      "importSource": "./pages/Profile",
+      "path": "/profile",
+      "isNested": true,
+      "isLazy": true,
+      "isProtected": true
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Settings",
+      "importSource": "./pages/Settings",
+      "path": "/settings",
+      "isNested": true,
+      "isLazy": true,
+      "isProtected": true
+    },
+    {
+      "routingComponent": "App",
+      "targetComponent": "Billing",
+      "importSource": "./pages/Billing",
+      "path": "/settings/billing",
+      "isNested": true,
+      "isLazy": true,
+      "isProtected": true
+    }
+  ]
+}
+
+Note: This combines all three boolean flags. `RequireAuth` is a pathless layout route acting as an auth guard (`isProtected: true`). `Layout` is another pathless layout route. `Profile`, `Settings`, and `Billing` are nested inside both. `Billing` composes the full path `/settings/billing`. All lazy-loaded components have `isLazy: true`. `RequireAuth` and `Layout` are NOT listed as route targets since they are pathless layout/guard wrappers — only the actual page components are targets.
+
+---
+
+### Example 7
+Input:
+import React from 'react';
+
+function Sidebar({ items }) {
+  return (
+    <nav>
+      {items.map(item => (
+        <a key={item.id} href={item.url}>{item.label}</a>
+      ))}
+    </nav>
+  );
+}
+
+export default Sidebar;
+
+Output:
+{
+  "routeDefinitions": []
+}
+
+Note: No routing definitions in this file.
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Only extract route definitions from `<Route>` elements (React Router).
+- Compose full paths for nested routes (parent path + child path).
+- For index routes, use the parent's path as the path.
+- Capture the actual target page component, NOT wrapper/guard/layout components.
+- Set `isNested` to true for any route defined inside another `<Route>`.
+- Set `isLazy` to true if the target component is loaded via `React.lazy` or `lazy` from React.
+- Set `isProtected` to true if the route is wrapped in an auth guard component.
+- Dynamic segments (`:id`, `:userId`) and wildcards (`*`) should be captured as-is in the path.
+- If a file has no route definitions, return an empty array.
+- The `routingComponent` is the component that contains the `<Routes>` or `<Switch>` block.
+
+Output:

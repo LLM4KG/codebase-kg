@@ -1,0 +1,14 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__floor__n1",
+  "condition": "floor",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 349.0504569999757,
+  "timeout_used_ms": 154105,
+  "stage_detail": "error: corrupt patch at line 23\nstrict git apply failed; retrying with --recount (context preserved)\nerror: patch failed: src/client/slices/note.ts:1\nerror: src/client/slices/note.ts: patch does not apply\nerror: patch failed: src/client/containers/NoteList.tsx:1\nerror: src/client/containers/NoteList.tsx: patch does not apply\n--recount failed; retrying with --recount -C0 (placement UNVERIFIED)\nContext reduced to (0/0) to apply fragment at 1\nContext reduced to (0/0) to apply fragment at 97\nerror: patch failed: src/client/containers/NoteList.tsx:1\nerror: src/client/containers/NoteList.tsx: patch does not apply",
+  "apply_mode": null
+}

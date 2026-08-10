@@ -1,0 +1,71 @@
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
++import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { NoteItem, NoteState } from '@/types'
+ import { getWeightedCategoryOptions } from '@/utils/helpers'
+ import { Folder } from '@/utils/enums'
+@@ -100,6 +100,13 @@ const noteSlice = createSlice({
+         note.trash = false
+       })
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+     deleteNote: (state, action: PayloadAction<string>) => {
+       state.notes = state.notes.filter((note) => note.id !== action.payload)
+     },
+@@ -200,6 +207,7 @@ export const {
+   emptyTrash,
+   restoreNote,
++  restoreAllTrash,
+   deleteNote,
+   pruneNotes,
+   swapNote,
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -1,7 +1,7 @@
+ import React, { useState, useEffect, useRef } from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ import { Droppable } from 'react-beautiful-dnd'
+-import { emptyTrash, addNote, swapNote, swapCategory } from '@/slices/note'
++import { emptyTrash, addNote, swapNote, swapCategory, restoreAllTrash } from '@/slices/note'
+ import { NoteItem, ReactDragEvent, ReactMouseEvent, RootState } from '@/types'
+ import { Folder } from '@/utils/enums'
+ import { getNoteTitle, sortByLastUpdated, sortByCreatedDate } from '@/utils/helpers'
+@@ -90,6 +90,10 @@ const NoteList: React.FC = () => {
+     dispatch(emptyTrash())
+   }
+ 
++  const handleRestoreAllTrash = () => {
++    dispatch(restoreAllTrash())
++  }
++
+   return (
+     <div className="note-list">
+       {activeFolder === Folder.TRASH && (
+@@ -97,6 +101,9 @@ const NoteList: React.FC = () => {
+           <button className="trash-button" onClick={handleEmptyTrash}>
+             <Trash2 size={15} />
+             Empty Trash
++          </button>
++          <button className="trash-button" onClick={handleRestoreAllTrash}>
++            <RefreshCw size={15} />
++            Restore All
+           </button>
+         </div>
+       )}
+@@ -10,7 +10,7 @@ import React, { useState, useEffect, useRef } from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ import { Droppable } from 'react-beautiful-dnd'
+ import { emptyTrash, addNote, swapNote, swapCategory, restoreAllTrash } from '@/slices/note'
+-import { Trash2 } from 'react-feather'
++import { Trash2, RefreshCw } from 'react-feather'
+ import { NoteItem, ReactDragEvent, ReactMouseEvent, RootState } from '@/types'
+ import { Folder } from '@/utils/enums'
+ import { getNoteTitle, sortByLastUpdated, sortByCreatedDate } from '@/utils/helpers'

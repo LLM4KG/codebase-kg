@@ -1,0 +1,57 @@
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+
+=======
+import { useState } from 'react';
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('');
+
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(successMessage);
+      setTimeout(() => setCopiedText(''), timeout);
+    } catch (err) {
+      setCopiedText('Failed to copy');
+    }
+  };
+
+  return { copiedText, handleCopy };
+};
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useState, useEffect } from 'react';
+=======
+import React from 'react';
+import { useCopyToClipboard } from '../utils/useCopyToClipboard';
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copied, setCopied] = useState('');
+  
+  useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => {
+        setCopied('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
+
+  const handleCopyNote = async () => {
+    try {
+      await copyToClipboard(noteContent);
+      setCopied('Copied!');
+    } catch (err) {
+      setCopied('Failed to copy');
+    }
+  };
+=======
+  const { copiedText: copied, handleCopy: handleCopyNote } = useCopyToClipboard('Copied!', 3000);
+>>>>>>> REPLACE
+```

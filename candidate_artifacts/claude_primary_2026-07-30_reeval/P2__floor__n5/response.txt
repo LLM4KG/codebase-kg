@@ -1,0 +1,114 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer to `src/client/slices/note.ts`
+2. Add a "Restore All" button to `src/client/containers/NoteList.tsx`
+
+Let me analyze the existing patterns in the codebase based on the task description.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { emptyTrash } from '@/slices/note'
+=======
+import { emptyTrash, restoreAllTrash } from '@/slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _emptyTrash = () => dispatch(emptyTrash())
+=======
+  const _emptyTrash = () => dispatch(emptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+        <button className="trash-button" onClick={_emptyTrash}>
+          <Icon size={14} icon={deleteIcon} />
+          Empty Trash
+        </button>
+=======
+        <button className="trash-button" onClick={_restoreAllTrash}>
+          <Icon size={14} icon={refreshIcon} />
+          Restore All
+        </button>
+        <button className="trash-button" onClick={_emptyTrash}>
+          <Icon size={14} icon={deleteIcon} />
+          Empty Trash
+        </button>
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { deleteIcon } from '@/utils/constants'
+=======
+import { deleteIcon, refreshIcon } from '@/utils/constants'
+>>>>>>> REPLACE
+```
+
+Wait, I need to verify the actual icon name used in the project. Let me reconsider - I don't know if `refreshIcon` exists. Let me use a safer approach and check what's available. Since I can't verify the exact icon constant, I'll use the delete icon pattern but reference a restore icon that likely exists, or just use text-only button to be safe.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { emptyTrash } from '@/slices/note'
+=======
+import { emptyTrash, restoreAllTrash } from '@/slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _emptyTrash = () => dispatch(emptyTrash())
+=======
+  const _emptyTrash = () => dispatch(emptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+        <button className="trash-button" onClick={_emptyTrash}>
+          <Icon size={14} icon={deleteIcon} />
+          Empty Trash
+        </button>
+=======
+        <button className="trash-button" onClick={_restoreAllTrash}>
+          Restore All
+        </button>
+        <button className="trash-button" onClick={_emptyTrash}>
+          <Icon size={14} icon={deleteIcon} />
+          Empty Trash
+        </button>
+>>>>>>> REPLACE
+```

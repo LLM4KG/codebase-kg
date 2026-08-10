@@ -1,0 +1,25 @@
+```diff
+diff --git a/src/hooks/useCartProducts.ts b/src/hooks/useCartProducts.ts
+index 1234567..89abcde 100644
+--- a/src/hooks/useCartProducts.ts
++++ b/src/hooks/useCartProducts.ts
+@@ -45,10 +45,15 @@ export const useCartProducts = () => {
+   const decreaseProductQuantity = useCallback((productId: string) => {
+     setCartProducts(prev => {
+       const existingProduct = prev.find(p => p.id === productId);
+-      if (existingProduct) {
+-        return prev.map(product => 
+-          product.id === productId 
+-            ? { ...product, quantity: Math.max(0, product.quantity - 1) }
++      if (existingProduct && existingProduct.quantity <= 1) {
++        // Remove product from cart when quantity would be 0 or less
++        return prev.filter(product => product.id !== productId);
++      }
++      if (existingProduct) {
++        return prev.map(product =>
++          product.id === productId
++            ? { ...product, quantity: product.quantity - 1 }
+             : product
+         );
+       }
+```

@@ -1,0 +1,208 @@
+```diff
+--git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
++import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+ import { LabelText } from '@resources/LabelText'
+@@ -1,6 +1,6 @@
+ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+ import { LabelText } from '@resources/LabelText'
+ import { Folder, NotesSortKey } from '@/utils/enums'
+ import { NoteItem, NoteState } from '@/types'
+ import { getWeightedFavorites, isDraftNote } from '@/utils/helpers'
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,3 +1,3 @@
+ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,6 +1,6 @@
+ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+ import { LabelText } from '@resources/LabelText'
+ import { Folder, NotesSortKey } from '@/utils/enums'
+ import { NoteItem, NoteState } from '@/types'
+```
+
+Let me provide a proper diff:
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,6 +1,6 @@
+ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+ import { LabelText } from '@resources/LabelText'
+ import { Folder, NotesSortKey } from '@/utils/enums'
+ import { NoteItem, NoteState } from '@/types'
+```
+
+I need to see the actual note.ts file content. Based on the context, here is the correct patch:
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,3 +1,3 @@
+-    permanentlyEmptyTrash: (state) => {
++    permanentlyEmptyTrash: (state) => {
+       state.notes = state.notes.filter((note) => !note.trash)
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -10,6 +10,7 @@ import {
+   permanentlyEmptyTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+   updateSelectedNotes,
++  restoreAllTrash,
+ } from '@/slices/note'
+@@ -35,6 +36,7 @@ export const NoteList: React.FC = () => {
+   const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+   const _pruneNotes = () => dispatch(pruneNotes())
++  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+   const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateActiveNote({ noteId, multiSelect }))
+@@ -95,6 +97,13 @@ export const NoteList: React.FC = () => {
+           >
+             Empty Trash
+           </NoteListButton>
++        )}
++        {showEmptyTrash && (
++          <NoteListButton
++            label="Restore All"
++            handler={() => _restoreAllTrash()}
++          >
++            Restore All
++          </NoteListButton>
+         )}
+       </div>
+```
+
+After reviewing the structure more carefully, here is the clean final patch:
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+ export const {
+   addNote,
+   deleteNote,
+   updateNote,
+   permanentlyEmptyTrash,
++  restoreAllTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+   updateSelectedNotes,
+   updateNoteCategory,
+   importNotes,
+   loadNotes,
+   swapNote,
+   swapFolder,
+   swapCategory,
+   toggleFavoriteNote,
+   toggleTrashedNote,
+   updateSelectedNotes,
+ } = noteSlice.actions
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -10,6 +10,7 @@ import {
+   permanentlyEmptyTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+   updateSelectedNotes,
++  restoreAllTrash,
+ } from '@/slices/note'
+@@ -36,6 +37,7 @@ export const NoteList: React.FC = () => {
+   const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+   const _pruneNotes = () => dispatch(pruneNotes())
++  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+   const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateActiveNote({ noteId, multiSelect }))
+@@ -97,6 +99,13 @@ export const NoteList: React.FC = () => {
+           >
+             Empty Trash
+           </NoteListButton>
++        )}
++        {showEmptyTrash && (
++          <NoteListButton
++            label="Restore All"
++            handler={_restoreAllTrash}
++          >
++            Restore All
++          </NoteListButton>
+         )}
+       </div>
+```
+
+I realize I cannot see the full note.ts file. Here is my best attempt at a clean, applicable patch based on the available context:
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,6 +1,12 @@
+     permanentlyEmptyTrash: (state) => {
+       state.notes = state.notes.filter((note) => !note.trash)
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -10,6 +10,7 @@ import {
+   permanentlyEmptyTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+   updateSelectedNotes,
++  restoreAllTrash,
+ } from '@/slices/note'
+@@ -36,6 +37,8 @@ export const NoteList: React.FC = () => {
+   const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+   const _pruneNotes = () => dispatch(pruneNotes())
++  const _restoreAllTrash = () => dispatch(restoreAllTrash())
++
+   const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateActiveNote({ noteId, multiSelect }))
+@@ -93,6 +96,13 @@ export const NoteList: React.FC = () => {
+           >
+             Empty Trash
+           </NoteListButton>
++        )}
++        {showEmptyTrash && (
++          <NoteListButton
++            label="Restore All"
++            handler={_restoreAllTrash}
++          >
++            Restore All
++          </NoteListButton>
+         )}
+       </div>
+```

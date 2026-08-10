@@ -1,0 +1,39 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Header",
+        "childComponent": "Form",
+        "importSource": "./Form",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "history",
+            "valueExpression": "history"
+          },
+          {
+            "propName": "handleSubmit",
+            "valueExpression": "handleSubmit"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Header",
+        "childComponent": "Navigation",
+        "importSource": "./Navigation",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

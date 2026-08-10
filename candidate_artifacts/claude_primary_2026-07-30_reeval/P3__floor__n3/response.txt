@@ -1,0 +1,71 @@
+Looking at the task, I need to:
+
+1. Create a new `useCopyToClipboard` hook
+2. Update `NoteMenuBar.tsx` to use it
+
+Let me analyze what the hook should extract based on the task description:
+- A `useState` for the "copied" feedback text
+- A `useEffect` that auto-clears it after 3 seconds
+- A `copyToClipboard` call in the onClick handler
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+import { copyToClipboard } from './helpers'
+
+export const useCopyToClipboard = (successMessage: string, timeout = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+    const timer = setTimeout(() => setCopiedText(''), timeout)
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    copyToClipboard(text)
+    setCopiedText(successMessage)
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useEffect, useRef, useState } from 'react'
+=======
+import React, { useRef, useState } from 'react'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { copyToClipboard, getWebsiteURL } from '@/utils/helpers'
+=======
+import { getWebsiteURL } from '@/utils/helpers'
+import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copied, setCopied] = useState('')
+
+  useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(''), 3000)
+    return () => clearTimeout(timer)
+  }, [copied])
+=======
+  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!', 3000)
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+      copyToClipboard(`${getWebsiteURL()}/share/${activeNote.shareKey}`)
+      setCopied('Copied!')
+=======
+      handleCopy(`${getWebsiteURL()}/share/${activeNote.shareKey}`)
+>>>>>>> REPLACE
+```

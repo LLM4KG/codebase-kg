@@ -1,0 +1,15 @@
+{
+  "task_id": "P3",
+  "candidate_id": "P3__whole_file__n1",
+  "condition": "whole_file",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 82041.97422200014,
+  "timeout_used_ms": 158497,
+  "stage_detail": null,
+  "apply_mode": "recount",
+  "apply_reason": null
+}

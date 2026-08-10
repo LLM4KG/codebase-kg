@@ -1,0 +1,14 @@
+{
+  "task_id": "P1",
+  "candidate_id": "P1__kg_augmented__n1",
+  "condition": "kg_augmented",
+  "model": "",
+  "stage": "harness_error",
+  "exit_code": null,
+  "stdout": "",
+  "stderr": "orchestrator error: RetryError[<Future at 0x7b60e0275730 state=finished raised APIConnectionError>]",
+  "duration_ms": 0.0,
+  "timeout_used_ms": 0,
+  "stage_detail": null,
+  "apply_mode": null
+}

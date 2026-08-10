@@ -1,0 +1,162 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.Container",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isOpen",
+            "valueExpression": "isOpen"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CartButton",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "handleToggleCart(isOpen)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CartIcon",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CartQuantity",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Products in cart quantity\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CartContent",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CartContentHeader",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CartIcon",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "large",
+            "valueExpression": "true"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CartQuantity",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.HeaderTitle",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "CartProducts",
+        "importSource": "./CartProducts",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "products",
+            "valueExpression": "products"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CartFooter",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.Sub",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.SubPrice",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.SubPriceValue",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.SubPriceInstallment",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Cart",
+        "childComponent": "S.CheckoutButton",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "handleCheckout"
+          },
+          {
+            "propName": "autoFocus",
+            "valueExpression": "true"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

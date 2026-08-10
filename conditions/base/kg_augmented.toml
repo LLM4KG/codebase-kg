@@ -1,0 +1,7 @@
+# KG-augmented retrieval condition
+condition_id = "kg_augmented"
+retriever = "kg_augmented"
+format_variant = "A"
+max_rounds = 1
+
+[retriever_params]

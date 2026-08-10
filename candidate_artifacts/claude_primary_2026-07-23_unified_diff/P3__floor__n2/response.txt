@@ -1,0 +1,81 @@
+```diff
+diff --git a/src/client/utils/useCopyToClipboard.ts b/src/client/utils/useCopyToClipboard.ts
+new file mode 100644
+--- /dev/null
++++ b/src/client/utils/useCopyToClipboard.ts
+@@ -0,0 +1,24 @@
++import { useState, useEffect } from 'react'
++
++const useCopyToClipboard = (
++  successMessage: string,
++  timeout: number = 3000
++): { copiedText: string; handleCopy: (text: string) => void } => {
++  const [copiedText, setCopiedText] = useState('')
++
++  useEffect(() => {
++    if (!copiedText) return
++    const timer = setTimeout(() => {
++      setCopiedText('')
++    }, timeout)
++    return () => clearTimeout(timer)
++  }, [copiedText, timeout])
++
++  const handleCopy = (text: string) => {
++    navigator.clipboard.writeText(text).then(() => {
++      setCopiedText(successMessage)
++    })
++  }
++
++  return { copiedText, handleCopy }
++}
++
++export default useCopyToClipboard
+diff --git a/src/client/containers/NoteMenuBar.tsx b/src/client/containers/NoteMenuBar.tsx
+--- a/src/client/containers/NoteMenuBar.tsx
++++ b/src/client/containers/NoteMenuBar.tsx
+@@ -1,4 +1,4 @@
+-import React, { useState, useEffect } from 'react'
++import React from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ 
+ import { TestID } from '@resources/TestID'
+@@ -17,6 +17,7 @@ import {
+ } from '@/selectors'
+ import { copyToClipboard } from '@/utils/copyToClipboard'
+ import { getWebsiteUrl } from '@/utils/getWebsiteUrl'
++import useCopyToClipboard from '@/utils/useCopyToClipboard'
+ 
+ export const NoteMenuBar: React.FC = () => {
+   const dispatch = useDispatch()
+@@ -27,19 +28,10 @@ export const NoteMenuBar: React.FC = () => {
+   const activeFolder = useSelector(selectActiveFolder)
+   const activeNote = useSelector(selectActiveNote)
+ 
+-  const [copied, setCopied] = useState('')
+-
+-  useEffect(() => {
+-    if (!copied) return
+-    const timer = setTimeout(() => {
+-      setCopied('')
+-    }, 3000)
+-    return () => clearTimeout(timer)
+-  }, [copied])
++  const { copiedText, handleCopy } = useCopyToClipboard('Copied!', 3000)
+ 
+   const copyNoteLink = () => {
+-    copyToClipboard(`${getWebsiteUrl()}/note/${activeNote?.id}`)
+-    setCopied('Copied!')
++    handleCopy(`${getWebsiteUrl()}/note/${activeNote?.id}`)
+   }
+ 
+   return (
+@@ -50,7 +42,7 @@ export const NoteMenuBar: React.FC = () => {
+           data-testid={TestID.NOTE_MENU_BAR_COPY_LINK}
+           onClick={copyNoteLink}
+         >
+-          {copied || 'Copy link'}
++          {copiedText || 'Copy link'}
+         </button>
+       )}
+     </nav>
+```

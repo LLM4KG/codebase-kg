@@ -1,0 +1,444 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract **component composition** and **prop passing** relationships from a given `.js` or `.jsx` file.
+
+Only consider component usages that appear directly in the current input file.
+
+Do not include any component usages that are assumed or inferred unless they are explicitly present in the provided content.
+
+---
+
+## What to Extract
+
+For each React component defined in this file (function or class), identify:
+
+1. **Child components** it renders in its JSX (the `USES_COMPONENT` relationship).
+2. **Props it passes** to each child component (the `PASSES_PROP` relationship).
+
+---
+
+## Detection Rules
+
+**Child component detection:**
+- A child component is any PascalCase JSX tag used within the parent's JSX return (or `render()` method for class components).
+- Include components rendered conditionally, inside `.map()`, inside ternaries, or in any other expression context.
+- Include components passed as prop values to other components (e.g., `<Route component={Dashboard} />`).
+- Do NOT include HTML elements (lowercase tags like `<div>`, `<button>`, `<input>`).
+- Do NOT include React built-in wrappers: `Fragment`, `React.Fragment`, `Suspense`, `StrictMode`.
+
+**Determining child component source:**
+- If the child is imported via a relative path (e.g., `import Cart from './Cart'`), set `importSource` to that relative path string.
+- If the child is imported from an external library (e.g., `import { Link } from 'react-router-dom'`), set `importSource` to the library name.
+- If the child is defined in the same file, set `importSource` to `"same_file"`.
+
+**Prop passing detection:**
+- For each child component used in JSX, list every prop attribute explicitly passed to it.
+- If props are spread (`{...obj}`), include an entry with `propName` set to the spread expression (e.g., `"...props"`, `"...config"`).
+- Do NOT include the `key` or `ref` pseudo-props.
+- Do NOT include `children` when passed as nested JSX (only include it if passed as an explicit attribute: `children={...}`).
+
+**Usage type:**
+- `"element"`: The component is rendered as a JSX element (e.g., `<Dashboard />`, `<Card>...</Card>`).
+- `"prop_value"`: The component is passed as a prop or variable reference, not directly rendered as JSX by the parent (e.g., `component={Dashboard}`, `render={() => <Dashboard />}` in React Router v5).
+
+---
+
+## Output Format
+
+Return a JSON object:
+{
+  "componentUsages": [
+    {
+      "parentComponent": "<name of the parent component>",
+      "childComponent": "<name of the child component>",
+      "importSource": "<import path or 'same_file'>",
+      "usage": "element" | "prop_value",
+      "propsPassed": [
+        {
+          "propName": "<attribute name>",
+          "valueExpression": "<short summary of the value>"
+        }
+      ]
+    }
+  ]
+}
+
+---
+
+### Example 1
+Input:
+import React from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer';
+
+function App() {
+  return (
+    <div>
+      <Header title="My App" />
+      <main>Content</main>
+      <Footer year={2024} />
+    </div>
+  );
+}
+
+export default App;
+
+Output:
+{
+  "componentUsages": [
+    {
+      "parentComponent": "App",
+      "childComponent": "Header",
+      "importSource": "./components/Header",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "title", "valueExpression": "\"My App\"" }
+      ]
+    },
+    {
+      "parentComponent": "App",
+      "childComponent": "Footer",
+      "importSource": "./components/Footer",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "year", "valueExpression": "2024" }
+      ]
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import React, { useState } from 'react';
+import ProductCard from './ProductCard';
+
+function ProductList({ products, onAddToCart }) {
+  const [sortBy, setSortBy] = useState('name');
+
+  const sorted = [...products].sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
+
+  return (
+    <div className="product-list">
+      {sorted.map(product => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          onAddToCart={onAddToCart}
+          isFeatured={product.featured}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default ProductList;
+
+Output:
+{
+  "componentUsages": [
+    {
+      "parentComponent": "ProductList",
+      "childComponent": "ProductCard",
+      "importSource": "./ProductCard",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "product", "valueExpression": "product" },
+        { "propName": "onAddToCart", "valueExpression": "onAddToCart" },
+        { "propName": "isFeatured", "valueExpression": "product.featured" }
+      ]
+    }
+  ]
+}
+
+Note: `key` is excluded as it is a React pseudo-prop, not a component prop.
+
+---
+
+### Example 3
+Input:
+import React from 'react';
+import { Route, Switch, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Dashboard from './pages/Dashboard';
+import Sidebar from './components/Sidebar';
+
+function AppLayout() {
+  return (
+    <div className="layout">
+      <Sidebar>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+      </Sidebar>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/about" component={About} />
+        <Route path="/dashboard" render={() => <Dashboard admin={true} />} />
+      </Switch>
+    </div>
+  );
+}
+
+export default AppLayout;
+
+Output:
+{
+  "componentUsages": [
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Sidebar",
+      "importSource": "./components/Sidebar",
+      "usage": "element",
+      "propsPassed": []
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Link",
+      "importSource": "react-router-dom",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "to", "valueExpression": "\"/\"" }
+      ]
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Link",
+      "importSource": "react-router-dom",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "to", "valueExpression": "\"/about\"" }
+      ]
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Route",
+      "importSource": "react-router-dom",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "exact", "valueExpression": "true" },
+        { "propName": "path", "valueExpression": "\"/\"" },
+        { "propName": "component", "valueExpression": "Home" }
+      ]
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Route",
+      "importSource": "react-router-dom",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "path", "valueExpression": "\"/about\"" },
+        { "propName": "component", "valueExpression": "About" }
+      ]
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Route",
+      "importSource": "react-router-dom",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "path", "valueExpression": "\"/dashboard\"" },
+        { "propName": "render", "valueExpression": "() => <Dashboard admin={true} />" }
+      ]
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Switch",
+      "importSource": "react-router-dom",
+      "usage": "element",
+      "propsPassed": []
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Home",
+      "importSource": "./pages/Home",
+      "usage": "prop_value",
+      "propsPassed": []
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "About",
+      "importSource": "./pages/About",
+      "usage": "prop_value",
+      "propsPassed": []
+    },
+    {
+      "parentComponent": "AppLayout",
+      "childComponent": "Dashboard",
+      "importSource": "./pages/Dashboard",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "admin", "valueExpression": "true" }
+      ]
+    }
+  ]
+}
+
+Note: `Home` and `About` are classified as `"prop_value"` because they are passed via `component={Home}`, not rendered as `<Home />`. `Dashboard` is `"element"` because it is rendered as `<Dashboard admin={true} />` inside the `render` prop. `Link` appears twice — once per JSX usage site — because different props are passed at each site.
+
+---
+
+### Example 4
+Input:
+import React from 'react';
+
+const Button = ({ label, onClick }) => {
+  return <button onClick={onClick}>{label}</button>;
+};
+
+const Alert = ({ message, onDismiss }) => {
+  return (
+    <div className="alert">
+      <span>{message}</span>
+      <Button label="Dismiss" onClick={onDismiss} />
+    </div>
+  );
+};
+
+function Card({ title, children }) {
+  return (
+    <div className="card">
+      <h2>{title}</h2>
+      {children}
+    </div>
+  );
+}
+
+function Page() {
+  const handleDismiss = () => console.log('dismissed');
+
+  return (
+    <Card title="Notifications">
+      <Alert message="New update available" onDismiss={handleDismiss} />
+    </Card>
+  );
+}
+
+export default Page;
+
+Output:
+{
+  "componentUsages": [
+    {
+      "parentComponent": "Alert",
+      "childComponent": "Button",
+      "importSource": "same_file",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "label", "valueExpression": "\"Dismiss\"" },
+        { "propName": "onClick", "valueExpression": "onDismiss" }
+      ]
+    },
+    {
+      "parentComponent": "Page",
+      "childComponent": "Card",
+      "importSource": "same_file",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "title", "valueExpression": "\"Notifications\"" }
+      ]
+    },
+    {
+      "parentComponent": "Page",
+      "childComponent": "Alert",
+      "importSource": "same_file",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "message", "valueExpression": "\"New update available\"" },
+        { "propName": "onDismiss", "valueExpression": "handleDismiss" }
+      ]
+    }
+  ]
+}
+
+Note: `Button` is defined in the same file as `Alert`, so `importSource` is `"same_file"`. `Card` receives `children` as nested JSX — this is not listed in `propsPassed` since it is not an explicit attribute.
+
+---
+
+### Example 5
+Input:
+import React, { Component } from 'react';
+import UserAvatar from './UserAvatar';
+import UserInfo from './UserInfo';
+
+class UserProfile extends Component {
+  render() {
+    const { user, settings } = this.props;
+    return (
+      <div className="profile">
+        <UserAvatar
+          src={user.avatarUrl}
+          size="large"
+          alt={user.name}
+        />
+        <UserInfo {...user} isAdmin={settings.isAdmin} />
+      </div>
+    );
+  }
+}
+
+export default UserProfile;
+
+Output:
+{
+  "componentUsages": [
+    {
+      "parentComponent": "UserProfile",
+      "childComponent": "UserAvatar",
+      "importSource": "./UserAvatar",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "src", "valueExpression": "user.avatarUrl" },
+        { "propName": "size", "valueExpression": "\"large\"" },
+        { "propName": "alt", "valueExpression": "user.name" }
+      ]
+    },
+    {
+      "parentComponent": "UserProfile",
+      "childComponent": "UserInfo",
+      "importSource": "./UserInfo",
+      "usage": "element",
+      "propsPassed": [
+        { "propName": "...user", "valueExpression": "{...user}" },
+        { "propName": "isAdmin", "valueExpression": "settings.isAdmin" }
+      ]
+    }
+  ]
+}
+
+Note: The spread `{...user}` is captured with the `propName` set to `"...user"` to indicate that individual prop names from the spread are not statically known.
+
+---
+
+### Example 6
+Input:
+import React from 'react';
+
+function EmptyState() {
+  return <p>No items found.</p>;
+}
+
+export default EmptyState;
+
+Output:
+{
+  "componentUsages": []
+}
+
+Note: `EmptyState` does not use any child components, so the output is an empty array.
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Only extract PascalCase JSX tags as child components. Ignore HTML elements.
+- Exclude React.Fragment, Fragment, Suspense, StrictMode as child components.
+- Exclude `key`, `ref`, and nested `children` from propsPassed.
+- For spread props, use `"...variableName"` as the propName.
+- Set usage to `"prop_value"` when a component is passed as a reference (not rendered directly as JSX by the parent).
+- If a child component appears multiple times with different props, create one entry per usage site.
+- Components with no child component usages should not appear in the output.
+- Set importSource to `"same_file"` for components defined in the current file.
+
+Output:

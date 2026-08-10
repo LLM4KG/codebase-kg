@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__floor__n2",
+  "condition": "floor",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1413.3232489984948,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/slices/note.ts\n--- SEARCH ---\n    emptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

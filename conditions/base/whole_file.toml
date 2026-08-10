@@ -1,0 +1,29 @@
+# Whole-file condition — oracle whole-file retrieval (INPUT side).
+#
+# Condition 2 of the six-condition baseline ladder: the full source of every file
+# the reference patch touches, read straight off disk from the frozen task YAML's
+# `files_modified` / `files_created`. No LLM call, no KG query — retrieval cost is
+# zero by construction, which is what makes it the right comparison point for the
+# token-cost table.
+#
+# The only condition with oracle localisation, deliberately: it is told where to
+# look, so it bounds how much of any KG advantage is localisation rather than
+# structure.
+#
+# NOT the generator output format. `format_variant` below is the *context
+# rendering* template (prompts/generation/format_a.jinja2), and the whole-file
+# OUTPUT format is `[run.generation] output_format` in conditions/runs/*.toml.
+# Three different things share the words "whole file"; see
+# docs/phase_2/phase-2-2b-output-format.md.
+#
+# Implemented by src/retrieval/whole_file_retriever.py (Phase 2 item 2b). Added to
+# the default condition set at the same time: the pilot's only non-KG arm was
+# `floor`, whose prompt carries no source code at all, so it could never reach
+# build or test and every comparison was against something already lost at the
+# apply stage.
+condition_id = "whole_file"
+retriever = "whole_file"
+format_variant = "A"
+max_rounds = 1
+
+[retriever_params]

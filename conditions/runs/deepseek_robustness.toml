@@ -1,0 +1,74 @@
+# ──────────────────────────────────────────────────────────────────
+# Run config: DeepSeek V3.1 — robustness check (Phase 5b)
+# ──────────────────────────────────────────────────────────────────
+# Open-weight model, distinct family and architecture from both Claude
+# and Qwen.  671B MoE (37B active) — general-purpose with strong
+# code generation capabilities.
+#
+# IMPORTANT: DeepSeek V3.1 supports a "reasoning" mode that produces
+# extended chain-of-thought tokens before the answer.  This MUST be
+# disabled for the experiment:
+#   - Reasoning tokens inflate usage counts, making cross-model
+#     token comparisons invalid.
+#   - CoT preamble may break diff extraction from model output.
+#
+# Replaces the originally-planned DeepSeek-Coder-V2-Lite, which is
+# unavailable on OpenRouter.  See decision log entry D-LLM2-amended.
+#
+# Per D-LLM3: all pipeline LLM calls (classifier, anchor extractor,
+# reformulator, generator) use this model.  Zero Anthropic API calls
+# during this run.
+#
+# Per D-LLM2: same six conditions × full task set × n=20.
+# ──────────────────────────────────────────────────────────────────
+
+[run]
+run_id          = "deepseek_robustness"
+description     = "Robustness check — DeepSeek V3.1 via OpenRouter"
+
+[run.model]
+# LiteLLM model string: prefix "openrouter/" routes through OpenRouter.
+model_id            = "openrouter/deepseek/deepseek-chat-v3.1"
+model_provider      = "openrouter"
+model_family        = "deepseek"
+model_version       = "deepseek/deepseek-chat-v3.1"    # OpenRouter model string
+model_architecture  = "moe"                              # 671B total, ~37B active
+context_window      = 33000                              # ~33K context per OpenRouter
+
+[run.generation]
+temperature     = 0.0       # EXPLICIT — OpenRouter may default to nonzero
+max_tokens      = 8192      # Match Claude/Qwen runs; adjust after pilot calibration
+
+# Same output format as the Claude run — the robustness check tests whether the
+# direction of condition results holds across model families, which requires the
+# generator's task to be identical. See docs/decision-log.md (2026-07-30).
+output_format   = "search_replace"
+
+[run.generation.provider_params]
+# Disable reasoning/thinking mode.  DeepSeek V3.1 can produce extended
+# chain-of-thought tokens if reasoning is enabled — this breaks both
+# output parsing and token-count comparability.
+#
+# OpenRouter passes this through to the DeepSeek backend.
+# Verify during Phase 0 smoke test that reasoning tokens are NOT
+# present in the response.
+reasoning = false
+
+[run.provider]
+# OpenRouter — OpenAI-compatible proxy.
+api_base        = "https://openrouter.ai/api/v1"
+# api_key sourced from env: OPENROUTER_API_KEY
+#
+# Reproducibility: log "X-OpenRouter-Provider" response header per call.
+
+[run.provider.extra_headers]
+# Optional — uncomment and fill for OpenRouter rankings.
+# HTTP-Referer       = "https://your-project-url"
+# X-OpenRouter-Title = "KG-Augmented-CodeGen-Thesis"
+
+[run.notes]
+locked_at       = ""        # ISO timestamp filled at Phase 5b start
+locked_by       = ""        # Git commit SHA at lock time
+rationale       = "Replaces DeepSeek-Coder-V2-Lite (unavailable on OpenRouter). V3.1 is a strong general-purpose MoE model with explicit code generation capabilities, different architecture and training lineage from both Claude (proprietary, dense) and Qwen (open, dense). Reasoning mode disabled to ensure comparable output format and token economics."
+original_model  = "DeepSeek-Coder-V2-Lite"
+change_reason   = "Model not available on OpenRouter; V3.1 is the closest available DeepSeek model with strong code capabilities"

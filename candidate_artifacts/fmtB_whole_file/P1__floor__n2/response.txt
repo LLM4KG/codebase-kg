@@ -1,0 +1,83 @@
+I need to find and fix the `decreaseProductQuantity` function in `useCartProducts.ts`.
+
+src/hooks/useCartProducts.ts
+```ts
+import { useCallback, useState } from "react";
+import { Product } from "../models";
+
+interface CartProduct {
+  product: Product;
+  quantity: number;
+}
+
+const useCartProducts = () => {
+  const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
+
+  const addProduct = useCallback(
+    (product: Product) => {
+      const existingProduct = cartProducts.find(
+        (cp) => cp.product.id === product.id
+      );
+      if (existingProduct) {
+        setCartProducts(
+          cartProducts.map((cp) =>
+            cp.product.id === product.id
+              ? { ...cp, quantity: cp.quantity + 1 }
+              : cp
+          )
+        );
+      } else {
+        setCartProducts([...cartProducts, { product, quantity: 1 }]);
+      }
+    },
+    [cartProducts]
+  );
+
+  const removeProduct = useCallback(
+    (product: Product) => {
+      setCartProducts(
+        cartProducts.filter((cp) => cp.product.id !== product.id)
+      );
+    },
+    [cartProducts]
+  );
+
+  const increaseProductQuantity = useCallback(
+    (product: Product) => {
+      setCartProducts(
+        cartProducts.map((cp) =>
+          cp.product.id === product.id
+            ? { ...cp, quantity: cp.quantity + 1 }
+            : cp
+        )
+      );
+    },
+    [cartProducts]
+  );
+
+  const decreaseProductQuantity = useCallback(
+    (product: Product) => {
+      setCartProducts(
+        cartProducts
+          .map((cp) =>
+            cp.product.id === product.id
+              ? { ...cp, quantity: cp.quantity - 1 }
+              : cp
+          )
+          .filter((cp) => cp.quantity > 0)
+      );
+    },
+    [cartProducts]
+  );
+
+  return {
+    cartProducts,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+export default useCartProducts;
+```

@@ -1,0 +1,31 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useState, useCallback } from 'react';\n\nexport function useCopyToClipboard(successMessage: string, timeout: number = 3000) {\n  const [copiedText, setCopiedText] = useState<string | null>(null);\n\n  const handleCopy = useCallback(async (text: string) => {\n    try {\n      await navigator.clipboard.writeText(text);\n      setCopiedText(successMessage);\n      \n      setTimeout(() => {\n        setCopiedText(null);\n      }, timeout);\n    } catch (err) {\n      console.error('Failed to copy text: ', err);\n    }\n  }, [successMessage, timeout]);\n\n  return { copiedText, handleCopy };\n}\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import React, { useState, useEffect, useCallback } from 'react';\n",
+      "content": "import React, { useCallback } from 'react';\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import { useNoteContext } from '../contexts/NoteContext';\nimport { copyToClipboard } from '../utils/clipboard';\n",
+      "content": "import { useNoteContext } from '../contexts/NoteContext';\nimport { copyToClipboard } from '../utils/clipboard';\nimport { useCopyToClipboard } from '../utils/useCopyToClipboard';\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "  const { note } = useNoteContext();\n  const [copiedText, setCopiedText] = useState<string | null>(null);\n\n  useEffect(() => {\n    if (copiedText) {\n      const timer = setTimeout(() => {\n        setCopiedText(null);\n      }, 3000);\n      return () => clearTimeout(timer);\n    }\n  }, [copiedText]);\n\n  const handleCopyNote = useCallback(async () => {\n    if (note) {\n      try {\n        await copyToClipboard(note.content);\n        setCopiedText('Copied to clipboard!');\n      } catch (err) {\n        console.error('Failed to copy note: ', err);\n      }\n    }\n  }, [note]);\n",
+      "content": "  const { note } = useNoteContext();\n  const { copiedText, handleCopy } = useCopyToClipboard('Copied to clipboard!', 3000);\n\n  const handleCopyNote = useCallback(async () => {\n    if (note) {\n      try {\n        await copyToClipboard(note.content);\n        handleCopy(note.content);\n      } catch (err) {\n        console.error('Failed to copy note: ', err);\n      }\n    }\n  }, [note, handleCopy]);\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

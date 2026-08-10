@@ -1,0 +1,43 @@
+# ──────────────────────────────────────────────────────────────────
+# Run config: Claude Sonnet — primary experiment (Phase 5a + Phase 6)
+# ──────────────────────────────────────────────────────────────────
+# A "run" parameterises the generator model. All six base conditions
+# inherit this run's model settings (per D-LLM3: no cross-model mixing).
+#
+# The exact model string is locked at the START of Phase 5a and
+# recorded in LOCKED_MODELS.md.  Do NOT change after locking.
+# ──────────────────────────────────────────────────────────────────
+
+[run]
+run_id          = "claude_primary"
+description     = "Primary experiment — Claude Sonnet"
+
+[run.model]
+# model_id is the LiteLLM model string used in code.
+# Not yet locked (D-LLM1 lock happens at Phase 5a); current model for the pilot.
+# Sonnet 4.6 rather than Sonnet 5: Sonnet 5 rejects non-default sampling
+# parameters with a 400, and this pipeline sends temperature=0.0 on every call.
+model_id        = "anthropic/claude-sonnet-4-6"     # UPDATE at lock time
+model_provider  = "anthropic"
+model_family    = "claude"
+model_version   = "claude-sonnet-4-6"               # UPDATE at lock time — exact API string
+
+[run.generation]
+temperature     = 0.0       # Non-negotiable — minimises sampling variance (D-LLM1)
+max_tokens      = 8192      # Adjust after pilot calibration
+
+# How the generator expresses an edit. Run-level, NOT condition-level: the format
+# must be identical across all six conditions or they differ in two variables at
+# once. Chosen 2026-07-30 from a measured three-way head-to-head — see
+# docs/decision-log.md and docs/phase_2/phase-2-2b-output-format.md.
+# `unified_diff` and `whole_file` remain runnable via --output-format.
+output_format   = "search_replace"
+
+[run.provider]
+# Anthropic direct API — no proxy.
+api_base        = "https://api.anthropic.com"
+# api_key sourced from env: ANTHROPIC_API_KEY
+
+[run.notes]
+locked_at       = ""        # ISO timestamp filled when model string is frozen
+locked_by       = ""        # Git commit SHA at lock time

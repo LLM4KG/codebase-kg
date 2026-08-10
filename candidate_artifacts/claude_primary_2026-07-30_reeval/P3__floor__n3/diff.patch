@@ -1,0 +1,37 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useEffect, useState } from 'react'\nimport { copyToClipboard } from './helpers'\n\nexport const useCopyToClipboard = (successMessage: string, timeout = 3000) => {\n  const [copiedText, setCopiedText] = useState('')\n\n  useEffect(() => {\n    if (!copiedText) return\n    const timer = setTimeout(() => setCopiedText(''), timeout)\n    return () => clearTimeout(timer)\n  }, [copiedText, timeout])\n\n  const handleCopy = (text: string) => {\n    copyToClipboard(text)\n    setCopiedText(successMessage)\n  }\n\n  return { copiedText, handleCopy }\n}\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import React, { useEffect, useRef, useState } from 'react'\n",
+      "content": "import React, { useRef, useState } from 'react'\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import { copyToClipboard, getWebsiteURL } from '@/utils/helpers'\n",
+      "content": "import { getWebsiteURL } from '@/utils/helpers'\nimport { useCopyToClipboard } from '@/utils/useCopyToClipboard'\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "  const [copied, setCopied] = useState('')\n\n  useEffect(() => {\n    if (!copied) return\n    const timer = setTimeout(() => setCopied(''), 3000)\n    return () => clearTimeout(timer)\n  }, [copied])\n",
+      "content": "  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!', 3000)\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "      copyToClipboard(`${getWebsiteURL()}/share/${activeNote.shareKey}`)\n      setCopied('Copied!')\n",
+      "content": "      handleCopy(`${getWebsiteURL()}/share/${activeNote.shareKey}`)\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

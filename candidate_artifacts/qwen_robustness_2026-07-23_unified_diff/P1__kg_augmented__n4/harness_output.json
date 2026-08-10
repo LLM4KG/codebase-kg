@@ -1,0 +1,14 @@
+{
+  "task_id": "P1",
+  "candidate_id": "P1__kg_augmented__n4",
+  "condition": "kg_augmented",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 397.02229099930264,
+  "timeout_used_ms": 9805,
+  "stage_detail": "/harness/candidate.diff:20: trailing whitespace.\n        return prev.map(product => \n/harness/candidate.diff:21: trailing whitespace.\n          product.id === productId \n/harness/candidate.diff:22: trailing whitespace.\n            ? { ...product, quantity: product.quantity - 1 } \nerror: corrupt patch at line 28\nstrict git apply failed; retrying with --recount -C0\n/harness/candidate.diff:20: trailing whitespace.\n        return prev.map(product => \n/harness/candidate.diff:21: trailing whitespace.\n          product.id === productId \n/harness/candidate.diff:22: trailing whitespace.\n            ? { ...product, quantity: product.quantity - 1 } \nerror: src/hooks/useCartProducts.ts: No such file or directory",
+  "apply_mode": null
+}

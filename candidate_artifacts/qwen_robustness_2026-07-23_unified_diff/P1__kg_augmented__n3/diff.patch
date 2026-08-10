@@ -1,0 +1,33 @@
+diff --git a/src/hooks/useCartProducts.ts b/src/hooks/useCartProducts.ts
+index 1234567..89abcde 100644
+--- a/src/hooks/useCartProducts.ts
++++ b/src/hooks/useCartProducts.ts
+@@ -45,10 +45,15 @@ export const useCartProducts = () => {
+   const decreaseProductQuantity = useCallback((productId: string) => {
+     setCartProducts(prevCartProducts => {
+       return prevCartProducts.map(cartProduct => {
+-        if (cartProduct.product.id === productId) {
+-          return {
+-            ...cartProduct,
+-            quantity: cartProduct.quantity - 1
+-          };
++        if (cartProduct.product.id === productId) {
++          const newQuantity = cartProduct.quantity - 1;
++          if (newQuantity <= 0) {
++            return null;
++          }
++          return {
++            ...cartProduct,
++            quantity: newQuantity
++          };
+         }
+         return cartProduct;
+@@ -56,7 +61,9 @@ export const useCartProducts = () => {
+       }).filter(Boolean) as CartProduct[];
+     });
+   }, []);
+-
++  
+   const removeProduct = useCallback((productId: string) => {
+     setCartProducts(prevCartProducts => 
+       prevCartProducts.filter(cartProduct => cartProduct.product.id !== productId)

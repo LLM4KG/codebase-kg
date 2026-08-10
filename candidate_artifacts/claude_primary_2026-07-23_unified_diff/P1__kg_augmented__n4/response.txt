@@ -1,0 +1,32 @@
+```diff
+--git a/src/hooks/useCartProducts.ts b/src/hooks/useCartProducts.ts
+--- a/src/hooks/useCartProducts.ts
++++ b/src/hooks/useCartProducts.ts
+@@ -1,4 +1,4 @@
+-import { useCallback } from 'react';
++import { useCallback } from 'react';
+ import { ICartProduct } from 'types';
+ import useCartContext from './useCartContext';
+ 
+@@ -40,12 +40,14 @@ const useCartProducts = () => {
+   const decreaseProductQuantity = useCallback(
+     (productId: ICartProduct['id']) => {
+       setProducts((prevProducts) =>
+-        prevProducts.map((product) =>
+-          product.id === productId
+-            ? { ...product, quantity: product.quantity - 1 }
+-            : product
+-        )
++        prevProducts.reduce<ICartProduct[]>((acc, product) => {
++          if (product.id === productId) {
++            if (product.quantity - 1 <= 0) {
++              return acc;
++            }
++            return [...acc, { ...product, quantity: product.quantity - 1 }];
++          }
++          return [...acc, product];
++        }, [])
+       );
+     },
+     [setProducts]
+```

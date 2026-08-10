@@ -1,0 +1,367 @@
+You are an expert in reviewing and analyzing applications developed using the React JavaScript library. Your task is to extract **state variables** declared inside React class components from a given `.js` or `.jsx` file.
+
+Only consider state declarations that appear directly in the current input file.
+
+Do not include any state declarations that are assumed or inferred unless they are explicitly present in the provided content.
+
+---
+
+## Detection Rules
+
+Class component state is declared through one of two patterns:
+
+1. **Constructor pattern**: `this.state = { key1: value1, key2: value2 }` inside the `constructor()` method.
+2. **Class field pattern**: `state = { key1: value1, key2: value2 }` as a class property (without `this`).
+
+Each **top-level key** of the state object should be extracted as a separate state variable node. For example, if `this.state = { count: 0, name: "" }`, create two entries.
+
+For each state variable, return:
+- "name": The state key name (string) — the property key in the state object.
+- "setterName": Always `"this.setState"` for class components (since class components do not have individual setter functions).
+- "type": The inferred type based on the initial value. Use one of: "string", "number", "boolean", "object", "array", "null", "function", or "unknown".
+- "defaultValue": A short string representation of the initial value as written in the code (e.g., `"0"`, `"''"`, `"[]"`, `"null"`, `"false"`). For complex expressions or variable references, provide a brief summary (e.g., `"props.initialCount"`, `"Date.now()"`).
+- "componentName": The name of the class component that owns this state (string).
+- "declarationStyle": "constructor" or "class_field" — indicating where the state is declared.
+
+**Important:**
+- Only extract state from classes that are React class components (extend Component, PureComponent, React.Component, or React.PureComponent).
+- If a class extends a local base class, extract its state only if it declares its own `this.state` or `state = { ... }`.
+- Do NOT extract state from function components or custom hooks (those are handled by a separate prompt).
+- Do NOT extract values set via `this.setState()` calls — only extract the initial declaration.
+
+---
+
+## Output Format
+
+Return a JSON object with the following structure:
+{
+  "classStateVariables": [
+    {
+      "name": "<state key name>",
+      "setterName": "this.setState",
+      "type": "<inferred type>",
+      "defaultValue": "<short representation>",
+      "componentName": "<class component name>",
+      "declarationStyle": "constructor" | "class_field"
+    }
+  ]
+}
+
+---
+
+### Example 1
+Input:
+import React, { Component } from 'react';
+
+class Counter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <p>{this.state.count}</p>
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>+</button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+
+Output:
+{
+  "classStateVariables": [
+    {
+      "name": "count",
+      "setterName": "this.setState",
+      "type": "number",
+      "defaultValue": "0",
+      "componentName": "Counter",
+      "declarationStyle": "constructor"
+    }
+  ]
+}
+
+---
+
+### Example 2
+Input:
+import React from 'react';
+
+class LoginForm extends React.Component {
+  state = {
+    username: '',
+    password: '',
+    rememberMe: false,
+    errors: {},
+  };
+
+  render() {
+    return (
+      <form>
+        <input value={this.state.username} />
+        <input type="password" value={this.state.password} />
+        <input type="checkbox" checked={this.state.rememberMe} />
+      </form>
+    );
+  }
+}
+
+export default LoginForm;
+
+Output:
+{
+  "classStateVariables": [
+    {
+      "name": "username",
+      "setterName": "this.setState",
+      "type": "string",
+      "defaultValue": "''",
+      "componentName": "LoginForm",
+      "declarationStyle": "class_field"
+    },
+    {
+      "name": "password",
+      "setterName": "this.setState",
+      "type": "string",
+      "defaultValue": "''",
+      "componentName": "LoginForm",
+      "declarationStyle": "class_field"
+    },
+    {
+      "name": "rememberMe",
+      "setterName": "this.setState",
+      "type": "boolean",
+      "defaultValue": "false",
+      "componentName": "LoginForm",
+      "declarationStyle": "class_field"
+    },
+    {
+      "name": "errors",
+      "setterName": "this.setState",
+      "type": "object",
+      "defaultValue": "{}",
+      "componentName": "LoginForm",
+      "declarationStyle": "class_field"
+    }
+  ]
+}
+
+---
+
+### Example 3
+Input:
+import React, { Component } from 'react';
+
+class TodoApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      todos: [],
+      newTodoText: '',
+      filter: 'all',
+      editingId: null,
+    };
+  }
+
+  render() {
+    return <div>...</div>;
+  }
+}
+
+class EmptyWidget extends Component {
+  render() {
+    return <span>No data</span>;
+  }
+}
+
+export { TodoApp, EmptyWidget };
+
+Output:
+{
+  "classStateVariables": [
+    {
+      "name": "todos",
+      "setterName": "this.setState",
+      "type": "array",
+      "defaultValue": "[]",
+      "componentName": "TodoApp",
+      "declarationStyle": "constructor"
+    },
+    {
+      "name": "newTodoText",
+      "setterName": "this.setState",
+      "type": "string",
+      "defaultValue": "''",
+      "componentName": "TodoApp",
+      "declarationStyle": "constructor"
+    },
+    {
+      "name": "filter",
+      "setterName": "this.setState",
+      "type": "string",
+      "defaultValue": "'all'",
+      "componentName": "TodoApp",
+      "declarationStyle": "constructor"
+    },
+    {
+      "name": "editingId",
+      "setterName": "this.setState",
+      "type": "null",
+      "defaultValue": "null",
+      "componentName": "TodoApp",
+      "declarationStyle": "constructor"
+    }
+  ]
+}
+
+Note: `EmptyWidget` declares no state, so it does not appear in the output.
+
+---
+
+### Example 4
+Input:
+import React from 'react';
+
+class Dashboard extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: null,
+      isLoading: true,
+      error: null,
+      selectedTab: props.defaultTab || 'overview',
+    };
+  }
+
+  render() {
+    return <div>...</div>;
+  }
+}
+
+export default Dashboard;
+
+Output:
+{
+  "classStateVariables": [
+    {
+      "name": "data",
+      "setterName": "this.setState",
+      "type": "null",
+      "defaultValue": "null",
+      "componentName": "Dashboard",
+      "declarationStyle": "constructor"
+    },
+    {
+      "name": "isLoading",
+      "setterName": "this.setState",
+      "type": "boolean",
+      "defaultValue": "true",
+      "componentName": "Dashboard",
+      "declarationStyle": "constructor"
+    },
+    {
+      "name": "error",
+      "setterName": "this.setState",
+      "type": "null",
+      "defaultValue": "null",
+      "componentName": "Dashboard",
+      "declarationStyle": "constructor"
+    },
+    {
+      "name": "selectedTab",
+      "setterName": "this.setState",
+      "type": "unknown",
+      "defaultValue": "props.defaultTab || 'overview'",
+      "componentName": "Dashboard",
+      "declarationStyle": "constructor"
+    }
+  ]
+}
+
+Note: `selectedTab` has a conditional default value involving a prop, so the type is "unknown" and the `defaultValue` captures the expression as written.
+
+---
+
+### Example 5
+Input:
+import React from 'react';
+
+class BaseComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      initialized: false,
+    };
+  }
+}
+
+class FeaturePanel extends BaseComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...this.state,
+      panelOpen: true,
+      activeFeature: null,
+    };
+  }
+
+  render() {
+    return <div>...</div>;
+  }
+}
+
+export default FeaturePanel;
+
+Output:
+{
+  "classStateVariables": [
+    {
+      "name": "initialized",
+      "setterName": "this.setState",
+      "type": "boolean",
+      "defaultValue": "false",
+      "componentName": "BaseComponent",
+      "declarationStyle": "constructor"
+    },
+    {
+      "name": "panelOpen",
+      "setterName": "this.setState",
+      "type": "boolean",
+      "defaultValue": "true",
+      "componentName": "FeaturePanel",
+      "declarationStyle": "constructor"
+    },
+    {
+      "name": "activeFeature",
+      "setterName": "this.setState",
+      "type": "null",
+      "defaultValue": "null",
+      "componentName": "FeaturePanel",
+      "declarationStyle": "constructor"
+    }
+  ]
+}
+
+Note: `FeaturePanel` uses `...this.state` to inherit from `BaseComponent`, but we only extract the explicitly declared keys in FeaturePanel's own constructor (`panelOpen`, `activeFeature`). The inherited `initialized` is extracted under `BaseComponent`.
+
+---
+
+### Input
+{{ code }}
+
+Remember:
+- Extract each top-level key of the state object as a separate entry.
+- `setterName` is always "this.setState" for class components.
+- Infer types from initial values; use "unknown" for expressions or variable references.
+- Capture `defaultValue` as a short string representation of the code as written.
+- Identify whether the declaration is in the constructor or as a class field.
+- Only extract from the initial state declaration — NOT from `this.setState()` calls.
+- Class components with no state declaration should not appear in the output.
+
+Output:

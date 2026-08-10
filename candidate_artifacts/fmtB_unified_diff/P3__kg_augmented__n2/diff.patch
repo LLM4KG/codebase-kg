@@ -1,0 +1,89 @@
+diff --git a/src/client/utils/useCopyToClipboard.ts b/src/client/utils/useCopyToClipboard.ts
+new file mode 100644
+--- /dev/null
++++ b/src/client/utils/useCopyToClipboard.ts
+@@ -0,0 +1,24 @@
++import { useState, useEffect } from 'react'
++
++import { copyToClipboard } from '@/utils/helpers'
++
++export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
++  const [copiedText, setCopiedText] = useState<string>('')
++
++  useEffect(() => {
++    if (copiedText === successMessage) {
++      const timer = setTimeout(() => {
++        setCopiedText('')
++      }, timeout)
++
++      return () => clearTimeout(timer)
++    }
++  }, [copiedText, successMessage, timeout])
++
++  const handleCopy = (text: string) => {
++    copyToClipboard(text)
++    setCopiedText(successMessage)
++  }
++
++  return { copiedText, handleCopy }
++}
+diff --git a/src/client/containers/NoteMenuBar.tsx b/src/client/containers/NoteMenuBar.tsx
+--- a/src/client/containers/NoteMenuBar.tsx
++++ b/src/client/containers/NoteMenuBar.tsx
+@@ -1,4 +1,4 @@
+-import React, { useEffect, useState } from 'react'
++import React, { useState } from 'react'
+ import { useDispatch, useSelector } from 'react-redux'
+ import {
+   Eye,
+@@ -18,7 +18,8 @@ import { toggleFavoriteNotes, toggleTrashNotes } from '@/slices/note'
+ import { getCategories, getNotes, getSync, getSettings } from '@/selectors'
+-import { downloadNotes, isDraftNote, getShortUuid, copyToClipboard } from '@/utils/helpers'
++import { downloadNotes, isDraftNote, getShortUuid } from '@/utils/helpers'
+ import { sync } from '@/slices/sync'
++import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+ 
+ export const NoteMenuBar = () => {
+   // ===========================================================================
+@@ -40,7 +41,7 @@ export const NoteMenuBar = () => {
+   const copyNoteIcon = <ClipboardCmp size={18} aria-hidden="true" focusable="false" />
+   const successfulCopyMessage = 'Note copied!'
+   const activeNote = notes.find((note) => note.id === activeNoteId)!
+   const shortNoteUuid = getShortUuid(activeNoteId)
+ 
+   // ===========================================================================
+   // State
+   // ===========================================================================
+ 
+-  const [uuidCopiedText, setUuidCopiedText] = useState<string>('')
+   const [isToggled, togglePreviewIcon] = useState<boolean>(false)
+ 
+   // ===========================================================================
+   // Hooks
+   // ===========================================================================
+ 
+-  useEffect(() => {
+-    if (uuidCopiedText === successfulCopyMessage) {
+-      const timer = setTimeout(() => {
+-        setUuidCopiedText('')
+-      }, 3000)
+-
+-      return () => clearTimeout(timer)
+-    }
+-  }, [uuidCopiedText])
++  const { copiedText: uuidCopiedText, handleCopy: handleCopyUuid } = useCopyToClipboard(
++    successfulCopyMessage,
++    3000
++  )
+ 
+   // ===========================================================================
+   // Dispatch
+@@ -103,9 +104,7 @@ export const NoteMenuBar = () => {
+             className="note-menu-bar-button uuid"
+             onClick={() => {
+-              copyToClipboard(`{{${shortNoteUuid}}}`)
+-              setUuidCopiedText(successfulCopyMessage)
++              handleCopyUuid(`{{${shortNoteUuid}}}`)
+             }}
+             data-testid={TestID.UUID_MENU_BAR_COPY_ICON}
+           >

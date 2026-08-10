@@ -1,0 +1,13 @@
+{
+  "format": "whole_file",
+  "edits": [
+    {
+      "path": "src/contexts/cart-context/useCartProducts.ts",
+      "op": "write",
+      "content": "import { useCartContext } from './CartContextProvider';\nimport useCartTotal from './useCartTotal';\nimport { ICartProduct } from 'models';\n\nconst useCartProducts = () => {\n  const { products, setProducts } = useCartContext();\n  const { updateCartTotal } = useCartTotal();\n\n  const updateQuantitySafely = (\n    currentProduct: ICartProduct,\n    targetProduct: ICartProduct,\n    quantity: number\n  ): ICartProduct => {\n    if (currentProduct.id === targetProduct.id) {\n      return Object.assign({\n        ...currentProduct,\n        quantity: currentProduct.quantity + quantity,\n      });\n    } else {\n      return currentProduct;\n    }\n  };\n\n  const addProduct = (newProduct: ICartProduct) => {\n    let updatedProducts;\n    const isProductAlreadyInCart = products.some(\n      (product: ICartProduct) => newProduct.id === product.id\n    );\n\n    if (isProductAlreadyInCart) {\n      updatedProducts = products.map((product: ICartProduct) => {\n        return updateQuantitySafely(product, newProduct, newProduct.quantity);\n      });\n    } else {\n      updatedProducts = [...products, newProduct];\n    }\n\n    setProducts(updatedProducts);\n    updateCartTotal(updatedProducts);\n  };\n\n  const removeProduct = (productToRemove: ICartProduct) => {\n    const updatedProducts = products.filter(\n      (product: ICartProduct) => product.id !== productToRemove.id\n    );\n\n    setProducts(updatedProducts);\n    updateCartTotal(updatedProducts);\n  };\n\n  const increaseProductQuantity = (productToIncrease: ICartProduct) => {\n    const updatedProducts = products.map((product: ICartProduct) => {\n      return updateQuantitySafely(product, productToIncrease, +1);\n    });\n\n    setProducts(updatedProducts);\n    updateCartTotal(updatedProducts);\n  };\n\n  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {\n    if (productToDecrease.quantity <= 1) {\n      removeProduct(productToDecrease);\n      return;\n    }\n\n    const updatedProducts = products.map((product: ICartProduct) => {\n      return updateQuantitySafely(product, productToDecrease, -1);\n    });\n\n    setProducts(updatedProducts);\n    updateCartTotal(updatedProducts);\n  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  };\n};\n\nexport default useCartProducts;\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

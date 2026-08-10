@@ -1,0 +1,19 @@
+{
+  "candidate_id": "P1__kg_augmented__n4",
+  "run_id": "qwen_robustness",
+  "run_name": "qwen_robustness",
+  "task_id": "P1",
+  "project_name": "react-shopping-cart",
+  "condition": "kg_augmented",
+  "index": 4,
+  "model_id": "openrouter/qwen/qwen-2.5-coder-32b-instruct",
+  "stage": "test_pass",
+  "timestamp": "2026-07-01T15:51:25.378821+00:00",
+  "retrieval_token_count": 0,
+  "generator_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0
+  },
+  "generator_latency_ms": 0.0,
+  "mock": true
+}

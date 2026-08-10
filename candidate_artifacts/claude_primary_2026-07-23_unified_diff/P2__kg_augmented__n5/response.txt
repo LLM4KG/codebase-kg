@@ -1,0 +1,192 @@
+```diff
+--git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -1,4 +1,4 @@
+-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
++import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+ import { v4 as uuid } from 'uuid'
+ 
+ import { Folder, LabelText } from '@/utils/enums'
+@@ -200,6 +200,13 @@ const noteSlice = createSlice({
+         state.notes = state.notes.filter((note) => !note.trash)
+       }
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+     pruneNotes: (state) => {
+       state.notes = state.notes.filter((note) => note.text !== '')
+     },
+@@ -280,6 +287,7 @@ export const {
+   updateNote,
+   updateSelectedNotes,
+   permanentlyEmptyTrash,
++  restoreAllTrash,
+   pruneNotes,
+   searchNotes,
+   updateActiveNote,
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -13,6 +13,7 @@ import {
+   permanentlyEmptyTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+   updateSelectedNotes,
++  restoreAllTrash,
+ } from '@/slices/note'
+ import { NoteItem, ReactDragEvent, ReactMouseEvent } from '@/types'
+ import { getNotes, getSettings, getCategories } from '@/selectors'
+@@ -40,6 +41,7 @@ export const NoteList: React.FC = () => {
+   const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateSelectedNotes({ noteId, multiSelect }))
+   const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
++  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+   const _pruneNotes = () => dispatch(pruneNotes())
+   const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateActiveNote({ noteId, multiSelect }))
+@@ -113,6 +115,13 @@ export const NoteList: React.FC = () => {
+           >
+             Empty Trash
+           </NoteListButton>
++          <NoteListButton
++            dataTestID={TestID.RESTORE_ALL_TRASH_BUTTON}
++            label="Restore All"
++            handler={() => _restoreAllTrash()}
++          >
++            Restore All
++          </NoteListButton>
+         )}
+       </div>
+```
+
+Wait, I need to check the TestID enum and also ensure the diff is correct. Let me also check if `RESTORE_ALL_TRASH_BUTTON` exists in TestID. Since I can't confirm, I'll use a string fallback or add it to the enum. Let me produce a clean diff:
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -200,6 +200,12 @@ const noteSlice = createSlice({
+         state.notes = state.notes.filter((note) => !note.trash)
+       }
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+     pruneNotes: (state) => {
+       state.notes = state.notes.filter((note) => note.text !== '')
+     },
+@@ -280,6 +286,7 @@ export const {
+   updateNote,
+   updateSelectedNotes,
+   permanentlyEmptyTrash,
++  restoreAllTrash,
+   pruneNotes,
+   searchNotes,
+   updateActiveNote,
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -13,6 +13,7 @@ import {
+   permanentlyEmptyTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+   updateSelectedNotes,
++  restoreAllTrash,
+ } from '@/slices/note'
+ import { NoteItem, ReactDragEvent, ReactMouseEvent } from '@/types'
+ import { getNotes, getSettings, getCategories } from '@/selectors'
+@@ -40,6 +41,7 @@ export const NoteList: React.FC = () => {
+   const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateSelectedNotes({ noteId, multiSelect }))
+   const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
++  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+   const _pruneNotes = () => dispatch(pruneNotes())
+   const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateActiveNote({ noteId, multiSelect }))
+@@ -110,6 +112,13 @@ export const NoteList: React.FC = () => {
+             Empty Trash
+           </NoteListButton>
+         )}
++        {showEmptyTrash && (
++          <NoteListButton
++            dataTestID="restore-all-trash-button"
++            label="Restore All"
++            handler={_restoreAllTrash}
++          >
++            Restore All
++          </NoteListButton>
++        )}
+       </div>
+```
+
+Let me produce the final clean version:
+
+```diff
+diff --git a/src/client/slices/note.ts b/src/client/slices/note.ts
+--- a/src/client/slices/note.ts
++++ b/src/client/slices/note.ts
+@@ -200,6 +200,12 @@ const noteSlice = createSlice({
+         state.notes = state.notes.filter((note) => !note.trash)
+       }
+     },
++    restoreAllTrash: (state) => {
++      state.notes = state.notes.map((note) =>
++        note.trash ? { ...note, trash: false } : note
++      )
++    },
+     pruneNotes: (state) => {
+       state.notes = state.notes.filter((note) => note.text !== '')
+     },
+@@ -280,6 +286,7 @@ export const {
+   updateNote,
+   updateSelectedNotes,
+   permanentlyEmptyTrash,
++  restoreAllTrash,
+   pruneNotes,
+   searchNotes,
+   updateActiveNote,
+diff --git a/src/client/containers/NoteList.tsx b/src/client/containers/NoteList.tsx
+--- a/src/client/containers/NoteList.tsx
++++ b/src/client/containers/NoteList.tsx
+@@ -13,6 +13,7 @@ import {
+   permanentlyEmptyTrash,
+   pruneNotes,
+   updateActiveNote,
+   searchNotes,
+   updateSelectedNotes,
++  restoreAllTrash,
+ } from '@/slices/note'
+ import { NoteItem, ReactDragEvent, ReactMouseEvent } from '@/types'
+ import { getNotes, getSettings, getCategories } from '@/selectors'
+@@ -40,6 +41,7 @@ export const NoteList: React.FC = () => {
+   const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateSelectedNotes({ noteId, multiSelect }))
+   const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
++  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+   const _pruneNotes = () => dispatch(pruneNotes())
+   const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+     dispatch(updateActiveNote({ noteId, multiSelect }))
+@@ -107,6 +109,13 @@ export const NoteList: React.FC = () => {
+             Empty Trash
+           </NoteListButton>
+         )}
++        {showEmptyTrash && (
++          <NoteListButton
++            dataTestID="restore-all-trash-button"
++            label="Restore All"
++            handler={_restoreAllTrash}
++          >
++            Restore All
++          </NoteListButton>
++        )}
+       </div>
+       <div data-testid={TestID.NOTE_LIST} className="note-list">
+```
