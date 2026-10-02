@@ -1,0 +1,61 @@
+model,leg,retriever,view,condition,task,run,n,token_budget,passed,test_fail,build_fail,never_applied,quarantined,harness_error,never_applied_reasons,distinct_outputs,context_tokens_median,usd_per_candidate
+Claude Sonnet 4.6,claude_primary,bm25,published,bm25,P1,claude_primary_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,1,5635,
+Claude Sonnet 4.6,claude_primary,bm25,published,bm25,P2,claude_primary_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,2,6962,
+Claude Sonnet 4.6,claude_primary,bm25,published,bm25,P3,claude_primary_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,2,6964,
+Claude Sonnet 4.6,claude_primary,bm25,published,bm25,P4,claude_primary_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,3,4949,
+Claude Sonnet 4.6,claude_primary,bm25,published,bm25,P5,claude_primary_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,3,4602,
+Claude Sonnet 4.6,claude_primary,bm25,published,bm25,P6,claude_primary_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,1,6899,
+Claude Sonnet 4.6,claude_primary,bm25,matched,bm25_matched,P1,claude_primary_2026-09-21_wp12_matched,5,626,5,0,0,0,0,0,,1,624,0.010017
+Claude Sonnet 4.6,claude_primary,bm25,matched,bm25_matched,P2,claude_primary_2026-09-21_wp12_matched,5,1532,0,0,0,5,0,0,search_not_found=5,5,1500,0.028257
+Claude Sonnet 4.6,claude_primary,bm25,matched,bm25_matched,P3,claude_primary_2026-09-21_wp12_matched,5,772,5,0,0,0,0,0,,4,705,0.022095
+Claude Sonnet 4.6,claude_primary,bm25,matched,bm25_matched,P4,claude_primary_2026-09-21_wp12_matched,5,371,0,0,0,5,0,0,search_not_found=5,4,358,0.025323
+Claude Sonnet 4.6,claude_primary,bm25,matched,bm25_matched,P5,claude_primary_2026-09-21_wp12_matched,5,497,5,0,0,0,0,0,,2,497,0.017451
+Claude Sonnet 4.6,claude_primary,bm25,matched,bm25_matched,P6,claude_primary_2026-09-21_wp12_matched,5,841,3,1,0,1,0,0,file_not_found=1,5,828,0.019482
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,published,text_emb_3_large,P1,claude_primary_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,1,5905,
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,published,text_emb_3_large,P2,claude_primary_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,1,6938,
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,published,text_emb_3_large,P3,claude_primary_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,3,6919,
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,published,text_emb_3_large,P4,claude_primary_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,1,5905,
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,published,text_emb_3_large,P5,claude_primary_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,2,5905,
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,published,text_emb_3_large,P6,claude_primary_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,1,6981,
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,matched,text_emb_3_large_matched,P1,claude_primary_2026-09-21_wp12_matched,5,626,5,0,0,0,0,0,,1,624,0.010023
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,matched,text_emb_3_large_matched,P2,claude_primary_2026-09-21_wp12_matched,5,1532,0,0,0,5,0,0,search_not_found=5,3,1497,0.026358
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,matched,text_emb_3_large_matched,P3,claude_primary_2026-09-21_wp12_matched,5,772,5,0,0,0,0,0,,3,705,0.022806
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,matched,text_emb_3_large_matched,P4,claude_primary_2026-09-21_wp12_matched,5,371,0,0,0,5,0,0,file_not_found=4;search_not_found=1,5,358,0.021405
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,matched,text_emb_3_large_matched,P5,claude_primary_2026-09-21_wp12_matched,5,497,0,0,0,5,0,0,search_not_found=5,3,469,0.015993
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,matched,text_emb_3_large_matched,P6,claude_primary_2026-09-21_wp12_matched,5,841,5,0,0,0,0,0,,2,800,0.012366
+Claude Sonnet 4.6,claude_primary,kg_augmented,published,kg_augmented,P1,claude_primary_2026-09-18_wp5_p1p3,5,7000,5,0,0,0,0,0,,1,626,
+Claude Sonnet 4.6,claude_primary,kg_augmented,published,kg_augmented,P2,claude_primary_2026-09-18_wp5_p1p3,5,7000,5,0,0,0,0,0,,4,1532,
+Claude Sonnet 4.6,claude_primary,kg_augmented,published,kg_augmented,P3,claude_primary_2026-09-18_wp5_p1p3,5,7000,5,0,0,0,0,0,,3,772,
+Claude Sonnet 4.6,claude_primary,kg_augmented,published,kg_augmented,P4,claude_primary_2026-09-19_wp5_p4p6,5,7000,0,0,0,5,0,0,file_not_found=3;search_not_found=2,5,371,
+Claude Sonnet 4.6,claude_primary,kg_augmented,published,kg_augmented,P5,claude_primary_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,3,497,
+Claude Sonnet 4.6,claude_primary,kg_augmented,published,kg_augmented,P6,claude_primary_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,2,841,
+Qwen3-Coder,qwen_robustness,bm25,published,bm25,P1,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,3,5635,
+Qwen3-Coder,qwen_robustness,bm25,published,bm25,P2,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,7000,3,0,2,0,0,0,,4,6962,
+Qwen3-Coder,qwen_robustness,bm25,published,bm25,P3,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,5,6964,
+Qwen3-Coder,qwen_robustness,bm25,published,bm25,P4,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,2,2,0,1,0,0,search_not_found=1,5,4949,
+Qwen3-Coder,qwen_robustness,bm25,published,bm25,P5,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,2,3,0,0,0,0,,3,4602,
+Qwen3-Coder,qwen_robustness,bm25,published,bm25,P6,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,2,6899,
+Qwen3-Coder,qwen_robustness,bm25,matched,bm25_matched,P1,qwen_robustness_2026-09-21_wp12_matched,5,626,5,0,0,0,0,0,,4,624,0.001158
+Qwen3-Coder,qwen_robustness,bm25,matched,bm25_matched,P2,qwen_robustness_2026-09-21_wp12_matched,5,1532,0,0,1,4,0,0,search_not_found=4,5,1500,0.005040
+Qwen3-Coder,qwen_robustness,bm25,matched,bm25_matched,P3,qwen_robustness_2026-09-21_wp12_matched,5,772,4,0,1,0,0,0,,5,705,0.004737
+Qwen3-Coder,qwen_robustness,bm25,matched,bm25_matched,P4,qwen_robustness_2026-09-21_wp12_matched,5,371,0,4,0,1,0,0,search_not_found=1,4,358,0.001766
+Qwen3-Coder,qwen_robustness,bm25,matched,bm25_matched,P5,qwen_robustness_2026-09-21_wp12_matched,5,497,3,2,0,0,0,0,,3,497,0.001080
+Qwen3-Coder,qwen_robustness,bm25,matched,bm25_matched,P6,qwen_robustness_2026-09-21_wp12_matched,5,841,3,2,0,0,0,0,,3,828,0.000978
+Qwen3-Coder,qwen_robustness,text_emb_3_large,published,text_emb_3_large,P1,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,7000,5,0,0,0,0,0,,4,5905,
+Qwen3-Coder,qwen_robustness,text_emb_3_large,published,text_emb_3_large,P2,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,7000,4,0,0,1,0,0,search_not_found=1,5,6938,
+Qwen3-Coder,qwen_robustness,text_emb_3_large,published,text_emb_3_large,P3,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,7000,3,0,2,0,0,0,,5,6919,
+Qwen3-Coder,qwen_robustness,text_emb_3_large,published,text_emb_3_large,P4,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,4,1,0,0,0,0,,5,5905,
+Qwen3-Coder,qwen_robustness,text_emb_3_large,published,text_emb_3_large,P5,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,3,2,0,0,0,0,,4,5905,
+Qwen3-Coder,qwen_robustness,text_emb_3_large,published,text_emb_3_large,P6,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,4,0,0,1,0,0,malformed_blocks=1,3,6981,
+Qwen3-Coder,qwen_robustness,text_emb_3_large,matched,text_emb_3_large_matched,P1,qwen_robustness_2026-09-21_wp12_matched,5,626,5,0,0,0,0,0,,1,624,0.000719
+Qwen3-Coder,qwen_robustness,text_emb_3_large,matched,text_emb_3_large_matched,P2,qwen_robustness_2026-09-21_wp12_matched,5,1532,5,0,0,0,0,0,,2,1497,0.001575
+Qwen3-Coder,qwen_robustness,text_emb_3_large,matched,text_emb_3_large_matched,P3,qwen_robustness_2026-09-21_wp12_matched,5,772,5,0,0,0,0,0,,4,705,0.004743
+Qwen3-Coder,qwen_robustness,text_emb_3_large,matched,text_emb_3_large_matched,P4,qwen_robustness_2026-09-21_wp12_matched,5,371,0,5,0,0,0,0,,3,358,0.001818
+Qwen3-Coder,qwen_robustness,text_emb_3_large,matched,text_emb_3_large_matched,P5,qwen_robustness_2026-09-21_wp12_matched,5,497,0,4,0,1,0,0,search_not_found=1,3,469,0.000962
+Qwen3-Coder,qwen_robustness,text_emb_3_large,matched,text_emb_3_large_matched,P6,qwen_robustness_2026-09-21_wp12_matched,5,841,3,0,0,2,0,0,malformed_blocks=2,3,800,0.000918
+Qwen3-Coder,qwen_robustness,kg_augmented,published,kg_augmented,P1,qwen_robustness_2026-09-18_wp5_p1p3,5,7000,5,0,0,0,0,0,,1,626,
+Qwen3-Coder,qwen_robustness,kg_augmented,published,kg_augmented,P2,qwen_robustness_2026-09-18_wp5_p1p3,5,7000,0,0,0,5,0,0,search_not_found=5,5,1532,
+Qwen3-Coder,qwen_robustness,kg_augmented,published,kg_augmented,P3,qwen_robustness_2026-09-18_wp5_p1p3,5,7000,3,0,1,1,0,0,search_not_found=1,5,772,
+Qwen3-Coder,qwen_robustness,kg_augmented,published,kg_augmented,P4,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,0,5,0,0,0,0,,3,371,
+Qwen3-Coder,qwen_robustness,kg_augmented,published,kg_augmented,P5,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,3,2,0,0,0,0,,5,497,
+Qwen3-Coder,qwen_robustness,kg_augmented,published,kg_augmented,P6,qwen_robustness_2026-09-19_wp5_p4p6,5,7000,5,0,0,0,0,0,,2,841,

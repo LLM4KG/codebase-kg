@@ -1,0 +1,28 @@
+section,basis,bm25_index_rank_ms,c_bm25,c_dense,c_kg,calls,calls_cross_file,calls_per_file_stage,classifier_in,classifier_latency_ms,classifier_out,classifier_usd,context_BM25,context_KG,context_dense,cypher_ms,dense_rank_ms,e_kg,files,i_dense,input_tokens,manifest,model,n_vs_bm25,n_vs_dense,output_tokens,repo,run_id,task,usd,usd_cross_file,usd_per_candidate_BM25,usd_per_candidate_KG,usd_per_candidate_dense,usd_per_file_stage,usd_per_source_file,wall_clock_s
+extraction,,,,,,512,72,440,,,,,,,,,,,55,,1790752,graph_reruns/react-shopping-cart/manifest.json,,,,27908,react-shopping-cart,extract_react-shopping-cart_20260918T062138,,5.790876,1.180212,,,,4.610664,0.10528865454545454,1042.896
+extraction,,,,,,644,164,480,,,,,,,,,,,60,,2666890,graph_reruns/takenote/manifest.json,,,,57060,takenote,extract_takenote_20260918T075552,,8.85657,2.951358,,,,5.905212000000001,0.1476095,1684.971
+extraction,,,,,,172,52,120,,,,,,,,,,,15,,626186,graph_reruns/SnapShot/manifest.json,,,,11405,SnapShot,extract_SnapShot_20260918T083803,,2.049633,0.821724,,,,1.227909,0.1366422,393.116
+extraction,,,,,,212,60,152,,,,,,,,,,,19,,829594,graph_export/todoist/manifest.json,,,,16327,todoist,extract_todoist_20260918T024611,,2.733687,0.992583,,,,1.7411039999999998,0.14387826315789476,503.866
+extraction,,,,,,1348,276,1072,,,,,,,,,,,134,,5258874,graph_export/jira_clone/manifest.json,,,,110774,jira_clone,extract_client_20260918T035017,,17.438232,5.061654000000001,,,,12.376578,0.13013605970149253,3141.513
+per_task,,41.283,,,,,,,610,4006.8297710022307,30,0.00228,5635.0,626.0,5905.0,2.406,16.186,,,,,,anthropic/claude-sonnet-4-6,,,,react-shopping-cart,,P1,,,0.048531,0.011775,0.050577,,,
+per_task,,64.902,,,,,,,640,2614.840219001053,30,0.00237,6962.0,1532.0,6938.0,6.779,35.847,,,,,,anthropic/claude-sonnet-4-6,,,,takenote,,P2,,,0.068733,0.024945,0.071115,,,
+per_task,,65.244,,,,,,,663,3954.4404190019122,40,0.002589,6964.0,772.0,6919.0,6.346,35.852,,,,,,anthropic/claude-sonnet-4-6,,,,takenote,,P3,,,0.073221,0.021777,0.067797,,,
+per_task,,40.409,,,,,,,588,6909.539092999694,32,0.002244,4949.0,371.0,5905.0,2.721,16.089,,,,,,anthropic/claude-sonnet-4-6,,,,react-shopping-cart,,P4,,,0.050187,0.026214,0.058986,,,
+per_task,,40.629,,,,,,,616,7438.202331999491,37,0.002379,4602.0,497.0,5905.0,3.424,16.394,,,,,,anthropic/claude-sonnet-4-6,,,,react-shopping-cart,,P5,,,0.050124,0.019782,0.058293,,,
+per_task,,74.001,,,,,,,606,1664.3322100007936,29,0.002253,6899.0,841.0,6981.0,4.439,35.569,,,,,,anthropic/claude-sonnet-4-6,,,,takenote,,P6,,,0.058635,0.014916,0.06351,,,
+per_task,,41.283,,,,,,,530,3273.2067489996552,24,0.00016,5635.0,626.0,5905.0,2.316,16.186,,,,,,openrouter/qwen/qwen3-coder,,,,react-shopping-cart,,P1,,,0.003999,0.001994,0.005045,,,
+per_task,,64.902,,,,,,,554,1614.5247250024113,24,0.000184,6962.0,1532.0,6938.0,6.649,35.847,,,,,,openrouter/qwen/qwen3-coder,,,,takenote,,P2,,,0.00512,0.002393,0.005247,,,
+per_task,,65.244,,,,,,,559,901.8383420043392,29,0.000209,6964.0,772.0,6919.0,6.692,35.852,,,,,,openrouter/qwen/qwen3-coder,,,,takenote,,P3,,,0.009096,0.004324,0.008172,,,
+per_task,,40.409,,,,,,,510,3940.2861809994647,27,0.00018,4949.0,371.0,5905.0,2.376,16.089,,,,,,openrouter/qwen/qwen3-coder,,,,react-shopping-cart,,P4,,,0.005009,0.001763,0.006702,,,
+per_task,,40.629,,,,,,,535,4621.419527000398,31,0.000191,4602.0,497.0,5905.0,3.184,16.394,,,,,,openrouter/qwen/qwen3-coder,,,,react-shopping-cart,,P5,,,0.0067,0.002051,0.005445,,,
+per_task,,74.001,,,,,,,525,1065.0263039988204,23,0.00018,6899.0,841.0,6981.0,4.524,35.569,,,,,,openrouter/qwen/qwen3-coder,,,,takenote,,P6,,,0.004639,0.001123,0.004725,,,
+breakeven_cost,"P1, P4, P5 on this repo",,0.049614,0.055962,0.019257,,,,,,,,,,,,,5.7909,,0.001483,,,anthropic/claude-sonnet-4-6,190.7591659254867,157.72760939174245,,react-shopping-cart,,,,,,,,,,
+breakeven_cost,"P2, P3, P6 on this repo",,0.066863,0.067487,0.020546,,,,,,,,,,,,,8.8566,,0.00447,,,anthropic/claude-sonnet-4-6,191.21640002590837,188.57870634767656,,takenote,,,,,,,,,,
+breakeven_cost,pooled P1–P6 (extrapolated),,0.058239,0.061725,0.019901,,,,,,,,,,,,,2.0496,,0.000761,,,anthropic/claude-sonnet-4-6,53.46357304953438,48.989036363823736,,SnapShot,,,,,,,,,,
+breakeven_cost,pooled P1–P6 (extrapolated),,0.058239,0.061725,0.019901,,,,,,,,,,,,,2.7337,,0.000964,,,anthropic/claude-sonnet-4-6,71.30675326707879,65.34008270123215,,todoist,,,,,,,,,,
+breakeven_cost,pooled P1–P6 (extrapolated),,0.058239,0.061725,0.019901,,,,,,,,,,,,,17.4382,,0.006797,,,anthropic/claude-sonnet-4-6,454.8668909930353,416.7898698606035,,jira_clone,,,,,,,,,,
+breakeven_cost,"P1, P4, P5 on this repo",,0.005236,0.00574,0.001936,,,,,,,,,,,,,5.7909,,0.001483,,,openrouter/qwen/qwen3-coder,1754.8190627956456,1521.834562669877,,react-shopping-cart,,,,,,,,,,
+breakeven_cost,"P2, P3, P6 on this repo",,0.006285,0.006061,0.002613,,,,,,,,,,,,,8.8566,,0.00447,,,openrouter/qwen/qwen3-coder,2412.1327698849245,2567.4713139859277,,takenote,,,,,,,,,,
+breakeven_cost,pooled P1–P6 (extrapolated),,0.005761,0.005901,0.002275,,,,,,,,,,,,,2.0496,,0.000761,,,openrouter/qwen/qwen3-coder,587.9898916480063,565.0495320193556,,SnapShot,,,,,,,,,,
+breakeven_cost,pooled P1–P6 (extrapolated),,0.005761,0.005901,0.002275,,,,,,,,,,,,,2.7337,,0.000964,,,openrouter/qwen/qwen3-coder,784.2283584083411,753.6458336972171,,todoist,,,,,,,,,,
+breakeven_cost,pooled P1–P6 (extrapolated),,0.005761,0.005901,0.002275,,,,,,,,,,,,,17.4382,,0.006797,,,openrouter/qwen/qwen3-coder,5002.604926937064,4807.339323152184,,jira_clone,,,,,,,,,,

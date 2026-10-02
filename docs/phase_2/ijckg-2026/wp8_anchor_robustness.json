@@ -1,0 +1,863 @@
+{
+  "db_uri": "bolt://localhost:7688",
+  "wp5_published_tokens": {
+    "P1": 626,
+    "P2": 1532,
+    "P3": 772,
+    "P4": 371,
+    "P5": 497,
+    "P6": 841
+  },
+  "cells": [
+    {
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "task_type": "bug_fix",
+      "case": "logged",
+      "mode": "strict",
+      "anchor_names": [
+        "useCartProducts"
+      ],
+      "anchor_routes": [],
+      "tokens": 626,
+      "queries": {
+        "bug_fix.cypher": 1,
+        "neighbor_props.cypher": 0
+      },
+      "files": [
+        "src/contexts/cart-context/CartContextProvider.tsx",
+        "src/contexts/cart-context/useCart.ts",
+        "src/contexts/cart-context/useCartProducts.ts",
+        "src/contexts/cart-context/useCartTotal.ts"
+      ],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "task_type": "bug_fix",
+      "case": "logged",
+      "mode": "hardened",
+      "anchor_names": [
+        "useCartProducts"
+      ],
+      "anchor_routes": [],
+      "tokens": 626,
+      "queries": {
+        "anchor_candidates.cypher": 20,
+        "bug_fix.cypher": 1,
+        "neighbor_props.cypher": 0
+      },
+      "files": [
+        "src/contexts/cart-context/CartContextProvider.tsx",
+        "src/contexts/cart-context/useCart.ts",
+        "src/contexts/cart-context/useCartProducts.ts",
+        "src/contexts/cart-context/useCartTotal.ts"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "useCartProducts"
+      ],
+      "resolutions": [
+        {
+          "requested": "useCartProducts",
+          "status": "exact",
+          "name": "useCartProducts",
+          "score": null,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "task_type": "bug_fix",
+      "case": "misspelled",
+      "mode": "strict",
+      "anchor_names": [
+        "useCartPorducts"
+      ],
+      "anchor_routes": [],
+      "tokens": 23,
+      "queries": {
+        "bug_fix.cypher": 0
+      },
+      "files": [],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "task_type": "bug_fix",
+      "case": "misspelled",
+      "mode": "hardened",
+      "anchor_names": [
+        "useCartPorducts"
+      ],
+      "anchor_routes": [],
+      "tokens": 626,
+      "queries": {
+        "anchor_candidates.cypher": 20,
+        "bug_fix.cypher": 1,
+        "neighbor_props.cypher": 0
+      },
+      "files": [
+        "src/contexts/cart-context/CartContextProvider.tsx",
+        "src/contexts/cart-context/useCart.ts",
+        "src/contexts/cart-context/useCartProducts.ts",
+        "src/contexts/cart-context/useCartTotal.ts"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "useCartProducts"
+      ],
+      "resolutions": [
+        {
+          "requested": "useCartPorducts",
+          "status": "fuzzy",
+          "name": "useCartProducts",
+          "score": 0.933,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "task_type": "bug_fix",
+      "case": "wrong",
+      "mode": "strict",
+      "anchor_names": [
+        "Checkbox"
+      ],
+      "anchor_routes": [],
+      "tokens": 135,
+      "queries": {
+        "bug_fix.cypher": 1
+      },
+      "files": [
+        "src/commons/Checkbox/Checkbox.tsx"
+      ],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "task_type": "bug_fix",
+      "case": "wrong",
+      "mode": "hardened",
+      "anchor_names": [
+        "Checkbox"
+      ],
+      "anchor_routes": [],
+      "tokens": 135,
+      "queries": {
+        "anchor_candidates.cypher": 20,
+        "bug_fix.cypher": 1
+      },
+      "files": [
+        "src/commons/Checkbox/Checkbox.tsx"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "Checkbox"
+      ],
+      "resolutions": [
+        {
+          "requested": "Checkbox",
+          "status": "exact",
+          "name": "Checkbox",
+          "score": null,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "task_type": "bug_fix",
+      "case": "empty",
+      "mode": "strict",
+      "anchor_names": [],
+      "anchor_routes": [],
+      "tokens": 23,
+      "queries": {
+        "bug_fix.cypher": 0
+      },
+      "files": [],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "task_type": "bug_fix",
+      "case": "empty",
+      "mode": "hardened",
+      "anchor_names": [],
+      "anchor_routes": [],
+      "tokens": 198,
+      "queries": {
+        "anchor_candidates.cypher": 20,
+        "project_overview.cypher": 14
+      },
+      "files": [
+        "src/commons/Checkbox/Checkbox.tsx",
+        "src/components/App/App.tsx",
+        "src/components/Cart/Cart.tsx",
+        "src/components/Cart/CartProducts/CartProduct/CartProduct.tsx",
+        "src/components/Cart/CartProducts/CartProducts.tsx",
+        "src/components/Filter/Filter.tsx",
+        "src/components/Github/GithubCorner/GithubCorner.tsx",
+        "src/components/Github/GithubStarButton/GithubStarButton.tsx",
+        "src/components/Loader/Loader.tsx",
+        "src/components/Products/Product/Product.tsx",
+        "src/components/Products/Products.tsx",
+        "src/components/Recruiter/Recruiter.tsx",
+        "src/contexts/cart-context/CartContextProvider.tsx",
+        "src/contexts/products-context/ProductsContextProvider.tsx"
+      ],
+      "anchor_fallback": true,
+      "dispatched": [],
+      "resolutions": [],
+      "routes_unknown": []
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "logged",
+      "mode": "strict",
+      "anchor_names": [
+        "NoteList"
+      ],
+      "anchor_routes": [],
+      "tokens": 1532,
+      "queries": {
+        "feature_addition_a.cypher": 1,
+        "feature_addition_b.cypher": 2,
+        "neighbor_props.cypher": 3
+      },
+      "files": [
+        "src/client/components/NoteList/NoteListButton.tsx",
+        "src/client/components/NoteList/SearchBar.tsx",
+        "src/client/containers/ContextMenu.tsx",
+        "src/client/containers/NoteList.tsx",
+        "src/client/utils/hooks.ts"
+      ],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "logged",
+      "mode": "hardened",
+      "anchor_names": [
+        "NoteList"
+      ],
+      "anchor_routes": [],
+      "tokens": 1532,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "feature_addition_a.cypher": 1,
+        "feature_addition_b.cypher": 2,
+        "neighbor_props.cypher": 3
+      },
+      "files": [
+        "src/client/components/NoteList/NoteListButton.tsx",
+        "src/client/components/NoteList/SearchBar.tsx",
+        "src/client/containers/ContextMenu.tsx",
+        "src/client/containers/NoteList.tsx",
+        "src/client/utils/hooks.ts"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "NoteList"
+      ],
+      "resolutions": [
+        {
+          "requested": "NoteList",
+          "status": "exact",
+          "name": "NoteList",
+          "score": null,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "misspelled",
+      "mode": "strict",
+      "anchor_names": [
+        "NoteLsit"
+      ],
+      "anchor_routes": [],
+      "tokens": 55,
+      "queries": {
+        "feature_addition_a.cypher": 0,
+        "feature_addition_b.cypher": 2
+      },
+      "files": [],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "misspelled",
+      "mode": "hardened",
+      "anchor_names": [
+        "NoteLsit"
+      ],
+      "anchor_routes": [],
+      "tokens": 1532,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "feature_addition_a.cypher": 1,
+        "feature_addition_b.cypher": 2,
+        "neighbor_props.cypher": 3
+      },
+      "files": [
+        "src/client/components/NoteList/NoteListButton.tsx",
+        "src/client/components/NoteList/SearchBar.tsx",
+        "src/client/containers/ContextMenu.tsx",
+        "src/client/containers/NoteList.tsx",
+        "src/client/utils/hooks.ts"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "NoteList"
+      ],
+      "resolutions": [
+        {
+          "requested": "NoteLsit",
+          "status": "fuzzy",
+          "name": "NoteList",
+          "score": 0.875,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "wrong",
+      "mode": "strict",
+      "anchor_names": [
+        "ContextMenu"
+      ],
+      "anchor_routes": [],
+      "tokens": 725,
+      "queries": {
+        "feature_addition_a.cypher": 1,
+        "feature_addition_b.cypher": 2,
+        "neighbor_props.cypher": 2
+      },
+      "files": [
+        "src/client/containers/ContextMenu.tsx"
+      ],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "wrong",
+      "mode": "hardened",
+      "anchor_names": [
+        "ContextMenu"
+      ],
+      "anchor_routes": [],
+      "tokens": 725,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "feature_addition_a.cypher": 1,
+        "feature_addition_b.cypher": 2,
+        "neighbor_props.cypher": 2
+      },
+      "files": [
+        "src/client/containers/ContextMenu.tsx"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "ContextMenu"
+      ],
+      "resolutions": [
+        {
+          "requested": "ContextMenu",
+          "status": "exact",
+          "name": "ContextMenu",
+          "score": null,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "empty",
+      "mode": "strict",
+      "anchor_names": [],
+      "anchor_routes": [],
+      "tokens": 55,
+      "queries": {
+        "feature_addition_a.cypher": 0,
+        "feature_addition_b.cypher": 2
+      },
+      "files": [],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "empty",
+      "mode": "hardened",
+      "anchor_names": [],
+      "anchor_routes": [],
+      "tokens": 594,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "project_overview.cypher": 40,
+        "feature_addition_b.cypher": 2
+      },
+      "files": [
+        "src/client/components/AppSidebar/ActionButton.tsx",
+        "src/client/components/AppSidebar/AddCategoryButton.tsx",
+        "src/client/components/AppSidebar/AddCategoryForm.tsx",
+        "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+        "src/client/components/AppSidebar/FolderOption.tsx",
+        "src/client/components/AppSidebar/ScratchpadOption.tsx",
+        "src/client/components/Editor/NoteLink.tsx",
+        "src/client/components/Editor/PreviewEditor.tsx",
+        "src/client/components/LastSyncedNotification.tsx",
+        "src/client/components/NoteList/ContextMenuOption.tsx",
+        "src/client/components/NoteList/NoteListButton.tsx",
+        "src/client/components/NoteList/SearchBar.tsx",
+        "src/client/components/NoteList/SelectCategory.tsx",
+        "src/client/components/Select.tsx",
+        "src/client/components/SettingsModal/IconButton.tsx",
+        "src/client/components/SettingsModal/IconButtonUploader.tsx",
+        "src/client/components/SettingsModal/Option.tsx",
+        "src/client/components/SettingsModal/SelectOptions.tsx",
+        "src/client/components/SettingsModal/Shortcut.tsx",
+        "src/client/components/Switch.tsx",
+        "src/client/components/Tabs/Tab.tsx",
+        "src/client/components/Tabs/TabPanel.tsx",
+        "src/client/components/Tabs/Tabs.tsx",
+        "src/client/containers/App.tsx",
+        "src/client/containers/AppSidebar.tsx",
+        "src/client/containers/CategoryList.tsx",
+        "src/client/containers/CategoryOption.tsx",
+        "src/client/containers/ContextMenu.tsx",
+        "src/client/containers/ContextMenuOptions.tsx",
+        "src/client/containers/KeyboardShortcuts.tsx",
+        "src/client/containers/NoteEditor.tsx",
+        "src/client/containers/NoteList.tsx",
+        "src/client/containers/NoteMenuBar.tsx",
+        "src/client/containers/SettingsModal.tsx",
+        "src/client/containers/TakeNoteApp.tsx",
+        "src/client/router/PrivateRoute.tsx",
+        "src/client/router/PublicRoute.tsx"
+      ],
+      "anchor_fallback": true,
+      "dispatched": [],
+      "resolutions": [],
+      "routes_unknown": []
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "bad_route",
+      "mode": "strict",
+      "anchor_names": [
+        "NoteList"
+      ],
+      "anchor_routes": [
+        "/notes/trash"
+      ],
+      "tokens": 1552,
+      "queries": {
+        "feature_addition_a.cypher": 1,
+        "feature_addition_b.cypher": 2,
+        "neighbor_props.cypher": 3
+      },
+      "files": [
+        "src/client/components/NoteList/NoteListButton.tsx",
+        "src/client/components/NoteList/SearchBar.tsx",
+        "src/client/containers/ContextMenu.tsx",
+        "src/client/containers/NoteList.tsx",
+        "src/client/utils/hooks.ts"
+      ],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P2",
+      "project": "takenote",
+      "task_type": "feature_addition",
+      "case": "bad_route",
+      "mode": "hardened",
+      "anchor_names": [
+        "NoteList"
+      ],
+      "anchor_routes": [
+        "/notes/trash"
+      ],
+      "tokens": 1552,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "feature_addition_b.cypher": 2,
+        "feature_addition_a.cypher": 1,
+        "neighbor_props.cypher": 3
+      },
+      "files": [
+        "src/client/components/NoteList/NoteListButton.tsx",
+        "src/client/components/NoteList/SearchBar.tsx",
+        "src/client/containers/ContextMenu.tsx",
+        "src/client/containers/NoteList.tsx",
+        "src/client/utils/hooks.ts"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "NoteList"
+      ],
+      "resolutions": [
+        {
+          "requested": "NoteList",
+          "status": "exact",
+          "name": "NoteList",
+          "score": null,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": [
+        "/notes/trash"
+      ]
+    },
+    {
+      "task": "P3",
+      "project": "takenote",
+      "task_type": "refactoring",
+      "case": "logged",
+      "mode": "strict",
+      "anchor_names": [
+        "NoteMenuBar",
+        "useCopyToClipboard"
+      ],
+      "anchor_routes": [],
+      "tokens": 772,
+      "queries": {
+        "refactoring.cypher": 1,
+        "refactoring_caller_props.cypher": 0,
+        "neighbor_props.cypher": 2
+      },
+      "files": [
+        "src/client/components/LastSyncedNotification.tsx",
+        "src/client/containers/NoteEditor.tsx",
+        "src/client/containers/NoteMenuBar.tsx"
+      ],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P3",
+      "project": "takenote",
+      "task_type": "refactoring",
+      "case": "logged",
+      "mode": "hardened",
+      "anchor_names": [
+        "NoteMenuBar",
+        "useCopyToClipboard"
+      ],
+      "anchor_routes": [],
+      "tokens": 772,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "refactoring.cypher": 1,
+        "refactoring_caller_props.cypher": 0,
+        "neighbor_props.cypher": 2
+      },
+      "files": [
+        "src/client/components/LastSyncedNotification.tsx",
+        "src/client/containers/NoteEditor.tsx",
+        "src/client/containers/NoteMenuBar.tsx"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "NoteMenuBar"
+      ],
+      "resolutions": [
+        {
+          "requested": "NoteMenuBar",
+          "status": "exact",
+          "name": "NoteMenuBar",
+          "score": null,
+          "alternatives": []
+        },
+        {
+          "requested": "useCopyToClipboard",
+          "status": "unresolved",
+          "name": null,
+          "score": null,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P3",
+      "project": "takenote",
+      "task_type": "refactoring",
+      "case": "misspelled",
+      "mode": "strict",
+      "anchor_names": [
+        "NoteMenuBra",
+        "useCopyToClipboard"
+      ],
+      "anchor_routes": [],
+      "tokens": 23,
+      "queries": {
+        "refactoring.cypher": 0,
+        "refactoring_caller_props.cypher": 0
+      },
+      "files": [],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P3",
+      "project": "takenote",
+      "task_type": "refactoring",
+      "case": "misspelled",
+      "mode": "hardened",
+      "anchor_names": [
+        "NoteMenuBra",
+        "useCopyToClipboard"
+      ],
+      "anchor_routes": [],
+      "tokens": 772,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "refactoring.cypher": 1,
+        "refactoring_caller_props.cypher": 0,
+        "neighbor_props.cypher": 2
+      },
+      "files": [
+        "src/client/components/LastSyncedNotification.tsx",
+        "src/client/containers/NoteEditor.tsx",
+        "src/client/containers/NoteMenuBar.tsx"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "NoteMenuBar"
+      ],
+      "resolutions": [
+        {
+          "requested": "NoteMenuBra",
+          "status": "fuzzy",
+          "name": "NoteMenuBar",
+          "score": 0.909,
+          "alternatives": []
+        },
+        {
+          "requested": "useCopyToClipboard",
+          "status": "unresolved",
+          "name": null,
+          "score": null,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P3",
+      "project": "takenote",
+      "task_type": "refactoring",
+      "case": "wrong",
+      "mode": "strict",
+      "anchor_names": [
+        "CategoryList"
+      ],
+      "anchor_routes": [],
+      "tokens": 997,
+      "queries": {
+        "refactoring.cypher": 1,
+        "refactoring_caller_props.cypher": 0,
+        "neighbor_props.cypher": 5
+      },
+      "files": [
+        "src/client/components/AppSidebar/AddCategoryButton.tsx",
+        "src/client/components/AppSidebar/AddCategoryForm.tsx",
+        "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+        "src/client/containers/AppSidebar.tsx",
+        "src/client/containers/CategoryList.tsx",
+        "src/client/containers/CategoryOption.tsx",
+        "src/client/contexts/TempStateContext.tsx"
+      ],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P3",
+      "project": "takenote",
+      "task_type": "refactoring",
+      "case": "wrong",
+      "mode": "hardened",
+      "anchor_names": [
+        "CategoryList"
+      ],
+      "anchor_routes": [],
+      "tokens": 997,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "refactoring.cypher": 1,
+        "refactoring_caller_props.cypher": 0,
+        "neighbor_props.cypher": 5
+      },
+      "files": [
+        "src/client/components/AppSidebar/AddCategoryButton.tsx",
+        "src/client/components/AppSidebar/AddCategoryForm.tsx",
+        "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+        "src/client/containers/AppSidebar.tsx",
+        "src/client/containers/CategoryList.tsx",
+        "src/client/containers/CategoryOption.tsx",
+        "src/client/contexts/TempStateContext.tsx"
+      ],
+      "anchor_fallback": false,
+      "dispatched": [
+        "CategoryList"
+      ],
+      "resolutions": [
+        {
+          "requested": "CategoryList",
+          "status": "exact",
+          "name": "CategoryList",
+          "score": null,
+          "alternatives": []
+        }
+      ],
+      "routes_unknown": []
+    },
+    {
+      "task": "P3",
+      "project": "takenote",
+      "task_type": "refactoring",
+      "case": "empty",
+      "mode": "strict",
+      "anchor_names": [],
+      "anchor_routes": [],
+      "tokens": 23,
+      "queries": {
+        "refactoring.cypher": 0,
+        "refactoring_caller_props.cypher": 0
+      },
+      "files": [],
+      "anchor_fallback": null,
+      "dispatched": null,
+      "resolutions": [],
+      "routes_unknown": null
+    },
+    {
+      "task": "P3",
+      "project": "takenote",
+      "task_type": "refactoring",
+      "case": "empty",
+      "mode": "hardened",
+      "anchor_names": [],
+      "anchor_routes": [],
+      "tokens": 566,
+      "queries": {
+        "anchor_candidates.cypher": 48,
+        "project_overview.cypher": 40
+      },
+      "files": [
+        "src/client/components/AppSidebar/ActionButton.tsx",
+        "src/client/components/AppSidebar/AddCategoryButton.tsx",
+        "src/client/components/AppSidebar/AddCategoryForm.tsx",
+        "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+        "src/client/components/AppSidebar/FolderOption.tsx",
+        "src/client/components/AppSidebar/ScratchpadOption.tsx",
+        "src/client/components/Editor/NoteLink.tsx",
+        "src/client/components/Editor/PreviewEditor.tsx",
+        "src/client/components/LastSyncedNotification.tsx",
+        "src/client/components/NoteList/ContextMenuOption.tsx",
+        "src/client/components/NoteList/NoteListButton.tsx",
+        "src/client/components/NoteList/SearchBar.tsx",
+        "src/client/components/NoteList/SelectCategory.tsx",
+        "src/client/components/Select.tsx",
+        "src/client/components/SettingsModal/IconButton.tsx",
+        "src/client/components/SettingsModal/IconButtonUploader.tsx",
+        "src/client/components/SettingsModal/Option.tsx",
+        "src/client/components/SettingsModal/SelectOptions.tsx",
+        "src/client/components/SettingsModal/Shortcut.tsx",
+        "src/client/components/Switch.tsx",
+        "src/client/components/Tabs/Tab.tsx",
+        "src/client/components/Tabs/TabPanel.tsx",
+        "src/client/components/Tabs/Tabs.tsx",
+        "src/client/containers/App.tsx",
+        "src/client/containers/AppSidebar.tsx",
+        "src/client/containers/CategoryList.tsx",
+        "src/client/containers/CategoryOption.tsx",
+        "src/client/containers/ContextMenu.tsx",
+        "src/client/containers/ContextMenuOptions.tsx",
+        "src/client/containers/KeyboardShortcuts.tsx",
+        "src/client/containers/NoteEditor.tsx",
+        "src/client/containers/NoteList.tsx",
+        "src/client/containers/NoteMenuBar.tsx",
+        "src/client/containers/SettingsModal.tsx",
+        "src/client/containers/TakeNoteApp.tsx",
+        "src/client/router/PrivateRoute.tsx",
+        "src/client/router/PublicRoute.tsx"
+      ],
+      "anchor_fallback": true,
+      "dispatched": [],
+      "resolutions": [],
+      "routes_unknown": []
+    }
+  ],
+  "strict_regression_ok": true
+}

@@ -1,0 +1,61 @@
+model,leg,condition,task,run,n,passed,test_fail,build_fail,never_applied,quarantined,harness_error,never_applied_reasons,distinct_outputs,context_tokens_median
+Claude Sonnet 4.6,claude_primary,floor,P1,claude_primary_2026-09-18_wp5_p1p3,5,0,0,0,5,0,0,file_not_found=5,2,0
+Claude Sonnet 4.6,claude_primary,floor,P2,claude_primary_2026-09-18_wp5_p1p3,5,0,0,0,5,0,0,search_not_found=5,5,0
+Claude Sonnet 4.6,claude_primary,floor,P3,claude_primary_2026-09-18_wp5_p1p3,5,0,0,0,5,0,0,search_not_found=5,4,0
+Claude Sonnet 4.6,claude_primary,floor,P4,claude_primary_2026-09-19_wp5_p4p6,5,0,0,0,5,0,0,file_not_found=5,4,0
+Claude Sonnet 4.6,claude_primary,floor,P5,claude_primary_2026-09-19_wp5_p4p6,5,0,0,0,5,0,0,file_not_found=5,4,0
+Claude Sonnet 4.6,claude_primary,floor,P6,claude_primary_2026-09-19_wp5_p4p6,5,0,0,0,5,0,0,file_not_found=5,3,0
+Claude Sonnet 4.6,claude_primary,whole_file,P1,claude_primary_2026-09-18_wp5_p1p3,5,5,0,0,0,0,0,,1,278
+Claude Sonnet 4.6,claude_primary,whole_file,P2,claude_primary_2026-09-18_wp5_p1p3,5,5,0,0,0,0,0,,1,2611
+Claude Sonnet 4.6,claude_primary,whole_file,P3,claude_primary_2026-09-18_wp5_p1p3,5,5,0,0,0,0,0,,4,709
+Claude Sonnet 4.6,claude_primary,whole_file,P4,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,1,599
+Claude Sonnet 4.6,claude_primary,whole_file,P5,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,1,289
+Claude Sonnet 4.6,claude_primary,whole_file,P6,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,2,699
+Claude Sonnet 4.6,claude_primary,kg_augmented,P1,claude_primary_2026-09-18_wp5_p1p3,5,5,0,0,0,0,0,,1,626
+Claude Sonnet 4.6,claude_primary,kg_augmented,P2,claude_primary_2026-09-18_wp5_p1p3,5,5,0,0,0,0,0,,4,1532
+Claude Sonnet 4.6,claude_primary,kg_augmented,P3,claude_primary_2026-09-18_wp5_p1p3,5,5,0,0,0,0,0,,3,772
+Claude Sonnet 4.6,claude_primary,kg_augmented,P4,claude_primary_2026-09-19_wp5_p4p6,5,0,0,0,5,0,0,file_not_found=3;search_not_found=2,5,371
+Claude Sonnet 4.6,claude_primary,kg_augmented,P5,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,3,497
+Claude Sonnet 4.6,claude_primary,kg_augmented,P6,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,2,841
+Claude Sonnet 4.6,claude_primary,bm25,P1,claude_primary_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,1,5635
+Claude Sonnet 4.6,claude_primary,bm25,P2,claude_primary_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,2,6962
+Claude Sonnet 4.6,claude_primary,bm25,P3,claude_primary_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,2,6964
+Claude Sonnet 4.6,claude_primary,bm25,P4,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,3,4949
+Claude Sonnet 4.6,claude_primary,bm25,P5,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,3,4602
+Claude Sonnet 4.6,claude_primary,bm25,P6,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,1,6899
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,P1,claude_primary_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,1,5905
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,P2,claude_primary_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,1,6938
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,P3,claude_primary_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,3,6919
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,P4,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,1,5905
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,P5,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,2,5905
+Claude Sonnet 4.6,claude_primary,text_emb_3_large,P6,claude_primary_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,1,6981
+Qwen3-Coder,qwen_robustness,floor,P1,qwen_robustness_2026-09-18_wp5_p1p3,5,0,0,0,5,0,0,file_not_found=5,1,0
+Qwen3-Coder,qwen_robustness,floor,P2,qwen_robustness_2026-09-18_wp5_p1p3,5,0,0,0,5,0,0,search_not_found=5,5,0
+Qwen3-Coder,qwen_robustness,floor,P3,qwen_robustness_2026-09-18_wp5_p1p3,5,0,0,0,5,0,0,search_not_found=5,5,0
+Qwen3-Coder,qwen_robustness,floor,P4,qwen_robustness_2026-09-19_wp5_p4p6,5,0,0,0,5,0,0,file_not_found=5,3,0
+Qwen3-Coder,qwen_robustness,floor,P5,qwen_robustness_2026-09-19_wp5_p4p6,5,0,0,0,5,0,0,file_not_found=5,5,0
+Qwen3-Coder,qwen_robustness,floor,P6,qwen_robustness_2026-09-19_wp5_p4p6,5,0,0,0,5,0,0,file_not_found=5,2,0
+Qwen3-Coder,qwen_robustness,whole_file,P1,qwen_robustness_2026-09-18_wp5_p1p3,5,5,0,0,0,0,0,,2,278
+Qwen3-Coder,qwen_robustness,whole_file,P2,qwen_robustness_2026-09-18_wp5_p1p3,5,1,0,4,0,0,0,,4,2611
+Qwen3-Coder,qwen_robustness,whole_file,P3,qwen_robustness_2026-09-18_wp5_p1p3,5,4,0,0,1,0,0,search_not_found=1,5,709
+Qwen3-Coder,qwen_robustness,whole_file,P4,qwen_robustness_2026-09-19_wp5_p4p6,5,4,1,0,0,0,0,,4,599
+Qwen3-Coder,qwen_robustness,whole_file,P5,qwen_robustness_2026-09-19_wp5_p4p6,5,0,4,0,1,0,0,search_not_found=1,4,289
+Qwen3-Coder,qwen_robustness,whole_file,P6,qwen_robustness_2026-09-19_wp5_p4p6,5,3,0,0,2,0,0,malformed_blocks=2,3,699
+Qwen3-Coder,qwen_robustness,kg_augmented,P1,qwen_robustness_2026-09-18_wp5_p1p3,5,5,0,0,0,0,0,,1,626
+Qwen3-Coder,qwen_robustness,kg_augmented,P2,qwen_robustness_2026-09-18_wp5_p1p3,5,0,0,0,5,0,0,search_not_found=5,5,1532
+Qwen3-Coder,qwen_robustness,kg_augmented,P3,qwen_robustness_2026-09-18_wp5_p1p3,5,3,0,1,1,0,0,search_not_found=1,5,772
+Qwen3-Coder,qwen_robustness,kg_augmented,P4,qwen_robustness_2026-09-19_wp5_p4p6,5,0,5,0,0,0,0,,3,371
+Qwen3-Coder,qwen_robustness,kg_augmented,P5,qwen_robustness_2026-09-19_wp5_p4p6,5,3,2,0,0,0,0,,5,497
+Qwen3-Coder,qwen_robustness,kg_augmented,P6,qwen_robustness_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,2,841
+Qwen3-Coder,qwen_robustness,bm25,P1,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,3,5635
+Qwen3-Coder,qwen_robustness,bm25,P2,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,3,0,2,0,0,0,,4,6962
+Qwen3-Coder,qwen_robustness,bm25,P3,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,5,6964
+Qwen3-Coder,qwen_robustness,bm25,P4,qwen_robustness_2026-09-19_wp5_p4p6,5,2,2,0,1,0,0,search_not_found=1,5,4949
+Qwen3-Coder,qwen_robustness,bm25,P5,qwen_robustness_2026-09-19_wp5_p4p6,5,2,3,0,0,0,0,,3,4602
+Qwen3-Coder,qwen_robustness,bm25,P6,qwen_robustness_2026-09-19_wp5_p4p6,5,5,0,0,0,0,0,,2,6899
+Qwen3-Coder,qwen_robustness,text_emb_3_large,P1,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,5,0,0,0,0,0,,4,5905
+Qwen3-Coder,qwen_robustness,text_emb_3_large,P2,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,4,0,0,1,0,0,search_not_found=1,5,6938
+Qwen3-Coder,qwen_robustness,text_emb_3_large,P3,qwen_robustness_2026-09-19_wp5_p1p3_baselines,5,3,0,2,0,0,0,,5,6919
+Qwen3-Coder,qwen_robustness,text_emb_3_large,P4,qwen_robustness_2026-09-19_wp5_p4p6,5,4,1,0,0,0,0,,5,5905
+Qwen3-Coder,qwen_robustness,text_emb_3_large,P5,qwen_robustness_2026-09-19_wp5_p4p6,5,3,2,0,0,0,0,,4,5905
+Qwen3-Coder,qwen_robustness,text_emb_3_large,P6,qwen_robustness_2026-09-19_wp5_p4p6,5,4,0,0,1,0,0,malformed_blocks=1,3,6981
