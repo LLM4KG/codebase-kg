@@ -1,0 +1,164 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "CategoryList",
+        "childComponent": "CollapseCategoryListButton",
+        "importSource": "@/components/AppSidebar/CollapseCategoryButton",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.CATEGORY_COLLAPSE_BUTTON"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "() => setCategoryListOpen(!isCategoryListOpen)"
+          },
+          {
+            "propName": "label",
+            "valueExpression": "LabelText.COLLAPSE_CATEGORY"
+          },
+          {
+            "propName": "isCategoryListOpen",
+            "valueExpression": "isCategoryListOpen"
+          },
+          {
+            "propName": "showIcon",
+            "valueExpression": "categories.length > 0"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryList",
+        "childComponent": "AddCategoryButton",
+        "importSource": "@/components/AppSidebar/AddCategoryButton",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.ADD_CATEGORY_BUTTON"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "onAddCategory"
+          },
+          {
+            "propName": "label",
+            "valueExpression": "LabelText.ADD_CATEGORY"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryList",
+        "childComponent": "Droppable",
+        "importSource": "react-beautiful-dnd",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"CATEGORY\""
+          },
+          {
+            "propName": "droppableId",
+            "valueExpression": "\"Category list\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryList",
+        "childComponent": "CategoryOption",
+        "importSource": "@/containers/CategoryOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "index",
+            "valueExpression": "index"
+          },
+          {
+            "propName": "category",
+            "valueExpression": "category"
+          },
+          {
+            "propName": "contextMenuRef",
+            "valueExpression": "contextMenuRef"
+          },
+          {
+            "propName": "handleCategoryMenuClick",
+            "valueExpression": "handleCategoryMenuClick"
+          },
+          {
+            "propName": "handleCategoryRightClick",
+            "valueExpression": "handleCategoryRightClick"
+          },
+          {
+            "propName": "onSubmitUpdateCategory",
+            "valueExpression": "onSubmitUpdateCategory"
+          },
+          {
+            "propName": "optionsId",
+            "valueExpression": "optionsId"
+          },
+          {
+            "propName": "setOptionsId",
+            "valueExpression": "setOptionsId"
+          },
+          {
+            "propName": "optionsPosition",
+            "valueExpression": "optionsPosition"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryList",
+        "childComponent": "AddCategoryForm",
+        "importSource": "@/components/AppSidebar/AddCategoryForm",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.NEW_CATEGORY_FORM"
+          },
+          {
+            "propName": "submitHandler",
+            "valueExpression": "onSubmitNewCategory"
+          },
+          {
+            "propName": "changeHandler",
+            "valueExpression": "_setCategoryEdit"
+          },
+          {
+            "propName": "resetHandler",
+            "valueExpression": "resetTempCategory"
+          },
+          {
+            "propName": "editingCategoryId",
+            "valueExpression": "editingCategoryId"
+          },
+          {
+            "propName": "tempCategoryName",
+            "valueExpression": "tempCategoryName"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": [
+      {
+        "consumerName": "CategoryList",
+        "consumerType": "function_component",
+        "contextName": "TempStateContext",
+        "contextSource": "@/contexts/TempStateContext",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

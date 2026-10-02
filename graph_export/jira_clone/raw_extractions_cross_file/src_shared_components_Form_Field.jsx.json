@@ -1,0 +1,86 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "FieldComponent",
+        "childComponent": "StyledField",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "className",
+            "valueExpression": "className"
+          },
+          {
+            "propName": "hasLabel",
+            "valueExpression": "!!label"
+          },
+          {
+            "propName": "data-testid",
+            "valueExpression": "name ? `form-field:${name}` : 'form-field'"
+          }
+        ]
+      },
+      {
+        "parentComponent": "FieldComponent",
+        "childComponent": "FieldLabel",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "htmlFor",
+            "valueExpression": "fieldId"
+          }
+        ]
+      },
+      {
+        "parentComponent": "FieldComponent",
+        "childComponent": "FormComponent",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "id",
+            "valueExpression": "fieldId"
+          },
+          {
+            "propName": "invalid",
+            "valueExpression": "!!error"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "name"
+          },
+          {
+            "propName": "...otherProps",
+            "valueExpression": "{...otherProps}"
+          }
+        ]
+      },
+      {
+        "parentComponent": "FieldComponent",
+        "childComponent": "FieldTip",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "FieldComponent",
+        "childComponent": "FieldError",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

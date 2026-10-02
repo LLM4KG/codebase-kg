@@ -1,0 +1,15 @@
+{
+  "task_id": "P6",
+  "candidate_id": "P6__ref__n1",
+  "condition": "reference",
+  "model": "reference",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 48786.06208099973,
+  "timeout_used_ms": 60000,
+  "stage_detail": null,
+  "apply_mode": "strict",
+  "apply_reason": null
+}

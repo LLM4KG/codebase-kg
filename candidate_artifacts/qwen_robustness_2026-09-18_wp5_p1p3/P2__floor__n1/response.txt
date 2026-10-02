@@ -1,0 +1,100 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote(state, action: PayloadAction<Note>) {
+      state.notes.push(action.payload)
+    },
+    updateNote(state, action: PayloadAction<Note>) {
+      const index = state.notes.findIndex(note => note.id === action.payload.id)
+      if (index !== -1) {
+        state.notes[index] = action.payload
+      }
+    },
+    deleteNote(state, action: PayloadAction<string>) {
+      const index = state.notes.findIndex(note => note.id === action.payload)
+      if (index !== -1) {
+        state.notes.splice(index, 1)
+      }
+    },
+    emptyTrash(state) {
+      state.notes = state.notes.filter(note => !note.trash)
+    },
+=======
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote(state, action: PayloadAction<Note>) {
+      state.notes.push(action.payload)
+    },
+    updateNote(state, action: PayloadAction<Note>) {
+      const index = state.notes.findIndex(note => note.id === action.payload.id)
+      if (index !== -1) {
+        state.notes[index] = action.payload
+      }
+    },
+    deleteNote(state, action: PayloadAction<string>) {
+      const index = state.notes.findIndex(note => note.id === action.payload)
+      if (index !== -1) {
+        state.notes.splice(index, 1)
+      }
+    },
+    emptyTrash(state) {
+      state.notes = state.notes.filter(note => !note.trash)
+    },
+    restoreAllTrash(state) {
+      state.notes.forEach(note => {
+        if (note.trash) {
+          note.trash = false
+        }
+      })
+    },
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+              <button onClick={handleEmptyTrash} className="btn btn-danger">
+                Empty Trash
+              </button>
+            )}
+          </>
+        )}
+=======
+              <button onClick={handleEmptyTrash} className="btn btn-danger">
+                Empty Trash
+              </button>
+              <button onClick={handleRestoreAll} className="btn btn-secondary ml-2">
+                Restore All
+              </button>
+            </>
+          )}
+        )}
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const handleEmptyTrash = () => {
+    dispatch(emptyTrash())
+  }
+
+  return (
+=======
+  const handleEmptyTrash = () => {
+    dispatch(emptyTrash())
+  }
+
+  const handleRestoreAll = () => {
+    dispatch(restoreAllTrash())
+  }
+
+  return (
+>>>>>>> REPLACE
+```

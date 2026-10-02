@@ -1,0 +1,163 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "AppSidebar",
+        "childComponent": "ActionButton",
+        "importSource": "@/components/AppSidebar/ActionButton",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.SIDEBAR_ACTION_CREATE_NEW_NOTE"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "newNoteHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Plus"
+          },
+          {
+            "propName": "label",
+            "valueExpression": "LabelText.CREATE_NEW_NOTE"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.NEW_NOTE"
+          }
+        ]
+      },
+      {
+        "parentComponent": "AppSidebar",
+        "childComponent": "ScratchpadOption",
+        "importSource": "@/components/AppSidebar/ScratchpadOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "active",
+            "valueExpression": "activeFolder === Folder.SCRATCHPAD"
+          },
+          {
+            "propName": "swapFolder",
+            "valueExpression": "swapFolderHandler"
+          }
+        ]
+      },
+      {
+        "parentComponent": "AppSidebar",
+        "childComponent": "FolderOption",
+        "importSource": "@/components/AppSidebar/FolderOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "active",
+            "valueExpression": "activeFolder === Folder.ALL"
+          },
+          {
+            "propName": "swapFolder",
+            "valueExpression": "swapFolderHandler"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.NOTES"
+          },
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.FOLDER_NOTES"
+          },
+          {
+            "propName": "folder",
+            "valueExpression": "Folder.ALL"
+          },
+          {
+            "propName": "addNoteType",
+            "valueExpression": "_unassignTrashFromNotes"
+          }
+        ]
+      },
+      {
+        "parentComponent": "AppSidebar",
+        "childComponent": "FolderOption",
+        "importSource": "@/components/AppSidebar/FolderOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "active",
+            "valueExpression": "activeFolder === Folder.FAVORITES"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.FAVORITES"
+          },
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.FOLDER_FAVORITES"
+          },
+          {
+            "propName": "folder",
+            "valueExpression": "Folder.FAVORITES"
+          },
+          {
+            "propName": "swapFolder",
+            "valueExpression": "swapFolderHandler"
+          },
+          {
+            "propName": "addNoteType",
+            "valueExpression": "_assignFavoriteToNotes"
+          }
+        ]
+      },
+      {
+        "parentComponent": "AppSidebar",
+        "childComponent": "FolderOption",
+        "importSource": "@/components/AppSidebar/FolderOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "active",
+            "valueExpression": "activeFolder === Folder.TRASH"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.TRASH"
+          },
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.FOLDER_TRASH"
+          },
+          {
+            "propName": "folder",
+            "valueExpression": "Folder.TRASH"
+          },
+          {
+            "propName": "swapFolder",
+            "valueExpression": "swapFolderHandler"
+          },
+          {
+            "propName": "addNoteType",
+            "valueExpression": "_assignTrashToNotes"
+          }
+        ]
+      },
+      {
+        "parentComponent": "AppSidebar",
+        "childComponent": "CategoryList",
+        "importSource": "@/containers/CategoryList",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,6 +1,7 @@
 """Pilot orchestrator: the per-candidate pipeline and the project-grouped run loop.
 
-Per candidate: load config -> build retriever (floor | kg_augmented) -> retrieve()
+Per candidate: load config -> build retriever (floor | whole_file | bm25 |
+text_emb_3_large | kg_augmented) -> retrieve()
 -> generate diff -> run_candidate (harness) -> write artifacts. Candidates are
 grouped by project so each project's KG is loaded once (one-project-per-DB), and
 run under a small concurrency bound. A per-candidate failure is recorded, never
@@ -38,7 +39,9 @@ from src.harness.results import _write_harness_result
 from src.harness.runner import QUARANTINED_MODES, run_candidate
 from src.harness.tasks import load_pilot_task
 from src.llm.logger import LLMResponse, UpstreamProviderError, _write_log_record
-from src.retrieval.config import load_experiment_config
+from src.retrieval.bm25_retriever import BM25Retriever
+from src.retrieval.config import RetrievalConditionConfig, load_experiment_config
+from src.retrieval.dense_retriever import DenseRetriever
 from src.retrieval.floor_retriever import FloorRetriever
 from src.retrieval.kg_retriever import KGAugmentedRetriever
 from src.retrieval.whole_file_retriever import WholeFileRetriever
@@ -58,7 +61,22 @@ CONDITIONS = ("floor", "whole_file", "kg_augmented")
 
 # Everything `--conditions` will accept, including combinations that are not the
 # default (e.g. re-running the original two-arm pilot shape).
-KNOWN_CONDITIONS = ("floor", "whole_file", "kg_augmented")
+# `bm25` (WP2) and `text_emb_3_large` (WP3, dense) are runnable but not defaults,
+# so existing legs keep their shape.
+# `bm25_matched` / `text_emb_3_large_matched` (WP12) are the same two retrievers
+# capped at the KG's own per-task context instead of 7,000 tokens — an ablation
+# that isolates selection quality from budget, not a sixth and seventh baseline,
+# so they are opt-in like the two they are matched against.
+KNOWN_CONDITIONS = ("floor", "whole_file", "kg_augmented", "bm25", "text_emb_3_large",
+                    "kg_augmented_hardened", "bm25_matched", "text_emb_3_large_matched")
+
+# Dispatch keys on the condition TOML's `retriever` field, never on the condition
+# id (WP12). A condition is a *configuration* — `kg_augmented_hardened` and
+# `bm25_matched` differ from their parents only in `[retriever_params]` — so the
+# retriever is what the id resolves to, not what it is. Keying on the id meant a
+# name tuple per retriever family (`KG_CONDITIONS` was the first) that had to be
+# kept in sync with conditions/base/*.toml by hand; keying on the field means a
+# new condition needs a TOML and nothing else.
 
 # Which tasks each run exercises (WI4 run structure).
 #
@@ -67,10 +85,11 @@ KNOWN_CONDITIONS = ("floor", "whole_file", "kg_augmented")
 # nodes, so `bug_fix.cypher` returned nothing). That leg therefore validated
 # multi-provider plumbing and nothing about open-model code generation. Widened
 # to the full task set for the 2026-07-30 re-evaluation so both model families
-# are measured on the same three tasks.
+# are measured on the same three tasks. P4-P6 added for the IJCKG 2026 revision
+# (WP4, validated and calibrated 19 Sep); select a subset with `--tasks`.
 RUN_TASKS: dict[str, list[str]] = {
-    "claude_primary": ["P1", "P2", "P3"],   # primary leg: 3 tasks x 3 conditions x n5 = 45
-    "qwen_robustness": ["P1", "P2", "P3"],  # open-model leg: same shape = 45
+    "claude_primary": ["P1", "P2", "P3", "P4", "P5", "P6"],   # 6 tasks x 3 conditions x n5 = 90
+    "qwen_robustness": ["P1", "P2", "P3", "P4", "P5", "P6"],  # open-model leg: same shape = 90
 }
 
 if sys.version_info >= (3, 11):
@@ -141,13 +160,28 @@ class Candidate:
 
 
 def build_candidates(
-    run_name: str, *, run_id: str | None = None, n: int = 5, conditions=CONDITIONS
+    run_name: str,
+    *,
+    run_id: str | None = None,
+    n: int = 5,
+    conditions=CONDITIONS,
+    tasks: tuple[str, ...] | None = None,
 ) -> list[Candidate]:
+    """`tasks` narrows the run's task list (e.g. re-running P2 after a retriever
+    change); it may only name tasks the run config already covers."""
     if run_name not in RUN_TASKS:
         raise ValueError(f"Unknown run {run_name!r}. Known: {list(RUN_TASKS)}")
+    task_ids = RUN_TASKS[run_name]
+    if tasks:
+        unknown = [t for t in tasks if t not in task_ids]
+        if unknown:
+            raise ValueError(
+                f"Task(s) {unknown} not in run {run_name!r}. Known: {task_ids}"
+            )
+        task_ids = [t for t in task_ids if t in tasks]
     rid = run_id or run_name
     out: list[Candidate] = []
-    for task_id in RUN_TASKS[run_name]:
+    for task_id in task_ids:
         project = _task_project(task_id)
         for condition in conditions:
             for i in range(1, n + 1):
@@ -240,6 +274,7 @@ def _write_candidate_artifacts(
     mock: bool,
     output_format: str = "unified_diff",
     script: EditScript | None = None,
+    retrieval_metadata: dict | None = None,
 ) -> None:
     out = ARTIFACTS_ROOT / cand.run_id / cand.candidate_id
     out.mkdir(parents=True, exist_ok=True)
@@ -277,10 +312,42 @@ def _write_candidate_artifacts(
         "edit_count": len(script.edits) if script else 0,
         "malformed_blocks": script.malformed_blocks if script else 0,
         "elided": script.elided if script else False,
+        # What the retriever chose and why (BM25's ranking, KG's anchors). Additive:
+        # before WP2 no retriever's metadata was persisted, so BM25's ranking — the
+        # only record of how its context was picked — would have been lost.
+        "retrieval_metadata": retrieval_metadata or {},
     }
     (out / "metadata.json").write_text(
-        json.dumps(metadata, indent=2), encoding="utf-8"
+        json.dumps(metadata, indent=2, default=str), encoding="utf-8"
     )
+
+
+def _matched_token_budget(
+    condition: RetrievalConditionConfig, task_id: str
+) -> dict[str, int]:
+    """`{"token_budget": n}` for a context-budget-matched condition, else `{}`.
+
+    A condition that declares `[retriever_params] token_budget_by_task` (WP12's
+    `*_matched` ablation arms) must declare it for *every* task it runs: a missing
+    entry raises rather than falling back to the retriever's 7,000-token default.
+    An arm named "matched" that silently ran at 7,000 tokens would be WP8's
+    silent-floor defect in a new costume — a condition labelled one thing and
+    behaving as another, invisible everywhere but in a token count. The budgets are
+    generated from wp5_outcomes.csv for all six tasks, so this is a guard, not a
+    code path.
+    """
+    by_task = condition.retriever_params.get("token_budget_by_task")
+    if by_task is None:
+        return {}
+    budget = by_task.get(task_id)
+    if budget is None:
+        raise ValueError(
+            f"condition {condition.condition_id!r} sets token_budget_by_task but has no "
+            f"entry for {task_id} — refusing to run it at the default budget, which "
+            f"would record an unmatched candidate under a matched condition. Add "
+            f"{task_id} to conditions/base/{condition.condition_id}.toml."
+        )
+    return {"token_budget": int(budget)}
 
 
 # --------------------------------------------------------------------------- #
@@ -309,8 +376,10 @@ async def run_one_candidate(
         )
     spec = load_task_spec(cand.task_id)
     repo_root = resolve_repo_root(cand.project_name)
+    # The TOML's `retriever`, not the condition id: see the note above KNOWN_CONDITIONS.
+    retriever_name = cfg.condition.retriever
 
-    if cand.condition == "kg_augmented" and not mock_retrieval:
+    if retriever_name == "kg_augmented" and not mock_retrieval:
         project_id = resolve_project_id(cand.project_name)
         retriever = KGAugmentedRetriever(
             cfg.condition,
@@ -320,7 +389,7 @@ async def run_one_candidate(
             log_dir=log_dir,
         )
         result = await retriever.retrieve(spec, project_id, repo_root)
-    elif cand.condition == "whole_file":
+    elif retriever_name == "whole_file":
         # Oracle localisation from the frozen task YAML — no KG, no LLM, so
         # `--mock-retrieval` has nothing to skip and this arm stays real in a
         # dry run.
@@ -330,9 +399,45 @@ async def run_one_candidate(
             task_type=_load_task_yaml(cand.task_id).get("task_type", ""),
             project_name=cand.project_name,
         ).retrieve(spec, "", repo_root)
-    else:
-        # floor, or kg_augmented under --mock-retrieval: empty context, no KG/LLM.
+    elif retriever_name == "bm25":
+        # Lexical baseline over the KG's own file set (same exclude_paths as
+        # extraction), filled to the KG's token budget. No KG, no LLM.
+        project_cfg = get_settings().projects.get(cand.project_name)
+        result = await BM25Retriever(
+            cfg.condition,
+            task_type=_load_task_yaml(cand.task_id).get("task_type", ""),
+            project_name=cand.project_name,
+            exclude_paths=project_cfg.exclude_paths if project_cfg else [],
+            **_matched_token_budget(cfg.condition, cand.task_id),
+        ).retrieve(spec, "", repo_root)
+    elif retriever_name == "text_emb_3_large":
+        # Dense baseline: BM25's corpus and fill, scored by embedding cosine. No KG
+        # and no generator-side LLM; embeddings come from the committed cache or an
+        # OpenAI call logged under this run. Stays real under --mock-retrieval.
+        project_cfg = get_settings().projects.get(cand.project_name)
+        result = await DenseRetriever(
+            cfg.condition,
+            run_id=cand.run_id,
+            task_type=_load_task_yaml(cand.task_id).get("task_type", ""),
+            project_name=cand.project_name,
+            exclude_paths=project_cfg.exclude_paths if project_cfg else [],
+            log_dir=log_dir,
+            **_matched_token_budget(cfg.condition, cand.task_id),
+        ).retrieve(spec, "", repo_root)
+    elif retriever_name in ("floor", "kg_augmented"):
+        # floor, or a KG arm under --mock-retrieval: empty context, no KG/LLM.
         result = await FloorRetriever(cfg.condition).retrieve(spec, "", repo_root)
+    else:
+        # Never fall through to the floor. A condition with no branch here used to
+        # run silently as floor and be reported as itself — a condition whose TOML
+        # loads but whose retriever is missing would have produced a whole arm of
+        # empty-context candidates with no trace of the mistake (WP8/WP12).
+        raise ValueError(
+            f"no retriever is wired for condition {cand.condition!r} "
+            f"(retriever={retriever_name!r}); add a branch in run_one_candidate, or fix "
+            f"`retriever` in conditions/base/{cand.condition}.toml, or remove the "
+            f"condition from KNOWN_CONDITIONS"
+        )
 
     context_block = result.context
 
@@ -368,6 +473,7 @@ async def run_one_candidate(
         diff=gen.diff,
         harness=harness,
         retrieval_tokens=result.total_token_count,
+        retrieval_metadata=result.metadata,
         generator_usage=gen.usage,
         generator_latency_ms=gen.latency_ms,
         mock=llm_call is not None,
@@ -471,6 +577,7 @@ async def run_pilot(
     output_format: str | None = None,
     conditions: tuple[str, ...] = CONDITIONS,
     run_id: str | None = None,
+    tasks: tuple[str, ...] | None = None,
 ) -> list[HarnessResult]:
     """Run one leg of the pilot (all conditions x tasks x n). Returns the results.
 
@@ -483,7 +590,9 @@ async def run_pilot(
     run_id = run_id or run_cfg.run_id
     _check_run_id_available(run_id, log_dir=log_dir)
     effective_format = output_format or run_cfg.output_format
-    candidates = build_candidates(run_name, run_id=run_id, n=n, conditions=conditions)
+    candidates = build_candidates(
+        run_name, run_id=run_id, n=n, conditions=conditions, tasks=tasks
+    )
     timeouts = load_timeouts()
     sem = asyncio.Semaphore(concurrency)
 
@@ -519,7 +628,9 @@ async def run_pilot(
     results: list[HarnessResult] = []
     for project, group in by_project.items():
         needs_kg = (not mock_retrieval) and any(
-            c.condition == "kg_augmented" for c in group
+            load_experiment_config(c.run_name, c.condition).condition.retriever
+            == "kg_augmented"
+            for c in group
         )
         if needs_kg:
             ensure_project_kg_loaded(project)

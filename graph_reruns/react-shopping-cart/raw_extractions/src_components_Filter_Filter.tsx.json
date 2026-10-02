@@ -1,0 +1,50 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "Filter",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useProducts",
+            "category": "library",
+            "source": "contexts/products-context"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "default"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "contexts/products-context",
+        "symbols": [],
+        "hooks": [
+          "useProducts"
+        ]
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

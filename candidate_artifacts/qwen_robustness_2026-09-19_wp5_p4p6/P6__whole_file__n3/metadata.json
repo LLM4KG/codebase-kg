@@ -1,0 +1,31 @@
+{
+  "candidate_id": "P6__whole_file__n3",
+  "run_id": "qwen_robustness_2026-09-19_wp5_p4p6",
+  "run_name": "qwen_robustness",
+  "task_id": "P6",
+  "project_name": "takenote",
+  "condition": "whole_file",
+  "index": 3,
+  "model_id": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "timestamp": "2026-09-19T16:19:33.784953+00:00",
+  "retrieval_token_count": 699,
+  "generator_usage": {
+    "input_tokens": 1923,
+    "output_tokens": 290
+  },
+  "generator_latency_ms": 2016.1765670000023,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": null,
+  "apply_reason": "malformed_blocks",
+  "edit_count": 0,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "oracle_files_read": [
+      "src/client/containers/CategoryList.tsx"
+    ],
+    "oracle_files_absent": []
+  }
+}

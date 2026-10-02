@@ -1,0 +1,172 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "App",
+        "childComponent": "HelmetProvider",
+        "importSource": "react-helmet-async",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Helmet",
+        "importSource": "react-helmet-async",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Switch",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "exact",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "path",
+            "valueExpression": "\"/\""
+          },
+          {
+            "propName": "component",
+            "valueExpression": "LandingPage"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/app\""
+          },
+          {
+            "propName": "component",
+            "valueExpression": "TakeNoteApp"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "PublicRoute",
+        "importSource": "@/router/PublicRoute",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "exact",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "path",
+            "valueExpression": "\"/\""
+          },
+          {
+            "propName": "component",
+            "valueExpression": "LandingPage"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "PrivateRoute",
+        "importSource": "@/router/PrivateRoute",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/app\""
+          },
+          {
+            "propName": "component",
+            "valueExpression": "TakeNoteApp"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Redirect",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "\"/\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "LandingPage",
+        "importSource": "@/components/LandingPage",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "TakeNoteApp",
+        "importSource": "@/containers/TakeNoteApp",
+        "usage": "prop_value",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": [
+      {
+        "routingComponent": "App",
+        "targetComponent": "LandingPage",
+        "importSource": "@/components/LandingPage",
+        "path": "/",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "TakeNoteApp",
+        "importSource": "@/containers/TakeNoteApp",
+        "path": "/app",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "LandingPage",
+        "importSource": "@/components/LandingPage",
+        "path": "/",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "App",
+        "targetComponent": "TakeNoteApp",
+        "importSource": "@/containers/TakeNoteApp",
+        "path": "/app",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": true
+      }
+    ]
+  }
+}

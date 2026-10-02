@@ -69,9 +69,18 @@ def _extract_json_object(text: str) -> dict | None:
 def parse_classifier_response(text: str) -> ClassifierResult:
     """Parse an LLM response into a ClassifierResult.
 
-    Degrades gracefully (documented L5 fallback): on malformed JSON or an invalid
-    task_type, returns a bug_fix result with empty anchors rather than raising —
-    the templates then fall back to project-wide summaries.
+    Never raises: on malformed JSON or an invalid task_type, returns a bug_fix
+    result with empty anchors.
+
+    Empty anchors are NOT a graceful degradation (corrected 2026-09-21, WP8). The
+    three anchor-scoped templates open with a non-optional
+    `WHERE anchor.name IN $anchorNames`, so an empty list matches no node, the query
+    returns zero rows, and Format A renders headers with nothing under them — the
+    KG-augmented condition silently becomes the floor condition. Earlier docstrings
+    claimed a project-wide fallback that was never implemented. `KGAugmentedRetriever`
+    with `anchor_resolution = "hardened"` implements one, bounded by the token budget,
+    and records `anchor_fallback` in the retrieval metadata; the default "strict" path
+    is unchanged. See docs/phase_2/ijckg-2026/wp8_anchor_extraction.md.
     """
     data = _extract_json_object(text)
     if data is None:

@@ -1,0 +1,15 @@
+{
+  "task_id": "P6",
+  "candidate_id": "P6__floor__n2",
+  "condition": "floor",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1376.4481960006378,
+  "timeout_used_ms": 146329,
+  "stage_detail": "apply_edits: no such file: src/components/CategoryList/CategoryList.tsx",
+  "apply_mode": null,
+  "apply_reason": "file_not_found"
+}

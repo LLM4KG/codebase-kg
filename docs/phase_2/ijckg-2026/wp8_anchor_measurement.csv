@@ -1,0 +1,16 @@
+model,task,project,calls,task_type_expected,task_type_predicted,task_type_correct,anchor_names,anchor_routes,n_anchors,n_resolved,n_ambiguous,n_unresolved,n_correct,n_truth,precision,recall,unresolved_anchors,unknown_routes
+anthropic/claude-sonnet-4-6,P1,react-shopping-cart,5,bug_fix,bug_fix,1,useCartProducts,,1,1,0,0,1,1,1.000,1.000,,
+anthropic/claude-sonnet-4-6,P2,takenote,5,feature_addition,feature_addition,1,NoteList,,1,1,0,0,1,1,1.000,1.000,,
+anthropic/claude-sonnet-4-6,P3,takenote,5,refactoring,refactoring,1,NoteMenuBar useCopyToClipboard,,2,1,0,1,2,2,1.000,1.000,useCopyToClipboard,
+anthropic/claude-sonnet-4-6,P4,react-shopping-cart,5,feature_addition,feature_addition,1,useCart Cart,,2,2,0,0,2,3,1.000,0.667,,
+anthropic/claude-sonnet-4-6,P5,react-shopping-cart,3,refactoring,refactoring,1,CartProduct CartProducts useCart,,3,3,0,0,2,2,0.667,1.000,,
+anthropic/claude-sonnet-4-6,P5,react-shopping-cart,2,refactoring,refactoring,1,CartProduct CartProducts,,2,2,0,0,2,2,1.000,1.000,,
+anthropic/claude-sonnet-4-6,P6,takenote,5,bug_fix,bug_fix,1,CategoryList,,1,1,0,0,1,1,1.000,1.000,,
+openrouter/qwen/qwen3-coder,P1,react-shopping-cart,5,bug_fix,bug_fix,1,useCartProducts,,1,1,0,0,1,1,1.000,1.000,,
+openrouter/qwen/qwen3-coder,P2,takenote,2,feature_addition,feature_addition,1,NoteList,/notes/trash,1,1,0,0,1,1,1.000,1.000,,/notes/trash
+openrouter/qwen/qwen3-coder,P2,takenote,3,feature_addition,feature_addition,1,NoteList,,1,1,0,0,1,1,1.000,1.000,,
+openrouter/qwen/qwen3-coder,P3,takenote,5,refactoring,refactoring,1,NoteMenuBar useCopyToClipboard,,2,1,0,1,2,2,1.000,1.000,useCopyToClipboard,
+openrouter/qwen/qwen3-coder,P4,react-shopping-cart,5,feature_addition,feature_addition,1,useCart Cart,,2,2,0,0,2,3,1.000,0.667,,
+openrouter/qwen/qwen3-coder,P5,react-shopping-cart,4,refactoring,refactoring,1,CartProduct CartProducts useCart,,3,3,0,0,2,2,0.667,1.000,,
+openrouter/qwen/qwen3-coder,P5,react-shopping-cart,1,refactoring,refactoring,1,CartProduct CartProducts,,2,2,0,0,2,2,1.000,1.000,,
+openrouter/qwen/qwen3-coder,P6,takenote,5,bug_fix,bug_fix,1,CategoryList,,1,1,0,0,1,1,1.000,1.000,,

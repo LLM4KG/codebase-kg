@@ -1,0 +1,104 @@
+```text
+src/hooks/useCart.ts
+<<<<<<< SEARCH
+  const removeFromCart = (productId: number) => {
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.product.id !== productId)
+    );
+    recalculateTotals();
+  };
+
+  return {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    subtotal,
+    tax,
+    shipping,
+    total,
+  };
+=======
+  const removeFromCart = (productId: number) => {
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.product.id !== productId)
+    );
+    recalculateTotals();
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+    setSubtotal(0);
+    setTax(0);
+    setShipping(0);
+    setTotal(0);
+  };
+
+  return {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    subtotal,
+    tax,
+    shipping,
+    total,
+  };
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+import { useCart } from '../../hooks/useCart';
+import { CartItem } from './CartItem';
+import { CartSummary } from './CartSummary';
+import styles from './Cart.module.css';
+
+export const Cart = () => {
+  const { cartItems, removeFromCart, subtotal, tax, shipping, total } =
+    useCart();
+
+  return (
+=======
+import { useCart } from '../../hooks/useCart';
+import { CartItem } from './CartItem';
+import { CartSummary } from './CartSummary';
+import styles from './Cart.module.css';
+
+export const Cart = () => {
+  const { cartItems, removeFromCart, clearCart, subtotal, tax, shipping, total } =
+    useCart();
+
+  return (
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+        <div className={styles.cartFooter}>
+          <CartSummary
+            subtotal={subtotal}
+            tax={tax}
+            shipping={shipping}
+            total={total}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+=======
+        <div className={styles.cartFooter}>
+          <CartSummary
+            subtotal={subtotal}
+            tax={tax}
+            shipping={shipping}
+            total={total}
+          />
+          <button className={styles.clearCartButton} onClick={clearCart}>
+            Clear cart
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+>>>>>>> REPLACE
+```

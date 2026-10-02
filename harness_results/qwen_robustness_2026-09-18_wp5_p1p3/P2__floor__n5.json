@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__floor__n5",
+  "condition": "floor",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1365.4848299993319,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/slices/note.ts\n--- SEARCH ---\nexport const noteSlice = createSlice({\n  name: '@@app/note',\n  initialState,\n  reducers: {\n    addNote(state, action: PayloadAction<Note>) {\n      state.notes[action.payload.id] = action.payload\n    },\n    updateNote(state, action: PayloadAction<Note>) {\n      state.notes[action.payload.id] = action.payload\n    },\n    deleteNote(state, action: PayloadAction<string>) {\n      delete state.notes[action.payload]\n    },\n    trashNote(state, action: PayloadAction<string>) {\n      const note = state.notes[action.payload]\n      if (note) {\n        note.trash = true\n      }\n    },\n    restoreNote(state, action: PayloadAction<string>) {\n      const note = state.notes[action.payload]\n      if (note) {\n        note.trash = false\n      }\n    },\n    permanentlyDeleteNote(state, action: PayloadAction<string>) {\n      delete state.notes[action.payload]\n    },\n    emptyTrash(state) {\n      Object.values(state.notes)\n        .filter(note => note.trash)\n        .forEach(note => {\n          delete state.notes[note.id]\n        })\n    },",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

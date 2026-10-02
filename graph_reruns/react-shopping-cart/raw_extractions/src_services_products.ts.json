@@ -1,0 +1,42 @@
+{
+  "function_components": {
+    "components": []
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "axios",
+        "symbols": [
+          "axios"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "models",
+        "symbols": [
+          "IGetProductsResponse"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

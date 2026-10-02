@@ -1,0 +1,79 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer to `src/client/slices/note.ts`
+2. Add a "Restore All" button to `src/client/containers/NoteList.tsx`
+
+Let me analyze the existing patterns in the codebase based on the task description. The `emptyTrash` action likely sets `trash: true` notes to deleted, so `restoreAllTrash` should set `trash: false` on all trashed notes. The NoteList component shows an "Empty Trash" button when viewing Trash folder.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+      return {
+        ...state,
+        notes: state.notes.map((note) =>
+          note.trash ? { ...note, deleted: true } : note
+        ),
+      }
+    },
+=======
+    emptyTrash: (state) => {
+      return {
+        ...state,
+        notes: state.notes.map((note) =>
+          note.trash ? { ...note, deleted: true } : note
+        ),
+      }
+    },
+    restoreAllTrash: (state) => {
+      return {
+        ...state,
+        notes: state.notes.map((note) =>
+          note.trash ? { ...note, trash: false } : note
+        ),
+      }
+    },
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { deleteNote, pruneNotes, swapNote, swapFolder, emptyTrash } from 'slices/note'
+=======
+import { deleteNote, pruneNotes, swapNote, swapFolder, emptyTrash, restoreAllTrash } from 'slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          {activeFolder === Folder.TRASH && (
+            <button
+              className="trash-button"
+              onClick={() => {
+                dispatch(emptyTrash())
+              }}
+            >
+              {_('Empty Trash')}
+            </button>
+          )}
+=======
+          {activeFolder === Folder.TRASH && (
+            <>
+              <button
+                className="trash-button"
+                onClick={() => {
+                  dispatch(restoreAllTrash())
+                }}
+              >
+                {_('Restore All')}
+              </button>
+              <button
+                className="trash-button"
+                onClick={() => {
+                  dispatch(emptyTrash())
+                }}
+              >
+                {_('Empty Trash')}
+              </button>
+            </>
+          )}
+>>>>>>> REPLACE
+```

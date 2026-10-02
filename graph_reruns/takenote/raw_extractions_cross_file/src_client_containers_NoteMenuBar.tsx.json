@@ -1,0 +1,224 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Edit",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Eye",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Star",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Trash2",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Download",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "downloadNotesHandler"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "LastSyncedNotification",
+        "importSource": "@/components/LastSyncedNotification",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "datetime",
+            "valueExpression": "lastSynced"
+          },
+          {
+            "propName": "pending",
+            "valueExpression": "pendingSync"
+          },
+          {
+            "propName": "syncing",
+            "valueExpression": "syncing"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Loader",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"rotating-svg\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "RefreshCw",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Sun",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Moon",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "Settings",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteMenuBar",
+        "childComponent": "ClipboardCmp",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          },
+          {
+            "propName": "aria-hidden",
+            "valueExpression": "\"true\""
+          },
+          {
+            "propName": "focusable",
+            "valueExpression": "\"false\""
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

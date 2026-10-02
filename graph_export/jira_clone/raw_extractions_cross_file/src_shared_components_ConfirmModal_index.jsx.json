@@ -1,0 +1,101 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ConfirmModal",
+        "childComponent": "StyledConfirmModal",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "className",
+            "valueExpression": "className"
+          },
+          {
+            "propName": "testid",
+            "valueExpression": "\"modal:confirm\""
+          },
+          {
+            "propName": "withCloseIcon",
+            "valueExpression": "false"
+          },
+          {
+            "propName": "renderLink",
+            "valueExpression": "renderLink"
+          },
+          {
+            "propName": "renderContent",
+            "valueExpression": "modal => ( <Fragment>...</Fragment> )"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ConfirmModal",
+        "childComponent": "Title",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ConfirmModal",
+        "childComponent": "Message",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ConfirmModal",
+        "childComponent": "Actions",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ConfirmModal",
+        "childComponent": "StyledButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "variant"
+          },
+          {
+            "propName": "isWorking",
+            "valueExpression": "isWorking"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => handleConfirm(modal)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ConfirmModal",
+        "childComponent": "StyledButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "hollow",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "modal.close"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,130 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const permanentlyEmptyTrash = createAction('PERMANENTLY_EMPTY_TRASH')
+=======
+export const permanentlyEmptyTrash = createAction('PERMANENTLY_EMPTY_TRASH')
+export const restoreAllTrash = createAction('RESTORE_ALL_TRASH')
+>>>>>>> REPLACE
+
+<<<<<<< SEARCH
+    case permanentlyEmptyTrash.type: {
+      return {
+        ...state,
+        notes: state.notes.filter((note) => !note.trash),
+      }
+    }
+=======
+    case permanentlyEmptyTrash.type: {
+      return {
+        ...state,
+        notes: state.notes.filter((note) => !note.trash),
+      }
+    }
+
+    case restoreAllTrash.type: {
+      return {
+        ...state,
+        notes: state.notes.map((note) => 
+          note.trash ? { ...note, trash: false } : note
+        ),
+      }
+    }
+>>>>>>> REPLACE
+
+<<<<<<< SEARCH
+    permanentlyEmptyTrash,
+    pruneNotes,
+    searchNotes,
+    swapFolder,
+    toggleFavoriteNote,
+    updateActiveNote,
+    updateNote,
+    updateSelectedNotes,
+  },
+})
+=======
+    permanentlyEmptyTrash,
+    pruneNotes,
+    restoreAllTrash,
+    searchNotes,
+    swapFolder,
+    toggleFavoriteNote,
+    updateActiveNote,
+    updateNote,
+    updateSelectedNotes,
+  },
+})
+>>>>>>> REPLACE
+
+<<<<<<< SEARCH
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+=======
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  restoreAllTrash,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+>>>>>>> REPLACE
+
+<<<<<<< SEARCH
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+=======
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+>>>>>>> REPLACE
+
+<<<<<<< SEARCH
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            label="Empty"
+            handler={() => _permanentlyEmptyTrash()}
+          >
+            Empty Trash
+          </NoteListButton>
+        )}
+=======
+        {showEmptyTrash && (
+          <>
+            <NoteListButton
+              dataTestID={TestID.EMPTY_TRASH_BUTTON}
+              label="Empty"
+              handler={() => _permanentlyEmptyTrash()}
+            >
+              Empty Trash
+            </NoteListButton>
+            <NoteListButton
+              dataTestID="restore-all-trash-button"
+              label="Restore"
+              handler={() => _restoreAllTrash()}
+            >
+              Restore All
+            </NoteListButton>
+          </>
+        )}
+>>>>>>> REPLACE
+```

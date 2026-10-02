@@ -1,0 +1,64 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useInterval",
+        "libraryHooks": [
+          {
+            "name": "useRef",
+            "source": "react",
+            "count": 1
+          },
+          {
+            "name": "useEffect",
+            "source": "react",
+            "count": 2
+          }
+        ],
+        "customHooks": []
+      },
+      {
+        "hookName": "useKey",
+        "libraryHooks": [
+          {
+            "name": "useRef",
+            "source": "react",
+            "count": 1
+          },
+          {
+            "name": "useEffect",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": []
+      },
+      {
+        "hookName": "useBeforeUnload",
+        "libraryHooks": [
+          {
+            "name": "useRef",
+            "source": "react",
+            "count": 1
+          },
+          {
+            "name": "useEffect",
+            "source": "react",
+            "count": 2
+          }
+        ],
+        "customHooks": []
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

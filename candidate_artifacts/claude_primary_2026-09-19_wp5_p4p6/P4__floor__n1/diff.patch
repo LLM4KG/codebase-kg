@@ -1,0 +1,26 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/hooks/useCart.ts",
+      "op": "replace",
+      "search": "  return {\n    cart,\n    addToCart,\n    removeFromCart,\n    updateQuantity,\n    totalItems,\n    totalPrice,\n  };\n",
+      "content": "  const clearCart = () => {\n    setCart([]);\n  };\n\n  return {\n    cart,\n    addToCart,\n    removeFromCart,\n    updateQuantity,\n    clearCart,\n    totalItems,\n    totalPrice,\n  };\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "  const { cart, removeFromCart, updateQuantity, totalItems, totalPrice } = useCart();\n",
+      "content": "  const { cart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice } = useCart();\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "        <div className=\"cart-footer\">\n",
+      "content": "        <div className=\"cart-footer\">\n          <button className=\"clear-cart-btn\" onClick={clearCart}>\n            Clear cart\n          </button>\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

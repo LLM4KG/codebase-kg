@@ -1,0 +1,88 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Toast",
+        "childComponent": "Container",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Toast",
+        "childComponent": "TransitionGroup",
+        "importSource": "react-transition-group",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Toast",
+        "childComponent": "CSSTransition",
+        "importSource": "react-transition-group",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "classNames",
+            "valueExpression": "\"jira-toast\""
+          },
+          {
+            "propName": "timeout",
+            "valueExpression": "200"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Toast",
+        "childComponent": "StyledToast",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "toast.type"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => removeToast(toast.id)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Toast",
+        "childComponent": "CloseIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"close\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "Toast",
+        "childComponent": "Title",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Toast",
+        "childComponent": "Message",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

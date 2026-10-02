@@ -1,0 +1,44 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Recruiter",
+        "childComponent": "S.Container",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Recruiter",
+        "childComponent": "S.Thumbnail",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Recruiter",
+        "childComponent": "S.Description",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Recruiter",
+        "childComponent": "S.Flag",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

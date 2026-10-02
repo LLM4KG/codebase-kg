@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__floor__n3",
+  "condition": "floor",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1368.248737999238,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/slices/note.ts\n--- SEARCH ---\nexport const noteSlice = createSlice({\n  name: 'note',\n  initialState,\n  reducers: {\n    addNote: (state, { payload }: PayloadAction<NoteItem>) => {\n      state.notes.push(payload)\n    },\n    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {\n      const index = state.notes.findIndex((note) => note.id === payload.id)\n      if (index !== -1) {\n        state.notes[index] = payload\n      }\n    },\n    deleteNote: (state, { payload }: PayloadAction<string>) => {\n      const index = state.notes.findIndex((note) => note.id === payload)\n      if (index !== -1) {\n        state.notes.splice(index, 1)\n      }\n    },\n    setNotes: (state, { payload }: PayloadAction<NoteItem[]>) => {\n      state.notes = payload\n    },\n    setSearchQuery: (state, { payload }: PayloadAction<string>) => {\n      state.searchQuery = payload\n    },\n    setTrash: (state, { payload }: PayloadAction<boolean>) => {\n      state.trash = payload\n    },\n    setFolder: (state, { payload }: PayloadAction<string | null>) => {\n      state.folder = payload\n    },\n    setNoteId: (state, { payload }: PayloadAction<string | null>) => {\n      state.noteId = payload\n    },\n    emptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

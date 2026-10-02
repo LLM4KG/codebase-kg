@@ -1,0 +1,36 @@
+```text
+src/components/CategoryList/CategoryList.tsx
+<<<<<<< SEARCH
+  const handleAddCategory = (name: string) => {
+    if (categories.some(cat => cat.name === name)) {
+      setError('Category already exists');
+      return;
+    }
+    addCategory(name);
+  };
+
+  const handleRenameCategory = (id: string, newName: string) => {
+    if (categories.some(cat => cat.name === newName && cat.id !== id)) {
+      setError('Category already exists');
+      return;
+    }
+    renameCategory(id, newName);
+  };
+=======
+  const handleAddCategory = (name: string) => {
+    if (categories.some(cat => cat.name.toLowerCase() === name.toLowerCase())) {
+      setError('Category already exists');
+      return;
+    }
+    addCategory(name);
+  };
+
+  const handleRenameCategory = (id: string, newName: string) => {
+    if (categories.some(cat => cat.name.toLowerCase() === newName.toLowerCase() && cat.id !== id)) {
+      setError('Category already exists');
+      return;
+    }
+    renameCategory(id, newName);
+  };
+>>>>>>> REPLACE
+```

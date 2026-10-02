@@ -1,0 +1,35 @@
+```text
+src/client/containers/CategoryList.tsx
+<<<<<<< SEARCH
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+=======
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+>>>>>>> REPLACE
+
+src/client/containers/CategoryList.tsx
+<<<<<<< SEARCH
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+=======
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+>>>>>>> REPLACE
+```

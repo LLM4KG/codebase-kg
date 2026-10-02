@@ -1,0 +1,35 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "PageLoader",
+        "childComponent": "StyledPageLoader",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "PageLoader",
+        "childComponent": "Spinner",
+        "importSource": "shared/components/Spinner",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "70"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

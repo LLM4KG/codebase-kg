@@ -1,0 +1,57 @@
+# Task P6 — TakeNote bug-fix: duplicate category names that differ only in case
+#
+# Exercises: bug_fix Cypher template (anchor CategoryList)
+# Project:   TakeNote. The test builds a Redux store, but the fix is string
+#            logic inside one component; no Redux knowledge is needed.
+# Statement names a path: no (component name only; path policy,
+#            docs/decision-log.md 2026-09-18)
+
+task_id: P6
+project_id: takenote
+project_repo: https://github.com/taniarascia/takenote
+git_commit: e0eddbb9a21ae4cf4c4c7c183f29cfd666e08331
+task_type: bug_fix
+
+spec: >
+  Category names are supposed to be unique, but `CategoryList` only rejects a
+  duplicate when the case matches exactly: with a category "Work" already
+  present, the user can still create a new category called "work" or "WORK",
+  or rename another category to it. Make the duplicate check
+  case-insensitive, both when adding a category and when renaming one.
+
+# Anchor components the classifier should extract from the spec:
+expected_anchors:
+  anchor_names:
+    - CategoryList       # the container holding both submit handlers
+  anchor_routes: []
+
+# Reference solution
+reference_patch: patches/P6.diff
+
+# Test file — placed in project before candidate diff is applied.
+# The harness runs: npx jest --config config/jest.config.js --testPathPattern=P6_category_case_insensitive
+test_files:
+  - tests/unit/client/containers/P6_category_case_insensitive.test.tsx
+
+# Files the reference patch modifies (for retrieval recall computation)
+files_modified:
+  - src/client/containers/CategoryList.tsx
+
+# Adversarial notes (for thesis documentation):
+# - Tests written BEFORE reference patch (adversarial mode).
+# - Drives the real CategoryList against a real store (rootReducer) and checks
+#   the store's category names: adding "work" and "  WORK  " is rejected,
+#   adding "Personal" is accepted; renaming "Home" to "work" is rejected,
+#   renaming it to "Personal" is accepted. The two accepting cases guard
+#   against a fix that rejects everything.
+# - Unpatched code fails the three rejecting cases.
+# - Valid alternatives: toLowerCase/toUpperCase on both sides, localeCompare
+#   with sensitivity 'base', a shared helper, or a reducer-level check in the
+#   category slice (needs Redux knowledge; record which each candidate does).
+# - Known edge, not tested: after the reference fix, renaming a category to a
+#   case variant of its own name ("Home" -> "home") is rejected, because the
+#   check also matches the category itself. That was already true of an
+#   unchanged name before the fix.
+# - WP4b: the KG has no HAS_HANDLER edges for onSubmitNewCategory /
+#   onSubmitUpdateCategory (passed as props, not bound to DOM events), so the
+#   KG context names the right component but not the functions to change.

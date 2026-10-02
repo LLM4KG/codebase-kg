@@ -1,0 +1,322 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+Category names are supposed to be unique, but `CategoryList` only rejects a duplicate when the case matches exactly: with a category "Work" already present, the user can still create a new category called "work" or "WORK", or rename another category to it. Make the duplicate check case-insensitive, both when adding a category and when renaming one.
+
+## Project Context
+
+You are working on the **takenote** React project.
+
+**Task type:** bug_fix
+
+---
+
+### Target Components
+
+
+#### category (`src/client/slices/category.ts`)
+
+
+```jsx
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import { CategoryItem, CategoryState } from '@/types'
+
+const _swapCategories = (categories: CategoryItem[], categoryId: number, destinationId: number) => {
+  const newCategories = [...categories]
+  newCategories.splice(categoryId, 1)
+  newCategories.splice(destinationId, 0, categories[categoryId])
+
+  return newCategories
+}
+
+export const initialState: CategoryState = {
+  categories: [],
+  editingCategory: {
+    id: '',
+    tempName: '',
+  },
+  error: '',
+  loading: true,
+}
+
+const categorySlice = createSlice({
+  name: 'category',
+  initialState,
+  reducers: {
+    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories.push(payload)
+    },
+
+    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {
+      const categoryNames = new Map<string, string>()
+      state.categories.forEach(({ name }) => categoryNames.set(name, name))
+
+      // Make sure duplicate category is not added
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))
+
+      state.categories.push(...toAdd)
+    },
+
+    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories = state.categories.map((category) =>
+        category.id === payload.id ? { ...category, name: payload.name } : category
+      )
+    },
+
+    deleteCategory: (state, { payload }: PayloadAction<string>) => {
+      state.categories = state.categories.filter((category) => category.id !== payload)
+    },
+
+    categoryDragEnter: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories = state.categories.map((category) =>
+        category.id === payload.id ? { ...category, draggedOver: true } : category
+      )
+    },
+
+    categoryDragLeave: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories = state.categories.map((category) =>
+        category.id === payload.id ? { ...category, draggedOver: false } : category
+      )
+    },
+
+    swapCategories: (
+      state,
+      { payload }: PayloadAction<{ categoryId: number; destinationId: number }>
+    ) => {
+      state.categories = _swapCategories(
+        state.categories,
+        payload.categoryId,
+        payload.destinationId
+      )
+    },
+
+    setCategoryEdit: (state, { payload }: PayloadAction<{ id: string; tempName: string }>) => {
+      state.editingCategory = payload
+    },
+
+    loadCategories: (state) => {
+      state.loading = true
+    },
+
+    loadCategoriesError: (state, { payload }: PayloadAction<string>) => {
+      state.loading = false
+      state.error = payload
+    },
+
+    loadCategoriesSuccess: (state, { payload }: PayloadAction<CategoryItem[]>) => {
+      state.categories = payload
+      state.loading = false
+    },
+  },
+})
+
+export const {
+  addCategory,
+  categoryDragEnter,
+  categoryDragLeave,
+  swapCategories,
+  deleteCategory,
+  loadCategories,
+  loadCategoriesError,
+  loadCategoriesSuccess,
+  updateCategory,
+  setCategoryEdit,
+  importCategories,
+} = categorySlice.actions
+
+export default categorySlice.reducer
+
+```
+
+
+
+
+
+
+
+
+#### LabelText (`src/resources/LabelText.ts`)
+
+
+```jsx
+// Default Labels
+export enum LabelText {
+  ADD_CATEGORY = 'Add category',
+  COLLAPSE_CATEGORY = 'Collapse Category List',
+  NOTES = 'Notes',
+  CREATE_NEW_NOTE = 'Create new note',
+  DELETE_PERMANENTLY = 'Delete permanently',
+  DOWNLOAD = 'Download',
+  FAVORITES = 'Favorites',
+  SCRATCHPAD = 'Scratchpad',
+  MARK_AS_FAVORITE = 'Mark as favorite',
+  MOVE_TO_TRASH = 'Move to trash',
+  NEW_CATEGORY = 'New category...',
+  NEW_NOTE = 'New note',
+  REMOVE_CATEGORY = 'Remove category',
+  REMOVE_FAVORITE = 'Remove favorite',
+  MOVE_CATEGORY = 'Move category',
+  RESTORE_FROM_TRASH = 'Restore from trash',
+  SETTINGS = 'Settings',
+  SYNC_NOTES = 'Sync notes',
+  TRASH = 'Trash',
+  WELCOME_TO_TAKENOTE = 'Welcome to Takenote!',
+  RENAME = 'Rename category',
+  ADD_CONTENT_NOTE = 'Please add content to this new note to access the menu options.',
+  DOWNLOAD_ALL_NOTES = 'Download all notes',
+  BACKUP_ALL_NOTES = 'Export backup',
+  IMPORT_BACKUP = 'Import backup',
+  TOGGLE_FAVORITE = 'Toggle favorite',
+  COPY_REFERENCE_TO_NOTE = 'Copy reference to note',
+}
+
+```
+
+
+
+
+
+
+
+
+#### TempStateContext (`src/client/contexts/TempStateContext.tsx`)
+
+
+```tsx
+import React, { createContext, FunctionComponent, useContext, useState } from 'react'
+
+interface TempStateContextInterface {
+  addingTempCategory: boolean
+  setAddingTempCategory(adding: boolean): void
+}
+
+const initialContextValue = {
+  addingTempCategory: false,
+  setAddingTempCategory: (adding: boolean) => undefined,
+}
+
+const TempStateContext = createContext<TempStateContextInterface>(initialContextValue)
+
+const useTempState = () => {
+  const context = useContext(TempStateContext)
+
+  if (!context) {
+    throw new Error('useTempState must be used within a TempStateContext')
+  }
+
+  return context
+}
+
+const TempStateProvider: FunctionComponent = ({ children }) => {
+  const [addingTempCategory, setAddingTempCategory] = useState(false)
+
+  const value: TempStateContextInterface = {
+    addingTempCategory,
+    setAddingTempCategory,
+  }
+
+  return <TempStateContext.Provider value={value}>{children}</TempStateContext.Provider>
+}
+
+export { TempStateProvider, useTempState }
+
+```
+
+
+
+
+
+
+
+
+#### AddCategoryButton (`src/client/components/AppSidebar/AddCategoryButton.tsx`)
+
+
+```tsx
+import React from 'react'
+import { Plus } from 'react-feather'
+
+import { iconColor } from '@/utils/constants'
+
+export interface AddCategoryButtonProps {
+  dataTestID: string
+  handler: (adding: boolean) => void
+  label: string
+}
+
+export const AddCategoryButton: React.FC<AddCategoryButtonProps> = ({
+  dataTestID,
+  handler,
+  label,
+}) => {
+  return (
+    <button
+      data-testid={dataTestID}
+      className="category-button"
+      onClick={() => handler(true)}
+      aria-label={label}
+    >
+      <Plus size={16} color={iconColor} />
+    </button>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### history (`src/client/utils/history.ts`)
+
+
+```jsx
+import { createBrowserHistory } from 'history'
+
+export default createBrowserHistory()
+
+```
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

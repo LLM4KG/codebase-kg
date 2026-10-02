@@ -1,0 +1,51 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "Search",
+        "syntax": "arrow",
+        "usesHooks": false,
+        "hookDetails": [],
+        "returnsJSX": true,
+        "exportType": "default"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "searchTerm",
+        "componentName": "Search",
+        "type": "unknown",
+        "isRequired": null
+      }
+    ],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

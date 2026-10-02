@@ -1,0 +1,27 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useOnEscapeKeyDown",
+        "libraryHooks": [
+          {
+            "name": "useEffect",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": []
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

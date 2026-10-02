@@ -1,0 +1,33 @@
+{
+  "candidate_id": "P4__whole_file__n4",
+  "run_id": "claude_primary_2026-09-19_wp5_p4p6",
+  "run_name": "claude_primary",
+  "task_id": "P4",
+  "project_name": "react-shopping-cart",
+  "condition": "whole_file",
+  "index": 4,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "timestamp": "2026-09-19T15:54:52.889709+00:00",
+  "retrieval_token_count": 599,
+  "generator_usage": {
+    "input_tokens": 2160,
+    "output_tokens": 766
+  },
+  "generator_latency_ms": 14763.252964001367,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": "exact_unique",
+  "apply_reason": null,
+  "edit_count": 5,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "oracle_files_read": [
+      "src/contexts/cart-context/useCartProducts.ts",
+      "src/contexts/cart-context/useCart.ts",
+      "src/components/Cart/Cart.tsx"
+    ],
+    "oracle_files_absent": []
+  }
+}

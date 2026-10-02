@@ -1,0 +1,15 @@
+{
+  "task_id": "P4",
+  "candidate_id": "P4__floor__n5",
+  "condition": "floor",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1294.7316250010772,
+  "timeout_used_ms": 13072,
+  "stage_detail": "apply_edits: no such file: src/hooks/useCart.ts",
+  "apply_mode": null,
+  "apply_reason": "file_not_found"
+}

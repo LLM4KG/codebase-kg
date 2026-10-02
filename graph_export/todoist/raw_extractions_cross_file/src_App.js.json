@@ -1,0 +1,53 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "App",
+        "childComponent": "SelectedProjectProvider",
+        "importSource": "./context",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "ProjectsProvider",
+        "importSource": "./context",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Header",
+        "importSource": "./components/layout/Header",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "darkMode",
+            "valueExpression": "darkMode"
+          },
+          {
+            "propName": "setDarkMode",
+            "valueExpression": "setDarkMode"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Content",
+        "importSource": "./components/layout/Content",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

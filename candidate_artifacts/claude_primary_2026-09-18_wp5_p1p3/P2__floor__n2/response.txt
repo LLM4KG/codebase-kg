@@ -1,0 +1,71 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer to `src/client/slices/note.ts`
+2. Add a "Restore All" button to `src/client/containers/NoteList.tsx`
+
+Let me analyze the existing patterns in these files.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const { emptyTrash } = noteSlice.actions
+=======
+  const { emptyTrash, restoreAllTrash } = noteSlice.actions
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          {activeFolder === Folder.TRASH && (
+            <button
+              className="trash-button"
+              onClick={() => dispatch(emptyTrash())}
+            >
+              <Icon size={15} icon={deletePermanently} />
+              Empty Trash
+            </button>
+          )}
+=======
+          {activeFolder === Folder.TRASH && (
+            <>
+              <button
+                className="trash-button"
+                onClick={() => dispatch(restoreAllTrash())}
+              >
+                <Icon size={15} icon={restoreFromTrash} />
+                Restore All
+              </button>
+              <button
+                className="trash-button"
+                onClick={() => dispatch(emptyTrash())}
+              >
+                <Icon size={15} icon={deletePermanently} />
+                Empty Trash
+              </button>
+            </>
+          )}
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { deletePermanently } from 'react-icons-kit/fa/deletePermanently'
+=======
+import { deletePermanently } from 'react-icons-kit/fa/deletePermanently'
+import { restoreFromTrash } from 'react-icons-kit/fa/restoreFromTrash'
+>>>>>>> REPLACE
+```

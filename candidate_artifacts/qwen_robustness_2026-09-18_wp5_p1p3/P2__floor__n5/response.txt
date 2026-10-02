@@ -1,0 +1,163 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote(state, action: PayloadAction<Note>) {
+      state.notes[action.payload.id] = action.payload
+    },
+    updateNote(state, action: PayloadAction<Note>) {
+      state.notes[action.payload.id] = action.payload
+    },
+    deleteNote(state, action: PayloadAction<string>) {
+      delete state.notes[action.payload]
+    },
+    trashNote(state, action: PayloadAction<string>) {
+      const note = state.notes[action.payload]
+      if (note) {
+        note.trash = true
+      }
+    },
+    restoreNote(state, action: PayloadAction<string>) {
+      const note = state.notes[action.payload]
+      if (note) {
+        note.trash = false
+      }
+    },
+    permanentlyDeleteNote(state, action: PayloadAction<string>) {
+      delete state.notes[action.payload]
+    },
+    emptyTrash(state) {
+      Object.values(state.notes)
+        .filter(note => note.trash)
+        .forEach(note => {
+          delete state.notes[note.id]
+        })
+    },
+=======
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote(state, action: PayloadAction<Note>) {
+      state.notes[action.payload.id] = action.payload
+    },
+    updateNote(state, action: PayloadAction<Note>) {
+      state.notes[action.payload.id] = action.payload
+    },
+    deleteNote(state, action: PayloadAction<string>) {
+      delete state.notes[action.payload]
+    },
+    trashNote(state, action: PayloadAction<string>) {
+      const note = state.notes[action.payload]
+      if (note) {
+        note.trash = true
+      }
+    },
+    restoreNote(state, action: PayloadAction<string>) {
+      const note = state.notes[action.payload]
+      if (note) {
+        note.trash = false
+      }
+    },
+    permanentlyDeleteNote(state, action: PayloadAction<string>) {
+      delete state.notes[action.payload]
+    },
+    emptyTrash(state) {
+      Object.values(state.notes)
+        .filter(note => note.trash)
+        .forEach(note => {
+          delete state.notes[note.id]
+        })
+    },
+    restoreAllTrash(state) {
+      Object.values(state.notes)
+        .filter(note => note.trash)
+        .forEach(note => {
+          note.trash = false
+        })
+    },
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+              {isTrash && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleEmptyTrash}
+                >
+                  Empty Trash
+                </Button>
+              )}
+=======
+              {isTrash && (
+                <>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleRestoreAll}
+                    style={{ marginRight: '10px' }}
+                  >
+                    Restore All
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleEmptyTrash}
+                  >
+                    Empty Trash
+                  </Button>
+                </>
+              )}
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  fetchNotes,
+  selectNotes,
+  emptyTrash,
+  Note,
+} from '../slices/note'
+=======
+import {
+  fetchNotes,
+  selectNotes,
+  emptyTrash,
+  restoreAllTrash,
+  Note,
+} from '../slices/note'
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const dispatch = useAppDispatch()
+
+  const handleEmptyTrash = () => {
+    dispatch(emptyTrash())
+  }
+
+  useEffect(() => {
+=======
+  const dispatch = useAppDispatch()
+
+  const handleEmptyTrash = () => {
+    dispatch(emptyTrash())
+  }
+
+  const handleRestoreAll = () => {
+    dispatch(restoreAllTrash())
+  }
+
+  useEffect(() => {
+>>>>>>> REPLACE
+```

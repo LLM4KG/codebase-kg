@@ -1,0 +1,27 @@
+```text
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  const { products, setProducts } = useCartContext();
+  const { updateCartTotal } = useCartTotal();
+
+  const updateQuantitySafely = (
+    currentProduct: ICartProduct,
+    targetProduct: ICartProduct,
+    quantity: number
+  ): ICartProduct => {
+=======
+  const { products, setProducts } = useCartContext();
+  const { updateCartTotal } = useCartTotal();
+
+  const clearCart = () => {
+    setProducts([]);
+    updateCartTotal([]);
+  };
+
+  const updateQuantitySafely = (
+    currentProduct: ICartProduct,
+    targetProduct: ICartProduct,
+    quantity: number
+  ): ICartProduct => {
+>>>>>>> REPLACE
+```

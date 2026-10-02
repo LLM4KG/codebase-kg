@@ -16,10 +16,15 @@ spec: >
   `decreaseProductQuantity` so that when a product's quantity would drop to
   zero or below, the product is removed from the cart entirely instead.
 
-# Anchor components the classifier should extract from the spec:
+# Anchor components the classifier should extract from the spec.
+# Documentation only: no code reads this field (WP8, 2026-09-21).
+# Corrected 2026-09-21 (WP8): was `CartProduct`, the UI component that calls
+# decreaseProductQuantity. The reference patch edits useCartProducts.ts, so the
+# hook — which is what the classifier extracted on all 10 WP5 candidates — is the
+# correct anchor and the previous value was wrong against the patch.
 expected_anchors:
   anchor_names:
-    - CartProduct        # the UI component that calls decreaseProductQuantity
+    - useCartProducts    # the hook that defines decreaseProductQuantity
   anchor_routes: []      # Shopping Cart has no React Router
 
 # Reference solution

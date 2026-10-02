@@ -1,0 +1,19 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useState } from 'react';\n\nexport const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {\n  const [copiedText, setCopiedText] = useState<string | null>(null);\n\n  const handleCopy = async (text: string) => {\n    try {\n      await navigator.clipboard.writeText(text);\n      setCopiedText(successMessage);\n      \n      setTimeout(() => {\n        setCopiedText(null);\n      }, timeout);\n    } catch (err) {\n      console.error('Failed to copy text: ', err);\n    }\n  };\n\n  return { copiedText, handleCopy };\n};\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import React, { useState, useEffect } from 'react';\nimport { MenuBar } from '../components/MenuBar';\nimport { MenuItem } from '../components/MenuItem';\nimport { useNoteContext } from '../contexts/NoteContext';\n\nexport const NoteMenuBar: React.FC = () => {\n  const { note } = useNoteContext();\n  const [copied, setCopied] = useState<string | null>(null);\n\n  useEffect(() => {\n    if (copied) {\n      const timer = setTimeout(() => {\n        setCopied(null);\n      }, 3000);\n      return () => clearTimeout(timer);\n    }\n  }, [copied]);\n\n  const copyToClipboard = async (text: string) => {\n    try {\n      await navigator.clipboard.writeText(text);\n      setCopied('Copied!');\n    } catch (err) {\n      console.error('Failed to copy text: ', err);\n    }\n  };\n\n  return (\n    <MenuBar>\n      <MenuItem \n        onClick={() => note && copyToClipboard(note.content)}\n        disabled={!note}\n      >\n        {copied || 'Copy Note'}\n      </MenuItem>\n    </MenuBar>\n  );\n};\n",
+      "content": "import React from 'react';\nimport { MenuBar } from '../components/MenuBar';\nimport { MenuItem } from '../components/MenuItem';\nimport { useNoteContext } from '../contexts/NoteContext';\nimport { useCopyToClipboard } from '../utils/useCopyToClipboard';\n\nexport const NoteMenuBar: React.FC = () => {\n  const { note } = useNoteContext();\n  const { copiedText, handleCopy } = useCopyToClipboard('Copied!');\n\n  return (\n    <MenuBar>\n      <MenuItem \n        onClick={() => note && handleCopy(note.content)}\n        disabled={!note}\n      >\n        {copiedText || 'Copy Note'}\n      </MenuItem>\n    </MenuBar>\n  );\n};\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__bm25_matched__n2",
+  "condition": "bm25_matched",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1340.6534919995465,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/slices/note.ts\n--- SEARCH ---\n    emptyTrash: (state) => {",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

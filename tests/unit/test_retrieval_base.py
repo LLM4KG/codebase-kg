@@ -154,6 +154,27 @@ reasoning = false
             assert cfg.condition_id == name
             assert cfg.retriever == name
 
+    def test_hardened_kg_condition_differs_only_in_anchor_resolution(self):
+        """kg_augmented_hardened is kg_augmented plus one retriever_param (WP8).
+
+        It is the one committed condition whose `retriever` is not its `condition_id`:
+        both arms are the same retriever class, and that is the point — the published
+        arm must stay byte-identical while the hardened one is measured beside it.
+        """
+        conditions_dir = Path("conditions") / "base"
+        if not conditions_dir.exists():
+            pytest.skip("conditions/base not present")
+
+        base = RetrievalConditionConfig(**_load_toml(conditions_dir / "kg_augmented.toml"))
+        hardened = RetrievalConditionConfig(**_load_toml(conditions_dir / "kg_augmented_hardened.toml"))
+
+        assert base.retriever_params.get("anchor_resolution") is None  # defaults to strict
+        assert hardened.condition_id == "kg_augmented_hardened"
+        assert hardened.retriever == base.retriever == "kg_augmented"
+        assert hardened.format_variant == base.format_variant
+        assert hardened.max_rounds == base.max_rounds
+        assert hardened.retriever_params == {"anchor_resolution": "hardened"}
+
 
 def _load_toml(path: Path) -> dict:
     import sys

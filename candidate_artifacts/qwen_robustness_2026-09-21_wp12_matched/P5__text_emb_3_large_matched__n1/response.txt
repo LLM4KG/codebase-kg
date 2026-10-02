@@ -1,0 +1,121 @@
+```text
+src/components/Cart/CartProducts/CartProduct/CartProduct.tsx
+<<<<<<< SEARCH
+import formatPrice from 'utils/formatPrice';
+import { ICartProduct } from 'models';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+interface IProps {
+  product: ICartProduct;
+}
+const CartProduct = ({ product }: IProps) => {
+  const { removeProduct, increaseProductQuantity, decreaseProductQuantity } =
+    useCart();
+  const {
+    sku,
+    title,
+=======
+import formatPrice from 'utils/formatPrice';
+import { ICartProduct } from 'models';
+
+import * as S from './style';
+
+interface IProps {
+  product: ICartProduct;
+  onRemove: (product: ICartProduct) => void;
+  onIncrease: (product: ICartProduct) => void;
+  onDecrease: (product: ICartProduct) => void;
+}
+const CartProduct = ({ product, onRemove, onIncrease, onDecrease }: IProps) => {
+  const {
+    sku,
+    title,
+>>>>>>> REPLACE
+
+### Continue generating the solution using the same format and conventions.
+
+src/components/Cart/CartProducts/CartProduct/CartProduct.tsx
+<<<<<<< SEARCH
+  } = product;
+
+  const handleRemoveProduct = () => removeProduct(product);
+  const handleIncreaseProductQuantity = () => increaseProductQuantity(product);
+  const handleDecreaseProductQuantity = () => decreaseProductQuantity(product);
+
+  return (
+    <S.Container>
+=======
+  } = product;
+
+  const handleRemoveProduct = () => onRemove(product);
+  const handleIncreaseProductQuantity = () => onIncrease(product);
+  const handleDecreaseProductQuantity = () => onDecrease(product);
+
+  return (
+    <S.Container>
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts/CartProducts.tsx
+<<<<<<< SEARCH
+import CartProduct from './CartProduct';
+
+import * as S from './style';
+import { ICartProduct } from 'models';
+
+const CartProducts = () => {
+  const { products } = useCart();
+
+  return (
+    <S.Container>
+      {products.length > 0 ? (
+        products.map((product: ICartProduct) => (
+          <CartProduct key={product.sku} product={product} />
+        ))
+      ) : (
+        <S.CartEmpty>
+          <S.CartEmptyText>Your cart is empty</S.CartEmptyText>
+        </S.CartEmpty>
+      )}
+    </S.Container>
+  );
+};
+
+export default CartProducts;
+=======
+import CartProduct from './CartProduct';
+
+import * as S from './style';
+import { ICartProduct } from 'models';
+import { useCart } from 'contexts/cart-context';
+
+const CartProducts = () => {
+  const { products } = useCart();
+  const { removeProduct, increaseProductQuantity, decreaseProductQuantity } = useCart();
+
+  return (
+    <S.Container>
+      {products.length > 0 ? (
+        products.map((product: ICartProduct) => (
+          <CartProduct 
+            key={product.sku} 
+            product={product}
+            onRemove={removeProduct}
+            onIncrease={increaseProductQuantity}
+            onDecrease={decreaseProductQuantity}
+          />
+        ))
+      ) : (
+        <S.CartEmpty>
+          <S.CartEmptyText>Your cart is empty</S.CartEmptyText>
+        </S.CartEmpty>
+      )}
+    </S.Container>
+  );
+};
+
+export default CartProducts;
+>>>>>>> REPLACE
+```

@@ -1,0 +1,786 @@
+[
+  [
+    {
+      "name": "@reduxjs/toolkit",
+      "version": "^1.4.0",
+      "category": "state-management"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "axios",
+      "version": "^0.21.1",
+      "category": "utility"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "clipboard-polyfill",
+      "version": "^3.0.1",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "codemirror",
+      "version": "^5.58.1",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "compression",
+      "version": "^1.7.4",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "cookie-parser",
+      "version": "^1.4.5",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "cors",
+      "version": "^2.8.5",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "dayjs",
+      "version": "^1.9.3",
+      "category": "utility"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "express",
+      "version": "^4.17.1",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "helmet",
+      "version": "^4.1.1",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "jszip",
+      "version": "^3.5.0",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "mousetrap",
+      "version": "^1.6.5",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "mousetrap-global-bind",
+      "version": "^1.1.0",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "path-browserify",
+      "version": "^1.0.1",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "prettier",
+      "version": "^2.1.2",
+      "category": "build-tool"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "process",
+      "version": "^0.11.10",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react",
+      "version": "^16.14.0",
+      "category": "framework"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-beautiful-dnd",
+      "version": "^13.0.0",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-codemirror2",
+      "version": "^7.2.1",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-device-detect",
+      "version": "^1.14.0",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-dom",
+      "version": "^16.14.0",
+      "category": "framework"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-feather",
+      "version": "^2.0.8",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-helmet-async",
+      "version": "^1.0.7",
+      "category": "utility"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-markdown",
+      "version": "^4.3.1",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-redux",
+      "version": "^7.2.1",
+      "category": "state-management"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-router-dom",
+      "version": "^5.2.0",
+      "category": "routing"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-split-pane",
+      "version": "^0.1.92",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "redux",
+      "version": "^4.0.5",
+      "category": "state-management"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "redux-saga",
+      "version": "^1.1.3",
+      "category": "state-management"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "stream-browserify",
+      "version": "^3.0.0",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "unist-util-visit",
+      "version": "^2.0.3",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "uuid",
+      "version": "^8.3.1",
+      "category": "utility"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "@cypress/webpack-preprocessor",
+      "version": "^5.4.8",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@testing-library/cypress",
+      "version": "^7.0.1",
+      "category": "testing"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@testing-library/jest-dom",
+      "version": "^5.11.4",
+      "category": "testing"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@testing-library/react",
+      "version": "^11.1.0",
+      "category": "testing"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/axios",
+      "version": "^0.14.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/codemirror",
+      "version": "0.0.98",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/compression",
+      "version": "^1.7.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/cookie-parser",
+      "version": "^1.4.2",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/cors",
+      "version": "^2.8.8",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/express",
+      "version": "^4.17.8",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/faker",
+      "version": "^5.1.2",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/helmet",
+      "version": "0.0.48",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/jest",
+      "version": "^26.0.14",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/jszip",
+      "version": "^3.4.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/lodash",
+      "version": "^4.14.162",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/node",
+      "version": "^14.11.8",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/prettier",
+      "version": "^2.1.3",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/react",
+      "version": "^16.9.52",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/react-beautiful-dnd",
+      "version": "^13.0.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/react-dom",
+      "version": "^16.9.8",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/react-helmet-async",
+      "version": "^1.0.3",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/react-redux",
+      "version": "^7.1.9",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/react-router",
+      "version": "^5.1.8",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/react-router-dom",
+      "version": "^5.1.6",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/testing-library__cypress",
+      "version": "^5.0.8",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/uuid",
+      "version": "^8.3.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "version": "^4.4.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@typescript-eslint/parser",
+      "version": "^4.4.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "clean-webpack-plugin",
+      "version": "^3.0.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "clipboardy",
+      "version": "^2.3.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "concurrently",
+      "version": "^5.3.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "copy-webpack-plugin",
+      "version": "^6.2.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "coveralls",
+      "version": "^3.1.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "cross-env",
+      "version": "^7.0.2",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "css-loader",
+      "version": "^5.0.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "css-minimizer-webpack-plugin",
+      "version": "^1.1.5",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "cypress",
+      "version": "^5.4.0",
+      "category": "testing"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "cypress-file-upload",
+      "version": "^4.1.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "dotenv",
+      "version": "^8.2.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "eslint",
+      "version": "^7.11.0",
+      "category": "build-tool"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "eslint-config-prettier",
+      "version": "^6.13.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "eslint-import-resolver-alias",
+      "version": "^1.1.2",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "eslint-plugin-import",
+      "version": "^2.22.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "eslint-plugin-prettier",
+      "version": "^3.1.4",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "eslint-plugin-react",
+      "version": "^7.21.4",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "faker",
+      "version": "^5.1.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "html-webpack-plugin",
+      "version": "^5.0.0-alpha.7",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "husky",
+      "version": "^4.3.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "image-webpack-loader",
+      "version": "^7.0.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "jest",
+      "version": "^26.5.3",
+      "category": "testing"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "jest-extended",
+      "version": "^0.11.5",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "jest-raw-loader",
+      "version": "^1.0.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "lint-staged",
+      "version": "^10.4.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "mini-css-extract-plugin",
+      "version": "^1.0.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "node-sass",
+      "version": "^4.14.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "nodemon",
+      "version": "^2.0.5",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "sass-loader",
+      "version": "^10.0.3",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "style-loader",
+      "version": "^2.0.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "ts-jest",
+      "version": "^26.4.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "ts-loader",
+      "version": "^8.0.5",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "ts-node",
+      "version": "^9.0.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "typescript",
+      "version": "^4.0.3",
+      "category": "build-tool"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "webpack",
+      "version": "^5.1.3",
+      "category": "build-tool"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "webpack-cli",
+      "version": "^4.0.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "webpack-dev-server",
+      "version": "^3.11.0",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "webpack-merge",
+      "version": "^5.2.0",
+      "category": "other"
+    },
+    "development"
+  ]
+]

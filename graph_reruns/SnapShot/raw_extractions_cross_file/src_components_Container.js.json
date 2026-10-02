@@ -1,0 +1,43 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Container",
+        "childComponent": "Loader",
+        "importSource": "./Loader",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Container",
+        "childComponent": "Gallery",
+        "importSource": "./Gallery",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "data",
+            "valueExpression": "images"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": [
+      {
+        "consumerName": "Container",
+        "consumerType": "function_component",
+        "contextName": "PhotoContext",
+        "contextSource": "../context/PhotoContext",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

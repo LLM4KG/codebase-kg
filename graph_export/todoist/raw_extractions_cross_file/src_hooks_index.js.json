@@ -1,0 +1,48 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useTasks",
+        "libraryHooks": [
+          {
+            "name": "useState",
+            "source": "react",
+            "count": 2
+          },
+          {
+            "name": "useEffect",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": []
+      },
+      {
+        "hookName": "useProjects",
+        "libraryHooks": [
+          {
+            "name": "useState",
+            "source": "react",
+            "count": 1
+          },
+          {
+            "name": "useEffect",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": []
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "task_id": "P5",
+  "candidate_id": "P5__text_emb_3_large_matched__n1",
+  "condition": "text_emb_3_large_matched",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1165.0044269990758,
+  "timeout_used_ms": 12653,
+  "stage_detail": "apply_edits: SEARCH text not found in src/components/Cart/CartProducts/CartProducts.tsx\n--- SEARCH ---\nimport CartProduct from './CartProduct';\n\nimport * as S from './style';\nimport { ICartProduct } from 'models';\n\nconst CartProducts = () => {\n  const { products } = useCart();\n\n  return (\n    <S.Container>\n      {products.length > 0 ? (\n        products.map((product: ICartProduct) => (\n          <CartProduct key={product.sku} product={product} />\n        ))\n      ) : (\n        <S.CartEmpty>\n          <S.CartEmptyText>Your cart is empty</S.CartEmptyText>\n        </S.CartEmpty>\n      )}\n    </S.Container>\n  );\n};\n\nexport default CartProducts;",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

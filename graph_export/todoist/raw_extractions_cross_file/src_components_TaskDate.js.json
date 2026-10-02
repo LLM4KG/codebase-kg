@@ -1,0 +1,37 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "TaskDate",
+        "childComponent": "FaSpaceShuttle",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TaskDate",
+        "childComponent": "FaSun",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TaskDate",
+        "childComponent": "FaRegPaperPlane",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

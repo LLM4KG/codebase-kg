@@ -1,0 +1,114 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "AddCategoryForm",
+        "syntax": "arrow",
+        "usesHooks": false,
+        "hookDetails": [],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "dataTestID",
+        "componentName": "AddCategoryForm",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "submitHandler",
+        "componentName": "AddCategoryForm",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "changeHandler",
+        "componentName": "AddCategoryForm",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "resetHandler",
+        "componentName": "AddCategoryForm",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "editingCategoryId",
+        "componentName": "AddCategoryForm",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "tempCategoryName",
+        "componentName": "AddCategoryForm",
+        "type": "string",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "submitHandler",
+        "eventType": "onSubmit",
+        "componentName": "AddCategoryForm",
+        "isInline": false
+      },
+      {
+        "name": "inline_onChange",
+        "eventType": "onChange",
+        "componentName": "AddCategoryForm",
+        "isInline": true
+      },
+      {
+        "name": "inline_onBlur",
+        "eventType": "onBlur",
+        "componentName": "AddCategoryForm",
+        "isInline": true
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@resources/TestID",
+        "symbols": [
+          "TestID"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@/types",
+        "symbols": [
+          "ReactSubmitEvent"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

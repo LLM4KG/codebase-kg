@@ -1,0 +1,315 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+Category names are supposed to be unique, but `CategoryList` only rejects a duplicate when the case matches exactly: with a category "Work" already present, the user can still create a new category called "work" or "WORK", or rename another category to it. Make the duplicate check case-insensitive, both when adding a category and when renaming one.
+
+## Project Context
+
+You are working on the **takenote** React project.
+
+**Task type:** bug_fix
+
+---
+
+### Target Components
+
+
+#### CategoryList (`src/client/containers/CategoryList.tsx`)
+
+
+```tsx
+import React, { useRef, useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { v4 as uuid } from 'uuid'
+import { Droppable } from 'react-beautiful-dnd'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { CategoryOption } from '@/containers/CategoryOption'
+import { getCategories } from '@/selectors'
+import { shouldOpenContextMenu } from '@/utils/helpers'
+import { ReactMouseEvent, ReactSubmitEvent, CategoryItem } from '@/types'
+import { useTempState } from '@/contexts/TempStateContext'
+import { setCategoryEdit, updateCategory, addCategory } from '@/slices/category'
+import { AddCategoryForm } from '@/components/AppSidebar/AddCategoryForm'
+import { AddCategoryButton } from '@/components/AppSidebar/AddCategoryButton'
+import { CollapseCategoryListButton } from '@/components/AppSidebar/CollapseCategoryButton'
+
+export const CategoryList: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const {
+    categories,
+    editingCategory: { id: editingCategoryId, tempName: tempCategoryName },
+  } = useSelector(getCategories)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _setCategoryEdit = (categoryId: string, tempName: string) =>
+    dispatch(setCategoryEdit({ id: categoryId, tempName }))
+  const _updateCategory = (category: CategoryItem) => dispatch(updateCategory(category))
+  const _addCategory = (category: CategoryItem) => dispatch(addCategory(category))
+
+  // ===========================================================================
+  // Refs
+  // ===========================================================================
+
+  const contextMenuRef = useRef<HTMLDivElement>(null)
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [optionsId, setOptionsId] = useState('')
+  const [optionsPosition, setOptionsPosition] = useState({ x: 0, y: 0 })
+  const [isCategoryListOpen, setCategoryListOpen] = useState(true)
+
+  // ===========================================================================
+  // Context
+  // ===========================================================================
+
+  const { addingTempCategory, setAddingTempCategory } = useTempState()
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const onAddCategory = (adding: boolean) => {
+    setCategoryListOpen(true)
+    setAddingTempCategory(adding)
+  }
+
+  const handleCategoryMenuClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId: string = ''
+  ) => {
+    const clicked = event.target
+
+    // Make sure we aren't getting any null values .. any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    if (shouldOpenContextMenu(clicked as Element)) {
+      if ('clientX' in event && 'clientY' in event) {
+        setOptionsPosition({ x: event.clientX, y: event.clientY })
+      }
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef?.current?.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== categoryId ? categoryId : '')
+    }
+  }
+
+  const handleCategoryRightClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId: string = ''
+  ) => {
+    event.preventDefault()
+    handleCategoryMenuClick(event, categoryId)
+  }
+
+  const resetTempCategory = () => {
+    setAddingTempCategory(false)
+    _setCategoryEdit('', '')
+  }
+
+  const onSubmitUpdateCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleCategoryMenuClick)
+
+    return () => {
+      document.removeEventListener('mousedown', handleCategoryMenuClick)
+    }
+  })
+
+  return (
+    <>
+      <div className="category-title">
+        <CollapseCategoryListButton
+          dataTestID={TestID.CATEGORY_COLLAPSE_BUTTON}
+          handler={() => setCategoryListOpen(!isCategoryListOpen)}
+          label={LabelText.COLLAPSE_CATEGORY}
+          isCategoryListOpen={isCategoryListOpen}
+          showIcon={categories.length > 0}
+        />
+        <AddCategoryButton
+          dataTestID={TestID.ADD_CATEGORY_BUTTON}
+          handler={onAddCategory}
+          label={LabelText.ADD_CATEGORY}
+        />
+      </div>
+      {isCategoryListOpen && (
+        <>
+          <Droppable type="CATEGORY" droppableId="Category list">
+            {(droppableProvided) => (
+              <div
+                {...droppableProvided.droppableProps}
+                ref={droppableProvided.innerRef}
+                className="category-list"
+                aria-label="Category list"
+              >
+                {categories.map((category, index) => (
+                  <CategoryOption
+                    key={category.id}
+                    index={index}
+                    category={category}
+                    contextMenuRef={contextMenuRef}
+                    handleCategoryMenuClick={handleCategoryMenuClick}
+                    handleCategoryRightClick={handleCategoryRightClick}
+                    onSubmitUpdateCategory={onSubmitUpdateCategory}
+                    optionsId={optionsId}
+                    setOptionsId={setOptionsId}
+                    optionsPosition={optionsPosition}
+                  />
+                ))}
+                {droppableProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          {addingTempCategory && (
+            <AddCategoryForm
+              dataTestID={TestID.NEW_CATEGORY_FORM}
+              submitHandler={onSubmitNewCategory}
+              changeHandler={_setCategoryEdit}
+              resetHandler={resetTempCategory}
+              editingCategoryId={editingCategoryId}
+              tempCategoryName={tempCategoryName}
+            />
+          )}
+        </>
+      )}
+    </>
+  )
+}
+
+```
+
+
+
+**Hooks used:** useSelector, useDispatch, useRef, useState, useEffect, useTempState
+
+
+**State:** optionsId, optionsPosition, isCategoryListOpen
+
+
+
+
+
+#### useTempState (`src/client/contexts/TempStateContext.tsx`)
+
+
+```tsx
+import React, { createContext, FunctionComponent, useContext, useState } from 'react'
+
+interface TempStateContextInterface {
+  addingTempCategory: boolean
+  setAddingTempCategory(adding: boolean): void
+}
+
+const initialContextValue = {
+  addingTempCategory: false,
+  setAddingTempCategory: (adding: boolean) => undefined,
+}
+
+const TempStateContext = createContext<TempStateContextInterface>(initialContextValue)
+
+const useTempState = () => {
+  const context = useContext(TempStateContext)
+
+  if (!context) {
+    throw new Error('useTempState must be used within a TempStateContext')
+  }
+
+  return context
+}
+
+const TempStateProvider: FunctionComponent = ({ children }) => {
+  const [addingTempCategory, setAddingTempCategory] = useState(false)
+
+  const value: TempStateContextInterface = {
+    addingTempCategory,
+    setAddingTempCategory,
+  }
+
+  return <TempStateContext.Provider value={value}>{children}</TempStateContext.Provider>
+}
+
+export { TempStateProvider, useTempState }
+
+```
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

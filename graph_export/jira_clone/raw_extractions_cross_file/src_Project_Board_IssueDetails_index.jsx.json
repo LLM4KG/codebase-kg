@@ -1,0 +1,297 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Loader",
+        "importSource": "./Loader",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "PageError",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "TopActions",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Type",
+        "importSource": "./Type",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "updateIssue",
+            "valueExpression": "updateIssue"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "TopActionsRight",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "AboutTooltip",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "renderLink",
+            "valueExpression": "linkProps => (<Button icon=\"feedback\" variant=\"empty\" {...linkProps}>Give feedback</Button>)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Button",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "icon",
+            "valueExpression": "\"feedback\""
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "...linkProps",
+            "valueExpression": "{...linkProps}"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "CopyLinkButton",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Delete",
+        "importSource": "./Delete",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "fetchProject",
+            "valueExpression": "fetchProject"
+          },
+          {
+            "propName": "modalClose",
+            "valueExpression": "modalClose"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Button",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "icon",
+            "valueExpression": "\"close\""
+          },
+          {
+            "propName": "iconSize",
+            "valueExpression": "24"
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "modalClose"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Content",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Left",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Title",
+        "importSource": "./Title",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "updateIssue",
+            "valueExpression": "updateIssue"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Description",
+        "importSource": "./Description",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "updateIssue",
+            "valueExpression": "updateIssue"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Comments",
+        "importSource": "./Comments",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "fetchIssue",
+            "valueExpression": "fetchIssue"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Right",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Status",
+        "importSource": "./Status",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "updateIssue",
+            "valueExpression": "updateIssue"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "AssigneesReporter",
+        "importSource": "./AssigneesReporter",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "updateIssue",
+            "valueExpression": "updateIssue"
+          },
+          {
+            "propName": "projectUsers",
+            "valueExpression": "projectUsers"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Priority",
+        "importSource": "./Priority",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "updateIssue",
+            "valueExpression": "updateIssue"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "EstimateTracking",
+        "importSource": "./EstimateTracking",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          },
+          {
+            "propName": "updateIssue",
+            "valueExpression": "updateIssue"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetails",
+        "childComponent": "Dates",
+        "importSource": "./Dates",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issue",
+            "valueExpression": "issue"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

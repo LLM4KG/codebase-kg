@@ -1,0 +1,96 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Button",
+        "childComponent": "StyledButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "...buttonProps",
+            "valueExpression": "{...buttonProps}"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "handleClick"
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "variant"
+          },
+          {
+            "propName": "disabled",
+            "valueExpression": "disabled || isWorking"
+          },
+          {
+            "propName": "isWorking",
+            "valueExpression": "isWorking"
+          },
+          {
+            "propName": "iconOnly",
+            "valueExpression": "!children"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Button",
+        "childComponent": "StyledSpinner",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "26"
+          },
+          {
+            "propName": "color",
+            "valueExpression": "getIconColor(variant)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Button",
+        "childComponent": "Icon",
+        "importSource": "shared/components/Icon",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "icon"
+          },
+          {
+            "propName": "size",
+            "valueExpression": "iconSize"
+          },
+          {
+            "propName": "color",
+            "valueExpression": "getIconColor(variant)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Button",
+        "childComponent": "Text",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "withPadding",
+            "valueExpression": "isWorking || icon"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

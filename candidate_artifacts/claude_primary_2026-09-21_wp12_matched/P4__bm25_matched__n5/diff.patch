@@ -1,0 +1,44 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "import { useCartContext } from './CartContextProvider';\nimport useCartProducts from './useCartProducts';\nimport useCartTotal from './useCartTotal';\n\nconst useCart = () => {\n  const { isOpen, setIsOpen } = useCartContext();\n  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n};\n\nexport default useCart;\n",
+      "content": "import { useCartContext } from './CartContextProvider';\nimport useCartProducts from './useCartProducts';\nimport useCartTotal from './useCartTotal';\n\nconst useCart = () => {\n  const { isOpen, setIsOpen } = useCartContext();\n  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    setProducts,\n  } = useCartProducts();\n  const { total, updateCartTotal, setTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  const clearCart = () => {\n    setProducts([]);\n    setTotal({\n      productQuantity: 0,\n      installments: 0,\n      totalPrice: 0,\n      currencyId: total.currencyId,\n      currencyFormat: total.currencyFormat,\n    });\n  };\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n    clearCart,\n  };\n};\n\nexport default useCart;\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "  const { products, total, isOpen, openCart, closeCart } = useCart();\n",
+      "content": "  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n",
+      "content": "            <S.CheckoutButton onClick={clearCart}>\n              Clear cart\n            </S.CheckoutButton>\n            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n",
+      "content": "  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  const clearCart = () => {\n    products.forEach((product) => removeProduct(product));\n    updateCartTotal([]);\n  };\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n    clearCart,\n  };\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "  const { products, total, isOpen, openCart, closeCart } = useCart();\n",
+      "content": "  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n",
+      "content": "            <S.CheckoutButton onClick={clearCart}>\n              Clear cart\n            </S.CheckoutButton>\n            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,181 @@
+{
+  "candidate_id": "P3__text_emb_3_large__n1",
+  "run_id": "qwen_robustness_2026-09-19_wp5_p1p3_baselines",
+  "run_name": "qwen_robustness",
+  "task_id": "P3",
+  "project_name": "takenote",
+  "condition": "text_emb_3_large",
+  "index": 1,
+  "model_id": "openrouter/qwen/qwen3-coder",
+  "stage": "test_pass",
+  "timestamp": "2026-09-19T15:46:05.072506+00:00",
+  "retrieval_token_count": 6919,
+  "generator_usage": {
+    "input_tokens": 14326,
+    "output_tokens": 3062
+  },
+  "generator_latency_ms": 20926.909828000134,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": "exact_unique",
+  "apply_reason": null,
+  "edit_count": 2,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "embedding_model": "text-embedding-3-large",
+    "cache_file": "embedding_cache/takenote/text-embedding-3-large.jsonl",
+    "corpus_size": 60,
+    "ranked_top": [
+      {
+        "path": "src/client/containers/NoteMenuBar.tsx",
+        "score": 0.559278
+      },
+      {
+        "path": "src/client/utils/helpers.ts",
+        "score": 0.553306
+      },
+      {
+        "path": "src/client/utils/hooks.ts",
+        "score": 0.534905
+      },
+      {
+        "path": "src/client/containers/ContextMenu.tsx",
+        "score": 0.527742
+      },
+      {
+        "path": "src/client/containers/KeyboardShortcuts.tsx",
+        "score": 0.527253
+      },
+      {
+        "path": "src/client/containers/NoteEditor.tsx",
+        "score": 0.5182
+      },
+      {
+        "path": "src/client/containers/TakeNoteApp.tsx",
+        "score": 0.516178
+      },
+      {
+        "path": "src/client/components/NoteList/ContextMenuOption.tsx",
+        "score": 0.508397
+      },
+      {
+        "path": "src/client/containers/ContextMenuOptions.tsx",
+        "score": 0.504572
+      },
+      {
+        "path": "src/client/containers/NoteList.tsx",
+        "score": 0.501402
+      },
+      {
+        "path": "src/client/components/Editor/NoteLink.tsx",
+        "score": 0.483692
+      },
+      {
+        "path": "src/client/containers/AppSidebar.tsx",
+        "score": 0.459122
+      },
+      {
+        "path": "src/client/components/NoteList/SearchBar.tsx",
+        "score": 0.455375
+      },
+      {
+        "path": "src/client/api/index.ts",
+        "score": 0.450289
+      },
+      {
+        "path": "src/client/contexts/TempStateContext.tsx",
+        "score": 0.449154
+      },
+      {
+        "path": "src/client/containers/SettingsModal.tsx",
+        "score": 0.448524
+      },
+      {
+        "path": "src/client/components/Editor/PreviewEditor.tsx",
+        "score": 0.44728
+      },
+      {
+        "path": "src/client/components/NoteList/NoteListButton.tsx",
+        "score": 0.444227
+      },
+      {
+        "path": "src/client/components/AppSidebar/ActionButton.tsx",
+        "score": 0.443165
+      },
+      {
+        "path": "src/client/components/Editor/EmptyEditor.tsx",
+        "score": 0.441505
+      }
+    ],
+    "included_files": [
+      "src/client/containers/NoteMenuBar.tsx",
+      "src/client/utils/helpers.ts",
+      "src/client/utils/hooks.ts",
+      "src/client/containers/ContextMenu.tsx",
+      "src/client/containers/KeyboardShortcuts.tsx",
+      "src/client/containers/NoteEditor.tsx",
+      "src/client/containers/TakeNoteApp.tsx",
+      "src/client/components/NoteList/ContextMenuOption.tsx",
+      "src/client/containers/ContextMenuOptions.tsx",
+      "src/client/containers/NoteList.tsx",
+      "src/client/components/Editor/NoteLink.tsx",
+      "src/client/containers/AppSidebar.tsx",
+      "src/client/components/NoteList/SearchBar.tsx",
+      "src/client/contexts/TempStateContext.tsx",
+      "src/client/components/NoteList/NoteListButton.tsx"
+    ],
+    "skipped_for_budget": [
+      "src/client/api/index.ts",
+      "src/client/containers/SettingsModal.tsx",
+      "src/client/components/Editor/PreviewEditor.tsx",
+      "src/client/components/Editor/EmptyEditor.tsx",
+      "src/client/components/AppSidebar/FolderOption.tsx",
+      "src/client/components/SettingsModal/IconButton.tsx",
+      "src/client/components/AppSidebar/ScratchpadOption.tsx",
+      "src/client/containers/CategoryOption.tsx",
+      "src/client/slices/note.ts",
+      "src/client/types/index.ts",
+      "src/client/components/SettingsModal/IconButtonUploader.tsx",
+      "src/client/containers/App.tsx",
+      "src/client/components/SettingsModal/Shortcut.tsx",
+      "src/client/components/NoteList/SelectCategory.tsx",
+      "src/client/components/Tabs/Tab.tsx",
+      "src/client/utils/enums.ts",
+      "src/client/containers/CategoryList.tsx",
+      "src/client/components/LastSyncedNotification.tsx",
+      "src/client/components/AppSidebar/AddCategoryButton.tsx",
+      "src/client/components/LandingPage.tsx",
+      "src/client/utils/reactMarkdownPlugins.ts",
+      "src/client/components/Select.tsx",
+      "src/client/utils/constants.ts",
+      "src/client/slices/settings.ts",
+      "src/client/slices/sync.ts",
+      "src/client/components/Tabs/Tabs.tsx",
+      "src/client/components/Switch.tsx",
+      "src/client/components/AppSidebar/AddCategoryForm.tsx",
+      "src/client/sagas/index.ts",
+      "src/resources/LabelText.ts",
+      "src/client/slices/auth.ts",
+      "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+      "src/client/router/PrivateRoute.tsx",
+      "src/client/router/PublicRoute.tsx",
+      "src/client/selectors/index.ts",
+      "src/client/components/SettingsModal/SelectOptions.tsx",
+      "src/client/utils/notesSortStrategies.ts",
+      "src/client/components/Tabs/TabPanel.tsx",
+      "src/client/slices/index.ts",
+      "src/client/index.tsx",
+      "src/client/components/SettingsModal/Option.tsx",
+      "src/client/slices/category.ts",
+      "src/resources/TestID.ts",
+      "src/client/utils/history.ts",
+      "src/client/components/AppSidebar/ActionButton.tsx"
+    ],
+    "budget_tokens_used": 6870,
+    "token_budget": 7000,
+    "cache_hits": 61,
+    "api_calls": 0,
+    "api_prompt_tokens": 0
+  }
+}

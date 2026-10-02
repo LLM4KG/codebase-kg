@@ -1,0 +1,25 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useState, useCallback } from 'react';\n\ninterface UseCopyToClipboardProps {\n  successMessage?: string;\n  timeout?: number;\n}\n\ninterface UseCopyToClipboardReturn {\n  copiedText: string;\n  handleCopy: (text: string) => Promise<boolean>;\n}\n\nexport const useCopyToClipboard = ({\n  successMessage = 'Copied!',\n  timeout = 3000,\n}: UseCopyToClipboardProps = {}): UseCopyToClipboardReturn => {\n  const [copiedText, setCopiedText] = useState('');\n\n  const handleCopy = useCallback(\n    async (text: string): Promise<boolean> => {\n      try {\n        await navigator.clipboard.writeText(text);\n        setCopiedText(successMessage);\n        \n        setTimeout(() => {\n          setCopiedText('');\n        }, timeout);\n        \n        return true;\n      } catch (error) {\n        console.error('Failed to copy text: ', error);\n        return false;\n      }\n    },\n    [successMessage, timeout]\n  );\n\n  return { copiedText, handleCopy };\n};\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import React, { useState, useEffect, useCallback } from 'react';\n",
+      "content": "import React, { useCallback } from 'react';\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "  const [copiedText, setCopiedText] = useState('');\n  const [copyTimeoutId, setCopyTimeoutId] = useState<NodeJS.Timeout | null>(null);\n\n  useEffect(() => {\n    return () => {\n      if (copyTimeoutId) {\n        clearTimeout(copyTimeoutId);\n      }\n    };\n  }, [copyTimeoutId]);\n\n  const handleCopyNoteId = useCallback(async () => {\n    if (!note?.id) return;\n\n    try {\n      await navigator.clipboard.writeText(note.id);\n      setCopiedText('Note ID copied!');\n      \n      // Clear the \"copied\" message after 3 seconds\n      const timeoutId = setTimeout(() => {\n        setCopiedText('');\n        setCopyTimeoutId(null);\n      }, 3000);\n      \n      setCopyTimeoutId(timeoutId);\n    } catch (error) {\n      console.error('Failed to copy note ID: ', error);\n    }\n  }, [note?.id]);\n",
+      "content": "  const { copiedText, handleCopy } = useCopyToClipboard({ \n    successMessage: 'Note ID copied!', \n    timeout: 3000 \n  });\n\n  const handleCopyNoteId = useCallback(async () => {\n    if (!note?.id) return;\n    await handleCopy(note.id);\n  }, [note?.id, handleCopy]);\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

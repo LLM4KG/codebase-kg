@@ -1,0 +1,56 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    permanentlyEmptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n",
+      "content": "    permanentlyEmptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n\n    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) => (note.trash ? { ...note, trash: false } : note))\n    },\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "  permanentlyEmptyTrash,\n  pruneNotes,\n",
+      "content": "  permanentlyEmptyTrash,\n  restoreAllTrash,\n  pruneNotes,\n"
+    },
+    {
+      "path": "src/resources/TestID.ts",
+      "op": "replace",
+      "search": "  EMPTY_TRASH_BUTTON = 'empty-trash-button',\n",
+      "content": "  EMPTY_TRASH_BUTTON = 'empty-trash-button',\n  RESTORE_ALL_TRASH_BUTTON = 'restore-all-trash-button',\n"
+    },
+    {
+      "path": "src/resources/LabelText.ts",
+      "op": "replace",
+      "search": "  RESTORE_FROM_TRASH = 'Restore from trash',\n",
+      "content": "  RESTORE_ALL_TRASH = 'Restore All',\n  RESTORE_FROM_TRASH = 'Restore from trash',\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import {\n  permanentlyEmptyTrash,\n  pruneNotes,\n  updateActiveNote,\n  searchNotes,\n  updateSelectedNotes,\n} from '@/slices/note'\n",
+      "content": "import {\n  permanentlyEmptyTrash,\n  restoreAllTrash,\n  pruneNotes,\n  updateActiveNote,\n  searchNotes,\n  updateSelectedNotes,\n} from '@/slices/note'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())\n",
+      "content": "  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())\n  const _restoreAllTrash = () => dispatch(restoreAllTrash())\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "        {showEmptyTrash && (\n          <NoteListButton\n            dataTestID={TestID.EMPTY_TRASH_BUTTON}\n            label=\"Empty\"\n            handler={() => _permanentlyEmptyTrash()}\n          >\n            Empty Trash\n          </NoteListButton>\n        )}\n",
+      "content": "        {showEmptyTrash && (\n          <>\n            <NoteListButton\n              dataTestID={TestID.RESTORE_ALL_TRASH_BUTTON}\n              label=\"Restore All\"\n              handler={() => _restoreAllTrash()}\n            >\n              {LabelText.RESTORE_ALL_TRASH}\n            </NoteListButton>\n            <NoteListButton\n              dataTestID={TestID.EMPTY_TRASH_BUTTON}\n              label=\"Empty\"\n              handler={() => _permanentlyEmptyTrash()}\n            >\n              Empty Trash\n            </NoteListButton>\n          </>\n        )}\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { TestID } from '@resources/TestID'\n",
+      "content": "import { TestID } from '@resources/TestID'\nimport { LabelText } from '@resources/LabelText'\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

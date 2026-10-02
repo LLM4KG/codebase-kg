@@ -1,0 +1,32 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    emptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n",
+      "content": "    emptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) =>\n        note.trash ? { ...note, trash: false } : note\n      )\n    },\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const { emptyTrash } = noteSlice.actions\n",
+      "content": "  const { emptyTrash, restoreAllTrash } = noteSlice.actions\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          {activeFolder === Folder.TRASH && (\n            <button\n              className=\"trash-button\"\n              onClick={() => dispatch(emptyTrash())}\n            >\n              <Icon size={15} icon={deletePermanently} />\n              Empty Trash\n            </button>\n          )}\n",
+      "content": "          {activeFolder === Folder.TRASH && (\n            <>\n              <button\n                className=\"trash-button\"\n                onClick={() => dispatch(restoreAllTrash())}\n              >\n                <Icon size={15} icon={restoreFromTrash} />\n                Restore All\n              </button>\n              <button\n                className=\"trash-button\"\n                onClick={() => dispatch(emptyTrash())}\n              >\n                <Icon size={15} icon={deletePermanently} />\n                Empty Trash\n              </button>\n            </>\n          )}\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { deletePermanently } from 'react-icons-kit/fa/deletePermanently'\n",
+      "content": "import { deletePermanently } from 'react-icons-kit/fa/deletePermanently'\nimport { restoreFromTrash } from 'react-icons-kit/fa/restoreFromTrash'\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

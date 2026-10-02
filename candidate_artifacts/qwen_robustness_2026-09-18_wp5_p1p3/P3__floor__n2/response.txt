@@ -1,0 +1,91 @@
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+
+=======
+import { useState } from 'react';
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(successMessage);
+      
+      setTimeout(() => {
+        setCopiedText(null);
+      }, timeout);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  return { copiedText, handleCopy };
+};
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useState, useEffect } from 'react';
+import { MenuBar } from '../components/MenuBar';
+import { MenuItem } from '../components/MenuItem';
+import { useNoteContext } from '../contexts/NoteContext';
+
+export const NoteMenuBar: React.FC = () => {
+  const { note } = useNoteContext();
+  const [copied, setCopied] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => {
+        setCopied(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied('Copied!');
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  return (
+    <MenuBar>
+      <MenuItem 
+        onClick={() => note && copyToClipboard(note.content)}
+        disabled={!note}
+      >
+        {copied || 'Copy Note'}
+      </MenuItem>
+    </MenuBar>
+  );
+};
+=======
+import React from 'react';
+import { MenuBar } from '../components/MenuBar';
+import { MenuItem } from '../components/MenuItem';
+import { useNoteContext } from '../contexts/NoteContext';
+import { useCopyToClipboard } from '../utils/useCopyToClipboard';
+
+export const NoteMenuBar: React.FC = () => {
+  const { note } = useNoteContext();
+  const { copiedText, handleCopy } = useCopyToClipboard('Copied!');
+
+  return (
+    <MenuBar>
+      <MenuItem 
+        onClick={() => note && handleCopy(note.content)}
+        disabled={!note}
+      >
+        {copiedText || 'Copy Note'}
+      </MenuItem>
+    </MenuBar>
+  );
+};
+>>>>>>> REPLACE
+```

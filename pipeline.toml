@@ -66,6 +66,20 @@ repo_path = "small/SnapShot"
 # already skipped by the extension filter, so no exclude_paths either.
 # Registered so the control project is invocable the same way as the other two.
 
+[projects.jira_clone]
+# The React app lives in client/: the repo-root package.json has no dependencies
+# and api/ is the TypeScript backend, so the repo root is not the project root.
+repo_path = "medium/jira_clone/client"
+# webpack `resolve.modules` and jsconfig `baseUrl` both make src/ the root for
+# bare specifiers: import { Icon } from 'shared/components' -> src/shared/components
+base_url = "src"
+# Cypress e2e tests, Jest file/style mocks, and the Express static server for the
+# production build. Leaves exactly the 134 source files under src/.
+exclude_paths = ["cypress", "jest", "server.js"]
+# NOTE: outputs are named after the repo directory, so this project extracts to
+# graph_export/client/ (run id extract_client_*). Rename to graph_export/jira_clone/
+# after export.
+
 [harness]
 default_timeout_ms = 60000       # Work item 5 overwrites this after calibration
 memory_limit = "4g"

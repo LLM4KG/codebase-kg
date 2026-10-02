@@ -1,0 +1,38 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "import * as S from './style';\n\nconst Cart = () => {\n  const { products, total, isOpen, openCart, closeCart } = useCart();\n\n  const handleCheckout = () => {\n    if (total.productQuantity) {\n",
+      "content": "import * as S from './style';\n\nconst Cart = () => {\n  const { products, total, isOpen, openCart, closeCart, clearCart } =\n    useCart();\n\n  const handleCheckout = () => {\n    if (total.productQuantity) {\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n          </S.CartFooter>\n        </S.CartContent>\n      )}\n",
+      "content": "            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n            <S.CheckoutButton onClick={clearCart} title=\"Clear cart\">\n              Clear cart\n            </S.CheckoutButton>\n          </S.CartFooter>\n        </S.CartContent>\n      )}\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n",
+      "content": "    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n",
+      "content": "    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n    total,\n    updateCartTotal,\n  };\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCartProducts.ts",
+      "op": "replace",
+      "search": "    updateCartTotal(updatedProducts);\n  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  };\n};\n",
+      "content": "    updateCartTotal(updatedProducts);\n  };\n\n  const clearCart = () => {\n    setProducts([]);\n    updateCartTotal([]);\n  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n  };\n};\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,83 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsBodyForm",
+        "childComponent": "Textarea",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "autoFocus",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "placeholder",
+            "valueExpression": "\"Add a comment...\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "value"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "onChange"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsBodyForm",
+        "childComponent": "Actions",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsBodyForm",
+        "childComponent": "FormButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"primary\""
+          },
+          {
+            "propName": "isWorking",
+            "valueExpression": "isWorking"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "handleSubmit"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsBodyForm",
+        "childComponent": "FormButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "onCancel"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

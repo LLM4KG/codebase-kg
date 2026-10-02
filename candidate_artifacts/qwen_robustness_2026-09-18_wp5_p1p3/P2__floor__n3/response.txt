@@ -1,0 +1,119 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const noteSlice = createSlice({
+  name: 'note',
+  initialState,
+  reducers: {
+    addNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes.push(payload)
+    },
+    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      const index = state.notes.findIndex((note) => note.id === payload.id)
+      if (index !== -1) {
+        state.notes[index] = payload
+      }
+    },
+    deleteNote: (state, { payload }: PayloadAction<string>) => {
+      const index = state.notes.findIndex((note) => note.id === payload)
+      if (index !== -1) {
+        state.notes.splice(index, 1)
+      }
+    },
+    setNotes: (state, { payload }: PayloadAction<NoteItem[]>) => {
+      state.notes = payload
+    },
+    setSearchQuery: (state, { payload }: PayloadAction<string>) => {
+      state.searchQuery = payload
+    },
+    setTrash: (state, { payload }: PayloadAction<boolean>) => {
+      state.trash = payload
+    },
+    setFolder: (state, { payload }: PayloadAction<string | null>) => {
+      state.folder = payload
+    },
+    setNoteId: (state, { payload }: PayloadAction<string | null>) => {
+      state.noteId = payload
+    },
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+export const noteSlice = createSlice({
+  name: 'note',
+  initialState,
+  reducers: {
+    addNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes.push(payload)
+    },
+    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      const index = state.notes.findIndex((note) => note.id === payload.id)
+      if (index !== -1) {
+        state.notes[index] = payload
+      }
+    },
+    deleteNote: (state, { payload }: PayloadAction<string>) => {
+      const index = state.notes.findIndex((note) => note.id === payload)
+      if (index !== -1) {
+        state.notes.splice(index, 1)
+      }
+    },
+    setNotes: (state, { payload }: PayloadAction<NoteItem[]>) => {
+      state.notes = payload
+    },
+    setSearchQuery: (state, { payload }: PayloadAction<string>) => {
+      state.searchQuery = payload
+    },
+    setTrash: (state, { payload }: PayloadAction<boolean>) => {
+      state.trash = payload
+    },
+    setFolder: (state, { payload }: PayloadAction<string | null>) => {
+      state.folder = payload
+    },
+    setNoteId: (state, { payload }: PayloadAction<string | null>) => {
+      state.noteId = payload
+    },
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+    restoreAllTrash: (state) => {
+      state.notes.forEach((note) => {
+        if (note.trash) {
+          note.trash = false
+        }
+      })
+    },
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+              <>
+                <button
+                  onClick={handleEmptyTrash}
+                  className="btn btn-danger"
+                  disabled={notes.filter((note) => note.trash).length === 0}
+                >
+                  Empty Trash
+                </button>
+              </>
+=======
+              <>
+                <button
+                  onClick={handleEmptyTrash}
+                  className="btn btn-danger"
+                  disabled={notes.filter((note) => note.trash).length === 0}
+                >
+                  Empty Trash
+                </button>
+                <button
+                  onClick={handleRestoreAll}
+                  className="btn btn-secondary ml-2"
+                  disabled={notes.filter((note) => note.trash).length === 0}
+                >
+                  Restore All
+                </button>
+              </>
+>>>>>>> REPLACE
+```

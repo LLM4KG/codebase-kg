@@ -1,0 +1,105 @@
+I need to:
+1. Add `restoreAllTrash` to the note slice
+2. Add `RESTORE_ALL_TRASH_BUTTON` to TestID
+3. Add `RESTORE_ALL` label to LabelText
+4. Add the "Restore All" button to NoteList
+
+Let me first look at the note slice and NoteList component based on the context provided, then make the changes.
+
+```text
+src/resources/TestID.ts
+<<<<<<< SEARCH
+  EMPTY_TRASH_BUTTON = 'empty-trash-button',
+=======
+  EMPTY_TRASH_BUTTON = 'empty-trash-button',
+  RESTORE_ALL_TRASH_BUTTON = 'restore-all-trash-button',
+>>>>>>> REPLACE
+
+src/resources/LabelText.ts
+<<<<<<< SEARCH
+  RESTORE_FROM_TRASH = 'Restore from trash',
+=======
+  RESTORE_ALL_TRASH = 'Restore all',
+  RESTORE_FROM_TRASH = 'Restore from trash',
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+=======
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+    emptyTrash: (state) => {
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  emptyTrash,
+=======
+  restoreAllTrash,
+  emptyTrash,
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  addNote,
+  swapFolder,
+  updateActiveNote,
+  assignFavoriteToNotes,
+  assignTrashToNotes,
+  updateSelectedNotes,
+  unassignTrashFromNotes,
+  emptyTrash,
+} from '@/slices/note'
+=======
+import {
+  addNote,
+  swapFolder,
+  updateActiveNote,
+  assignFavoriteToNotes,
+  assignTrashToNotes,
+  updateSelectedNotes,
+  unassignTrashFromNotes,
+  emptyTrash,
+  restoreAllTrash,
+} from '@/slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _emptyTrash = () => dispatch(emptyTrash())
+=======
+  const _emptyTrash = () => dispatch(emptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          <button
+            className="trash-button"
+            data-testid={TestID.EMPTY_TRASH_BUTTON}
+            onClick={_emptyTrash}
+          >
+            {LabelText.EMPTY_TRASH}
+          </button>
+=======
+          <button
+            className="trash-button"
+            data-testid={TestID.RESTORE_ALL_TRASH_BUTTON}
+            onClick={_restoreAllTrash}
+          >
+            {LabelText.RESTORE_ALL_TRASH}
+          </button>
+          <button
+            className="trash-button"
+            data-testid={TestID.EMPTY_TRASH_BUTTON}
+            onClick={_emptyTrash}
+          >
+            {LabelText.EMPTY_TRASH}
+          </button>
+>>>>>>> REPLACE
+```

@@ -1,0 +1,15 @@
+{
+  "task_id": "P4",
+  "candidate_id": "P4__bm25_matched__n1",
+  "condition": "bm25_matched",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1108.891586000027,
+  "timeout_used_ms": 13072,
+  "stage_detail": "apply_edits: SEARCH text not found in src/contexts/cart-context/useCart.ts\n--- SEARCH ---\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

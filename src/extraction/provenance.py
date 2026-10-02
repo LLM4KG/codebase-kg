@@ -92,9 +92,16 @@ def build_provenance(
     model: str,
     prompt_ids: list[str],
     file_count: int,
+    usage: dict | None = None,
 ) -> dict:
-    """Assemble the provenance record for one extraction run."""
-    return {
+    """Assemble the provenance record for one extraction run.
+
+    `usage` is the token-usage summary from `src/llm/extraction_log.summarize()`.
+    Tokens only, never dollars: prices change, and a price baked into a committed
+    artifact would silently go stale. Omitted when the caller has none, so records
+    for graphs built before usage logging existed keep their old shape.
+    """
+    provenance = {
         "project_id": project_id,
         "extraction_model": model,
         "prompt_set_version": compute_prompt_set_version(),
@@ -103,6 +110,9 @@ def build_provenance(
         "file_count": file_count,
         **get_repo_revision(repo_root),
     }
+    if usage is not None:
+        provenance["usage"] = usage
+    return provenance
 
 
 def write_provenance(output_dir: Path, provenance: dict) -> Path:

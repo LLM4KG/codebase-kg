@@ -1,0 +1,91 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "CollapseCategoryListButton",
+        "syntax": "arrow",
+        "usesHooks": false,
+        "hookDetails": [],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "dataTestID",
+        "componentName": "CollapseCategoryListButton",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "handler",
+        "componentName": "CollapseCategoryListButton",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "label",
+        "componentName": "CollapseCategoryListButton",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "isCategoryListOpen",
+        "componentName": "CollapseCategoryListButton",
+        "type": "boolean",
+        "isRequired": true
+      },
+      {
+        "name": "showIcon",
+        "componentName": "CollapseCategoryListButton",
+        "type": "boolean",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "handler",
+        "eventType": "onClick",
+        "componentName": "CollapseCategoryListButton",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-feather",
+        "symbols": [
+          "ChevronDown",
+          "ChevronRight",
+          "Layers"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

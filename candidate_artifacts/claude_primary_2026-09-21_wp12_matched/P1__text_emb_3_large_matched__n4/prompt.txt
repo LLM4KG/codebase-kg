@@ -1,0 +1,320 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+The `decreaseProductQuantity` function in `useCartProducts.ts` allows a product's quantity to reach zero when decreased. The product remains in the cart with quantity 0 and displays a $0.00 line item. Fix `decreaseProductQuantity` so that when a product's quantity would drop to zero or below, the product is removed from the cart entirely instead.
+
+## Project Context
+
+You are working on the **react-shopping-cart** React project.
+
+**Task type:** bug_fix
+
+---
+
+### Target Components
+
+
+#### useCartProducts (`src/contexts/cart-context/useCartProducts.ts`)
+
+
+```jsx
+import { useCartContext } from './CartContextProvider';
+import useCartTotal from './useCartTotal';
+import { ICartProduct } from 'models';
+
+const useCartProducts = () => {
+  const { products, setProducts } = useCartContext();
+  const { updateCartTotal } = useCartTotal();
+
+  const updateQuantitySafely = (
+    currentProduct: ICartProduct,
+    targetProduct: ICartProduct,
+    quantity: number
+  ): ICartProduct => {
+    if (currentProduct.id === targetProduct.id) {
+      return Object.assign({
+        ...currentProduct,
+        quantity: currentProduct.quantity + quantity,
+      });
+    } else {
+      return currentProduct;
+    }
+  };
+
+  const addProduct = (newProduct: ICartProduct) => {
+    let updatedProducts;
+    const isProductAlreadyInCart = products.some(
+      (product: ICartProduct) => newProduct.id === product.id
+    );
+
+    if (isProductAlreadyInCart) {
+      updatedProducts = products.map((product: ICartProduct) => {
+        return updateQuantitySafely(product, newProduct, newProduct.quantity);
+      });
+    } else {
+      updatedProducts = [...products, newProduct];
+    }
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const removeProduct = (productToRemove: ICartProduct) => {
+    const updatedProducts = products.filter(
+      (product: ICartProduct) => product.id !== productToRemove.id
+    );
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const increaseProductQuantity = (productToIncrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToIncrease, +1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+export default useCartProducts;
+
+```
+
+
+
+
+
+
+
+
+#### CartProduct (`src/components/Cart/CartProducts/CartProduct/CartProduct.tsx`)
+
+
+```tsx
+import formatPrice from 'utils/formatPrice';
+import { ICartProduct } from 'models';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+interface IProps {
+  product: ICartProduct;
+}
+const CartProduct = ({ product }: IProps) => {
+  const { removeProduct, increaseProductQuantity, decreaseProductQuantity } =
+    useCart();
+  const {
+    sku,
+    title,
+    price,
+    style,
+    currencyId,
+    currencyFormat,
+    availableSizes,
+    quantity,
+  } = product;
+
+  const handleRemoveProduct = () => removeProduct(product);
+  const handleIncreaseProductQuantity = () => increaseProductQuantity(product);
+  const handleDecreaseProductQuantity = () => decreaseProductQuantity(product);
+
+  return (
+    <S.Container>
+      <S.DeleteButton
+        onClick={handleRemoveProduct}
+        title="remove product from cart"
+      />
+      <S.Image
+        src={require(`static/products/${sku}-1-cart.webp`)}
+        alt={title}
+      />
+      <S.Details>
+        <S.Title>{title}</S.Title>
+        <S.Desc>
+          {`${availableSizes[0]} | ${style}`} <br />
+          Quantity: {quantity}
+        </S.Desc>
+      </S.Details>
+      <S.Price>
+        <p>{`${currencyFormat}  ${formatPrice(price, currencyId)}`}</p>
+        <div>
+          <S.ChangeQuantity
+            onClick={handleDecreaseProductQuantity}
+            disabled={quantity === 1 ? true : false}
+          >
+            -
+          </S.ChangeQuantity>
+          <S.ChangeQuantity onClick={handleIncreaseProductQuantity}>
+            +
+          </S.ChangeQuantity>
+        </div>
+      </S.Price>
+    </S.Container>
+  );
+};
+
+export default CartProduct;
+
+```
+
+
+
+
+
+
+
+
+#### useCart (`src/contexts/cart-context/useCart.ts`)
+
+
+```jsx
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Cart/CartProducts/CartProduct/index.ts`)
+
+
+```jsx
+export { default } from './CartProduct';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Cart/CartProducts/index.ts`)
+
+
+```jsx
+export { default } from './CartProducts';
+
+```
+
+
+
+
+
+
+
+
+#### cart-total (`src/utils/test/mocks/cart-total.ts`)
+
+
+```jsx
+import { ICartTotal } from 'models';
+
+const mockTotal: ICartTotal = {
+  productQuantity: 1,
+  installments: 1,
+  totalPrice: 10.9,
+  currencyId: 'USD',
+  currencyFormat: '$',
+};
+
+export default mockTotal;
+
+```
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

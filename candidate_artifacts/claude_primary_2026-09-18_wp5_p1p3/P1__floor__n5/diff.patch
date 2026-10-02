@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/hooks/useCartProducts.ts",
+      "op": "replace",
+      "search": "  const decreaseProductQuantity = (productId: Products['id']) => {\n    setProducts((state) =>\n      state.map((product) =>\n        product.id === productId\n          ? { ...product, quantity: product.quantity - 1 }\n          : product\n      )\n    );\n  };\n",
+      "content": "  const decreaseProductQuantity = (productId: Products['id']) => {\n    setProducts((state) =>\n      state\n        .map((product) =>\n          product.id === productId\n            ? { ...product, quantity: product.quantity - 1 }\n            : product\n        )\n        .filter((product) => product.quantity > 0)\n    );\n  };\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

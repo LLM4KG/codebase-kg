@@ -1,0 +1,56 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "PageError",
+        "childComponent": "ErrorPage",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "PageError",
+        "childComponent": "ErrorPageInner",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "PageError",
+        "childComponent": "ErrorBox",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "PageError",
+        "childComponent": "StyledIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"bug\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "PageError",
+        "childComponent": "Title",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

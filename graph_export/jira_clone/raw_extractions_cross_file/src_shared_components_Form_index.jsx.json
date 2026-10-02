@@ -1,0 +1,92 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Form",
+        "childComponent": "Formik",
+        "importSource": "formik",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "...otherProps",
+            "valueExpression": "{...otherProps}"
+          },
+          {
+            "propName": "validate",
+            "valueExpression": "values => { if (validate) { return validate(values); } if (validations) { return generateErrors(values, validations); } return {}; }"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Form.Element",
+        "childComponent": "FormikForm",
+        "importSource": "formik",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "noValidate",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "...props",
+            "valueExpression": "{...props}"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Form.Field",
+        "childComponent": "FormikField",
+        "importSource": "formik",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "name",
+            "valueExpression": "name"
+          },
+          {
+            "propName": "validate",
+            "valueExpression": "validate"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Form.Field",
+        "childComponent": "FieldComponent",
+        "importSource": "./Field",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "...field",
+            "valueExpression": "{...field}"
+          },
+          {
+            "propName": "...props",
+            "valueExpression": "{...props}"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "name"
+          },
+          {
+            "propName": "error",
+            "valueExpression": "get(touched, name) && get(errors, name)"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "value => setFieldValue(name, value)"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

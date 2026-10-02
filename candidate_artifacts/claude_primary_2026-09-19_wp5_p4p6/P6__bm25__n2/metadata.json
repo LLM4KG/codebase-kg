@@ -1,0 +1,199 @@
+{
+  "candidate_id": "P6__bm25__n2",
+  "run_id": "claude_primary_2026-09-19_wp5_p4p6",
+  "run_name": "claude_primary",
+  "task_id": "P6",
+  "project_name": "takenote",
+  "condition": "bm25",
+  "index": 2,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "timestamp": "2026-09-19T16:07:58.460363+00:00",
+  "retrieval_token_count": 6899,
+  "generator_usage": {
+    "input_tokens": 18090,
+    "output_tokens": 291
+  },
+  "generator_latency_ms": 5322.0518059988535,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": "exact_unique",
+  "apply_reason": null,
+  "edit_count": 2,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "query_tokens": [
+      "category",
+      "names",
+      "supposed",
+      "unique",
+      "categorylist",
+      "category",
+      "list",
+      "only",
+      "rejects",
+      "duplicate",
+      "case",
+      "matches",
+      "exactly",
+      "category",
+      "work",
+      "already",
+      "present",
+      "user",
+      "can",
+      "still",
+      "create",
+      "new",
+      "category",
+      "called",
+      "work",
+      "work",
+      "rename",
+      "another",
+      "category",
+      "make",
+      "duplicate",
+      "check",
+      "case",
+      "insensitive",
+      "both",
+      "adding",
+      "category",
+      "renaming",
+      "one"
+    ],
+    "corpus_size": 60,
+    "ranked_top": [
+      {
+        "path": "src/client/slices/category.ts",
+        "score": 29.6099
+      },
+      {
+        "path": "src/client/api/index.ts",
+        "score": 28.6986
+      },
+      {
+        "path": "src/client/containers/CategoryList.tsx",
+        "score": 23.5342
+      },
+      {
+        "path": "src/client/utils/helpers.ts",
+        "score": 23.0139
+      },
+      {
+        "path": "src/resources/LabelText.ts",
+        "score": 21.7618
+      },
+      {
+        "path": "src/resources/TestID.ts",
+        "score": 20.7964
+      },
+      {
+        "path": "src/client/contexts/TempStateContext.tsx",
+        "score": 19.3227
+      },
+      {
+        "path": "src/client/containers/NoteList.tsx",
+        "score": 18.6259
+      },
+      {
+        "path": "src/client/containers/AppSidebar.tsx",
+        "score": 16.9932
+      },
+      {
+        "path": "src/client/containers/KeyboardShortcuts.tsx",
+        "score": 14.9749
+      },
+      {
+        "path": "src/client/containers/ContextMenuOptions.tsx",
+        "score": 14.4226
+      },
+      {
+        "path": "src/client/components/AppSidebar/AddCategoryButton.tsx",
+        "score": 13.4988
+      },
+      {
+        "path": "src/client/types/index.ts",
+        "score": 13.4443
+      },
+      {
+        "path": "src/client/containers/CategoryOption.tsx",
+        "score": 12.9379
+      },
+      {
+        "path": "src/client/containers/ContextMenu.tsx",
+        "score": 12.6215
+      },
+      {
+        "path": "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+        "score": 12.4546
+      },
+      {
+        "path": "src/client/slices/note.ts",
+        "score": 12.3271
+      },
+      {
+        "path": "src/client/utils/constants.ts",
+        "score": 12.1419
+      },
+      {
+        "path": "src/client/components/AppSidebar/AddCategoryForm.tsx",
+        "score": 12.0797
+      },
+      {
+        "path": "src/client/components/NoteList/SelectCategory.tsx",
+        "score": 12.0245
+      }
+    ],
+    "included_files": [
+      "src/client/slices/category.ts",
+      "src/client/api/index.ts",
+      "src/client/containers/CategoryList.tsx",
+      "src/client/utils/helpers.ts",
+      "src/resources/LabelText.ts",
+      "src/resources/TestID.ts",
+      "src/client/contexts/TempStateContext.tsx",
+      "src/client/containers/NoteList.tsx",
+      "src/client/containers/AppSidebar.tsx",
+      "src/client/containers/KeyboardShortcuts.tsx",
+      "src/client/containers/ContextMenuOptions.tsx",
+      "src/client/components/AppSidebar/AddCategoryButton.tsx",
+      "src/client/types/index.ts",
+      "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+      "src/client/utils/constants.ts"
+    ],
+    "skipped_for_budget": [
+      "src/client/containers/CategoryOption.tsx",
+      "src/client/containers/ContextMenu.tsx",
+      "src/client/slices/note.ts",
+      "src/client/components/NoteList/SelectCategory.tsx",
+      "src/client/utils/enums.ts",
+      "src/client/containers/SettingsModal.tsx",
+      "src/client/containers/TakeNoteApp.tsx",
+      "src/client/containers/NoteMenuBar.tsx",
+      "src/client/slices/index.ts",
+      "src/client/sagas/index.ts",
+      "src/client/components/LandingPage.tsx",
+      "src/client/slices/auth.ts",
+      "src/client/selectors/index.ts",
+      "src/client/components/AppSidebar/FolderOption.tsx",
+      "src/client/utils/notesSortStrategies.ts",
+      "src/client/components/NoteList/NoteListButton.tsx",
+      "src/client/index.tsx",
+      "src/client/slices/sync.ts",
+      "src/client/components/Editor/EmptyEditor.tsx",
+      "src/client/slices/settings.ts",
+      "src/client/components/NoteList/SearchBar.tsx",
+      "src/client/components/Tabs/Tabs.tsx",
+      "src/client/components/NoteList/ContextMenuOption.tsx",
+      "src/client/utils/hooks.ts",
+      "src/client/containers/NoteEditor.tsx",
+      "src/client/utils/history.ts",
+      "src/client/components/AppSidebar/AddCategoryForm.tsx"
+    ],
+    "budget_tokens_used": 6843,
+    "token_budget": 7000
+  }
+}

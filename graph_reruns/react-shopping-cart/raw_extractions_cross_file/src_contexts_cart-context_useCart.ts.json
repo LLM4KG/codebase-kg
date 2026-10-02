@@ -1,0 +1,34 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useCart",
+        "libraryHooks": [],
+        "customHooks": [
+          {
+            "name": "useCartContext",
+            "source": "./CartContextProvider"
+          },
+          {
+            "name": "useCartProducts",
+            "source": "./useCartProducts"
+          },
+          {
+            "name": "useCartTotal",
+            "source": "./useCartTotal"
+          }
+        ]
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "task_id": "P3",
+  "candidate_id": "P3__floor__n1",
+  "condition": "floor",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1353.027289005695,
+  "timeout_used_ms": 174803,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/containers/NoteMenuBar.tsx\n--- SEARCH ---\nimport React, { useState, useEffect, useCallback } from 'react';",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

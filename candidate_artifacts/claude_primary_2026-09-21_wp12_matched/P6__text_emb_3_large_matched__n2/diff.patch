@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/containers/CategoryList.tsx",
+      "op": "replace",
+      "search": "    if (categories.find((cat) => cat.name === category.name) || category.name === '') {\n      resetTempCategory()\n    } else {\n      _updateCategory(category)\n      resetTempCategory()\n    }\n  }\n\n  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {\n    event.preventDefault()\n\n    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }\n\n    if (categories.find((cat) => cat.name === category.name) || category.name === '') {\n",
+      "content": "    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {\n      resetTempCategory()\n    } else {\n      _updateCategory(category)\n      resetTempCategory()\n    }\n  }\n\n  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {\n    event.preventDefault()\n\n    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }\n\n    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

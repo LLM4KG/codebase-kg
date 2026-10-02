@@ -1,0 +1,117 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "IconButtonUploader",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useRef",
+            "category": "library",
+            "source": "react"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "dataTestID",
+        "componentName": "IconButtonUploader",
+        "type": "string",
+        "isRequired": false
+      },
+      {
+        "name": "disabled",
+        "componentName": "IconButtonUploader",
+        "type": "boolean",
+        "isRequired": false
+      },
+      {
+        "name": "handler",
+        "componentName": "IconButtonUploader",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "icon",
+        "componentName": "IconButtonUploader",
+        "type": "element",
+        "isRequired": true
+      },
+      {
+        "name": "text",
+        "componentName": "IconButtonUploader",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "accept",
+        "componentName": "IconButtonUploader",
+        "type": "string",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "handleFileInput",
+        "eventType": "onChange",
+        "componentName": "IconButtonUploader",
+        "isInline": false
+      },
+      {
+        "name": "handleClick",
+        "eventType": "onClick",
+        "componentName": "IconButtonUploader",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React",
+          "ChangeEvent"
+        ],
+        "hooks": [
+          "useRef"
+        ]
+      },
+      {
+        "from": "react-feather",
+        "symbols": [
+          "Icon"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@/utils/constants",
+        "symbols": [
+          "iconColor"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

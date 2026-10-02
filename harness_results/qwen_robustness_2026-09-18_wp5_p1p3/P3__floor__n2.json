@@ -1,0 +1,15 @@
+{
+  "task_id": "P3",
+  "candidate_id": "P3__floor__n2",
+  "condition": "floor",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1410.830779997923,
+  "timeout_used_ms": 174803,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/containers/NoteMenuBar.tsx\n--- SEARCH ---\nimport React, { useState, useEffect } from 'react';\nimport { MenuBar } from '../components/MenuBar';\nimport { MenuItem } from '../components/MenuItem';\nimport { useNoteContext } from '../contexts/NoteContext';\n\nexport const NoteMenuBar: React.FC = () => {\n  const { note } = useNoteContext();\n  const [copied, setCopied] = useState<string | null>(null);\n\n  useEffect(() => {\n    if (copied) {\n      const timer = setTimeout(() => {\n        setCopied(null);\n      }, 3000);\n      return () => clearTimeout(timer);\n    }\n  }, [copied]);\n\n  const copyToClipboard = async (text: string) => {\n    try {\n      await navigator.clipboard.writeText(text);\n      setCopied('Copied!');\n    } catch (err) {\n      console.error('Failed to copy text: ', err);\n    }\n  };\n\n  return (\n    <MenuBar>\n      <MenuItem \n        onClick={() => note && copyToClipboard(note.content)}\n        disabled={!note}\n      >\n        {copied || 'Copy Note'}\n      </MenuItem>\n    </MenuBar>\n  );\n};",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

@@ -1,0 +1,107 @@
+I need to look at the NoteList component to understand its current structure before making changes.
+
+Since the NoteList component isn't provided in the context, I'll work with what I know from the note slice and NoteListButton component. Let me make the two required changes:
+
+1. Add `restoreAllTrash` reducer to `src/client/slices/note.ts`
+2. Add "Restore All" button to `src/client/containers/NoteList.tsx`
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) => (note.trash ? { ...note, trash: false } : note))
+    },
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const {
+  addNote,
+  updateNote,
+  updateNotes,
+  deleteNotes,
+  addCategoryToNote,
+  removeCategoryFromNotes,
+  updateActiveNote,
+  updateActiveCategoryId,
+  swapFolder,
+  assignFavoriteToNotes,
+  toggleFavoriteNotes,
+  assignTrashToNotes,
+  toggleTrashNotes,
+  unassignTrashFromNotes,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+  loadNotesError,
+  loadNotesSuccess,
+  importNotes,
+} = noteSlice.actions
+=======
+export const {
+  addNote,
+  updateNote,
+  updateNotes,
+  deleteNotes,
+  addCategoryToNote,
+  removeCategoryFromNotes,
+  updateActiveNote,
+  updateActiveCategoryId,
+  swapFolder,
+  assignFavoriteToNotes,
+  toggleFavoriteNotes,
+  assignTrashToNotes,
+  toggleTrashNotes,
+  unassignTrashFromNotes,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+  loadNotesError,
+  loadNotesSuccess,
+  importNotes,
+} = noteSlice.actions
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  permanentlyEmptyTrash,
+=======
+import {
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          <NoteListButton
+            dataTestID="empty-trash-button"
+            label="Empty Trash"
+            handler={() => dispatch(permanentlyEmptyTrash())}
+          />
+=======
+          <NoteListButton
+            dataTestID="restore-all-trash-button"
+            label="Restore All"
+            handler={() => dispatch(restoreAllTrash())}
+          />
+          <NoteListButton
+            dataTestID="empty-trash-button"
+            label="Empty Trash"
+            handler={() => dispatch(permanentlyEmptyTrash())}
+          />
+>>>>>>> REPLACE
+```

@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "export const noteSlice = createSlice({\n  name: 'note',\n  initialState,\n  reducers: {\n    addNote: (state, action: PayloadAction<Note>) => {\n      state.notes.push(action.payload)\n    },\n    updateNote: (state, action: PayloadAction<Note>) => {\n      const index = state.notes.findIndex(note => note.id === action.payload.id)\n      if (index !== -1) {\n        state.notes[index] = action.payload\n      }\n    },\n    deleteNote: (state, action: PayloadAction<string>) => {\n      state.notes = state.notes.filter(note => note.id !== action.payload)\n    },\n    trashNote: (state, action: PayloadAction<string>) => {\n      const note = state.notes.find(note => note.id === action.payload)\n      if (note) {\n        note.trash = true\n      }\n    },\n    restoreNote: (state, action: PayloadAction<string>) => {\n      const note = state.notes.find(note => note.id === action.payload)\n      if (note) {\n        note.trash = false\n      }\n    },\n    permanentlyDeleteNote: (state, action: PayloadAction<string>) => {\n      state.notes = state.notes.filter(note => note.id !== action.payload)\n    },\n    emptyTrash: state => {\n      state.notes = state.notes.filter(note => !note.trash)\n    },\n",
+      "content": "export const noteSlice = createSlice({\n  name: 'note',\n  initialState,\n  reducers: {\n    addNote: (state, action: PayloadAction<Note>) => {\n      state.notes.push(action.payload)\n    },\n    updateNote: (state, action: PayloadAction<Note>) => {\n      const index = state.notes.findIndex(note => note.id === action.payload.id)\n      if (index !== -1) {\n        state.notes[index] = action.payload\n      }\n    },\n    deleteNote: (state, action: PayloadAction<string>) => {\n      state.notes = state.notes.filter(note => note.id !== action.payload)\n    },\n    trashNote: (state, action: PayloadAction<string>) => {\n      const note = state.notes.find(note => note.id === action.payload)\n      if (note) {\n        note.trash = true\n      }\n    },\n    restoreNote: (state, action: PayloadAction<string>) => {\n      const note = state.notes.find(note => note.id === action.payload)\n      if (note) {\n        note.trash = false\n      }\n    },\n    permanentlyDeleteNote: (state, action: PayloadAction<string>) => {\n      state.notes = state.notes.filter(note => note.id !== action.payload)\n    },\n    emptyTrash: state => {\n      state.notes = state.notes.filter(note => !note.trash)\n    },\n    restoreAllTrash: state => {\n      state.notes.forEach(note => {\n        if (note.trash) {\n          note.trash = false\n        }\n      })\n    },\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "              <button\n                className=\"btn btn-danger\"\n                onClick={() => dispatch(emptyTrash())}\n              >\n                Empty Trash\n              </button>\n            </>\n          )}\n        </div>\n      )}\n",
+      "content": "              <button\n                className=\"btn btn-primary mr-2\"\n                onClick={() => dispatch(restoreAllTrash())}\n              >\n                Restore All\n              </button>\n              <button\n                className=\"btn btn-danger\"\n                onClick={() => dispatch(emptyTrash())}\n              >\n                Empty Trash\n              </button>\n            </>\n          )}\n        </div>\n      )}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

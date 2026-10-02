@@ -1,0 +1,874 @@
+{
+  "host": {
+    "machine": "x86_64",
+    "system": "Linux",
+    "release": "7.0.0-31-generic",
+    "processor": "x86_64",
+    "python": "3.12.3",
+    "cpu_count": 12,
+    "db_uri": "bolt://localhost:7688"
+  },
+  "method": {
+    "warmup": 3,
+    "reps": 30,
+    "kg_load_reps": 3,
+    "classifications_from": {
+      "anthropic/claude-sonnet-4-6": [
+        "claude_primary_2026-09-18_wp5_p1p3",
+        "claude_primary_2026-09-19_wp5_p4p6"
+      ],
+      "openrouter/qwen/qwen3-coder": [
+        "qwen_robustness_2026-09-18_wp5_p1p3",
+        "qwen_robustness_2026-09-19_wp5_p4p6"
+      ]
+    }
+  },
+  "kg_load": {
+    "react-shopping-cart": {
+      "median_ms": 173.02,
+      "min_ms": 160.813,
+      "max_ms": 224.983,
+      "n": 3
+    },
+    "takenote": {
+      "median_ms": 503.205,
+      "min_ms": 484.374,
+      "max_ms": 503.932,
+      "n": 3
+    }
+  },
+  "kg": [
+    {
+      "model": "anthropic/claude-sonnet-4-6",
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "classification": {
+        "task_type": "bug_fix",
+        "anchor_names": [
+          "useCartProducts"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "bug_fix.cypher": {
+          "median_ms": 1.609,
+          "min_ms": 1.488,
+          "max_ms": 2.715,
+          "n": 30,
+          "rows": 1
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 0.775,
+          "min_ms": 0.712,
+          "max_ms": 1.434,
+          "n": 30,
+          "rows": 0
+        }
+      },
+      "cypher_total": {
+        "median_ms": 2.406,
+        "min_ms": 2.236,
+        "max_ms": 3.751,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 2.648,
+        "min_ms": 2.476,
+        "max_ms": 4.128,
+        "n": 30
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-6",
+      "task": "P4",
+      "project": "react-shopping-cart",
+      "classification": {
+        "task_type": "feature_addition",
+        "anchor_names": [
+          "useCart",
+          "Cart"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "feature_addition_a.cypher": {
+          "median_ms": 1.161,
+          "min_ms": 0.887,
+          "max_ms": 1.513,
+          "n": 30,
+          "rows": 1
+        },
+        "feature_addition_b.cypher": {
+          "median_ms": 0.729,
+          "min_ms": 0.611,
+          "max_ms": 0.813,
+          "n": 30,
+          "rows": 0
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 0.875,
+          "min_ms": 0.637,
+          "max_ms": 0.991,
+          "n": 30,
+          "rows": 1
+        }
+      },
+      "cypher_total": {
+        "median_ms": 2.721,
+        "min_ms": 2.247,
+        "max_ms": 3.199,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 2.905,
+        "min_ms": 2.48,
+        "max_ms": 3.449,
+        "n": 30
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-6",
+      "task": "P5",
+      "project": "react-shopping-cart",
+      "classification": {
+        "task_type": "refactoring",
+        "anchor_names": [
+          "CartProduct",
+          "CartProducts",
+          "useCart"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 3,
+      "queries": {
+        "refactoring.cypher": {
+          "median_ms": 1.51,
+          "min_ms": 1.352,
+          "max_ms": 1.71,
+          "n": 30,
+          "rows": 2
+        },
+        "refactoring_caller_props.cypher": {
+          "median_ms": 0.873,
+          "min_ms": 0.717,
+          "max_ms": 1.093,
+          "n": 30,
+          "rows": 2
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 1.011,
+          "min_ms": 0.848,
+          "max_ms": 1.213,
+          "n": 30,
+          "rows": 3
+        }
+      },
+      "cypher_total": {
+        "median_ms": 3.424,
+        "min_ms": 3.003,
+        "max_ms": 3.661,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 3.716,
+        "min_ms": 3.288,
+        "max_ms": 3.993,
+        "n": 30
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-6",
+      "task": "P5",
+      "project": "react-shopping-cart",
+      "classification": {
+        "task_type": "refactoring",
+        "anchor_names": [
+          "CartProduct",
+          "CartProducts"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 2,
+      "queries": {
+        "refactoring.cypher": {
+          "median_ms": 1.501,
+          "min_ms": 1.319,
+          "max_ms": 2.279,
+          "n": 30,
+          "rows": 2
+        },
+        "refactoring_caller_props.cypher": {
+          "median_ms": 0.888,
+          "min_ms": 0.706,
+          "max_ms": 1.168,
+          "n": 30,
+          "rows": 2
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 0.962,
+          "min_ms": 0.852,
+          "max_ms": 1.326,
+          "n": 30,
+          "rows": 3
+        }
+      },
+      "cypher_total": {
+        "median_ms": 3.324,
+        "min_ms": 2.915,
+        "max_ms": 4.735,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 3.619,
+        "min_ms": 3.194,
+        "max_ms": 5.399,
+        "n": 30
+      }
+    },
+    {
+      "model": "openrouter/qwen/qwen3-coder",
+      "task": "P1",
+      "project": "react-shopping-cart",
+      "classification": {
+        "task_type": "bug_fix",
+        "anchor_names": [
+          "useCartProducts"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "bug_fix.cypher": {
+          "median_ms": 1.593,
+          "min_ms": 1.424,
+          "max_ms": 2.334,
+          "n": 30,
+          "rows": 1
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 0.722,
+          "min_ms": 0.65,
+          "max_ms": 1.839,
+          "n": 30,
+          "rows": 0
+        }
+      },
+      "cypher_total": {
+        "median_ms": 2.316,
+        "min_ms": 2.083,
+        "max_ms": 4.173,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 2.557,
+        "min_ms": 2.343,
+        "max_ms": 4.48,
+        "n": 30
+      }
+    },
+    {
+      "model": "openrouter/qwen/qwen3-coder",
+      "task": "P4",
+      "project": "react-shopping-cart",
+      "classification": {
+        "task_type": "feature_addition",
+        "anchor_names": [
+          "useCart",
+          "Cart"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "feature_addition_a.cypher": {
+          "median_ms": 0.974,
+          "min_ms": 0.9,
+          "max_ms": 1.198,
+          "n": 30,
+          "rows": 1
+        },
+        "feature_addition_b.cypher": {
+          "median_ms": 0.674,
+          "min_ms": 0.573,
+          "max_ms": 0.931,
+          "n": 30,
+          "rows": 0
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 0.728,
+          "min_ms": 0.652,
+          "max_ms": 0.859,
+          "n": 30,
+          "rows": 1
+        }
+      },
+      "cypher_total": {
+        "median_ms": 2.376,
+        "min_ms": 2.186,
+        "max_ms": 2.842,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 2.594,
+        "min_ms": 2.427,
+        "max_ms": 3.034,
+        "n": 30
+      }
+    },
+    {
+      "model": "openrouter/qwen/qwen3-coder",
+      "task": "P5",
+      "project": "react-shopping-cart",
+      "classification": {
+        "task_type": "refactoring",
+        "anchor_names": [
+          "CartProduct",
+          "CartProducts",
+          "useCart"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 4,
+      "queries": {
+        "refactoring.cypher": {
+          "median_ms": 1.523,
+          "min_ms": 1.295,
+          "max_ms": 2.651,
+          "n": 30,
+          "rows": 2
+        },
+        "refactoring_caller_props.cypher": {
+          "median_ms": 0.74,
+          "min_ms": 0.652,
+          "max_ms": 1.262,
+          "n": 30,
+          "rows": 2
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 0.893,
+          "min_ms": 0.808,
+          "max_ms": 1.621,
+          "n": 30,
+          "rows": 3
+        }
+      },
+      "cypher_total": {
+        "median_ms": 3.184,
+        "min_ms": 2.865,
+        "max_ms": 4.658,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 3.51,
+        "min_ms": 3.149,
+        "max_ms": 5.074,
+        "n": 30
+      }
+    },
+    {
+      "model": "openrouter/qwen/qwen3-coder",
+      "task": "P5",
+      "project": "react-shopping-cart",
+      "classification": {
+        "task_type": "refactoring",
+        "anchor_names": [
+          "CartProduct",
+          "CartProducts"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 1,
+      "queries": {
+        "refactoring.cypher": {
+          "median_ms": 1.412,
+          "min_ms": 1.258,
+          "max_ms": 1.702,
+          "n": 30,
+          "rows": 2
+        },
+        "refactoring_caller_props.cypher": {
+          "median_ms": 0.756,
+          "min_ms": 0.712,
+          "max_ms": 1.905,
+          "n": 30,
+          "rows": 2
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 0.941,
+          "min_ms": 0.82,
+          "max_ms": 1.718,
+          "n": 30,
+          "rows": 3
+        }
+      },
+      "cypher_total": {
+        "median_ms": 3.11,
+        "min_ms": 2.823,
+        "max_ms": 4.403,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 3.452,
+        "min_ms": 3.187,
+        "max_ms": 4.852,
+        "n": 30
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-6",
+      "task": "P2",
+      "project": "takenote",
+      "classification": {
+        "task_type": "feature_addition",
+        "anchor_names": [
+          "NoteList"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "feature_addition_a.cypher": {
+          "median_ms": 4.519,
+          "min_ms": 4.14,
+          "max_ms": 7.394,
+          "n": 30,
+          "rows": 1
+        },
+        "feature_addition_b.cypher": {
+          "median_ms": 0.971,
+          "min_ms": 0.849,
+          "max_ms": 1.271,
+          "n": 30,
+          "rows": 2
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 1.312,
+          "min_ms": 1.144,
+          "max_ms": 1.732,
+          "n": 30,
+          "rows": 3
+        }
+      },
+      "cypher_total": {
+        "median_ms": 6.779,
+        "min_ms": 6.313,
+        "max_ms": 9.791,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 7.091,
+        "min_ms": 6.605,
+        "max_ms": 10.145,
+        "n": 30
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-6",
+      "task": "P3",
+      "project": "takenote",
+      "classification": {
+        "task_type": "refactoring",
+        "anchor_names": [
+          "NoteMenuBar",
+          "useCopyToClipboard"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "refactoring.cypher": {
+          "median_ms": 4.407,
+          "min_ms": 4.151,
+          "max_ms": 6.233,
+          "n": 30,
+          "rows": 1
+        },
+        "refactoring_caller_props.cypher": {
+          "median_ms": 0.802,
+          "min_ms": 0.742,
+          "max_ms": 1.06,
+          "n": 30,
+          "rows": 0
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 1.103,
+          "min_ms": 0.952,
+          "max_ms": 1.241,
+          "n": 30,
+          "rows": 2
+        }
+      },
+      "cypher_total": {
+        "median_ms": 6.346,
+        "min_ms": 5.946,
+        "max_ms": 8.177,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 6.576,
+        "min_ms": 6.206,
+        "max_ms": 8.447,
+        "n": 30
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-4-6",
+      "task": "P6",
+      "project": "takenote",
+      "classification": {
+        "task_type": "bug_fix",
+        "anchor_names": [
+          "CategoryList"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "bug_fix.cypher": {
+          "median_ms": 4.439,
+          "min_ms": 4.195,
+          "max_ms": 5.673,
+          "n": 30,
+          "rows": 1
+        }
+      },
+      "cypher_total": {
+        "median_ms": 4.439,
+        "min_ms": 4.195,
+        "max_ms": 5.673,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 4.661,
+        "min_ms": 4.387,
+        "max_ms": 5.943,
+        "n": 30
+      }
+    },
+    {
+      "model": "openrouter/qwen/qwen3-coder",
+      "task": "P2",
+      "project": "takenote",
+      "classification": {
+        "task_type": "feature_addition",
+        "anchor_names": [
+          "NoteList"
+        ],
+        "anchor_routes": [
+          "/notes/trash"
+        ]
+      },
+      "calls": 2,
+      "queries": {
+        "feature_addition_a.cypher": {
+          "median_ms": 4.463,
+          "min_ms": 4.279,
+          "max_ms": 6.354,
+          "n": 30,
+          "rows": 1
+        },
+        "feature_addition_b.cypher": {
+          "median_ms": 0.944,
+          "min_ms": 0.863,
+          "max_ms": 1.777,
+          "n": 30,
+          "rows": 2
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 1.217,
+          "min_ms": 1.072,
+          "max_ms": 1.551,
+          "n": 30,
+          "rows": 3
+        }
+      },
+      "cypher_total": {
+        "median_ms": 6.727,
+        "min_ms": 6.301,
+        "max_ms": 8.57,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 7.054,
+        "min_ms": 6.597,
+        "max_ms": 9.027,
+        "n": 30
+      }
+    },
+    {
+      "model": "openrouter/qwen/qwen3-coder",
+      "task": "P2",
+      "project": "takenote",
+      "classification": {
+        "task_type": "feature_addition",
+        "anchor_names": [
+          "NoteList"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 3,
+      "queries": {
+        "feature_addition_a.cypher": {
+          "median_ms": 4.436,
+          "min_ms": 4.217,
+          "max_ms": 5.949,
+          "n": 30,
+          "rows": 1
+        },
+        "feature_addition_b.cypher": {
+          "median_ms": 0.968,
+          "min_ms": 0.82,
+          "max_ms": 2.164,
+          "n": 30,
+          "rows": 2
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 1.243,
+          "min_ms": 1.085,
+          "max_ms": 1.697,
+          "n": 30,
+          "rows": 3
+        }
+      },
+      "cypher_total": {
+        "median_ms": 6.649,
+        "min_ms": 6.232,
+        "max_ms": 9.045,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 6.942,
+        "min_ms": 6.522,
+        "max_ms": 9.41,
+        "n": 30
+      }
+    },
+    {
+      "model": "openrouter/qwen/qwen3-coder",
+      "task": "P3",
+      "project": "takenote",
+      "classification": {
+        "task_type": "refactoring",
+        "anchor_names": [
+          "NoteMenuBar",
+          "useCopyToClipboard"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "refactoring.cypher": {
+          "median_ms": 4.721,
+          "min_ms": 4.218,
+          "max_ms": 6.081,
+          "n": 30,
+          "rows": 1
+        },
+        "refactoring_caller_props.cypher": {
+          "median_ms": 0.925,
+          "min_ms": 0.74,
+          "max_ms": 1.501,
+          "n": 30,
+          "rows": 0
+        },
+        "neighbor_props.cypher": {
+          "median_ms": 1.025,
+          "min_ms": 0.905,
+          "max_ms": 1.852,
+          "n": 30,
+          "rows": 2
+        }
+      },
+      "cypher_total": {
+        "median_ms": 6.692,
+        "min_ms": 6.074,
+        "max_ms": 8.47,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 6.973,
+        "min_ms": 6.303,
+        "max_ms": 8.79,
+        "n": 30
+      }
+    },
+    {
+      "model": "openrouter/qwen/qwen3-coder",
+      "task": "P6",
+      "project": "takenote",
+      "classification": {
+        "task_type": "bug_fix",
+        "anchor_names": [
+          "CategoryList"
+        ],
+        "anchor_routes": []
+      },
+      "calls": 5,
+      "queries": {
+        "bug_fix.cypher": {
+          "median_ms": 4.524,
+          "min_ms": 4.324,
+          "max_ms": 5.855,
+          "n": 30,
+          "rows": 1
+        }
+      },
+      "cypher_total": {
+        "median_ms": 4.524,
+        "min_ms": 4.324,
+        "max_ms": 5.855,
+        "n": 30
+      },
+      "dispatch_total": {
+        "median_ms": 4.736,
+        "min_ms": 4.54,
+        "max_ms": 6.108,
+        "n": 30
+      }
+    }
+  ],
+  "baselines": {
+    "P1": {
+      "project": "react-shopping-cart",
+      "bm25_cold": {
+        "median_ms": 41.283,
+        "min_ms": 39.418,
+        "max_ms": 42.9,
+        "n": 30
+      },
+      "bm25_warm": {
+        "median_ms": 17.507,
+        "min_ms": 16.958,
+        "max_ms": 19.708,
+        "n": 30
+      },
+      "dense_cached": {
+        "median_ms": 16.186,
+        "min_ms": 15.689,
+        "max_ms": 17.761,
+        "n": 30
+      }
+    },
+    "P4": {
+      "project": "react-shopping-cart",
+      "bm25_cold": {
+        "median_ms": 40.409,
+        "min_ms": 39.003,
+        "max_ms": 44.504,
+        "n": 30
+      },
+      "bm25_warm": {
+        "median_ms": 16.677,
+        "min_ms": 16.333,
+        "max_ms": 19.656,
+        "n": 30
+      },
+      "dense_cached": {
+        "median_ms": 16.089,
+        "min_ms": 15.762,
+        "max_ms": 23.846,
+        "n": 30
+      }
+    },
+    "P5": {
+      "project": "react-shopping-cart",
+      "bm25_cold": {
+        "median_ms": 40.629,
+        "min_ms": 39.33,
+        "max_ms": 43.71,
+        "n": 30
+      },
+      "bm25_warm": {
+        "median_ms": 17.045,
+        "min_ms": 16.613,
+        "max_ms": 18.681,
+        "n": 30
+      },
+      "dense_cached": {
+        "median_ms": 16.394,
+        "min_ms": 15.756,
+        "max_ms": 18.028,
+        "n": 30
+      }
+    },
+    "P2": {
+      "project": "takenote",
+      "bm25_cold": {
+        "median_ms": 64.902,
+        "min_ms": 62.803,
+        "max_ms": 71.149,
+        "n": 30
+      },
+      "bm25_warm": {
+        "median_ms": 38.928,
+        "min_ms": 37.063,
+        "max_ms": 42.627,
+        "n": 30
+      },
+      "dense_cached": {
+        "median_ms": 35.847,
+        "min_ms": 34.052,
+        "max_ms": 40.041,
+        "n": 30
+      }
+    },
+    "P3": {
+      "project": "takenote",
+      "bm25_cold": {
+        "median_ms": 65.244,
+        "min_ms": 63.081,
+        "max_ms": 69.608,
+        "n": 30
+      },
+      "bm25_warm": {
+        "median_ms": 38.779,
+        "min_ms": 37.741,
+        "max_ms": 42.069,
+        "n": 30
+      },
+      "dense_cached": {
+        "median_ms": 35.852,
+        "min_ms": 34.636,
+        "max_ms": 40.224,
+        "n": 30
+      }
+    },
+    "P6": {
+      "project": "takenote",
+      "bm25_cold": {
+        "median_ms": 74.001,
+        "min_ms": 71.324,
+        "max_ms": 79.184,
+        "n": 30
+      },
+      "bm25_warm": {
+        "median_ms": 47.888,
+        "min_ms": 46.319,
+        "max_ms": 50.9,
+        "n": 30
+      },
+      "dense_cached": {
+        "median_ms": 35.569,
+        "min_ms": 34.569,
+        "max_ms": 39.244,
+        "n": 30
+      }
+    }
+  },
+  "distinct_classifications": {
+    "anthropic/claude-sonnet-4-6|P1": 1,
+    "anthropic/claude-sonnet-4-6|P2": 1,
+    "anthropic/claude-sonnet-4-6|P3": 1,
+    "anthropic/claude-sonnet-4-6|P4": 1,
+    "anthropic/claude-sonnet-4-6|P5": 2,
+    "anthropic/claude-sonnet-4-6|P6": 1,
+    "openrouter/qwen/qwen3-coder|P1": 1,
+    "openrouter/qwen/qwen3-coder|P2": 2,
+    "openrouter/qwen/qwen3-coder|P3": 1,
+    "openrouter/qwen/qwen3-coder|P4": 1,
+    "openrouter/qwen/qwen3-coder|P5": 2,
+    "openrouter/qwen/qwen3-coder|P6": 1
+  }
+}

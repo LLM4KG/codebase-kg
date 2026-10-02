@@ -1,0 +1,2118 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+TakeNote has a "permanently empty trash" action but no way to restore all trashed notes at once. Add a `restoreAllTrash` reducer action to the note slice (`src/client/slices/note.ts`) that sets `trash: false` on every trashed note. Then add a "Restore All" button to the NoteList component (`src/client/containers/NoteList.tsx`) that appears alongside the existing "Empty Trash" button when the user is viewing the Trash folder.
+
+## Project Context
+
+You are working on the **takenote** React project.
+
+**Task type:** feature_addition
+
+---
+
+### Target Components
+
+
+#### note (`src/client/slices/note.ts`)
+
+
+```jsx
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { v4 as uuid } from 'uuid'
+
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { NoteItem, NoteState } from '@/types'
+import { isDraftNote } from '@/utils/helpers'
+import { getNotesSorter } from '@/utils/notesSortStrategies'
+
+const getNewActiveNoteId = (
+  notes: NoteItem[],
+  oldNoteId: string,
+  activeCategoryId: string,
+  activeFolder: Folder
+): string => {
+  const newActiveNotes = notes
+    .filter((note) => !note.scratchpad) // filter out all scratchpad notes
+    .filter((note) => (activeFolder !== Folder.TRASH ? !note.trash : note.trash)) // trash or not trash
+    .filter((note) => (activeCategoryId ? note.category === activeCategoryId : true)) // filter category if necessary
+  const trashedNoteIndex = newActiveNotes.findIndex((note) => note.id === oldNoteId)
+
+  if (trashedNoteIndex === 0 && newActiveNotes[1]) return newActiveNotes[1].id
+  if (newActiveNotes[trashedNoteIndex - 1]) return newActiveNotes[trashedNoteIndex - 1].id
+
+  return ''
+}
+
+export const getFirstNoteId = (
+  folder: Folder,
+  notes: NoteItem[],
+  categoryId?: string,
+  sortOrderKey?: NotesSortKey
+): string => {
+  const availableNotes = !sortOrderKey
+    ? notes.filter((note) => !note.trash)
+    : notes.filter((note) => !note.trash).sort(getNotesSorter(sortOrderKey))
+
+  const firstNote = {
+    [Folder.ALL]: () => availableNotes.find((note) => !note.scratchpad),
+    [Folder.CATEGORY]: () => availableNotes.find((note) => note.category === categoryId),
+    [Folder.FAVORITES]: () => availableNotes.find((note) => note.favorite),
+    [Folder.SCRATCHPAD]: () => availableNotes.find((note) => note.scratchpad),
+    [Folder.TRASH]: () => notes.find((note) => note.trash),
+  }[folder]()
+
+  return firstNote ? firstNote.id : ''
+}
+
+export const initialState: NoteState = {
+  notes: [],
+  activeCategoryId: '',
+  activeFolder: Folder.ALL,
+  activeNoteId: '',
+  selectedNotesIds: [],
+  searchValue: '',
+  error: '',
+  loading: true,
+}
+
+const noteSlice = createSlice({
+  name: 'note',
+  initialState,
+  reducers: {
+    addNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      const draftNote = state.notes.find((note) => isDraftNote(note))
+
+      if (!draftNote) {
+        state.notes.push(payload)
+      }
+    },
+
+    importNotes: (state, { payload }: PayloadAction<NoteItem[]>) => {
+      const toAdd = payload.map((note) => {
+        note.id = uuid()
+
+        return note
+      })
+
+      state.notes.push(...toAdd)
+    },
+
+    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload.id
+          ? { ...note, text: payload.text, lastUpdated: payload.lastUpdated }
+          : note
+      )
+    },
+
+    updateNotes: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        notes: NoteItem[]
+        activeFolder: Folder
+        activeCategoryId?: string
+        sortOrderKey?: NotesSortKey
+      }>
+    ) => {
+      state.notes = payload.notes
+      state.activeNoteId = getFirstNoteId(
+        payload.activeFolder,
+        payload.notes,
+        payload.activeCategoryId,
+        payload.sortOrderKey
+      )
+      state.selectedNotesIds = [
+        getFirstNoteId(
+          payload.activeFolder,
+          payload.notes,
+          payload.activeCategoryId,
+          payload.sortOrderKey
+        ),
+      ]
+    },
+
+    deleteNotes: (state, { payload }: PayloadAction<string[]>) => {
+      state.notes = state.notes.filter((note) => !payload.includes(note.id))
+      state.activeNoteId = getNewActiveNoteId(
+        state.notes,
+        state.activeNoteId,
+        state.activeCategoryId,
+        state.activeFolder
+      )
+      state.selectedNotesIds = [
+        getNewActiveNoteId(
+          state.notes,
+          state.activeNoteId,
+          state.activeCategoryId,
+          state.activeFolder
+        ),
+      ]
+    },
+
+    addCategoryToNote: (
+      state,
+      { payload }: PayloadAction<{ categoryId: string; noteId: string }>
+    ) => {
+      state.notes = state.selectedNotesIds.includes(payload.noteId)
+        ? // Multi
+          state.notes.map((note) =>
+            state.selectedNotesIds.includes(note.id)
+              ? { ...note, category: payload.categoryId }
+              : note
+          )
+        : // Single
+          state.notes.map((note) =>
+            note.id === payload.noteId ? { ...note, category: payload.categoryId } : note
+          )
+    },
+
+    removeCategoryFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes.map((note) => {
+        if (note.category === payload) {
+          note.category = ''
+        }
+      })
+    },
+
+    updateActiveNote: (
+      state,
+      { payload: { noteId, multiSelect } }: PayloadAction<{ noteId: string; multiSelect: boolean }>
+    ) => {
+      state.activeNoteId = multiSelect
+        ? state.notes.filter(({ id }) => state.selectedNotesIds.includes(id)).slice(-1)[0].id
+        : noteId
+    },
+
+    updateActiveCategoryId: (state, { payload }: PayloadAction<string>) => {
+      state.activeCategoryId = payload
+      state.activeFolder = Folder.CATEGORY
+      state.activeNoteId = getFirstNoteId(Folder.CATEGORY, state.notes, payload)
+      state.selectedNotesIds = [getFirstNoteId(Folder.CATEGORY, state.notes, payload)]
+      state.notes = state.notes.filter((note) => note.text !== '')
+    },
+
+    swapFolder: (
+      state,
+      { payload }: PayloadAction<{ folder: Folder; sortOrderKey?: NotesSortKey }>
+    ) => {
+      state.activeFolder = payload.folder
+      state.activeCategoryId = ''
+      state.activeNoteId = getFirstNoteId(
+        payload.folder,
+        state.notes,
+        undefined,
+        payload.sortOrderKey
+      )
+      state.selectedNotesIds = [
+        getFirstNoteId(payload.folder, state.notes, undefined, payload.sortOrderKey),
+      ]
+      state.notes = state.notes.filter((note) => note.scratchpad || note.text !== '')
+    },
+
+    assignFavoriteToNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) => {
+        if (state.selectedNotesIds.includes(payload)) {
+          return state.selectedNotesIds.includes(note.id) ? { ...note, favorite: true } : note
+        }
+        if (note.id === payload) {
+          return { ...note, favorite: true }
+        }
+
+        return note
+      })
+    },
+
+    toggleFavoriteNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.selectedNotesIds.includes(payload)
+        ? state.notes.map((note) =>
+            state.selectedNotesIds.includes(note.id) ? { ...note, favorite: !note.favorite } : note
+          )
+        : state.notes.map((note) =>
+            note.id === payload ? { ...note, favorite: !note.favorite } : note
+          )
+    },
+
+    assignTrashToNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) => {
+        if (state.selectedNotesIds.includes(payload)) {
+          return state.selectedNotesIds.includes(note.id) ? { ...note, trash: true } : note
+        }
+        if (note.id === payload) {
+          return { ...note, trash: true }
+        }
+
+        return note
+      })
+      state.activeNoteId = getNewActiveNoteId(
+        state.notes,
+        payload,
+        state.activeCategoryId,
+        state.activeFolder
+      )
+      state.selectedNotesIds = [
+        getNewActiveNoteId(state.notes, payload, state.activeCategoryId, state.activeFolder),
+      ]
+    },
+
+    toggleTrashNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.selectedNotesIds.includes(payload)
+        ? state.notes.map((note) =>
+            state.selectedNotesIds.includes(note.id) ? { ...note, trash: !note.trash } : note
+          )
+        : state.notes.map((note) => (note.id === payload ? { ...note, trash: !note.trash } : note))
+      state.activeNoteId = getNewActiveNoteId(
+        state.notes,
+        payload,
+        state.activeCategoryId,
+        state.activeFolder
+      )
+      state.selectedNotesIds = [
+        getNewActiveNoteId(state.notes, payload, state.activeCategoryId, state.activeFolder),
+      ]
+    },
+
+    unassignTrashFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) => {
+        if (state.selectedNotesIds.includes(payload)) {
+          return state.selectedNotesIds.includes(note.id) && note.trash
+            ? { ...note, trash: false }
+            : note
+        }
+        if (note.id === payload) {
+          return { ...note, trash: false }
+        }
+
+        return note
+      })
+    },
+
+    updateSelectedNotes: (
+      state,
+      { payload: { noteId, multiSelect } }: PayloadAction<{ noteId: string; multiSelect: boolean }>
+    ) => {
+      state.selectedNotesIds = multiSelect
+        ? state.selectedNotesIds.length === 1 && state.selectedNotesIds[0] === noteId
+          ? state.selectedNotesIds
+          : state.selectedNotesIds.includes(noteId)
+          ? state.selectedNotesIds.filter((selectedNoteId) => selectedNoteId !== noteId)
+          : [...state.selectedNotesIds, noteId]
+        : [noteId]
+    },
+
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+
+    pruneNotes: (state) => {
+      state.notes = state.notes.filter(
+        (note) => note.scratchpad || note.text !== '' || state.selectedNotesIds.includes(note.id)
+      )
+    },
+
+    searchNotes: (state, { payload }: PayloadAction<string>) => {
+      state.searchValue = payload
+    },
+
+    loadNotes: (state) => {
+      state.loading = true
+    },
+
+    loadNotesError: (state, { payload }: PayloadAction<string>) => {
+      state.loading = false
+      state.error = payload
+    },
+
+    loadNotesSuccess: (
+      state,
+      { payload }: PayloadAction<{ notes: NoteItem[]; sortOrderKey?: NotesSortKey }>
+    ) => {
+      state.notes = payload.notes
+      state.activeNoteId = getFirstNoteId(
+        Folder.ALL,
+        payload.notes,
+        undefined,
+        payload.sortOrderKey
+      )
+      state.selectedNotesIds = [
+        getFirstNoteId(Folder.ALL, payload.notes, undefined, payload.sortOrderKey),
+      ]
+      state.loading = false
+    },
+  },
+})
+
+export const {
+  addNote,
+  updateNote,
+  updateNotes,
+  deleteNotes,
+  addCategoryToNote,
+  removeCategoryFromNotes,
+  updateActiveNote,
+  updateActiveCategoryId,
+  swapFolder,
+  assignFavoriteToNotes,
+  toggleFavoriteNotes,
+  assignTrashToNotes,
+  toggleTrashNotes,
+  unassignTrashFromNotes,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+  loadNotesError,
+  loadNotesSuccess,
+  importNotes,
+} = noteSlice.actions
+
+export default noteSlice.reducer
+
+```
+
+
+
+
+
+
+
+
+#### NoteList (`src/client/containers/NoteList.tsx`)
+
+
+```tsx
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { MoreHorizontal, Book, Star, Folder as FolderIcon } from 'react-feather'
+
+import { TestID } from '@resources/TestID'
+import { Folder, Shortcuts, ContextMenuEnum } from '@/utils/enums'
+import { NoteListButton } from '@/components/NoteList/NoteListButton'
+import { SearchBar } from '@/components/NoteList/SearchBar'
+import { ContextMenu } from '@/containers/ContextMenu'
+import { getNoteTitle, shouldOpenContextMenu, debounceEvent, isDraftNote } from '@/utils/helpers'
+import { useKey } from '@/utils/hooks'
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+import { NoteItem, ReactDragEvent, ReactMouseEvent } from '@/types'
+import { getNotes, getSettings, getCategories } from '@/selectors'
+import { getNotesSorter } from '@/utils/notesSortStrategies'
+
+export const NoteList: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { notesSortKey } = useSelector(getSettings)
+  const { activeCategoryId, activeFolder, selectedNotesIds, notes, searchValue } =
+    useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+
+  // ===========================================================================
+  // Refs
+  // ===========================================================================
+
+  const contextMenuRef = useRef<HTMLDivElement>(null)
+  const searchRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [optionsId, setOptionsId] = useState('')
+  const [optionsPosition, setOptionsPosition] = useState({ x: 0, y: 0 })
+
+  const re = new RegExp(searchValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+  const isMatch = (result: NoteItem) => re.test(result.text)
+
+  const filter: Record<Folder, (note: NoteItem) => boolean> = {
+    [Folder.CATEGORY]: (note) => !note.trash && note.category === activeCategoryId,
+    [Folder.SCRATCHPAD]: (note) => !!note.scratchpad,
+    [Folder.FAVORITES]: (note) => !note.trash && !!note.favorite,
+    [Folder.TRASH]: (note) => !!note.trash,
+    [Folder.ALL]: (note) => !note.trash && !note.scratchpad,
+  }
+
+  const filteredNotes: NoteItem[] = notes
+    .filter(filter[activeFolder])
+    .filter(isMatch)
+    .sort(getNotesSorter(notesSortKey))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const focusSearchHandler = () => searchRef.current.focus()
+
+  const handleDragStart = (event: ReactDragEvent, noteId: string = '') => {
+    event.stopPropagation()
+
+    event.dataTransfer.setData('text/plain', noteId)
+  }
+
+  const handleNoteOptionsClick = (event: ReactMouseEvent, noteId: string = '') => {
+    const clicked = event.target
+
+    // Make sure we aren't getting any null values. Any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    // Ensure the clicked target is supposed to open the context menu
+    if (shouldOpenContextMenu(clicked as Element)) {
+      // note: don't check for MouseEvent because Cypress MouseEvent !== Window.MouseEvent
+      if ('pageX' in event && 'pageY' in event) {
+        setOptionsPosition({ x: event.pageX, y: event.pageY })
+      }
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef.current || !contextMenuRef.current.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== noteId ? noteId : '')
+    }
+  }
+
+  const handleNoteRightClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    noteId: string = ''
+  ) => {
+    event.preventDefault()
+    const clicked = event.target
+    const RIGHT_CLICK = 2
+
+    // Make sure we aren't getting any null values .. any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    // FIXME: This feels hacky
+    if (event.ctrlKey) return
+
+    // Make sure we are not right clicking on the menu
+    if (optionsId && event.button == RIGHT_CLICK) return
+
+    if ('clientX' in event && 'clientY' in event) {
+      setOptionsPosition({ x: event.clientX, y: event.clientY })
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef.current || contextMenuRef.current.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== noteId ? noteId : '')
+    }
+  }
+
+  const showEmptyTrash = activeFolder === Folder.TRASH && filteredNotes.length > 0
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleNoteOptionsClick)
+
+    return () => {
+      document.removeEventListener('mousedown', handleNoteOptionsClick)
+    }
+  })
+
+  useKey(Shortcuts.SEARCH, () => focusSearchHandler())
+
+  return (
+    <aside className="note-sidebar">
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            label="Empty"
+            handler={() => _permanentlyEmptyTrash()}
+          >
+            Empty Trash
+          </NoteListButton>
+        )}
+      </div>
+      <div data-testid={TestID.NOTE_LIST} className="note-list">
+        {filteredNotes.map((note: NoteItem, index: number) => {
+          let noteTitle: string | React.ReactElement = getNoteTitle(note.text)
+          const noteCategory = categories.find((category) => category.id === note.category)
+
+          if (searchValue) {
+            const highlightStart = noteTitle.search(re)
+
+            if (highlightStart !== -1) {
+              const highlightEnd = highlightStart + searchValue.length
+
+              noteTitle = (
+                <>
+                  {noteTitle.slice(0, highlightStart)}
+                  <strong className="highlighted">
+                    {noteTitle.slice(highlightStart, highlightEnd)}
+                  </strong>
+                  {noteTitle.slice(highlightEnd)}
+                </>
+              )
+            }
+          }
+
+          return (
+            <div
+              data-testid={TestID.NOTE_LIST_ITEM + index}
+              className={
+                selectedNotesIds.includes(note.id) ? 'note-list-each selected' : 'note-list-each'
+              }
+              key={note.id}
+              onClick={(event) => {
+                event.stopPropagation()
+
+                _updateSelectedNotes(note.id, event.metaKey)
+                _updateActiveNote(note.id, event.metaKey)
+                _pruneNotes()
+              }}
+              onContextMenu={(event) => handleNoteRightClick(event, note.id)}
+              draggable={note.text !== ''}
+              onDragStart={(event) => handleDragStart(event, note.id)}
+            >
+              <div className="note-list-outer">
+                <div data-testid={'note-title-' + index} className="note-title">
+                  {note.favorite ? (
+                    <>
+                      <div className="icon">
+                        <Star aria-hidden="true" className="note-favorite" size={12} />
+                        <span className="sr-only">Favorite note</span>
+                      </div>
+                      <div className="truncate-text">{noteTitle}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="icon" />
+                      <div className="truncate-text"> {noteTitle}</div>
+                    </>
+                  )}
+                </div>
+                {!isDraftNote(note) ? (
+                  <div
+                    // TODO: make testID based off of index when we add that to a NoteItem object
+                    data-testid={TestID.NOTE_OPTIONS_DIV + index}
+                    className={optionsId === note.id ? 'note-options selected' : 'note-options'}
+                    onClick={(event) => handleNoteOptionsClick(event, note.id)}
+                  >
+                    <MoreHorizontal aria-hidden="true" size={15} className="context-menu-action" />
+                    <span className="sr-only">Note options</span>
+                  </div>
+                ) : (
+                  <div className="note-options">&nbsp;</div>
+                )}
+              </div>
+              {(activeFolder === Folder.ALL || activeFolder === Folder.FAVORITES) && (
+                <div className="note-category">
+                  {!!noteCategory ? (
+                    <>
+                      <FolderIcon size={12} className="context-menu-action" />
+                      {noteCategory?.name}
+                    </>
+                  ) : (
+                    <>
+                      <Book size={12} className="context-menu-action" />
+                      Notes
+                    </>
+                  )}
+                </div>
+              )}
+              {optionsId === note.id && !isDraftNote(note) && (
+                <ContextMenu
+                  contextMenuRef={contextMenuRef}
+                  item={note}
+                  optionsPosition={optionsPosition}
+                  setOptionsId={setOptionsId}
+                  type={ContextMenuEnum.NOTE}
+                />
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </aside>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### helpers (`src/client/utils/helpers.ts`)
+
+
+```jsx
+import dayjs from 'dayjs'
+import { v4 as uuid } from 'uuid'
+import JSZip from 'jszip'
+import { Action } from 'redux'
+import * as clipboard from 'clipboard-polyfill/text'
+
+import { LabelText } from '@resources/LabelText'
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { folderMap } from '@/utils/constants'
+import { NoteItem, CategoryItem, WithPayload } from '@/types'
+
+export const getActiveNote = (notes: NoteItem[], activeNoteId: string) =>
+  notes.find((note) => note.id === activeNoteId)
+
+export const getShortUuid = (uuid: string) => {
+  return uuid.substr(0, 6)
+}
+
+export const getActiveNoteFromShortUuid = (notes: NoteItem[], shortUuid: string) => {
+  const uuidWithoutHash = shortUuid.replace('{{', '').replace('}}', '')
+
+  return notes.find((note) => note.id.startsWith(uuidWithoutHash))
+}
+
+export const getActiveCategory = (categories: CategoryItem[], activeCategoryId: string) =>
+  categories.find(({ id }) => id === activeCategoryId)
+
+export const getNoteTitle = (text: string): string => {
+  // Remove whitespace from both ends
+  // Get the first n characters
+  // Remove # from the title in the case of using markdown headers in your title
+  const noteText = text.trim().match(/[^#]{1,45}/)
+
+  // Get the first line of text after any newlines
+  // In the future, this should break on a full word
+  return noteText ? noteText[0].trim().split(/\r?\n/)[0] : LabelText.NEW_NOTE
+}
+
+export const noteWithFrontmatter = (note: NoteItem, category?: CategoryItem): string =>
+  `---
+title: ${getNoteTitle(note.text)}
+created: ${note.created}
+lastUpdated: ${note.lastUpdated}
+category: ${category?.name ?? ''}
+---
+
+${note.text}`
+
+// Downloads a single note as a markdown file or a group of notes as a zip file.
+export const downloadNotes = (notes: NoteItem[], categories: CategoryItem[]): void => {
+  if (notes.length === 1) {
+    const pom = document.createElement('a')
+
+    pom.setAttribute(
+      'href',
+      `data:text/plain;charset=utf-8,${encodeURIComponent(
+        noteWithFrontmatter(
+          notes[0],
+          categories.find((category: CategoryItem) => category.id === notes[0].category)
+        )
+      )}`
+    )
+    pom.setAttribute('download', `${getNoteTitle(notes[0].text)}.md`)
+
+    if (document.createEvent) {
+      const event = document.createEvent('MouseEvents')
+      event.initEvent('click', true, true)
+      pom.dispatchEvent(event)
+    } else {
+      pom.click()
+    }
+  } else {
+    const zip = new JSZip()
+    notes.forEach((note) =>
+      zip.file(
+        `${getNoteTitle(note.text)} (${note.id.substring(0, 6)}).md`,
+        noteWithFrontmatter(
+          note,
+          categories.find((category: CategoryItem) => category.id === note.category)
+        )
+      )
+    )
+
+    zip.generateAsync({ type: 'blob' }).then(
+      (content) => {
+        var downloadUrl = window.URL.createObjectURL(content)
+        var a = document.createElement('a')
+        a.href = downloadUrl
+        a.download = 'notes.zip'
+        document.body.appendChild(a)
+        a.click()
+        URL.revokeObjectURL(downloadUrl)
+      },
+      (err) => {
+        // TODO: error generating zip file.
+        // Generate a popup?
+      }
+    )
+  }
+}
+
+export const backupNotes = (notes: NoteItem[], categories: CategoryItem[]) => {
+  const pom = document.createElement('a')
+
+  const json = JSON.stringify({ notes, categories })
+  const blob = new Blob([json], { type: 'application/json' })
+
+  const downloadUrl = window.URL.createObjectURL(blob)
+  pom.href = downloadUrl
+  pom.download = `takenote-backup-${dayjs().format('YYYY-MM-DD')}.json`
+  document.body.appendChild(pom)
+
+  // @ts-ignore
+  if (!window.Cypress) {
+    pom.click()
+    URL.revokeObjectURL(downloadUrl)
+  }
+}
+
+const newNote = (categoryId?: string, folder?: Folder): NoteItem => ({
+  id: uuid(),
+  text: '',
+  created: dayjs().format(),
+  lastUpdated: dayjs().format(),
+  category: categoryId,
+  favorite: folder === Folder.FAVORITES,
+})
+
+export const newNoteHandlerHelper = (
+  activeFolder: Folder,
+  previewMarkdown: boolean,
+  activeNote: NoteItem | undefined,
+  activeCategoryId: string,
+  swapFolder: (
+    folder: Folder
+  ) => WithPayload<{ folder: string; sortOrderKey?: NotesSortKey }, Action<string>>,
+  togglePreviewMarkdown: () => WithPayload<undefined, Action<string>>,
+  addNote: (note: NoteItem) => WithPayload<NoteItem, Action<string>>,
+  updateActiveNote: (
+    noteId: string,
+    multiSelect: boolean
+  ) => WithPayload<
+    {
+      noteId: string
+      multiSelect: boolean
+    },
+    Action<string>
+  >,
+  updateSelectedNotes: (
+    noteId: string,
+    multiSelect: boolean
+  ) => WithPayload<
+    {
+      noteId: string
+      multiSelect: boolean
+    },
+    Action<string>
+  >
+) => {
+  if ([Folder.TRASH, Folder.SCRATCHPAD].indexOf(activeFolder) !== -1) {
+    swapFolder(Folder.ALL)
+  }
+
+  if (previewMarkdown) {
+    togglePreviewMarkdown()
+  }
+
+  if ((activeNote && activeNote.text !== '') || !activeNote) {
+    const note = newNote(
+      activeCategoryId,
+      activeFolder === Folder.TRASH ? Folder.ALL : activeFolder
+    )
+    addNote(note)
+    updateSelectedNotes(note.id, false)
+    updateActiveNote(note.id, false)
+  }
+}
+
+export const shouldOpenContextMenu = (clicked: Element) => {
+  if (!clicked.parentElement) return
+
+  const elementContainsClass = (className: string) => clicked.classList.contains(className)
+
+  const parentContainsClass = (className: string) =>
+    clicked.parentElement!.classList.contains(className)
+
+  return (
+    (clicked instanceof Element &&
+      // If the element is explicitly a context menu action
+      elementContainsClass('context-menu-action')) ||
+    // If the element is an item of the context menu
+    (!elementContainsClass('nav-item') &&
+      !elementContainsClass('options-context-menu') &&
+      !elementContainsClass('nav-item-icon') &&
+      !parentContainsClass('nav-item-icon')) ||
+    // Or if it's a sub-element of the context menu
+    (clicked.tagName === 'circle' && parentContainsClass('context-menu-action'))
+  )
+}
+
+export const getWebsiteTitle = (activeFolder: Folder, activeCategory?: CategoryItem) => {
+  // Show category name if category is active
+  if (activeFolder === Folder.CATEGORY && activeCategory) {
+    return `${activeCategory.name} | TakeNote`
+  } else {
+    // Show main folder name otherwise
+    return `${folderMap[activeFolder]} | TakeNote`
+  }
+}
+
+export const determineAppClass = (
+  darkTheme: boolean,
+  sidebarVisible: boolean,
+  activeFolder: Folder
+) => {
+  let className = 'app'
+
+  if (darkTheme) className += ' dark'
+
+  return className
+}
+
+export const determineCategoryClass = (
+  category: CategoryItem,
+  isDragging: boolean,
+  activeCategoryId: string
+) => {
+  if (category.draggedOver) {
+    return 'category-list-each dragged-over'
+  } else if (category.id === activeCategoryId) {
+    return 'category-list-each active'
+  } else if (isDragging) {
+    return 'category-list-each dragging'
+  } else {
+    return 'category-list-each'
+  }
+}
+
+export const debounceEvent = <T extends Function>(cb: T, wait = 20) => {
+  let h = 0
+  const callable = (...args: any) => {
+    clearTimeout(h)
+    h = window.setTimeout(() => cb(...args), wait)
+  }
+
+  return <T>(<any>callable)
+}
+
+export const isDraftNote = (note: NoteItem) => {
+  return !note.scratchpad && note.text === ''
+}
+
+export const getDayJsLocale = (languagetoken: string): string => {
+  try {
+    require('dayjs/locale/' + languagetoken + '.js')
+
+    return languagetoken
+  } catch (error) {
+    if (languagetoken.includes('-'))
+      return getDayJsLocale(languagetoken.substring(0, languagetoken.lastIndexOf('-')))
+
+    return 'en'
+  }
+}
+
+export const getNoteBarConf = (
+  activeFolder: Folder
+): {
+  minSize?: number
+  maxSize?: number
+  defaultSize?: number
+  allowResize?: boolean
+  resizerStyle?: React.CSSProperties
+} => {
+  switch (activeFolder) {
+    case Folder.SCRATCHPAD:
+      return {
+        minSize: 0,
+        maxSize: 0,
+        defaultSize: 0,
+        allowResize: false,
+        resizerStyle: { display: 'none' },
+      }
+
+    default:
+      return {
+        minSize: 200,
+        maxSize: 600,
+        defaultSize: 330,
+      }
+  }
+}
+
+export const copyToClipboard = (text: string) => {
+  clipboard.writeText(text)
+}
+
+```
+
+
+
+
+
+
+
+
+#### NoteMenuBar (`src/client/containers/NoteMenuBar.tsx`)
+
+
+```tsx
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  Eye,
+  Edit,
+  Star,
+  Trash2,
+  Download,
+  RefreshCw,
+  Loader,
+  Settings,
+  Sun,
+  Moon,
+  Clipboard as ClipboardCmp,
+} from 'react-feather'
+
+import { TestID } from '@resources/TestID'
+import { LastSyncedNotification } from '@/components/LastSyncedNotification'
+import { NoteItem, CategoryItem } from '@/types'
+import {
+  toggleSettingsModal,
+  togglePreviewMarkdown,
+  toggleDarkTheme,
+  updateCodeMirrorOption,
+} from '@/slices/settings'
+import { toggleFavoriteNotes, toggleTrashNotes } from '@/slices/note'
+import { getCategories, getNotes, getSync, getSettings } from '@/selectors'
+import { downloadNotes, isDraftNote, getShortUuid, copyToClipboard } from '@/utils/helpers'
+import { sync } from '@/slices/sync'
+
+export const NoteMenuBar = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { notes, activeNoteId } = useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+  const { syncing, lastSynced, pendingSync } = useSelector(getSync)
+  const { darkTheme } = useSelector(getSettings)
+
+  // ===========================================================================
+  // Other
+  // ===========================================================================
+
+  const copyNoteIcon = <ClipboardCmp size={18} aria-hidden="true" focusable="false" />
+  const successfulCopyMessage = 'Note copied!'
+  const activeNote = notes.find((note) => note.id === activeNoteId)!
+  const shortNoteUuid = getShortUuid(activeNoteId)
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [uuidCopiedText, setUuidCopiedText] = useState<string>('')
+  const [isToggled, togglePreviewIcon] = useState<boolean>(false)
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    if (uuidCopiedText === successfulCopyMessage) {
+      const timer = setTimeout(() => {
+        setUuidCopiedText('')
+      }, 3000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [uuidCopiedText])
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _togglePreviewMarkdown = () => dispatch(togglePreviewMarkdown())
+  const _toggleTrashNotes = (noteId: string) => dispatch(toggleTrashNotes(noteId))
+  const _toggleFavoriteNotes = (noteId: string) => dispatch(toggleFavoriteNotes(noteId))
+  const _sync = (notes: NoteItem[], categories: CategoryItem[]) =>
+    dispatch(sync({ notes, categories }))
+  const _toggleSettingsModal = () => dispatch(toggleSettingsModal())
+  const _toggleDarkTheme = () => dispatch(toggleDarkTheme())
+  const _updateCodeMirrorOption = (key: string, value: any) =>
+    dispatch(updateCodeMirrorOption({ key, value }))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const downloadNotesHandler = () => downloadNotes([activeNote], categories)
+  const favoriteNoteHandler = () => _toggleFavoriteNotes(activeNoteId)
+  const trashNoteHandler = () => _toggleTrashNotes(activeNoteId)
+  const syncNotesHandler = () => _sync(notes, categories)
+  const settingsHandler = () => _toggleSettingsModal()
+  const toggleDarkThemeHandler = () => {
+    _toggleDarkTheme()
+    _updateCodeMirrorOption('theme', darkTheme ? 'base16-light' : 'new-moon')
+  }
+  const togglePreviewHandler = () => {
+    togglePreviewIcon(!isToggled)
+    _togglePreviewMarkdown()
+  }
+
+  return (
+    <section className="note-menu-bar">
+      {activeNote && !isDraftNote(activeNote) ? (
+        <nav>
+          <button
+            className="note-menu-bar-button"
+            onClick={togglePreviewHandler}
+            data-testid={TestID.PREVIEW_MODE}
+          >
+            {isToggled ? (
+              <Edit aria-hidden="true" size={18} />
+            ) : (
+              <Eye aria-hidden="true" size={18} />
+            )}
+            <span className="sr-only">{isToggled ? 'Edit note' : 'Preview note'}</span>
+          </button>
+          {!activeNote.scratchpad && (
+            <>
+              <button className="note-menu-bar-button" onClick={favoriteNoteHandler}>
+                <Star aria-hidden="true" size={18} />
+                <span className="sr-only">Add note to favorites</span>
+              </button>
+              <button className="note-menu-bar-button trash" onClick={trashNoteHandler}>
+                <Trash2 aria-hidden="true" size={18} />
+                <span className="sr-only">Delete note</span>
+              </button>
+            </>
+          )}
+          <button className="note-menu-bar-button">
+            <Download aria-hidden="true" size={18} onClick={downloadNotesHandler} />
+            <span className="sr-only">Download note</span>
+          </button>
+          <button
+            className="note-menu-bar-button uuid"
+            onClick={() => {
+              copyToClipboard(`{{${shortNoteUuid}}}`)
+              setUuidCopiedText(successfulCopyMessage)
+            }}
+            data-testid={TestID.UUID_MENU_BAR_COPY_ICON}
+          >
+            {copyNoteIcon}
+            {uuidCopiedText && <span className="uuid-copied-text">{uuidCopiedText}</span>}
+            <span className="sr-only">Copy note</span>
+          </button>
+        </nav>
+      ) : (
+        <div />
+      )}
+      <nav>
+        <LastSyncedNotification datetime={lastSynced} pending={pendingSync} syncing={syncing} />
+        <button
+          className="note-menu-bar-button"
+          onClick={syncNotesHandler}
+          data-testid={TestID.TOPBAR_ACTION_SYNC_NOTES}
+        >
+          {syncing ? (
+            <Loader aria-hidden="true" size={18} className="rotating-svg" />
+          ) : (
+            <RefreshCw aria-hidden="true" size={18} />
+          )}
+          <span className="sr-only">Sync notes</span>
+        </button>
+        <button className="note-menu-bar-button" onClick={toggleDarkThemeHandler}>
+          {darkTheme ? <Sun aria-hidden="true" size={18} /> : <Moon aria-hidden="true" size={18} />}
+          <span className="sr-only">Themes</span>
+        </button>
+
+        <button className="note-menu-bar-button" onClick={settingsHandler}>
+          <Settings aria-hidden="true" size={18} />
+          <span className="sr-only">Settings</span>
+        </button>
+      </nav>
+    </section>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### KeyboardShortcuts (`src/client/containers/KeyboardShortcuts.tsx`)
+
+
+```tsx
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import prettier from 'prettier/standalone'
+import parserMarkdown from 'prettier/parser-markdown'
+
+import { useTempState } from '@/contexts/TempStateContext'
+import { Folder, Shortcuts } from '@/utils/enums'
+import { downloadNotes, getActiveNote, newNoteHandlerHelper } from '@/utils/helpers'
+import { useKey } from '@/utils/hooks'
+import {
+  addNote,
+  swapFolder,
+  toggleTrashNotes,
+  updateActiveNote,
+  updateSelectedNotes,
+  updateNote,
+} from '@/slices/note'
+import { sync } from '@/slices/sync'
+import { getCategories, getNotes, getSettings } from '@/selectors'
+import { CategoryItem, NoteItem } from '@/types'
+import { toggleDarkTheme, togglePreviewMarkdown, updateCodeMirrorOption } from '@/slices/settings'
+
+export const KeyboardShortcuts: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { categories } = useSelector(getCategories)
+  const { activeCategoryId, activeFolder, activeNoteId, notes, selectedNotesIds } = useSelector(
+    getNotes
+  )
+  const { darkTheme, previewMarkdown } = useSelector(getSettings)
+
+  const activeNote = getActiveNote(notes, activeNoteId)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _addNote = (note: NoteItem) => dispatch(addNote(note))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _swapFolder = (folder: Folder) => dispatch(swapFolder({ folder }))
+  const _toggleTrashNotes = (noteId: string) => dispatch(toggleTrashNotes(noteId))
+  const _sync = (notes: NoteItem[], categories: CategoryItem[]) =>
+    dispatch(sync({ notes, categories }))
+  const _togglePreviewMarkdown = () => dispatch(togglePreviewMarkdown())
+  const _toggleDarkTheme = () => dispatch(toggleDarkTheme())
+  const _updateCodeMirrorOption = (key: string, value: string) =>
+    dispatch(updateCodeMirrorOption({ key, value }))
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const { addingTempCategory, setAddingTempCategory } = useTempState()
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const newNoteHandler = () =>
+    newNoteHandlerHelper(
+      activeFolder,
+      previewMarkdown,
+      activeNote,
+      activeCategoryId,
+      _swapFolder,
+      _togglePreviewMarkdown,
+      _addNote,
+      _updateActiveNote,
+      _updateSelectedNotes
+    )
+  const newTempCategoryHandler = () => !addingTempCategory && setAddingTempCategory(true)
+  const trashNoteHandler = () => _toggleTrashNotes(activeNote!.id)
+  const syncNotesHandler = () => _sync(notes, categories)
+  const downloadNotesHandler = () => {
+    if (!activeNote || selectedNotesIds.length === 0) return
+    downloadNotes(
+      selectedNotesIds.includes(activeNote.id)
+        ? notes.filter((note) => selectedNotesIds.includes(note.id))
+        : [activeNote],
+      categories
+    )
+  }
+  const togglePreviewMarkdownHandler = () => _togglePreviewMarkdown()
+  const toggleDarkThemeHandler = () => {
+    _toggleDarkTheme()
+    _updateCodeMirrorOption('theme', darkTheme ? 'base16-light' : 'new-moon')
+  }
+  const prettifyNoteHandler = () => {
+    // format current note with prettier
+    if (activeNote && activeNote.text) {
+      const formattedText = prettier.format(activeNote.text, {
+        parser: 'markdown',
+        plugins: [parserMarkdown],
+      })
+
+      const updatedNote = {
+        ...activeNote,
+        text: formattedText,
+      }
+
+      dispatch(updateNote(updatedNote))
+    }
+  }
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useKey(Shortcuts.NEW_NOTE, () => newNoteHandler())
+  useKey(Shortcuts.NEW_CATEGORY, () => newTempCategoryHandler())
+  useKey(Shortcuts.DELETE_NOTE, () => trashNoteHandler())
+  useKey(Shortcuts.SYNC_NOTES, () => syncNotesHandler())
+  useKey(Shortcuts.DOWNLOAD_NOTES, () => downloadNotesHandler())
+  useKey(Shortcuts.PREVIEW, () => togglePreviewMarkdownHandler())
+  useKey(Shortcuts.TOGGLE_THEME, () => toggleDarkThemeHandler())
+  useKey(Shortcuts.PRETTIFY, () => prettifyNoteHandler())
+
+  return null
+}
+
+```
+
+
+
+
+
+
+
+
+#### ContextMenuOptions (`src/client/containers/ContextMenuOptions.tsx`)
+
+
+```tsx
+import React, { useContext } from 'react'
+import { ArrowUp, Download, Star, Trash, X, Edit2, Clipboard } from 'react-feather'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { ContextMenuOption } from '@/components/NoteList/ContextMenuOption'
+import { downloadNotes, isDraftNote, getShortUuid, copyToClipboard } from '@/utils/helpers'
+import {
+  deleteNotes,
+  toggleFavoriteNotes,
+  toggleTrashNotes,
+  addCategoryToNote,
+  updateActiveNote,
+  swapFolder,
+  removeCategoryFromNotes,
+} from '@/slices/note'
+import { getCategories, getNotes } from '@/selectors'
+import { Folder, ContextMenuEnum } from '@/utils/enums'
+import { CategoryItem, NoteItem } from '@/types'
+import category, { setCategoryEdit, deleteCategory } from '@/slices/category'
+import { MenuUtilitiesContext } from '@/containers/ContextMenu'
+
+export interface ContextMenuOptionsProps {
+  clickedItem: NoteItem | CategoryItem
+  type: ContextMenuEnum
+}
+
+export const ContextMenuOptions: React.FC<ContextMenuOptionsProps> = ({ clickedItem, type }) => {
+  if (type === 'CATEGORY') {
+    return <CategoryOptions clickedCategory={clickedItem as CategoryItem} />
+  } else {
+    return <NotesOptions clickedNote={clickedItem as NoteItem} />
+  }
+}
+
+interface CategoryOptionsProps {
+  clickedCategory: CategoryItem
+}
+
+const CategoryOptions: React.FC<CategoryOptionsProps> = ({ clickedCategory }) => {
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _deleteCategory = (categoryId: string) => dispatch(deleteCategory(categoryId))
+  const _removeCategoryFromNotes = (categoryId: string) =>
+    dispatch(removeCategoryFromNotes(categoryId))
+  const _swapFolder = (folder: Folder) => dispatch(swapFolder({ folder }))
+  const _setCategoryEdit = (categoryId: string, tempName: string) =>
+    dispatch(setCategoryEdit({ id: categoryId, tempName }))
+
+  // ===========================================================================
+  // Context
+  // ===========================================================================
+
+  const { setOptionsId } = useContext(MenuUtilitiesContext)
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const startRenameHandler = () => {
+    _setCategoryEdit(clickedCategory.id, clickedCategory.name)
+    setOptionsId('')
+  }
+  const removeCategoryHandler = () => {
+    _deleteCategory(clickedCategory.id)
+    _removeCategoryFromNotes(clickedCategory.id)
+    _swapFolder(Folder.ALL)
+  }
+
+  return (
+    <nav className="options-nav" data-testid={TestID.CATEGORY_OPTIONS_NAV}>
+      <ContextMenuOption
+        dataTestID={TestID.CATEGORY_OPTION_RENAME}
+        handler={startRenameHandler}
+        icon={Edit2}
+        text={LabelText.RENAME}
+      />
+      <ContextMenuOption
+        dataTestID={TestID.CATEGORY_OPTION_DELETE_PERMANENTLY}
+        handler={removeCategoryHandler}
+        icon={X}
+        text={LabelText.DELETE_PERMANENTLY}
+        optionType="delete"
+      />
+    </nav>
+  )
+}
+
+interface NotesOptionsProps {
+  clickedNote: NoteItem
+}
+
+const NotesOptions: React.FC<NotesOptionsProps> = ({ clickedNote }) => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { selectedNotesIds, notes } = useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+
+  const selectedNotes = notes.filter((note) => selectedNotesIds.includes(note.id))
+  const isSelectedNotesDiffFavor = Boolean(
+    selectedNotes.find((note) => note.favorite) && selectedNotes.find((note) => !note.favorite)
+  )
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _deleteNotes = (noteIds: string[]) => dispatch(deleteNotes(noteIds))
+  const _toggleTrashNotes = (noteId: string) => dispatch(toggleTrashNotes(noteId))
+  const _toggleFavoriteNotes = (noteId: string) => dispatch(toggleFavoriteNotes(noteId))
+  const _addCategoryToNote = (categoryId: string, noteId: string) =>
+    dispatch(addCategoryToNote({ categoryId, noteId }))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const deleteNotesHandler = () => _deleteNotes(selectedNotesIds)
+  const downloadNotesHandler = () =>
+    downloadNotes(
+      selectedNotesIds.includes(clickedNote.id) ? selectedNotes : [clickedNote],
+      categories
+    )
+  const favoriteNoteHandler = () => _toggleFavoriteNotes(clickedNote.id)
+  const trashNoteHandler = () => _toggleTrashNotes(clickedNote.id)
+  const removeCategoryFromNoteHandler = () => {
+    _addCategoryToNote('', clickedNote.id)
+    _updateActiveNote(clickedNote.id, false)
+  }
+  const copyLinkedNoteMarkdownHandler = (e: React.SyntheticEvent, note: NoteItem) => {
+    e.preventDefault()
+
+    const shortNoteUuid = getShortUuid(note.id)
+    copyToClipboard(`{{${shortNoteUuid}}}`)
+  }
+
+  return !isDraftNote(clickedNote) ? (
+    <nav className="options-nav" data-testid={TestID.NOTE_OPTIONS_NAV}>
+      {clickedNote.trash && (
+        <>
+          <ContextMenuOption
+            dataTestID={TestID.NOTE_OPTION_DELETE_PERMANENTLY}
+            handler={deleteNotesHandler}
+            icon={X}
+            text={LabelText.DELETE_PERMANENTLY}
+            optionType="delete"
+          />
+          <ContextMenuOption
+            dataTestID={TestID.NOTE_OPTION_RESTORE_FROM_TRASH}
+            handler={trashNoteHandler}
+            icon={ArrowUp}
+            text={LabelText.RESTORE_FROM_TRASH}
+          />
+        </>
+      )}
+      {!clickedNote.scratchpad && !clickedNote.trash && (
+        <>
+          <ContextMenuOption
+            dataTestID={TestID.NOTE_OPTION_FAVORITE}
+            handler={favoriteNoteHandler}
+            icon={Star}
+            text={
+              isSelectedNotesDiffFavor
+                ? LabelText.TOGGLE_FAVORITE
+                : clickedNote.favorite
+                ? LabelText.REMOVE_FAVORITE
+                : LabelText.MARK_AS_FAVORITE
+            }
+          />
+          <ContextMenuOption
+            dataTestID={TestID.NOTE_OPTION_TRASH}
+            handler={trashNoteHandler}
+            icon={Trash}
+            text={LabelText.MOVE_TO_TRASH}
+            optionType="delete"
+          />
+        </>
+      )}
+      {clickedNote.category && !clickedNote.trash && (
+        <ContextMenuOption
+          dataTestID={TestID.NOTE_OPTION_REMOVE_CATEGORY}
+          handler={removeCategoryFromNoteHandler}
+          icon={X}
+          text={LabelText.REMOVE_CATEGORY}
+        />
+      )}
+      <ContextMenuOption
+        dataTestID={TestID.NOTE_OPTION_DOWNLOAD}
+        handler={downloadNotesHandler}
+        icon={Download}
+        text={LabelText.DOWNLOAD}
+      />
+      <ContextMenuOption
+        dataTestID={TestID.COPY_REFERENCE_TO_NOTE}
+        handler={(e: React.SyntheticEvent) => copyLinkedNoteMarkdownHandler(e, clickedNote)}
+        icon={Clipboard}
+        text={LabelText.COPY_REFERENCE_TO_NOTE}
+      />
+    </nav>
+  ) : null
+}
+
+```
+
+
+
+
+
+
+
+
+#### TakeNoteApp (`src/client/containers/TakeNoteApp.tsx`)
+
+
+```tsx
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
+import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import SplitPane from 'react-split-pane'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+
+import { AppSidebar } from '@/containers/AppSidebar'
+import { KeyboardShortcuts } from '@/containers/KeyboardShortcuts'
+import { NoteEditor } from '@/containers/NoteEditor'
+import { NoteList } from '@/containers/NoteList'
+import { SettingsModal } from '@/containers/SettingsModal'
+import { TempStateProvider } from '@/contexts/TempStateContext'
+import { useInterval, useBeforeUnload } from '@/utils/hooks'
+import {
+  getWebsiteTitle,
+  determineAppClass,
+  getActiveCategory,
+  getDayJsLocale,
+  getNoteBarConf,
+} from '@/utils/helpers'
+import { loadCategories, swapCategories } from '@/slices/category'
+import { sync } from '@/slices/sync'
+import { NoteItem, CategoryItem } from '@/types'
+import { loadNotes } from '@/slices/note'
+import { loadSettings } from '@/slices/settings'
+import { getSettings, getNotes, getCategories, getSync } from '@/selectors'
+
+dayjs.extend(localizedFormat)
+dayjs.locale(getDayJsLocale(navigator.language))
+
+export const TakeNoteApp: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { darkTheme, sidebarVisible } = useSelector(getSettings)
+  const { activeFolder, activeCategoryId, notes } = useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+  const { pendingSync } = useSelector(getSync)
+
+  const activeCategory = getActiveCategory(categories, activeCategoryId)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _loadNotes = () => dispatch(loadNotes())
+  const _loadCategories = () => dispatch(loadCategories())
+  const _loadSettings = () => dispatch(loadSettings())
+  const _swapCategories = (categoryId: number, destinationId: number) =>
+    dispatch(swapCategories({ categoryId, destinationId }))
+  const _sync = (notes: NoteItem[], categories: CategoryItem[]) =>
+    dispatch(sync({ notes, categories }))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result
+
+    if (!destination) return
+
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return
+
+    if (result.type === 'CATEGORY') {
+      _swapCategories(source.index, destination.index)
+    }
+  }
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    _loadNotes()
+    _loadCategories()
+    _loadSettings()
+  }, [])
+
+  useInterval(() => {
+    _sync(notes, categories)
+  }, 50000)
+
+  useBeforeUnload((event: BeforeUnloadEvent) => (pendingSync ? event.preventDefault() : null))
+
+  return (
+    <HelmetProvider>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{getWebsiteTitle(activeFolder, activeCategory)}</title>
+        <link rel="canonical" href="https://takenote.dev" />
+      </Helmet>
+
+      <TempStateProvider>
+        <div className={determineAppClass(darkTheme, sidebarVisible, activeFolder)}>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <SplitPane split="vertical" minSize={150} maxSize={500} defaultSize={240}>
+              <AppSidebar />
+              <SplitPane split="vertical" {...getNoteBarConf(activeFolder)}>
+                <NoteList />
+                <NoteEditor />
+              </SplitPane>
+            </SplitPane>
+          </DragDropContext>
+          <KeyboardShortcuts />
+          <SettingsModal />
+        </div>
+      </TempStateProvider>
+    </HelmetProvider>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### AppSidebar (`src/client/containers/AppSidebar.tsx`)
+
+
+```tsx
+import React from 'react'
+import { Plus } from 'react-feather'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { ActionButton } from '@/components/AppSidebar/ActionButton'
+import { FolderOption } from '@/components/AppSidebar/FolderOption'
+import { ScratchpadOption } from '@/components/AppSidebar/ScratchpadOption'
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { CategoryList } from '@/containers/CategoryList'
+import {
+  addNote,
+  swapFolder,
+  updateActiveNote,
+  assignFavoriteToNotes,
+  assignTrashToNotes,
+  updateSelectedNotes,
+  unassignTrashFromNotes,
+} from '@/slices/note'
+import { togglePreviewMarkdown } from '@/slices/settings'
+import { getSettings, getNotes } from '@/selectors'
+import { NoteItem } from '@/types'
+import { newNoteHandlerHelper, getActiveNote } from '@/utils/helpers'
+
+export const AppSidebar: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { activeCategoryId, activeFolder, activeNoteId, notes } = useSelector(getNotes)
+  const { previewMarkdown, notesSortKey } = useSelector(getSettings)
+
+  const activeNote = getActiveNote(notes, activeNoteId)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _addNote = (note: NoteItem) => dispatch(addNote(note))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _swapFolder = (sortOrderKey: NotesSortKey) => (folder: Folder) =>
+    dispatch(swapFolder({ folder, sortOrderKey }))
+  const _togglePreviewMarkdown = () => dispatch(togglePreviewMarkdown())
+  const _assignTrashToNotes = (noteId: string) => dispatch(assignTrashToNotes(noteId))
+  const _unassignTrashFromNotes = (noteId: string) => dispatch(unassignTrashFromNotes(noteId))
+  const _assignFavoriteToNotes = (noteId: string) => dispatch(assignFavoriteToNotes(noteId))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const newNoteHandler = () =>
+    newNoteHandlerHelper(
+      activeFolder,
+      previewMarkdown,
+      activeNote,
+      activeCategoryId,
+      swapFolderHandler,
+      _togglePreviewMarkdown,
+      _addNote,
+      _updateActiveNote,
+      _updateSelectedNotes
+    )
+  const swapFolderHandler = _swapFolder(notesSortKey)
+
+  return (
+    <aside className="app-sidebar">
+      <ActionButton
+        dataTestID={TestID.SIDEBAR_ACTION_CREATE_NEW_NOTE}
+        handler={newNoteHandler}
+        icon={Plus}
+        label={LabelText.CREATE_NEW_NOTE}
+        text={LabelText.NEW_NOTE}
+      />
+      <section className="app-sidebar-main">
+        <ScratchpadOption
+          active={activeFolder === Folder.SCRATCHPAD}
+          swapFolder={swapFolderHandler}
+        />
+        <FolderOption
+          active={activeFolder === Folder.ALL}
+          swapFolder={swapFolderHandler}
+          text={LabelText.NOTES}
+          dataTestID={TestID.FOLDER_NOTES}
+          folder={Folder.ALL}
+          addNoteType={_unassignTrashFromNotes}
+        />
+        <FolderOption
+          active={activeFolder === Folder.FAVORITES}
+          text={LabelText.FAVORITES}
+          dataTestID={TestID.FOLDER_FAVORITES}
+          folder={Folder.FAVORITES}
+          swapFolder={swapFolderHandler}
+          addNoteType={_assignFavoriteToNotes}
+        />
+        <FolderOption
+          active={activeFolder === Folder.TRASH}
+          text={LabelText.TRASH}
+          dataTestID={TestID.FOLDER_TRASH}
+          folder={Folder.TRASH}
+          swapFolder={swapFolderHandler}
+          addNoteType={_assignTrashToNotes}
+        />
+        <CategoryList />
+      </section>
+    </aside>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/client/types/index.ts`)
+
+
+```jsx
+import React from 'react'
+
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { sync } from '@/slices/sync'
+
+//==============================================================================
+// Items
+//==============================================================================
+
+export interface NoteItem {
+  id: string
+  text: string
+  created: string
+  lastUpdated: string
+  /**
+   * Refers to the category UUID and not the actual name.
+   */
+  category?: string
+  scratchpad?: boolean
+  trash?: boolean
+  favorite?: boolean
+}
+
+export interface CategoryItem {
+  id: string
+  name: string
+  draggedOver: boolean
+}
+
+export interface GithubUser {
+  [anyProp: string]: any
+}
+
+//==============================================================================
+// State
+//==============================================================================
+
+export interface AuthState {
+  loading: boolean
+  currentUser: GithubUser
+  isAuthenticated: boolean
+  error?: string
+}
+
+export interface CategoryState {
+  categories: CategoryItem[]
+  error: string
+  loading: boolean
+  editingCategory: {
+    id: string
+    tempName: string
+  }
+}
+
+export interface NoteState {
+  notes: NoteItem[]
+  activeFolder: Folder
+  activeNoteId: string
+  selectedNotesIds: string[]
+  activeCategoryId: string
+  error: string
+  loading: boolean
+  searchValue: string
+}
+
+export interface SettingsState {
+  isOpen: boolean
+  previewMarkdown: boolean
+  loading: boolean
+  darkTheme: boolean
+  sidebarVisible: boolean
+  notesSortKey: NotesSortKey
+  codeMirrorOptions: { [key: string]: any }
+}
+
+export interface SyncState {
+  syncing: boolean
+  lastSynced: string
+  error: string
+  pendingSync: boolean
+}
+
+export interface RootState {
+  authState: AuthState
+  categoryState: CategoryState
+  noteState: NoteState
+  settingsState: SettingsState
+  syncState: SyncState
+}
+
+//==============================================================================
+// API
+//==============================================================================
+
+export interface SyncPayload {
+  categories: CategoryItem[]
+  notes: NoteItem[]
+}
+
+export interface SyncAction {
+  type: typeof sync.type
+  payload: SyncPayload
+}
+
+//==============================================================================
+// Events
+//==============================================================================
+
+export type ReactDragEvent = React.DragEvent<HTMLDivElement>
+
+export type ReactMouseEvent =
+  | MouseEvent
+  | React.MouseEvent<HTMLDivElement>
+  | React.ChangeEvent<HTMLSelectElement>
+
+export type ReactSubmitEvent = React.FormEvent<HTMLFormElement> | React.FocusEvent<HTMLInputElement>
+
+//==============================================================================
+// Default Types
+//==============================================================================
+
+// Taken from TypeScript private declared type within Actions
+export type WithPayload<P, T> = T & {
+  payload: P
+}
+
+```
+
+
+
+
+
+
+
+
+#### NoteListButton (`src/client/components/NoteList/NoteListButton.tsx`)
+
+
+```tsx
+import React, { MouseEventHandler } from 'react'
+
+export interface NoteListButtonProps {
+  dataTestID: string
+  disabled?: boolean
+  handler: MouseEventHandler
+  label: string
+}
+
+export const NoteListButton: React.FC<NoteListButtonProps> = ({
+  dataTestID,
+  disabled = false,
+  handler,
+  label,
+}) => {
+  return (
+    <button
+      data-testid={dataTestID}
+      className="list-button"
+      aria-label={label}
+      onClick={handler}
+      disabled={disabled}
+      title={label}
+    >
+      {label}
+    </button>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### EmptyEditor (`src/client/components/Editor/EmptyEditor.tsx`)
+
+
+```tsx
+import React from 'react'
+
+export const EmptyEditor: React.FC = () => {
+  return (
+    <div className="empty-editor v-center" data-testid="empty-editor">
+      <div className="text-center">
+        <p>
+          <strong>Create a note</strong>
+        </p>
+        <p>
+          <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>N</kbd>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/client/slices/index.ts`)
+
+
+```jsx
+import { combineReducers, Reducer } from 'redux'
+
+import authReducer from '@/slices/auth'
+import categoryReducer from '@/slices/category'
+import noteReducer from '@/slices/note'
+import settingsReducer from '@/slices/settings'
+import syncReducer from '@/slices/sync'
+import { RootState } from '@/types'
+
+const rootReducer: Reducer<RootState> = combineReducers<RootState>({
+  authState: authReducer,
+  categoryState: categoryReducer,
+  noteState: noteReducer,
+  settingsState: settingsReducer,
+  syncState: syncReducer,
+})
+
+export default rootReducer
+
+```
+
+
+
+
+
+
+
+
+#### NoteLink (`src/client/components/Editor/NoteLink.tsx`)
+
+
+```tsx
+import React from 'react'
+
+import { NoteItem } from '@/types'
+import { Errors } from '@/utils/enums'
+import { TestID } from '@resources/TestID'
+
+import { getNoteTitle, getActiveNoteFromShortUuid } from '../../utils/helpers'
+
+export interface NoteLinkProps {
+  uuid: string
+  notes: NoteItem[]
+  handleNoteLinkClick: (e: React.SyntheticEvent, note: NoteItem) => void
+}
+
+const NoteLink: React.FC<NoteLinkProps> = ({ notes, uuid, handleNoteLinkClick }) => {
+  const note = getActiveNoteFromShortUuid(notes, uuid)
+  const title = note !== undefined ? getNoteTitle(note.text) : null
+
+  if (note && title)
+    return (
+      <a data-testid={TestID.NOTE_LINK_SUCCESS} onClick={(e) => handleNoteLinkClick(e, note)}>
+        {title}
+      </a>
+    )
+
+  return (
+    <span data-testid={TestID.NOTE_LINK_ERROR} className="error">
+      {Errors.INVALID_LINKED_NOTE_ID}
+    </span>
+  )
+}
+
+export default NoteLink
+
+```
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

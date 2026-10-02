@@ -8,6 +8,7 @@ import logging
 import shutil
 import signal
 import sys
+import time
 from pathlib import Path
 
 from rich.console import Console
@@ -27,6 +28,7 @@ from src.extraction.llm_extractor import extract_file, PROMPTS, CROSS_FILE_PROMP
 from src.extraction.per_file_ingestion import ingest_file_results
 from src.extraction.cross_file import run_cross_file_extraction
 from src.extraction.provenance import build_provenance, write_provenance
+from src.llm import extraction_log
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -116,6 +118,11 @@ async def run_pipeline(
     file_paths = [f["filePath"] for f in files]
     checkpoint.init_files(project_id, file_paths)
 
+    # Token-usage log (IJCKG WP0). Keyed on the repo directory name, like the
+    # output dir, so the log is findable next to the graph it describes.
+    run_log = extraction_log.ExtractionRunLog(repo_root.name, settings.llm.model)
+    console.print(f"  Usage log: {run_log.path}")
+
     # ── Stage 2 + 3: LLM Extraction + Per-File Ingestion ──
     console.print("\n[bold]Stage 2+3: LLM Extraction & Per-File Ingestion[/bold]")
 
@@ -127,10 +134,16 @@ async def run_pipeline(
     all_llm_results: dict[str, dict] = {}
 
     # Load already-completed results
+    resumed_files = 0
     for fp in checkpoint.get_completed_files(project_id):
         results = checkpoint.get_llm_results(fp, project_id)
         if results:
             all_llm_results[fp] = results
+            # Made no call in this run and so leaves no usage record: the run's
+            # totals under-state the repo's cost, which provenance must say.
+            resumed_files += 1
+
+    stage_2_3_start = time.perf_counter()
 
     with Progress(
         SpinnerColumn(),
@@ -157,7 +170,7 @@ async def run_pipeline(
             checkpoint.mark_extracting(fp, project_id)
 
             try:
-                llm_results = await extract_file(fp, code)
+                llm_results = await extract_file(fp, code, run_log=run_log)
                 all_llm_results[fp] = llm_results
 
                 # Stage 3: Ingest into graph
@@ -181,10 +194,14 @@ async def run_pipeline(
             progress.advance(task)
             progress.update(task, description=f"[cyan]{fp}[/cyan]")
 
+    stage_2_3_s = time.perf_counter() - stage_2_3_start
+
     if _shutdown_requested:
         console.print("[yellow]Pipeline paused. Re-run to resume.[/yellow]")
         checkpoint.close()
         return
+
+    stage_4_start = time.perf_counter()
 
     # ── Stage 4: Cross-File Resolution ──
     console.print("\n[bold]Stage 4: Cross-File Resolution[/bold]")
@@ -207,7 +224,10 @@ async def run_pipeline(
             aliases=aliases,
             base_url=base_url,
             raw_output_dir=cross_file_raw_dir,
+            run_log=run_log,
         )
+
+    stage_4_s = time.perf_counter() - stage_4_start
 
     # ── Provenance ──
     # Written after Stage 4 so it only exists for a run that completed. Records
@@ -219,8 +239,22 @@ async def run_pipeline(
         model=settings.llm.model,
         prompt_ids=[p[0] for p in PROMPTS] + [p[0] for p in CROSS_FILE_PROMPTS],
         file_count=len(file_paths),
+        usage=extraction_log.summarize(
+            run_log,
+            call_delay_s=settings.llm.call_delay,
+            files_resumed_from_checkpoint=resumed_files,
+            wall_clock_s={"stage_2_3": stage_2_3_s, "stage_4": stage_4_s},
+        ),
     )
     write_provenance(output_dir, provenance)
+    usage = provenance["usage"]
+    console.print(
+        f"  Usage: {usage['calls_api']} API calls ({usage['api_attempts']} attempts, "
+        f"{usage['calls_failed']} failed), {usage['calls_cache_hit']} cache hits, "
+        f"{usage['input_tokens']:,} in / {usage['output_tokens']:,} out tokens"
+        + ("" if usage["complete"] else
+           " [yellow](incomplete: cache hits or resumed files — not a cost figure)[/yellow]")
+    )
     console.print(
         f"  Provenance: model={provenance['extraction_model']} "
         f"prompts={provenance['prompt_set_version']} "

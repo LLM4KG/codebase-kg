@@ -1,0 +1,64 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "PreviewEditor",
+        "childComponent": "ReactMarkdown",
+        "importSource": "react-markdown",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "plugins",
+            "valueExpression": "[uuidPlugin]"
+          },
+          {
+            "propName": "renderers",
+            "valueExpression": "{ uuid: ({ value }) => returnNoteLink(value) }"
+          },
+          {
+            "propName": "linkTarget",
+            "valueExpression": "\"_blank\""
+          },
+          {
+            "propName": "className",
+            "valueExpression": "`previewer previewer_direction-${directionText}`"
+          },
+          {
+            "propName": "source",
+            "valueExpression": "noteText"
+          }
+        ]
+      },
+      {
+        "parentComponent": "PreviewEditor",
+        "childComponent": "NoteLink",
+        "importSource": "./NoteLink",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "uuid",
+            "valueExpression": "value"
+          },
+          {
+            "propName": "notes",
+            "valueExpression": "notes"
+          },
+          {
+            "propName": "handleNoteLinkClick",
+            "valueExpression": "handleNoteLinkClick"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,31 @@
+```text
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+=======
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.reduce((acc: ICartProduct[], product: ICartProduct) => {
+      if (product.id === productToDecrease.id) {
+        const newQuantity = product.quantity - 1;
+        if (newQuantity <= 0) {
+          return acc;
+        } else {
+          return [...acc, {...product, quantity: newQuantity}];
+        }
+      } else {
+        return [...acc, product];
+      }
+    }, []);
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+>>>>>>> REPLACE
+```

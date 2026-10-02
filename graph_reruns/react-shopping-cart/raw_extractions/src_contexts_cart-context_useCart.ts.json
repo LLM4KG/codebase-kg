@@ -1,0 +1,35 @@
+{
+  "function_components": {
+    "components": []
+  },
+  "custom_hooks": {
+    "customHooks": [
+      {
+        "name": "useCart",
+        "syntax": "arrow",
+        "exportType": "default",
+        "parameters": [],
+        "returnShape": "object"
+      }
+    ]
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": []
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

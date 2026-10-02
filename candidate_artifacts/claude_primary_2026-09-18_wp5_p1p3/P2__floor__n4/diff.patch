@@ -1,0 +1,26 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    emptyTrash: (state) => {\n      return {\n        ...state,\n        notes: state.notes.map((note) =>\n          note.trash ? { ...note, deleted: true } : note\n        ),\n      }\n    },\n",
+      "content": "    emptyTrash: (state) => {\n      return {\n        ...state,\n        notes: state.notes.map((note) =>\n          note.trash ? { ...note, deleted: true } : note\n        ),\n      }\n    },\n    restoreAllTrash: (state) => {\n      return {\n        ...state,\n        notes: state.notes.map((note) =>\n          note.trash ? { ...note, trash: false } : note\n        ),\n      }\n    },\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import { deleteNote, pruneNotes, swapNote, swapFolder, emptyTrash } from 'slices/note'\n",
+      "content": "import { deleteNote, pruneNotes, swapNote, swapFolder, emptyTrash, restoreAllTrash } from 'slices/note'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          {activeFolder === Folder.TRASH && (\n            <button\n              className=\"trash-button\"\n              onClick={() => {\n                dispatch(emptyTrash())\n              }}\n            >\n              {_('Empty Trash')}\n            </button>\n          )}\n",
+      "content": "          {activeFolder === Folder.TRASH && (\n            <>\n              <button\n                className=\"trash-button\"\n                onClick={() => {\n                  dispatch(restoreAllTrash())\n                }}\n              >\n                {_('Restore All')}\n              </button>\n              <button\n                className=\"trash-button\"\n                onClick={() => {\n                  dispatch(emptyTrash())\n                }}\n              >\n                {_('Empty Trash')}\n              </button>\n            </>\n          )}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "  assignFavoriteToNotes,\n  assignTrashToNotes,\n  updateSelectedNotes,\n  unassignTrashFromNotes,\n} from '@/slices/note'\n",
+      "content": "  assignFavoriteToNotes,\n  assignTrashToNotes,\n  updateSelectedNotes,\n  unassignTrashFromNotes,\n  restoreAllTrash,\n} from '@/slices/note'\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

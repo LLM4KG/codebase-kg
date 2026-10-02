@@ -1,0 +1,44 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+  loadNotesError,
+  loadNotesSuccess,
+  importNotes,
+} = noteSlice.actions
+=======
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+  loadNotesError,
+  loadNotesSuccess,
+  importNotes,
+} = noteSlice.actions
+>>>>>>> REPLACE
+```

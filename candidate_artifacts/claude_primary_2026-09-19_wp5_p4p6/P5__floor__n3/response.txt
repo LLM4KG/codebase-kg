@@ -1,0 +1,97 @@
+I need to see the existing code to make precise changes. Let me analyze the task:
+
+1. `CartProduct` currently calls `useCart` internally
+2. Need to refactor it to accept `onRemove`, `onIncrease`, `onDecrease` props
+3. Move `useCart` call to `CartProducts` parent component
+
+Based on typical patterns for this kind of component, here are the SEARCH/REPLACE blocks:
+
+```text
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+import { useCart } from '../../hooks/useCart';
+=======
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+interface CartProductProps {
+  product: ICartProduct;
+}
+=======
+interface CartProductProps {
+  product: ICartProduct;
+  onRemove: (product: ICartProduct) => void;
+  onIncrease: (product: ICartProduct) => void;
+  onDecrease: (product: ICartProduct) => void;
+}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+const CartProduct = ({ product }: CartProductProps) => {
+  const { removeFromCart, increaseCartQuantity, decreaseCartQuantity } = useCart();
+=======
+const CartProduct = ({ product, onRemove, onIncrease, onDecrease }: CartProductProps) => {
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => removeFromCart(product)}
+=======
+      onClick={() => onRemove(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => decreaseCartQuantity(product)}
+=======
+      onClick={() => onDecrease(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => increaseCartQuantity(product)}
+=======
+      onClick={() => onIncrease(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+import CartProduct from './CartProduct';
+=======
+import { useCart } from '../../hooks/useCart';
+import CartProduct from './CartProduct';
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+const CartProducts = ({ products }: CartProductsProps) => {
+  return (
+    <S.Container>
+      {products?.map((product) => (
+        <CartProduct key={product.id} product={product} />
+      ))}
+    </S.Container>
+  );
+};
+=======
+const CartProducts = ({ products }: CartProductsProps) => {
+  const { removeFromCart, increaseCartQuantity, decreaseCartQuantity } = useCart();
+
+  return (
+    <S.Container>
+      {products?.map((product) => (
+        <CartProduct
+          key={product.id}
+          product={product}
+          onRemove={removeFromCart}
+          onIncrease={increaseCartQuantity}
+          onDecrease={decreaseCartQuantity}
+        />
+      ))}
+    </S.Container>
+  );
+};
+>>>>>>> REPLACE
+```

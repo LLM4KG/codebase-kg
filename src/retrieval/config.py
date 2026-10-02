@@ -102,6 +102,27 @@ def _flatten_run_toml(data: dict[str, Any]) -> dict[str, Any]:
     return flat
 
 
+def load_condition_config(
+    condition_name: str,
+    conditions_dir: str | Path = "conditions",
+) -> RetrievalConditionConfig:
+    """Load conditions/base/{condition_name}.toml on its own.
+
+    Split out of `load_experiment_config` for callers that need only what a
+    condition *is* — which retriever it dispatches to — and have no run in hand
+    (`_preflight_dense_key`). Dispatch keys on `retriever`, so anything deciding
+    "is this the dense arm?" must read the field rather than match the name.
+    """
+    condition_path = Path(conditions_dir) / "base" / f"{condition_name}.toml"
+    if not condition_path.exists():
+        raise FileNotFoundError(f"Condition config not found: {condition_path}")
+
+    with open(condition_path, "rb") as f:
+        condition_data = tomllib.load(f)
+
+    return RetrievalConditionConfig(**condition_data)
+
+
 def load_experiment_config(
     run_name: str,
     condition_name: str,
@@ -119,17 +140,11 @@ def load_experiment_config(
     if not run_path.exists():
         raise FileNotFoundError(f"Run config not found: {run_path}")
 
-    condition_path = base / "base" / f"{condition_name}.toml"
-    if not condition_path.exists():
-        raise FileNotFoundError(f"Condition config not found: {condition_path}")
+    condition_config = load_condition_config(condition_name, conditions_dir)
 
     with open(run_path, "rb") as f:
         run_data = tomllib.load(f)
 
-    with open(condition_path, "rb") as f:
-        condition_data = tomllib.load(f)
-
     run_config = RunConfig(**_flatten_run_toml(run_data))
-    condition_config = RetrievalConditionConfig(**condition_data)
 
     return ExperimentConfig(run=run_config, condition=condition_config)

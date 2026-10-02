@@ -1,0 +1,129 @@
+```text
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+import { useCart } from '../../hooks/useCart';
+import type { CartItem } from '../../types/cart';
+
+interface CartProductProps {
+  item: CartItem;
+}
+
+export function CartProduct({ item }: CartProductProps) {
+  const { removeItem, updateQuantity } = useCart();
+
+  const handleRemove = () => {
+    removeItem(item.product.id);
+  };
+
+  const handleIncrease = () => {
+    updateQuantity(item.product.id, item.quantity + 1);
+  };
+
+  const handleDecrease = () => {
+    if (item.quantity > 1) {
+      updateQuantity(item.product.id, item.quantity - 1);
+    } else {
+      removeItem(item.product.id);
+    }
+  };
+
+  return (
+=======
+interface CartProductProps {
+  item: CartItem;
+  onRemove: (item: CartItem) => void;
+  onIncrease: (item: CartItem) => void;
+  onDecrease: (item: CartItem) => void;
+}
+
+export function CartProduct({ item, onRemove, onIncrease, onDecrease }: CartProductProps) {
+  const handleRemove = () => {
+    onRemove(item);
+  };
+
+  const handleIncrease = () => {
+    onIncrease(item);
+  };
+
+  const handleDecrease = () => {
+    onDecrease(item);
+  };
+
+  return (
+>>>>>>> REPLACE
+```
+
+```text
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+import { CartProduct } from './CartProduct';
+import { useCart } from '../../hooks/useCart';
+import type { CartItem } from '../../types/cart';
+
+export function CartProducts() {
+  const { items } = useCart();
+
+  if (items.length === 0) {
+    return (
+      <div className="cart-empty">
+        <p>Your cart is empty</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cart-products">
+      {items.map((item) => (
+        <CartProduct key={item.product.id} item={item} />
+      ))}
+    </div>
+  );
+}
+=======
+import { CartProduct } from './CartProduct';
+import { useCart } from '../../hooks/useCart';
+import type { CartItem } from '../../types/cart';
+
+export function CartProducts() {
+  const { items, removeItem, updateQuantity } = useCart();
+
+  const handleRemove = (item: CartItem) => {
+    removeItem(item.product.id);
+  };
+
+  const handleIncrease = (item: CartItem) => {
+    updateQuantity(item.product.id, item.quantity + 1);
+  };
+
+  const handleDecrease = (item: CartItem) => {
+    if (item.quantity > 1) {
+      updateQuantity(item.product.id, item.quantity - 1);
+    } else {
+      removeItem(item.product.id);
+    }
+  };
+
+  if (items.length === 0) {
+    return (
+      <div className="cart-empty">
+        <p>Your cart is empty</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cart-products">
+      {items.map((item) => (
+        <CartProduct 
+          key={item.product.id} 
+          item={item} 
+          onRemove={handleRemove}
+          onIncrease={handleIncrease}
+          onDecrease={handleDecrease}
+        />
+      ))}
+    </div>
+  );
+}
+>>>>>>> REPLACE
+```

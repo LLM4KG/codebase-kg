@@ -1,0 +1,23 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Authenticate",
+        "childComponent": "PageLoader",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}
