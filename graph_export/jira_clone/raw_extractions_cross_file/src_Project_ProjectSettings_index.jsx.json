@@ -1,0 +1,161 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "Form",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "initialValues",
+            "valueExpression": "Form.initialValues(project, get => ({ name: get('name'), url: get('url'), category: get('category'), description: get('description') }))"
+          },
+          {
+            "propName": "validations",
+            "valueExpression": "{ name: [Form.is.required(), Form.is.maxLength(100)], url: Form.is.url(), category: Form.is.required() }"
+          },
+          {
+            "propName": "onSubmit",
+            "valueExpression": "async (values, form) => { ... }"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "FormCont",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "FormElement",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "Breadcrumbs",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "items",
+            "valueExpression": "['Projects', project.name, 'Project Details']"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "FormHeading",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "Form.Field.Input",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "name",
+            "valueExpression": "\"name\""
+          },
+          {
+            "propName": "label",
+            "valueExpression": "\"Name\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "Form.Field.Input",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "name",
+            "valueExpression": "\"url\""
+          },
+          {
+            "propName": "label",
+            "valueExpression": "\"URL\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "Form.Field.TextEditor",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "name",
+            "valueExpression": "\"description\""
+          },
+          {
+            "propName": "label",
+            "valueExpression": "\"Description\""
+          },
+          {
+            "propName": "tip",
+            "valueExpression": "\"Describe the project in as much detail as you'd like.\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "Form.Field.Select",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "name",
+            "valueExpression": "\"category\""
+          },
+          {
+            "propName": "label",
+            "valueExpression": "\"Project Category\""
+          },
+          {
+            "propName": "options",
+            "valueExpression": "categoryOptions"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectSettings",
+        "childComponent": "ActionButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"submit\""
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "\"primary\""
+          },
+          {
+            "propName": "isWorking",
+            "valueExpression": "isUpdating"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

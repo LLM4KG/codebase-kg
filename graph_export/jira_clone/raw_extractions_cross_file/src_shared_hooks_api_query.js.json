@@ -1,0 +1,46 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useQuery",
+        "libraryHooks": [
+          {
+            "name": "useRef",
+            "source": "react",
+            "count": 1
+          },
+          {
+            "name": "useCallback",
+            "source": "react",
+            "count": 2
+          },
+          {
+            "name": "useEffect",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": [
+          {
+            "name": "useDeepCompareMemoize",
+            "source": "shared/hooks/deepCompareMemoize"
+          },
+          {
+            "name": "useMergeState",
+            "source": "shared/hooks/mergeState"
+          }
+        ]
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

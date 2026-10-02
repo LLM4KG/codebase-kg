@@ -1,0 +1,79 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Modal",
+        "childComponent": "ScrollOverlay",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Modal",
+        "childComponent": "ClickableOverlay",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "variant"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Modal",
+        "childComponent": "StyledModal",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "className",
+            "valueExpression": "className"
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "variant"
+          },
+          {
+            "propName": "width",
+            "valueExpression": "width"
+          },
+          {
+            "propName": "data-testid",
+            "valueExpression": "testid"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Modal",
+        "childComponent": "CloseIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"close\""
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "variant"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "closeModal"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

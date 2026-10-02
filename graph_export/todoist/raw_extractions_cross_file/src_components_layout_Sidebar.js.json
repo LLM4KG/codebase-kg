@@ -1,0 +1,71 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Sidebar",
+        "childComponent": "FaInbox",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Sidebar",
+        "childComponent": "FaRegCalendar",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Sidebar",
+        "childComponent": "FaRegCalendarAlt",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Sidebar",
+        "childComponent": "FaChevronDown",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "className",
+            "valueExpression": "!showProjects ? 'hidden-projects' : undefined"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Sidebar",
+        "childComponent": "Projects",
+        "importSource": "../Projects",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Sidebar",
+        "childComponent": "AddProject",
+        "importSource": "../AddProject",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": [
+      {
+        "consumerName": "Sidebar",
+        "consumerType": "function_component",
+        "contextName": "useSelectedProjectValue",
+        "contextSource": "../../context",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

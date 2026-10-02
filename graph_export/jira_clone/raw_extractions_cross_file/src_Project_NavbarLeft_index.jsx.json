@@ -1,0 +1,187 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "NavLeft",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "LogoLink",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "\"/\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "StyledLogo",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "color",
+            "valueExpression": "\"#fff\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "Item",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "issueSearchModalOpen"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "Icon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"search\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "22"
+          },
+          {
+            "propName": "top",
+            "valueExpression": "1"
+          },
+          {
+            "propName": "left",
+            "valueExpression": "3"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "ItemText",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "Item",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "issueCreateModalOpen"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "Icon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"plus\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "27"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "ItemText",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "Bottom",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "AboutTooltip",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "placement",
+            "valueExpression": "\"right\""
+          },
+          {
+            "propName": "offset",
+            "valueExpression": "{ top: -218 }"
+          },
+          {
+            "propName": "renderLink",
+            "valueExpression": "linkProps => (<Item {...linkProps}>...</Item>)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "Item",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "...linkProps",
+            "valueExpression": "{...linkProps}"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "Icon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"help\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "25"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectNavbarLeft",
+        "childComponent": "ItemText",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

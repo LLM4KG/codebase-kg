@@ -1,0 +1,227 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectIssueCreate",
+        "childComponent": "Form",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "enableReinitialize",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "initialValues",
+            "valueExpression": "{ type: IssueType.TASK, title: '', description: '', reporterId: currentUserId, userIds: [], priority: IssuePriority.MEDIUM }"
+          },
+          {
+            "propName": "validations",
+            "valueExpression": "{ type: Form.is.required(), title: [Form.is.required(), Form.is.maxLength(200)], reporterId: Form.is.required(), priority: Form.is.required() }"
+          },
+          {
+            "propName": "onSubmit",
+            "valueExpression": "async (values, form) => { ... }"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectIssueCreate",
+        "childComponent": "FormElement",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueCreate",
+        "childComponent": "FormHeading",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueCreate",
+        "childComponent": "Divider",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueCreate",
+        "childComponent": "Actions",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueCreate",
+        "childComponent": "ActionButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"submit\""
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "\"primary\""
+          },
+          {
+            "propName": "isWorking",
+            "valueExpression": "isCreating"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectIssueCreate",
+        "childComponent": "ActionButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"button\""
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "modalClose"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderType",
+        "childComponent": "SelectItem",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderType",
+        "childComponent": "IssueTypeIcon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "type"
+          },
+          {
+            "propName": "top",
+            "valueExpression": "1"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderType",
+        "childComponent": "SelectItemLabel",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderPriority",
+        "childComponent": "SelectItem",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderPriority",
+        "childComponent": "IssuePriorityIcon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "priority",
+            "valueExpression": "priority"
+          },
+          {
+            "propName": "top",
+            "valueExpression": "1"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderPriority",
+        "childComponent": "SelectItemLabel",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderUser",
+        "childComponent": "SelectItem",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "withBottomMargin",
+            "valueExpression": "!!removeOptionValue"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => removeOptionValue && removeOptionValue()"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderUser",
+        "childComponent": "Avatar",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "20"
+          },
+          {
+            "propName": "avatarUrl",
+            "valueExpression": "user.avatarUrl"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "user.name"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderUser",
+        "childComponent": "SelectItemLabel",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderUser",
+        "childComponent": "Icon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"close\""
+          },
+          {
+            "propName": "top",
+            "valueExpression": "2"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

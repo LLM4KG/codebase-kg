@@ -1,0 +1,141 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "Draggable",
+        "importSource": "react-beautiful-dnd",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "draggableId",
+            "valueExpression": "issue.id.toString()"
+          },
+          {
+            "propName": "index",
+            "valueExpression": "index"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "IssueLink",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "`${match.url}/issues/${issue.id}`"
+          },
+          {
+            "propName": "data-testid",
+            "valueExpression": "\"list-issue\""
+          },
+          {
+            "propName": "...provided.draggableProps",
+            "valueExpression": "{...provided.draggableProps}"
+          },
+          {
+            "propName": "...provided.dragHandleProps",
+            "valueExpression": "{...provided.dragHandleProps}"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "Issue",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isBeingDragged",
+            "valueExpression": "snapshot.isDragging && !snapshot.isDropAnimating"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "Title",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "Bottom",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "IssueTypeIcon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "issue.type"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "IssuePriorityIcon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "priority",
+            "valueExpression": "issue.priority"
+          },
+          {
+            "propName": "top",
+            "valueExpression": "-1"
+          },
+          {
+            "propName": "left",
+            "valueExpression": "4"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "Assignees",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardListIssue",
+        "childComponent": "AssigneeAvatar",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "24"
+          },
+          {
+            "propName": "avatarUrl",
+            "valueExpression": "user.avatarUrl"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "user.name"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

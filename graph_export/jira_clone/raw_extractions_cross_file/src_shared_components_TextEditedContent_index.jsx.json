@@ -1,0 +1,36 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "TextEditedContent",
+        "childComponent": "Content",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "className",
+            "valueExpression": "\"ql-editor\""
+          },
+          {
+            "propName": "dangerouslySetInnerHTML",
+            "valueExpression": "{ __html: content }"
+          },
+          {
+            "propName": "...otherProps",
+            "valueExpression": "{...otherProps}"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

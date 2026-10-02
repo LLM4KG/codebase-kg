@@ -1,0 +1,108 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "AboutTooltip",
+        "childComponent": "Tooltip",
+        "importSource": "shared/components/Tooltip",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "width",
+            "valueExpression": "300"
+          },
+          {
+            "propName": "...tooltipProps",
+            "valueExpression": "{...tooltipProps}"
+          },
+          {
+            "propName": "renderContent",
+            "valueExpression": "() => (<FeedbackDropdown>...</FeedbackDropdown>)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "AboutTooltip",
+        "childComponent": "FeedbackDropdown",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "AboutTooltip",
+        "childComponent": "FeedbackImageCont",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "AboutTooltip",
+        "childComponent": "FeedbackImage",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "src",
+            "valueExpression": "feedbackImage"
+          },
+          {
+            "propName": "alt",
+            "valueExpression": "\"Give feedback\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "AboutTooltip",
+        "childComponent": "FeedbackParagraph",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "AboutTooltip",
+        "childComponent": "FeedbackParagraph",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "AboutTooltip",
+        "childComponent": "Button",
+        "importSource": "shared/components/Button",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"primary\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "AboutTooltip",
+        "childComponent": "Button",
+        "importSource": "shared/components/Button",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "style",
+            "valueExpression": "{ marginLeft: 10 }"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "\"github\""
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

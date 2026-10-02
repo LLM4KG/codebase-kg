@@ -1,0 +1,98 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsPriority",
+        "childComponent": "SectionTitle",
+        "importSource": "../Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsPriority",
+        "childComponent": "Select",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "withClearValue",
+            "valueExpression": "false"
+          },
+          {
+            "propName": "dropdownWidth",
+            "valueExpression": "343"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "\"priority\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "issue.priority"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "Object.values(IssuePriority).map(priority => ({ value: priority, label: IssuePriorityCopy[priority] }))"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "priority => updateIssue({ priority })"
+          },
+          {
+            "propName": "renderValue",
+            "valueExpression": "({ value: priority }) => renderPriorityItem(priority, true)"
+          },
+          {
+            "propName": "renderOption",
+            "valueExpression": "({ value: priority }) => renderPriorityItem(priority)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderPriorityItem",
+        "childComponent": "Priority",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isValue",
+            "valueExpression": "isValue"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderPriorityItem",
+        "childComponent": "IssuePriorityIcon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "priority",
+            "valueExpression": "priority"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderPriorityItem",
+        "childComponent": "Label",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

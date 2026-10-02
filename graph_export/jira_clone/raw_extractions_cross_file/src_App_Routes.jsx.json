@@ -1,0 +1,148 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Routes",
+        "childComponent": "Router",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "history",
+            "valueExpression": "history"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Routes",
+        "childComponent": "Switch",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Routes",
+        "childComponent": "Redirect",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "exact",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "from",
+            "valueExpression": "\"/\""
+          },
+          {
+            "propName": "to",
+            "valueExpression": "\"/project\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "Routes",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/authenticate\""
+          },
+          {
+            "propName": "component",
+            "valueExpression": "Authenticate"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Routes",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "\"/project\""
+          },
+          {
+            "propName": "component",
+            "valueExpression": "Project"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Routes",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "component",
+            "valueExpression": "PageError"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Routes",
+        "childComponent": "Authenticate",
+        "importSource": "Auth/Authenticate",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Routes",
+        "childComponent": "Project",
+        "importSource": "Project",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Routes",
+        "childComponent": "PageError",
+        "importSource": "shared/components/PageError",
+        "usage": "prop_value",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": [
+      {
+        "routingComponent": "Routes",
+        "targetComponent": "Authenticate",
+        "importSource": "Auth/Authenticate",
+        "path": "/authenticate",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "Routes",
+        "targetComponent": "Project",
+        "importSource": "Project",
+        "path": "/project",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "Routes",
+        "targetComponent": "PageError",
+        "importSource": "shared/components/PageError",
+        "path": "*",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      }
+    ]
+  }
+}

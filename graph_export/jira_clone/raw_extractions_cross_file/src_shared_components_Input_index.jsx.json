@@ -1,0 +1,64 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Input",
+        "childComponent": "StyledInput",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "className",
+            "valueExpression": "className"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Input",
+        "childComponent": "StyledIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "icon"
+          },
+          {
+            "propName": "size",
+            "valueExpression": "15"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Input",
+        "childComponent": "InputElement",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "...inputProps",
+            "valueExpression": "{...inputProps}"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "handleChange"
+          },
+          {
+            "propName": "hasIcon",
+            "valueExpression": "!!icon"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

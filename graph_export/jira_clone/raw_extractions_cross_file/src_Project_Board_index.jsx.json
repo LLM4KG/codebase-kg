@@ -1,0 +1,165 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoard",
+        "childComponent": "Breadcrumbs",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "items",
+            "valueExpression": "['Projects', project.name, 'Kanban Board']"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoard",
+        "childComponent": "Header",
+        "importSource": "./Header",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoard",
+        "childComponent": "Filters",
+        "importSource": "./Filters",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "projectUsers",
+            "valueExpression": "project.users"
+          },
+          {
+            "propName": "defaultFilters",
+            "valueExpression": "defaultFilters"
+          },
+          {
+            "propName": "filters",
+            "valueExpression": "filters"
+          },
+          {
+            "propName": "mergeFilters",
+            "valueExpression": "mergeFilters"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoard",
+        "childComponent": "Lists",
+        "importSource": "./Lists",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "project",
+            "valueExpression": "project"
+          },
+          {
+            "propName": "filters",
+            "valueExpression": "filters"
+          },
+          {
+            "propName": "updateLocalProjectIssues",
+            "valueExpression": "updateLocalProjectIssues"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoard",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "`${match.path}/issues/:issueId`"
+          },
+          {
+            "propName": "render",
+            "valueExpression": "routeProps => <Modal ... />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoard",
+        "childComponent": "Modal",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isOpen",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "testid",
+            "valueExpression": "\"modal:issue-details\""
+          },
+          {
+            "propName": "width",
+            "valueExpression": "1040"
+          },
+          {
+            "propName": "withCloseIcon",
+            "valueExpression": "false"
+          },
+          {
+            "propName": "onClose",
+            "valueExpression": "() => history.push(match.url)"
+          },
+          {
+            "propName": "renderContent",
+            "valueExpression": "modal => <IssueDetails ... />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoard",
+        "childComponent": "IssueDetails",
+        "importSource": "./IssueDetails",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issueId",
+            "valueExpression": "routeProps.match.params.issueId"
+          },
+          {
+            "propName": "projectUsers",
+            "valueExpression": "project.users"
+          },
+          {
+            "propName": "fetchProject",
+            "valueExpression": "fetchProject"
+          },
+          {
+            "propName": "updateLocalProjectIssues",
+            "valueExpression": "updateLocalProjectIssues"
+          },
+          {
+            "propName": "modalClose",
+            "valueExpression": "modal.close"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": [
+      {
+        "routingComponent": "ProjectBoard",
+        "targetComponent": "IssueDetails",
+        "importSource": "./IssueDetails",
+        "path": "${match.path}/issues/:issueId",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      }
+    ]
+  }
+}

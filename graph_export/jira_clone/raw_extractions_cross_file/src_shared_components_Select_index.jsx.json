@@ -1,0 +1,210 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Select",
+        "childComponent": "StyledSelect",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "className",
+            "valueExpression": "className"
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "variant"
+          },
+          {
+            "propName": "tabIndex",
+            "valueExpression": "\"0\""
+          },
+          {
+            "propName": "onKeyDown",
+            "valueExpression": "handleFocusedSelectKeydown"
+          },
+          {
+            "propName": "invalid",
+            "valueExpression": "invalid"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "ValueContainer",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "variant"
+          },
+          {
+            "propName": "data-testid",
+            "valueExpression": "name ? `select:${name}` : 'select'"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "activateDropdown"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "Placeholder",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "ValueMulti",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "variant"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "ValueMultiItem",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "() => removeOptionValue(optionValue)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "Icon",
+        "importSource": "shared/components/Icon",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"close\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "14"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "AddMore",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "Icon",
+        "importSource": "shared/components/Icon",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"plus\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "ChevronIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"chevron-down\""
+          },
+          {
+            "propName": "top",
+            "valueExpression": "1"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Select",
+        "childComponent": "Dropdown",
+        "importSource": "./Dropdown",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dropdownWidth",
+            "valueExpression": "dropdownWidth"
+          },
+          {
+            "propName": "value",
+            "valueExpression": "value"
+          },
+          {
+            "propName": "isValueEmpty",
+            "valueExpression": "isValueEmpty"
+          },
+          {
+            "propName": "searchValue",
+            "valueExpression": "searchValue"
+          },
+          {
+            "propName": "setSearchValue",
+            "valueExpression": "setSearchValue"
+          },
+          {
+            "propName": "$selectRef",
+            "valueExpression": "$selectRef"
+          },
+          {
+            "propName": "$inputRef",
+            "valueExpression": "$inputRef"
+          },
+          {
+            "propName": "deactivateDropdown",
+            "valueExpression": "deactivateDropdown"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "options"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "handleChange"
+          },
+          {
+            "propName": "onCreate",
+            "valueExpression": "onCreate"
+          },
+          {
+            "propName": "isMulti",
+            "valueExpression": "isMulti"
+          },
+          {
+            "propName": "withClearValue",
+            "valueExpression": "withClearValue"
+          },
+          {
+            "propName": "propsRenderOption",
+            "valueExpression": "propsRenderOption"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

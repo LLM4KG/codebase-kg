@@ -1,0 +1,123 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsType",
+        "childComponent": "Select",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "dropdownWidth",
+            "valueExpression": "150"
+          },
+          {
+            "propName": "withClearValue",
+            "valueExpression": "false"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "\"type\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "issue.type"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "Object.values(IssueType).map(type => ({ value: type, label: IssueTypeCopy[type] }))"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "type => updateIssue({ type })"
+          },
+          {
+            "propName": "renderValue",
+            "valueExpression": "({ value: type }) => <TypeButton variant=\"empty\" icon={<IssueTypeIcon type={type} />}>{...}</TypeButton>"
+          },
+          {
+            "propName": "renderOption",
+            "valueExpression": "({ value: type }) => <Type key={type} onClick={() => updateIssue({ type })}><IssueTypeIcon type={type} top={1} /><TypeLabel>{...}</TypeLabel></Type>"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsType",
+        "childComponent": "TypeButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "<IssueTypeIcon type={type} />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsType",
+        "childComponent": "IssueTypeIcon",
+        "importSource": "shared/components",
+        "usage": "prop_value",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "type"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsType",
+        "childComponent": "Type",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "() => updateIssue({ type })"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsType",
+        "childComponent": "IssueTypeIcon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "type"
+          },
+          {
+            "propName": "top",
+            "valueExpression": "1"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsType",
+        "childComponent": "TypeLabel",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

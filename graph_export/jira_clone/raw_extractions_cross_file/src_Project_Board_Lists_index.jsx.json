@@ -1,0 +1,59 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardLists",
+        "childComponent": "DragDropContext",
+        "importSource": "react-beautiful-dnd",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onDragEnd",
+            "valueExpression": "handleIssueDrop"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardLists",
+        "childComponent": "Lists",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardLists",
+        "childComponent": "List",
+        "importSource": "./List",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "status",
+            "valueExpression": "status"
+          },
+          {
+            "propName": "project",
+            "valueExpression": "project"
+          },
+          {
+            "propName": "filters",
+            "valueExpression": "filters"
+          },
+          {
+            "propName": "currentUserId",
+            "valueExpression": "currentUserId"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

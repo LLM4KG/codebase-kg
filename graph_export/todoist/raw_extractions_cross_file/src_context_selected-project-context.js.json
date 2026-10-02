@@ -1,0 +1,55 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "SelectedProjectProvider",
+        "childComponent": "SelectedProjectContext.Provider",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "{ selectedProject, setSelectedProject }"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useSelectedProjectValue",
+        "libraryHooks": [
+          {
+            "name": "useContext",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": []
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [
+      {
+        "componentName": "SelectedProjectProvider",
+        "contextName": "SelectedProjectContext",
+        "contextSource": "same_file",
+        "valueExpression": "{ selectedProject, setSelectedProject }"
+      }
+    ],
+    "contextConsumers": [
+      {
+        "consumerName": "useSelectedProjectValue",
+        "consumerType": "custom_hook",
+        "contextName": "SelectedProjectContext",
+        "contextSource": "same_file",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}
