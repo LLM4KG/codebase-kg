@@ -10,6 +10,7 @@ from pathlib import Path, PurePosixPath
 from src.graph.connection import run_query, run_query_void
 from src.graph import queries as Q
 from src.extraction.llm_extractor import CROSS_FILE_PROMPTS, extract_file_cross_file
+from src.llm.extraction_log import ExtractionRunLog
 
 logger = logging.getLogger(__name__)
 
@@ -163,14 +164,14 @@ def _build_component_index(file_manifest: list[str]) -> dict[str, dict]:
     index: dict[str, dict] = {}
 
     # Function Components
-    results = run_query("MATCH (fc:Function_Component) RETURN fc.uid AS uid, fc.name AS name, fc.filePath AS filePath")
+    results = run_query("MATCH (fc:Function_Component) RETURN fc.uid AS uid, fc.name AS name, fc.filePath AS filePath, fc.exportType AS exportType")
     for r in results:
-        index[r["uid"]] = {"uid": r["uid"], "name": r["name"], "filePath": r["filePath"], "type": "Function_Component"}
+        index[r["uid"]] = {"uid": r["uid"], "name": r["name"], "filePath": r["filePath"], "type": "Function_Component", "exportType": r["exportType"]}
 
     # Class Components
-    results = run_query("MATCH (cc:Class_Component) RETURN cc.uid AS uid, cc.name AS name, cc.filePath AS filePath")
+    results = run_query("MATCH (cc:Class_Component) RETURN cc.uid AS uid, cc.name AS name, cc.filePath AS filePath, cc.exportType AS exportType")
     for r in results:
-        index[r["uid"]] = {"uid": r["uid"], "name": r["name"], "filePath": r["filePath"], "type": "Class_Component"}
+        index[r["uid"]] = {"uid": r["uid"], "name": r["name"], "filePath": r["filePath"], "type": "Class_Component", "exportType": r["exportType"]}
 
     # Custom Hooks
     results = run_query("MATCH (ch:Custom_Hook) RETURN ch.uid AS uid, ch.name AS name, ch.filePath AS filePath")
@@ -220,7 +221,42 @@ def resolve_child_component(
     # directory — which also resolves renaming re-exports like
     # `export { CartProvider } from './CartContextProvider'`, where no filename
     # matches the imported symbol.
-    return _find_component_under_directory(child_name, resolved, component_index)
+    found = _find_component_under_directory(child_name, resolved, component_index)
+    if found is not None:
+        return found
+
+    # Renamed default import: `import Board from './Board'` where Board/index.jsx
+    # defines `ProjectBoard`. The JSX tag carries the importer's local name, which
+    # need not match the node. If the import lands on a file that defines exactly
+    # one component, a default import can only mean that one (jira_clone names
+    # nearly every component this way). Files with several components stay
+    # unresolved rather than guessed.
+    return _sole_component_in_file(resolved, component_index, file_manifest)
+
+
+def _sole_component_in_file(
+    resolved: str,
+    component_index: dict[str, dict],
+    file_manifest: list[str],
+) -> dict | None:
+    """The only component defined in the file `resolved` points at, else None.
+
+    Custom hooks share the component index but cannot be a JSX child, so they
+    neither count as the sole component nor stop one from being sole.
+    """
+    target = next((c for c in expand_extensions(resolved) if c in file_manifest), None)
+    if target is None:
+        return None
+    in_file = [
+        e for e in component_index.values()
+        if e.get("filePath") == target and e.get("type") != "Custom_Hook"
+    ]
+    if len(in_file) == 1:
+        return in_file[0]
+    # Several components (jira_clone's IssueCreate also defines render helpers):
+    # a default import can only mean the file's single default export.
+    defaults = [e for e in in_file if e.get("exportType") == "default"]
+    return defaults[0] if len(defaults) == 1 else None
 
 
 def _find_component_under_directory(
@@ -231,16 +267,22 @@ def _find_component_under_directory(
     """Find a component by name whose file sits directly inside `directory`.
 
     Restricted to direct children so that a barrel does not accidentally claim a
-    same-named component from a nested sub-directory.
+    same-named component from a nested sub-directory. One nested shape is
+    accepted: `<directory>/<name>/index.*`, the folder-per-component layout
+    behind `export { default as Button } from './Button'` (jira_clone's
+    `shared/components`). It is what `./Button` itself resolves to, so it is the
+    re-export target rather than an unrelated same-named component. Without it,
+    every barrel import of a folder component was dropped.
     """
     prefix = directory.rstrip("/") + "/"
+    folder_index = tuple(f"{prefix}{name}/index{ext}" for ext in EXTENSIONS)
     for entry in component_index.values():
         if entry["name"] != name:
             continue
         file_path = entry.get("filePath") or ""
         if not file_path.startswith(prefix):
             continue
-        if "/" in file_path[len(prefix):]:
+        if "/" in file_path[len(prefix):] and file_path not in folder_index:
             continue  # nested deeper than one level
         return entry
     return None
@@ -305,6 +347,7 @@ async def run_cross_file_extraction(
     aliases: dict[str, str] | None = None,
     base_url: str = "",
     raw_output_dir: Path | None = None,
+    run_log: ExtractionRunLog | None = None,
 ) -> None:
     """
     Stage 4: Run cross-file LLM prompts and create cross-file edges.
@@ -340,7 +383,9 @@ async def run_cross_file_extraction(
         cross_file_results[fp] = {}
 
         for prompt_id, template, response_model in CROSS_FILE_PROMPTS:
-            result = await extract_file_cross_file(fp, code, prompt_id, template, response_model)
+            result = await extract_file_cross_file(
+                fp, code, prompt_id, template, response_model, run_log=run_log
+            )
             cross_file_results[fp][prompt_id] = result
             step += 1
             if on_progress:
@@ -368,7 +413,7 @@ async def run_cross_file_extraction(
     step += 1
     if on_progress:
         on_progress(step, total_steps, "entrypoint analysis")
-    _extract_root_component(repo_root, component_index)
+    _extract_root_component(repo_root, component_index, file_manifest)
 
     step += 1
     if on_progress:
@@ -593,37 +638,67 @@ def _ingest_routes(
         })
 
 
-def _extract_root_component(repo_root: Path, component_index: dict[str, dict]) -> None:
-    """Detect the root component from the entrypoint file."""
+def find_entrypoint(
+    repo_root: Path, file_manifest: list[str] | None = None
+) -> tuple[str, str] | None:
+    """Return `(entrypoint_path, root_component_name)`, or None.
+
+    Candidates in order: package.json `main`, the conventional paths in
+    CANDIDATE_ENTRYPOINTS, then (given a manifest) every other manifest file that
+    imports react-dom, `index.*` / `main.*` first. The first candidate with a
+    detectable render call wins.
+
+    With a manifest, only extracted files are candidates. Previously the first
+    candidate that merely *existed* was taken and never re-checked: takenote's
+    `main` is `src/server/index.ts`, an excluded Express server, so detection
+    looked there and failed, and the real `src/client/index.tsx` was never tried.
+    """
     import json
 
-    entrypoint_path = None
+    def eligible(path: str) -> bool:
+        if file_manifest is not None:
+            return path in file_manifest
+        return (repo_root / path).is_file()
 
-    # Strategy A: package.json main field
+    candidates: list[str] = []
     pkg_path = repo_root / "package.json"
     if pkg_path.exists():
-        pkg = json.loads(pkg_path.read_text())
-        main_field = pkg.get("main")
-        if main_field and (repo_root / main_field).exists():
-            entrypoint_path = main_field
+        main_field = json.loads(pkg_path.read_text()).get("main")
+        if main_field:
+            candidates.append(main_field)
+    candidates += CANDIDATE_ENTRYPOINTS
+    explicit = set(candidates)  # checked as before; the manifest scan below is filtered
+    if file_manifest is not None:
+        def _rank(path: str) -> tuple:
+            stem = Path(path).stem
+            return (stem not in ("index", "main"), path.count("/"), path)
+        candidates += sorted(file_manifest, key=_rank)
 
-    # Strategy B: common candidate paths
-    if entrypoint_path is None:
-        for candidate in CANDIDATE_ENTRYPOINTS:
-            if (repo_root / candidate).exists():
-                entrypoint_path = candidate
-                break
+    seen: set[str] = set()
+    for path in candidates:
+        if path in seen or not eligible(path):
+            continue
+        seen.add(path)
+        content = (repo_root / path).read_text(errors="replace")
+        if path not in explicit and "react-dom" not in content:
+            continue
+        root_name = _extract_rendered_component(content)
+        if root_name is not None:
+            return path, root_name
+    return None
 
-    if entrypoint_path is None:
-        logger.warning("No entrypoint file found")
+
+def _extract_root_component(
+    repo_root: Path,
+    component_index: dict[str, dict],
+    file_manifest: list[str] | None = None,
+) -> None:
+    """Detect the root component from the entrypoint file."""
+    found = find_entrypoint(repo_root, file_manifest)
+    if found is None:
+        logger.warning("Could not detect a root component (no entrypoint with a render call)")
         return
-
-    content = (repo_root / entrypoint_path).read_text(errors="replace")
-    root_name = _extract_rendered_component(content)
-
-    if root_name is None:
-        logger.warning("Could not detect root component in %s", entrypoint_path)
-        return
+    entrypoint_path, root_name = found
 
     logger.info("Root component: %s (from %s)", root_name, entrypoint_path)
 
@@ -637,21 +712,21 @@ def _extract_root_component(repo_root: Path, component_index: dict[str, dict]) -
 
 def _extract_rendered_component(content: str) -> str | None:
     """Extract the root component name from a ReactDOM render call."""
-    # Direct patterns
-    patterns = [
-        r"\.render\(\s*<(\w+)[\s/>]",
-        r"ReactDOM\.render\(\s*<(\w+)[\s/>]",
-    ]
+    # Matches `root.render(`, `ReactDOM.render(` and the bare `render(` / `hydrate(`
+    # of `import { render } from 'react-dom'` (todoist). The earlier patterns all
+    # required a leading `.`, so a bare call went undetected and the graph got no
+    # RENDERS_ROOT_COMPONENT edge. The lookbehind rejects identifiers that merely
+    # end in "render", e.g. `rerender(`.
+    render_call = r"(?<![\w$])(?:render|hydrate)\("
 
-    for pattern in patterns:
-        match = re.search(pattern, content)
-        if match:
-            name = match.group(1)
-            if name not in KNOWN_WRAPPERS and not name.startswith("React"):
-                return name
+    match = re.search(render_call + r"\s*<(\w+)[\s/>]", content)
+    if match:
+        name = match.group(1)
+        if name not in KNOWN_WRAPPERS and not name.startswith("React"):
+            return name
 
     # Wrapper-aware fallback: find the render block and all JSX tags
-    render_match = re.search(r"\.render\(", content)
+    render_match = re.search(render_call, content)
     if render_match:
         # Extract a generous block after .render(
         start = render_match.start()

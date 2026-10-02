@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import time
 from pathlib import Path
 
 from src.config import get_settings
 from src.llm.client import extract_structured
 from src.llm.cache import get_cached, set_cached
+from src.llm.extraction_log import ExtractionRunLog
 from src.llm.prompt_loader import render_prompt
 from src.graph.models import (
     FunctionComponentResponse,
@@ -54,7 +56,49 @@ CROSS_FILE_PROMPTS = [
 ]
 
 
-async def extract_file(file_path: str, code: str) -> dict:
+async def _logged_extract(
+    prompt_text: str,
+    response_model: type,
+    run_log: ExtractionRunLog | None,
+    stage: str,
+    prompt_id: str,
+    file_path: str,
+):
+    """`extract_structured`, plus one usage record when a run log is attached.
+
+    Only the API await is timed — the `call_delay` sleep that follows a success is
+    our own pacing, not provider latency. A failure is recorded before it
+    propagates, because the caller swallows it into an empty result and a failed
+    call still cost whatever its attempts consumed.
+    """
+    if run_log is None:
+        return await extract_structured(prompt_text, response_model)
+
+    attempt_usage: list[dict] = []
+    start = time.perf_counter()
+    try:
+        response = await extract_structured(
+            prompt_text, response_model, usage_sink=attempt_usage
+        )
+    except BaseException as exc:
+        run_log.record_call(
+            stage, prompt_id, file_path,
+            attempt_usage=attempt_usage,
+            latency_ms=(time.perf_counter() - start) * 1000,
+            error=exc,
+        )
+        raise
+    run_log.record_call(
+        stage, prompt_id, file_path,
+        attempt_usage=attempt_usage,
+        latency_ms=(time.perf_counter() - start) * 1000,
+    )
+    return response
+
+
+async def extract_file(
+    file_path: str, code: str, run_log: ExtractionRunLog | None = None
+) -> dict:
     """
     Run all 7 per-file LLM prompts for a single source file.
 
@@ -69,13 +113,17 @@ async def extract_file(file_path: str, code: str) -> dict:
         if cached is not None:
             results[prompt_id] = cached
             logger.debug("Cache hit for %s/%s", file_path, prompt_id)
+            if run_log is not None:
+                run_log.record_cache_hit("per_file", prompt_id, file_path)
             continue
 
         # Render prompt and call LLM
         prompt_text = render_prompt(template, code=code)
 
         try:
-            response = await extract_structured(prompt_text, response_model)
+            response = await _logged_extract(
+                prompt_text, response_model, run_log, "per_file", prompt_id, file_path
+            )
             result_dict = response.model_dump(by_alias=True)
             results[prompt_id] = result_dict
             set_cached(code, prompt_id, model, result_dict)
@@ -91,18 +139,23 @@ async def extract_file(file_path: str, code: str) -> dict:
 
 
 async def extract_file_cross_file(file_path: str, code: str, prompt_id: str,
-                                   template: str, response_model: type) -> dict:
+                                   template: str, response_model: type,
+                                   run_log: ExtractionRunLog | None = None) -> dict:
     """Run a single cross-file LLM prompt for a source file."""
     model = get_settings().llm.model
 
     cached = get_cached(code, prompt_id, model)
     if cached is not None:
+        if run_log is not None:
+            run_log.record_cache_hit("cross_file", prompt_id, file_path)
         return cached
 
     prompt_text = render_prompt(template, code=code)
 
     try:
-        response = await extract_structured(prompt_text, response_model)
+        response = await _logged_extract(
+            prompt_text, response_model, run_log, "cross_file", prompt_id, file_path
+        )
         result_dict = response.model_dump(by_alias=True)
         set_cached(code, prompt_id, model, result_dict)
         delay = get_settings().llm.call_delay
