@@ -1,0 +1,186 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "NoteMenuBar",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useEffect",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useDispatch",
+            "category": "library",
+            "source": "react-redux"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": [
+      {
+        "name": "togglePreviewHandler",
+        "eventType": "onClick",
+        "componentName": "NoteMenuBar",
+        "isInline": false
+      },
+      {
+        "name": "favoriteNoteHandler",
+        "eventType": "onClick",
+        "componentName": "NoteMenuBar",
+        "isInline": false
+      },
+      {
+        "name": "trashNoteHandler",
+        "eventType": "onClick",
+        "componentName": "NoteMenuBar",
+        "isInline": false
+      },
+      {
+        "name": "downloadNotesHandler",
+        "eventType": "onClick",
+        "componentName": "NoteMenuBar",
+        "isInline": false
+      },
+      {
+        "name": "inline_onClick",
+        "eventType": "onClick",
+        "componentName": "NoteMenuBar",
+        "isInline": true
+      },
+      {
+        "name": "syncNotesHandler",
+        "eventType": "onClick",
+        "componentName": "NoteMenuBar",
+        "isInline": false
+      },
+      {
+        "name": "toggleDarkThemeHandler",
+        "eventType": "onClick",
+        "componentName": "NoteMenuBar",
+        "isInline": false
+      },
+      {
+        "name": "settingsHandler",
+        "eventType": "onClick",
+        "componentName": "NoteMenuBar",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": [
+          "useEffect",
+          "useState"
+        ]
+      },
+      {
+        "from": "react-redux",
+        "symbols": [],
+        "hooks": [
+          "useDispatch",
+          "useSelector"
+        ]
+      },
+      {
+        "from": "react-feather",
+        "symbols": [
+          "Eye",
+          "Edit",
+          "Star",
+          "Trash2",
+          "Download",
+          "RefreshCw",
+          "Loader",
+          "Settings",
+          "Sun",
+          "Moon",
+          "ClipboardCmp"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@resources/TestID",
+        "symbols": [
+          "TestID"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": [
+      {
+        "name": "uuidCopiedText",
+        "setterName": "setUuidCopiedText",
+        "type": "string",
+        "defaultValue": "''",
+        "componentName": "NoteMenuBar",
+        "declarationPattern": "useState"
+      },
+      {
+        "name": "isToggled",
+        "setterName": "togglePreviewIcon",
+        "type": "boolean",
+        "defaultValue": "false",
+        "componentName": "NoteMenuBar",
+        "declarationPattern": "useState"
+      }
+    ]
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

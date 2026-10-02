@@ -1,0 +1,70 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "App",
+        "childComponent": "Loader",
+        "importSource": "components/Loader",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "GithubCorner",
+        "importSource": "components/Github",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Recruiter",
+        "importSource": "components/Recruiter",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Filter",
+        "importSource": "components/Filter",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "GithubStarButton",
+        "importSource": "components/Github",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Products",
+        "importSource": "components/Products",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "products",
+            "valueExpression": "products"
+          }
+        ]
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Cart",
+        "importSource": "components/Cart",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

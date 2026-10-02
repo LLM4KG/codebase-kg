@@ -1,0 +1,21 @@
+{
+  "projectId": "78fa83d158b6",
+  "file_count": 15,
+  "files": [
+    "src/App.js",
+    "src/api/config.js",
+    "src/components/Container.js",
+    "src/components/Form.js",
+    "src/components/Gallery.js",
+    "src/components/Header.js",
+    "src/components/Image.js",
+    "src/components/Item.js",
+    "src/components/Loader.js",
+    "src/components/Navigation.js",
+    "src/components/NoImages.js",
+    "src/components/NotFound.js",
+    "src/components/Search.js",
+    "src/context/PhotoContext.js",
+    "src/index.js"
+  ]
+}

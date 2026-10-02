@@ -1,0 +1,23 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Loader",
+        "childComponent": "S.Container",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

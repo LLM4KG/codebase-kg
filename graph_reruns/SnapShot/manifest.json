@@ -1,0 +1,233 @@
+{
+  "format": "cypherl",
+  "nodes": {
+    "File": 15,
+    "Function_Component": 12,
+    "Prop": 10,
+    "Library": 8,
+    "Library_Hook": 3,
+    "State_Variable": 3,
+    "EventHandler": 2,
+    "Context": 1,
+    "Class_Component": 1,
+    "Project": 1
+  },
+  "relationships": {
+    "BELONGS_TO": 15,
+    "USES_COMPONENT": 13,
+    "DEFINED_IN": 13,
+    "PASSES_PROP": 11,
+    "ACCEPTS_PROP": 10,
+    "DEPENDS_ON": 8,
+    "ROUTES_TO": 4,
+    "USES_LIBRARY_HOOK": 4,
+    "PROVIDED_BY": 3,
+    "DECLARES_STATE": 3,
+    "HAS_HANDLER": 2,
+    "RENDERS_ROOT_COMPONENT": 1,
+    "PROVIDES_CONTEXT": 1,
+    "CONSUMES_CONTEXT": 1
+  },
+  "provenance": {
+    "project_id": "78fa83d158b6",
+    "extraction_model": "anthropic/claude-sonnet-4-6",
+    "prompt_set_version": "72ef9f041851",
+    "prompt_ids": [
+      "class_components",
+      "composition",
+      "context_provider_consumer",
+      "contexts",
+      "custom_hook_internal",
+      "custom_hooks",
+      "function_components",
+      "library_usage",
+      "props_and_handlers",
+      "route_definitions",
+      "state_class",
+      "state_function"
+    ],
+    "extracted_at": "2026-09-18T08:44:36+00:00",
+    "file_count": 15,
+    "repo_commit_sha": "d6ea1fd3fd74f6bbfa8794963b6743ac5be61757",
+    "repo_dirty": false,
+    "usage": {
+      "run_id": "extract_SnapShot_20260918T083803",
+      "log_path": "experiment_logs/extract_SnapShot_20260918T083803/extraction.jsonl",
+      "model": "anthropic/claude-sonnet-4-6",
+      "call_delay_s": 0.0,
+      "complete": true,
+      "files_resumed_from_checkpoint": 0,
+      "calls_api": 172,
+      "calls_cache_hit": 0,
+      "calls_failed": 0,
+      "api_attempts": 172,
+      "input_tokens": 626186,
+      "output_tokens": 11405,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "api_latency_s": 392.08,
+      "wall_clock_s": {
+        "stage_2_3": 274.627,
+        "stage_4": 118.489
+      },
+      "by_stage": {
+        "per_file": {
+          "calls_api": 120,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 120,
+          "input_tokens": 379388,
+          "output_tokens": 5983,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 273.842
+        },
+        "cross_file": {
+          "calls_api": 52,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 52,
+          "input_tokens": 246798,
+          "output_tokens": 5422,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 118.238
+        }
+      },
+      "by_prompt": {
+        "class_components": {
+          "calls_api": 15,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 15,
+          "input_tokens": 49396,
+          "output_tokens": 562,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 33.081
+        },
+        "composition": {
+          "calls_api": 13,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 13,
+          "input_tokens": 62538,
+          "output_tokens": 3070,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 43.305
+        },
+        "context_provider_consumer": {
+          "calls_api": 13,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 13,
+          "input_tokens": 58729,
+          "output_tokens": 838,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 25.549
+        },
+        "contexts": {
+          "calls_api": 15,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 15,
+          "input_tokens": 38821,
+          "output_tokens": 517,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 24.744
+        },
+        "custom_hook_internal": {
+          "calls_api": 13,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 13,
+          "input_tokens": 51189,
+          "output_tokens": 481,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 21.544
+        },
+        "custom_hooks": {
+          "calls_api": 15,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 15,
+          "input_tokens": 41281,
+          "output_tokens": 525,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 37.767
+        },
+        "function_components": {
+          "calls_api": 15,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 15,
+          "input_tokens": 46021,
+          "output_tokens": 1157,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 39.45
+        },
+        "library_usage": {
+          "calls_api": 15,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 15,
+          "input_tokens": 32506,
+          "output_tokens": 856,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 28.636
+        },
+        "props_and_handlers": {
+          "calls_api": 15,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 15,
+          "input_tokens": 61921,
+          "output_tokens": 1110,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 39.563
+        },
+        "route_definitions": {
+          "calls_api": 13,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 13,
+          "input_tokens": 74342,
+          "output_tokens": 1033,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 27.839
+        },
+        "state_class": {
+          "calls_api": 15,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 15,
+          "input_tokens": 56416,
+          "output_tokens": 540,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 37.503
+        },
+        "state_function": {
+          "calls_api": 15,
+          "calls_cache_hit": 0,
+          "calls_failed": 0,
+          "api_attempts": 15,
+          "input_tokens": 53026,
+          "output_tokens": 716,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "api_latency_s": 33.097
+        }
+      }
+    }
+  }
+}

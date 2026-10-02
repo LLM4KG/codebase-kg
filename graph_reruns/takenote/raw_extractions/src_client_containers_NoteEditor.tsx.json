@@ -1,0 +1,119 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "NoteEditor",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useDispatch",
+            "category": "library",
+            "source": "react-redux"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": [
+      {
+        "name": "inline_editorDidMount",
+        "eventType": "editorDidMount",
+        "componentName": "NoteEditor",
+        "isInline": true
+      },
+      {
+        "name": "inline_onBeforeChange",
+        "eventType": "onBeforeChange",
+        "componentName": "NoteEditor",
+        "isInline": true
+      },
+      {
+        "name": "inline_onChange",
+        "eventType": "onChange",
+        "componentName": "NoteEditor",
+        "isInline": true
+      },
+      {
+        "name": "inline_onPaste",
+        "eventType": "onPaste",
+        "componentName": "NoteEditor",
+        "isInline": true
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "dayjs",
+        "symbols": [
+          "dayjs"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-codemirror2",
+        "symbols": [
+          "Controlled as CodeMirror"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-redux",
+        "symbols": [],
+        "hooks": [
+          "useDispatch",
+          "useSelector"
+        ]
+      },
+      {
+        "from": "codemirror",
+        "symbols": [
+          "Editor"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

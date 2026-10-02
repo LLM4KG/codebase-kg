@@ -1,0 +1,98 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "SelectCategory",
+        "syntax": "arrow",
+        "usesHooks": false,
+        "hookDetails": [],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "onChange",
+        "componentName": "SelectCategory",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "categories",
+        "componentName": "SelectCategory",
+        "type": "array",
+        "isRequired": true
+      },
+      {
+        "name": "note",
+        "componentName": "SelectCategory",
+        "type": "object",
+        "isRequired": true
+      },
+      {
+        "name": "activeCategoryId",
+        "componentName": "SelectCategory",
+        "type": "string",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "onChange",
+        "eventType": "onChange",
+        "componentName": "SelectCategory",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@resources/TestID",
+        "symbols": [
+          "TestID"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@/types",
+        "symbols": [
+          "NoteItem",
+          "CategoryItem"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@/utils/helpers",
+        "symbols": [
+          "isDraftNote"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "TempStateProvider",
+        "childComponent": "TempStateContext.Provider",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "value"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useTempState",
+        "libraryHooks": [
+          {
+            "name": "useContext",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": []
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [
+      {
+        "componentName": "TempStateProvider",
+        "contextName": "TempStateContext",
+        "contextSource": "same_file",
+        "valueExpression": "{ addingTempCategory, setAddingTempCategory }"
+      }
+    ],
+    "contextConsumers": [
+      {
+        "consumerName": "useTempState",
+        "consumerType": "custom_hook",
+        "contextName": "TempStateContext",
+        "contextSource": "same_file",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

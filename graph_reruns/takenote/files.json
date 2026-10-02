@@ -1,0 +1,302 @@
+[
+  {
+    "name": "index.ts",
+    "filePath": "src/client/api/index.ts",
+    "modifiedAt": "2026-03-14T18:09:29.613229+00:00"
+  },
+  {
+    "name": "ActionButton.tsx",
+    "filePath": "src/client/components/AppSidebar/ActionButton.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613347+00:00"
+  },
+  {
+    "name": "AddCategoryButton.tsx",
+    "filePath": "src/client/components/AppSidebar/AddCategoryButton.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613407+00:00"
+  },
+  {
+    "name": "AddCategoryForm.tsx",
+    "filePath": "src/client/components/AppSidebar/AddCategoryForm.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613407+00:00"
+  },
+  {
+    "name": "CollapseCategoryButton.tsx",
+    "filePath": "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613407+00:00"
+  },
+  {
+    "name": "FolderOption.tsx",
+    "filePath": "src/client/components/AppSidebar/FolderOption.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613407+00:00"
+  },
+  {
+    "name": "ScratchpadOption.tsx",
+    "filePath": "src/client/components/AppSidebar/ScratchpadOption.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613407+00:00"
+  },
+  {
+    "name": "EmptyEditor.tsx",
+    "filePath": "src/client/components/Editor/EmptyEditor.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613407+00:00"
+  },
+  {
+    "name": "NoteLink.tsx",
+    "filePath": "src/client/components/Editor/NoteLink.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613616+00:00"
+  },
+  {
+    "name": "PreviewEditor.tsx",
+    "filePath": "src/client/components/Editor/PreviewEditor.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613616+00:00"
+  },
+  {
+    "name": "LandingPage.tsx",
+    "filePath": "src/client/components/LandingPage.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613616+00:00"
+  },
+  {
+    "name": "LastSyncedNotification.tsx",
+    "filePath": "src/client/components/LastSyncedNotification.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613616+00:00"
+  },
+  {
+    "name": "ContextMenuOption.tsx",
+    "filePath": "src/client/components/NoteList/ContextMenuOption.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613616+00:00"
+  },
+  {
+    "name": "NoteListButton.tsx",
+    "filePath": "src/client/components/NoteList/NoteListButton.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613835+00:00"
+  },
+  {
+    "name": "SearchBar.tsx",
+    "filePath": "src/client/components/NoteList/SearchBar.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613835+00:00"
+  },
+  {
+    "name": "SelectCategory.tsx",
+    "filePath": "src/client/components/NoteList/SelectCategory.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613835+00:00"
+  },
+  {
+    "name": "Select.tsx",
+    "filePath": "src/client/components/Select.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613835+00:00"
+  },
+  {
+    "name": "IconButton.tsx",
+    "filePath": "src/client/components/SettingsModal/IconButton.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.613835+00:00"
+  },
+  {
+    "name": "IconButtonUploader.tsx",
+    "filePath": "src/client/components/SettingsModal/IconButtonUploader.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614008+00:00"
+  },
+  {
+    "name": "Option.tsx",
+    "filePath": "src/client/components/SettingsModal/Option.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614008+00:00"
+  },
+  {
+    "name": "SelectOptions.tsx",
+    "filePath": "src/client/components/SettingsModal/SelectOptions.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614008+00:00"
+  },
+  {
+    "name": "Shortcut.tsx",
+    "filePath": "src/client/components/SettingsModal/Shortcut.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614008+00:00"
+  },
+  {
+    "name": "Switch.tsx",
+    "filePath": "src/client/components/Switch.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614008+00:00"
+  },
+  {
+    "name": "Tab.tsx",
+    "filePath": "src/client/components/Tabs/Tab.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614008+00:00"
+  },
+  {
+    "name": "TabPanel.tsx",
+    "filePath": "src/client/components/Tabs/TabPanel.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614205+00:00"
+  },
+  {
+    "name": "Tabs.tsx",
+    "filePath": "src/client/components/Tabs/Tabs.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614205+00:00"
+  },
+  {
+    "name": "App.tsx",
+    "filePath": "src/client/containers/App.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614205+00:00"
+  },
+  {
+    "name": "AppSidebar.tsx",
+    "filePath": "src/client/containers/AppSidebar.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "CategoryList.tsx",
+    "filePath": "src/client/containers/CategoryList.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "CategoryOption.tsx",
+    "filePath": "src/client/containers/CategoryOption.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "ContextMenu.tsx",
+    "filePath": "src/client/containers/ContextMenu.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "ContextMenuOptions.tsx",
+    "filePath": "src/client/containers/ContextMenuOptions.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "KeyboardShortcuts.tsx",
+    "filePath": "src/client/containers/KeyboardShortcuts.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "NoteEditor.tsx",
+    "filePath": "src/client/containers/NoteEditor.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "NoteList.tsx",
+    "filePath": "src/client/containers/NoteList.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "NoteMenuBar.tsx",
+    "filePath": "src/client/containers/NoteMenuBar.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "SettingsModal.tsx",
+    "filePath": "src/client/containers/SettingsModal.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "TakeNoteApp.tsx",
+    "filePath": "src/client/containers/TakeNoteApp.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "TempStateContext.tsx",
+    "filePath": "src/client/contexts/TempStateContext.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "index.tsx",
+    "filePath": "src/client/index.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "PrivateRoute.tsx",
+    "filePath": "src/client/router/PrivateRoute.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.614321+00:00"
+  },
+  {
+    "name": "PublicRoute.tsx",
+    "filePath": "src/client/router/PublicRoute.tsx",
+    "modifiedAt": "2026-03-14T18:09:29.615177+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/client/sagas/index.ts",
+    "modifiedAt": "2026-03-14T18:09:29.615177+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/client/selectors/index.ts",
+    "modifiedAt": "2026-03-14T18:09:29.615177+00:00"
+  },
+  {
+    "name": "auth.ts",
+    "filePath": "src/client/slices/auth.ts",
+    "modifiedAt": "2026-03-14T18:09:29.615217+00:00"
+  },
+  {
+    "name": "category.ts",
+    "filePath": "src/client/slices/category.ts",
+    "modifiedAt": "2026-03-14T18:09:29.615447+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/client/slices/index.ts",
+    "modifiedAt": "2026-03-14T18:09:29.615447+00:00"
+  },
+  {
+    "name": "note.ts",
+    "filePath": "src/client/slices/note.ts",
+    "modifiedAt": "2026-03-14T18:09:29.615447+00:00"
+  },
+  {
+    "name": "settings.ts",
+    "filePath": "src/client/slices/settings.ts",
+    "modifiedAt": "2026-03-14T18:09:29.615447+00:00"
+  },
+  {
+    "name": "sync.ts",
+    "filePath": "src/client/slices/sync.ts",
+    "modifiedAt": "2026-03-14T18:09:29.615447+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/client/types/index.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616217+00:00"
+  },
+  {
+    "name": "constants.ts",
+    "filePath": "src/client/utils/constants.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616217+00:00"
+  },
+  {
+    "name": "enums.ts",
+    "filePath": "src/client/utils/enums.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616602+00:00"
+  },
+  {
+    "name": "helpers.ts",
+    "filePath": "src/client/utils/helpers.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616602+00:00"
+  },
+  {
+    "name": "history.ts",
+    "filePath": "src/client/utils/history.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616602+00:00"
+  },
+  {
+    "name": "hooks.ts",
+    "filePath": "src/client/utils/hooks.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616602+00:00"
+  },
+  {
+    "name": "notesSortStrategies.ts",
+    "filePath": "src/client/utils/notesSortStrategies.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616602+00:00"
+  },
+  {
+    "name": "reactMarkdownPlugins.ts",
+    "filePath": "src/client/utils/reactMarkdownPlugins.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616602+00:00"
+  },
+  {
+    "name": "LabelText.ts",
+    "filePath": "src/resources/LabelText.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616602+00:00"
+  },
+  {
+    "name": "TestID.ts",
+    "filePath": "src/resources/TestID.ts",
+    "modifiedAt": "2026-03-14T18:09:29.616909+00:00"
+  }
+]

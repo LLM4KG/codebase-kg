@@ -1,0 +1,107 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "PreviewEditor",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useDispatch",
+            "category": "library",
+            "source": "react-redux"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "noteText",
+        "componentName": "PreviewEditor",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "directionText",
+        "componentName": "PreviewEditor",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "notes",
+        "componentName": "PreviewEditor",
+        "type": "array",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-markdown",
+        "symbols": [
+          "ReactMarkdown"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-redux",
+        "symbols": [],
+        "hooks": [
+          "useDispatch"
+        ]
+      },
+      {
+        "from": "@/utils/enums",
+        "symbols": [
+          "Folder"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@/slices/note",
+        "symbols": [
+          "updateActiveNote",
+          "updateSelectedNotes",
+          "pruneNotes",
+          "swapFolder"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@/types",
+        "symbols": [
+          "NoteItem"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

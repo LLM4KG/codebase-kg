@@ -1,0 +1,32 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useProducts",
+        "libraryHooks": [
+          {
+            "name": "useCallback",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": [
+          {
+            "name": "useProductsContext",
+            "source": "./ProductsContextProvider"
+          }
+        ]
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

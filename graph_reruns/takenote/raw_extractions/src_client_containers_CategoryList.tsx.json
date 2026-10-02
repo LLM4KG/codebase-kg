@@ -1,0 +1,136 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "CategoryList",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useDispatch",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useRef",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useTempState",
+            "category": "custom",
+            "source": "@/contexts/TempStateContext"
+          },
+          {
+            "name": "useEffect",
+            "category": "library",
+            "source": "react"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": [
+          "useRef",
+          "useState",
+          "useEffect"
+        ]
+      },
+      {
+        "from": "react-redux",
+        "symbols": [],
+        "hooks": [
+          "useSelector",
+          "useDispatch"
+        ]
+      },
+      {
+        "from": "uuid",
+        "symbols": [
+          "uuid"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-beautiful-dnd",
+        "symbols": [
+          "Droppable"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": [
+      {
+        "name": "optionsId",
+        "setterName": "setOptionsId",
+        "type": "string",
+        "defaultValue": "''",
+        "componentName": "CategoryList",
+        "declarationPattern": "useState"
+      },
+      {
+        "name": "optionsPosition",
+        "setterName": "setOptionsPosition",
+        "type": "object",
+        "defaultValue": "{ x: 0, y: 0 }",
+        "componentName": "CategoryList",
+        "declarationPattern": "useState"
+      },
+      {
+        "name": "isCategoryListOpen",
+        "setterName": "setCategoryListOpen",
+        "type": "boolean",
+        "defaultValue": "true",
+        "componentName": "CategoryList",
+        "declarationPattern": "useState"
+      }
+    ]
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

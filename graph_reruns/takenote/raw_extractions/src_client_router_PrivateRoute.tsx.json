@@ -1,0 +1,80 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "PrivateRoute",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "component",
+        "componentName": "PrivateRoute",
+        "type": "any",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "inline_render",
+        "eventType": "render",
+        "componentName": "PrivateRoute",
+        "isInline": true
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-redux",
+        "symbols": [],
+        "hooks": [
+          "useSelector"
+        ]
+      },
+      {
+        "from": "react-router-dom",
+        "symbols": [
+          "Redirect",
+          "Route",
+          "RouteProps"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

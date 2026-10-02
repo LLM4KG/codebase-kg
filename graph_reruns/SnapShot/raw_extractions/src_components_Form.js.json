@@ -1,0 +1,87 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "Form",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "default"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "handleSubmit",
+        "componentName": "Form",
+        "type": "function",
+        "isRequired": null
+      },
+      {
+        "name": "history",
+        "componentName": "Form",
+        "type": "unknown",
+        "isRequired": null
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "inline_onSubmit",
+        "eventType": "onSubmit",
+        "componentName": "Form",
+        "isInline": true
+      },
+      {
+        "name": "updateSearchInput",
+        "eventType": "onChange",
+        "componentName": "Form",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": [
+          "useState"
+        ]
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": [
+      {
+        "name": "searchEntry",
+        "setterName": "setSearchEntry",
+        "type": "string",
+        "defaultValue": "\"\"",
+        "componentName": "Form",
+        "declarationPattern": "useState"
+      }
+    ]
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

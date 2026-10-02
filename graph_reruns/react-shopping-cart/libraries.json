@@ -1,0 +1,170 @@
+[
+  [
+    {
+      "name": "@testing-library/jest-dom",
+      "version": "^5.16.2",
+      "category": "testing"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "@testing-library/react",
+      "version": "^13.0.0",
+      "category": "testing"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "@testing-library/user-event",
+      "version": "^13.5.0",
+      "category": "testing"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "@types/jest",
+      "version": "^27.4.1",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "@types/node",
+      "version": "^16.11.25",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "@types/react",
+      "version": "^17.0.43",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "@types/react-dom",
+      "version": "^17.0.14",
+      "category": "other"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "axios",
+      "version": "^0.26.0",
+      "category": "utility"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react",
+      "version": "^18.0.0",
+      "category": "framework"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-dom",
+      "version": "^18.0.0",
+      "category": "framework"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "react-scripts",
+      "version": "^5.0.0",
+      "category": "build-tool"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "styled-components",
+      "version": "^5.3.3",
+      "category": "ui-library"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "typescript",
+      "version": "^4.6.3",
+      "category": "build-tool"
+    },
+    "production"
+  ],
+  [
+    {
+      "name": "@commitlint/cli",
+      "version": "^16.2.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@commitlint/config-conventional",
+      "version": "^16.2.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@testing-library/react-hooks",
+      "version": "^7.0.2",
+      "category": "testing"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "@types/styled-components",
+      "version": "^5.1.23",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "firebase-tools",
+      "version": "^10.2.1",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "husky",
+      "version": "^4.2.5",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "lint-staged",
+      "version": "^10.2.10",
+      "category": "other"
+    },
+    "development"
+  ],
+  [
+    {
+      "name": "prettier",
+      "version": "^2.5.1",
+      "category": "build-tool"
+    },
+    "development"
+  ]
+]

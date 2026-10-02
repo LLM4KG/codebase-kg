@@ -1,0 +1,144 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "ContextMenuOptions",
+        "syntax": "arrow",
+        "usesHooks": false,
+        "hookDetails": [],
+        "returnsJSX": true,
+        "exportType": "named"
+      },
+      {
+        "name": "CategoryOptions",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useDispatch",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useContext",
+            "category": "library",
+            "source": "react"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "none"
+      },
+      {
+        "name": "NotesOptions",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useDispatch",
+            "category": "library",
+            "source": "react-redux"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "none"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "clickedItem",
+        "componentName": "ContextMenuOptions",
+        "type": "object",
+        "isRequired": true
+      },
+      {
+        "name": "type",
+        "componentName": "ContextMenuOptions",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "clickedCategory",
+        "componentName": "CategoryOptions",
+        "type": "object",
+        "isRequired": true
+      },
+      {
+        "name": "clickedNote",
+        "componentName": "NotesOptions",
+        "type": "object",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": [
+          "useContext"
+        ]
+      },
+      {
+        "from": "react-feather",
+        "symbols": [
+          "ArrowUp",
+          "Download",
+          "Star",
+          "Trash",
+          "X",
+          "Edit2",
+          "Clipboard"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-redux",
+        "symbols": [],
+        "hooks": [
+          "useDispatch",
+          "useSelector"
+        ]
+      },
+      {
+        "from": "@resources/LabelText",
+        "symbols": [
+          "LabelText"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@resources/TestID",
+        "symbols": [
+          "TestID"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "ScratchpadOption",
+        "syntax": "arrow",
+        "usesHooks": false,
+        "hookDetails": [],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "active",
+        "componentName": "ScratchpadOption",
+        "type": "boolean",
+        "isRequired": true
+      },
+      {
+        "name": "swapFolder",
+        "componentName": "ScratchpadOption",
+        "type": "function",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "inline_onClick",
+        "eventType": "onClick",
+        "componentName": "ScratchpadOption",
+        "isInline": true
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-feather",
+        "symbols": [
+          "Edit"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@resources/TestID",
+        "symbols": [
+          "TestID"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@resources/LabelText",
+        "symbols": [
+          "LabelText"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@/utils/enums",
+        "symbols": [
+          "Folder"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@/utils/constants",
+        "symbols": [
+          "iconColor"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

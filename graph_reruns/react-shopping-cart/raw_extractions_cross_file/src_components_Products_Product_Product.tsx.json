@@ -1,0 +1,99 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Product",
+        "childComponent": "S.Container",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onKeyUp",
+            "valueExpression": "handleAddProductWhenEnter"
+          },
+          {
+            "propName": "sku",
+            "valueExpression": "sku"
+          },
+          {
+            "propName": "tabIndex",
+            "valueExpression": "1"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Product",
+        "childComponent": "S.Stopper",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Product",
+        "childComponent": "S.Image",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "alt",
+            "valueExpression": "title"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Product",
+        "childComponent": "S.Title",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Product",
+        "childComponent": "S.Price",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Product",
+        "childComponent": "S.Val",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Product",
+        "childComponent": "S.Installment",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Product",
+        "childComponent": "S.BuyButton",
+        "importSource": "./style",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "handleAddProduct"
+          },
+          {
+            "propName": "tabIndex",
+            "valueExpression": "-1"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}
