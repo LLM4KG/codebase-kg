@@ -1,0 +1,50 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "  | ReturnType<typeof updateActiveNote>\n  | ReturnType<typeof updateSelectedNotes>\n  | ReturnType<typeof addNote>\n  | ReturnType<typeof updateNote>\n  | ReturnType<typeof deleteNotes>\n  | ReturnType<typeof addCategory>\n  | ReturnType<typeof renameCategory>\n  | ReturnType<typeof deleteCategory>\n  | ReturnType<typeof swapFolder>\n  | ReturnType<typeof assignFavoriteToNotes>\n  | ReturnType<typeof unassignFavoriteFromNotes>\n  | ReturnType<typeof assignTrashToNotes>\n  | ReturnType<typeof unassignTrashFromNotes>\n",
+      "content": "  | ReturnType<typeof updateActiveNote>\n  | ReturnType<typeof updateSelectedNotes>\n  | ReturnType<typeof addNote>\n  | ReturnType<typeof updateNote>\n  | ReturnType<typeof deleteNotes>\n  | ReturnType<typeof addCategory>\n  | ReturnType<typeof renameCategory>\n  | ReturnType<typeof deleteCategory>\n  | ReturnType<typeof swapFolder>\n  | ReturnType<typeof assignFavoriteToNotes>\n  | ReturnType<typeof unassignFavoriteFromNotes>\n  | ReturnType<typeof assignTrashToNotes>\n  | ReturnType<typeof unassignTrashFromNotes>\n  | ReturnType<typeof restoreAllTrash>\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "export const unassignTrashFromNotes = (noteId: string) => ({\n  type: 'UNASSIGN_TRASH_FROM_NOTES',\n  payload: { noteId },\n})\n",
+      "content": "export const unassignTrashFromNotes = (noteId: string) => ({\n  type: 'UNASSIGN_TRASH_FROM_NOTES',\n  payload: { noteId },\n})\n\nexport const restoreAllTrash = () => ({\n  type: 'RESTORE_ALL_TRASH',\n})\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    case 'UNASSIGN_TRASH_FROM_NOTES': {\n      const { noteId } = action.payload\n\n      return {\n        ...state,\n        notes: state.notes.map((note) =>\n          note.id === noteId || note.id.includes(noteId)\n            ? { ...note, trash: false, tempId: undefined }\n            : note\n        ),\n      }\n    }\n",
+      "content": "    case 'UNASSIGN_TRASH_FROM_NOTES': {\n      const { noteId } = action.payload\n\n      return {\n        ...state,\n        notes: state.notes.map((note) =>\n          note.id === noteId || note.id.includes(noteId)\n            ? { ...note, trash: false, tempId: undefined }\n            : note\n        ),\n      }\n    }\n\n    case 'RESTORE_ALL_TRASH': {\n      return {\n        ...state,\n        notes: state.notes.map((note) => (note.trash ? { ...note, trash: false } : note)),\n      }\n    }\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import React, { useState, useEffect, useRef } from 'react'\nimport { useDispatch, useSelector } from 'react-redux'\nimport { Archive, CheckCircle, Search, XCircle, AlertCircle } from 'react-feather'\nimport AutosizeInput from 'react-input-autosize'\n\nimport { TestID } from '@resources/TestID'\nimport { LabelText } from '@resources/LabelText'\nimport { Folder } from '@/utils/enums'\nimport { getNotes, getCategories, getSettings } from '@/selectors'\nimport { updateNote, swapFolder, deleteNotes, assignTrashToNotes } from '@/slices/note'\nimport { NoteListItems } from '@/components/NoteList/NoteListItems'\nimport { NoteItem, CategoryItem, TemporaryNoteItem } from '@/types'\nimport { getWebsiteTitle, getActiveNote, getActiveCategory } from '@/utils/helpers'\nimport { sync } from '@/slices/sync'\n\nexport interface NoteListProps {\n  activeNote: NoteItem | undefined\n  selectedNotes: NoteItem[]\n  syncNotes: () => void\n}\n",
+      "content": "import React, { useState, useEffect, useRef } from 'react'\nimport { useDispatch, useSelector } from 'react-redux'\nimport { Archive, CheckCircle, Search, XCircle, AlertCircle, RotateCcw } from 'react-feather'\nimport AutosizeInput from 'react-input-autosize'\n\nimport { TestID } from '@resources/TestID'\nimport { LabelText } from '@resources/LabelText'\nimport { Folder } from '@/utils/enums'\nimport { getNotes, getCategories, getSettings } from '@/selectors'\nimport { updateNote, swapFolder, deleteNotes, assignTrashToNotes, restoreAllTrash } from '@/slices/note'\nimport { NoteListItems } from '@/components/NoteList/NoteListItems'\nimport { NoteItem, CategoryItem, TemporaryNoteItem } from '@/types'\nimport { getWebsiteTitle, getActiveNote, getActiveCategory } from '@/utils/helpers'\nimport { sync } from '@/slices/sync'\n\nexport interface NoteListProps {\n  activeNote: NoteItem | undefined\n  selectedNotes: NoteItem[]\n  syncNotes: () => void\n}\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const _assignTrashToNotes = (noteId: string) => dispatch(assignTrashToNotes(noteId))\n  const _deleteNotes = (noteIds: string[]) => dispatch(deleteNotes(noteIds))\n  const _swapFolder = (folder: Folder) => dispatch(swapFolder(folder))\n  const _sync = () => dispatch(sync())\n",
+      "content": "  const _assignTrashToNotes = (noteId: string) => dispatch(assignTrashToNotes(noteId))\n  const _deleteNotes = (noteIds: string[]) => dispatch(deleteNotes(noteIds))\n  const _swapFolder = (folder: Folder) => dispatch(swapFolder(folder))\n  const _sync = () => dispatch(sync())\n  const _restoreAllTrash = () => dispatch(restoreAllTrash())\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const handleEmptyTrash = () => {\n    if (window.confirm('Are you sure you want to permanently delete all notes in Trash?')) {\n      _deleteNotes(trashedNotes.map((note) => note.id))\n    }\n  }\n",
+      "content": "  const handleEmptyTrash = () => {\n    if (window.confirm('Are you sure you want to permanently delete all notes in Trash?')) {\n      _deleteNotes(trashedNotes.map((note) => note.id))\n    }\n  }\n\n  const handleRestoreAll = () => {\n    if (window.confirm('Are you sure you want to restore all notes from Trash?')) {\n      _restoreAllTrash()\n    }\n  }\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          {activeFolder === Folder.TRASH && (\n            <div className=\"note-list-header-actions\">\n              <button\n                className=\"btn-empty-trash\"\n                data-testid={TestID.EMPTY_TRASH_BUTTON}\n                onClick={handleEmptyTrash}\n              >\n                <XCircle size={18} />\n                {LabelText.DELETE_PERMANENTLY}\n              </button>\n            </div>\n          )}\n",
+      "content": "          {activeFolder === Folder.TRASH && (\n            <div className=\"note-list-header-actions\">\n              <button className=\"btn-restore-all\" onClick={handleRestoreAll}>\n                <RotateCcw size={18} />\n                Restore All\n              </button>\n              <button\n                className=\"btn-empty-trash\"\n                data-testid={TestID.EMPTY_TRASH_BUTTON}\n                onClick={handleEmptyTrash}\n              >\n                <XCircle size={18} />\n                {LabelText.DELETE_PERMANENTLY}\n              </button>\n            </div>\n          )}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

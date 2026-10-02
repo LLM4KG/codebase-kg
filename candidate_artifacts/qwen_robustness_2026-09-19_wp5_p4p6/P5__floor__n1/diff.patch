@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart';\nimport { Product } from '../../types';\n\ninterface CartProductProps {\n  product: Product;\n}\n\nexport const CartProduct = ({ product }: CartProductProps) => {\n  const { removeProduct, changeProductQuantity } = useCart();\n\n  const handleRemove = () => {\n    removeProduct(product.id);\n  };\n\n  const handleIncrease = () => {\n    changeProductQuantity(product.id, product.quantity + 1);\n  };\n\n  const handleDecrease = () => {\n    if (product.quantity > 1) {\n      changeProductQuantity(product.id, product.quantity - 1);\n    } else {\n      removeProduct(product.id);\n    }\n  };\n\n  return (\n    <div className=\"cart-product\">\n      <img src={product.image} alt={product.title} />\n      <div className=\"product-info\">\n        <h3>{product.title}</h3>\n        <p>${product.price.toFixed(2)}</p>\n        <div className=\"quantity-controls\">\n          <button onClick={handleDecrease}>-</button>\n          <span>{product.quantity}</span>\n          <button onClick={handleIncrease}>+</button>\n        </div>\n      </div>\n      <button onClick={handleRemove} className=\"remove-button\">\n        Remove\n      </button>\n    </div>\n  );\n};\n",
+      "content": "import { Product } from '../../types';\n\ninterface CartProductProps {\n  product: Product;\n  onRemove: (product: Product) => void;\n  onIncrease: (product: Product) => void;\n  onDecrease: (product: Product) => void;\n}\n\nexport const CartProduct = ({ product, onRemove, onIncrease, onDecrease }: CartProductProps) => {\n  const handleRemove = () => {\n    onRemove(product);\n  };\n\n  const handleIncrease = () => {\n    onIncrease(product);\n  };\n\n  const handleDecrease = () => {\n    onDecrease(product);\n  };\n\n  return (\n    <div className=\"cart-product\">\n      <img src={product.image} alt={product.title} />\n      <div className=\"product-info\">\n        <h3>{product.title}</h3>\n        <p>${product.price.toFixed(2)}</p>\n        <div className=\"quantity-controls\">\n          <button onClick={handleDecrease}>-</button>\n          <span>{product.quantity}</span>\n          <button onClick={handleIncrease}>+</button>\n        </div>\n      </div>\n      <button onClick={handleRemove} className=\"remove-button\">\n        Remove\n      </button>\n    </div>\n  );\n};\n"
+    },
+    {
+      "path": "src/components/Cart/CartProducts.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart';\nimport { CartProduct } from './CartProduct';\n\nexport const CartProducts = () => {\n  const { cart } = useCart();\n\n  if (cart.length === 0) {\n    return <p>Your cart is empty</p>;\n  }\n\n  return (\n    <div className=\"cart-products\">\n      {cart.map((product) => (\n        <CartProduct key={product.id} product={product} />\n      ))}\n    </div>\n  );\n};\n",
+      "content": "import { useCart } from '../../hooks/useCart';\nimport { CartProduct } from './CartProduct';\n\nexport const CartProducts = () => {\n  const { cart, removeProduct, changeProductQuantity } = useCart();\n\n  if (cart.length === 0) {\n    return <p>Your cart is empty</p>;\n  }\n\n  const handleRemove = (product: any) => {\n    removeProduct(product.id);\n  };\n\n  const handleIncrease = (product: any) => {\n    changeProductQuantity(product.id, product.quantity + 1);\n  };\n\n  const handleDecrease = (product: any) => {\n    if (product.quantity > 1) {\n      changeProductQuantity(product.id, product.quantity - 1);\n    } else {\n      removeProduct(product.id);\n    }\n  };\n\n  return (\n    <div className=\"cart-products\">\n      {cart.map((product) => (\n        <CartProduct \n          key={product.id} \n          product={product} \n          onRemove={handleRemove}\n          onIncrease={handleIncrease}\n          onDecrease={handleDecrease}\n        />\n      ))}\n    </div>\n  );\n};\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

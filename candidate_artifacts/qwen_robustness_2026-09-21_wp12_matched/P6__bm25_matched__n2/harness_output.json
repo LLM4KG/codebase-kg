@@ -1,0 +1,15 @@
+{
+  "task_id": "P6",
+  "candidate_id": "P6__bm25_matched__n2",
+  "condition": "bm25_matched",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "test_fail",
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 49074.5809809996,
+  "timeout_used_ms": 146329,
+  "stage_detail": "FAIL tests/unit/client/containers/P6_category_case_insensitive.test.tsx\n  P6 - duplicate category names are rejected case-insensitively\n    ✕ rejects adding \"work\" when \"Work\" exists (98 ms)\n    ✕ rejects adding \"  WORK  \" when \"Work\" exists (36 ms)\n    ✓ still adds a genuinely new category (36 ms)\n    ✕ rejects renaming \"Home\" to \"work\" when \"Work\" exists (36 ms)\n    ✓ still renames a category to a genuinely new name (24 ms)\n\n  ● P6 - duplicate category names are rejected case-insensitively › rejects adding \"work\" when \"Work\" exists\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 0\n    + Received  + 1\n\n      Array [\n        \"Work\",\n        \"Home\",\n    +   \"work\",\n      ]\n\n      74 |     const { names, addViaForm } = setup()\n      75 |     addViaForm('work')\n    > 76 |     expect(names()).toEqual(['Work', 'Home'])\n         |                     ^\n      77 |   })\n      78 | \n      79 |   it('rejects adding \"  WORK  \" when \"Work\" exists', () => {\n\n      at Object.<anonymous> (tests/unit/client/containers/P6_category_case_insensitive.test.tsx:76:21)\n\n  ● P6 - duplicate category names are rejected case-insensitively › rejects adding \"  WORK  \" when \"Work\" exists\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 0\n    + Received  + 1\n\n      Array [\n        \"Work\",\n        \"Home\",\n    +   \"WORK\",\n      ]\n\n      80 |     const { names, addViaForm } = setup()\n      81 |     addViaForm('  WORK  ')\n    > 82 |     expect(names()).toEqual(['Work', 'Home'])\n         |                     ^\n      83 |   })\n      84 | \n      85 |   it('still adds a genuinely new category', () => {\n\n      at Object.<anonymous> (tests/unit/client/containers/P6_category_case_insensitive.test.tsx:82:21)\n\n  ● P6 - duplicate category names are rejected case-insensitively › rejects renaming \"Home\" to \"work\" when \"Work\" exists\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  - 1\n    + Received  + 1\n\n      Array [\n        \"Work\",\n    -   \"Home\",\n    +   \"work\",\n      ]\n\n      92 |     const { names, renameViaForm } = setup()\n      93 |     renameViaForm('2', 'work')\n    > 94 |     expect(names()).toEqual(['Work', 'Home'])\n         |                     ^\n      95 |   })\n      96 | \n      97 |   it('still renames a category to a genuinely new name', () => {\n\n      at Object.<anonymous> (tests/unit/client/containers/P6_category_case_insensitive.test.tsx:94:21)\n\nTest Suites: 1 failed, 1 total\nTests:       3 failed, 2 passed, 5 total\nSnapshots:   0 total\nTime:        5.353 s\nRan all test suites matching /P6_category_case_insensitive/i.",
+  "apply_mode": "exact_unique",
+  "apply_reason": null
+}

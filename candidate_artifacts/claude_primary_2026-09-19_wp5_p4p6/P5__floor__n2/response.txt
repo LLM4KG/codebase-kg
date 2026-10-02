@@ -1,0 +1,95 @@
+I need to see the existing code to make precise changes. Let me analyze the task and produce the refactoring.
+
+Based on the task, I need to:
+1. Remove `useCart` from `CartProduct` and add `onRemove`, `onIncrease`, `onDecrease` props
+2. Move `useCart` logic into `CartProducts` and pass callbacks down
+
+```text
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+import { useCart } from '../../hooks/useCart';
+=======
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+interface CartProductProps {
+  product: ICartProduct;
+}
+=======
+interface CartProductProps {
+  product: ICartProduct;
+  onRemove: (product: ICartProduct) => void;
+  onIncrease: (product: ICartProduct) => void;
+  onDecrease: (product: ICartProduct) => void;
+}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+const CartProduct = ({ product }: CartProductProps) => {
+  const { removeFromCart, increaseCartQuantity, decreaseCartQuantity } = useCart();
+=======
+const CartProduct = ({ product, onRemove, onIncrease, onDecrease }: CartProductProps) => {
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => removeFromCart(product)}
+=======
+      onClick={() => onRemove(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => decreaseCartQuantity(product)}
+=======
+      onClick={() => onDecrease(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => increaseCartQuantity(product)}
+=======
+      onClick={() => onIncrease(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+import CartProduct from './CartProduct';
+=======
+import { useCart } from '../../hooks/useCart';
+import CartProduct from './CartProduct';
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+const CartProducts = ({ products }: CartProductsProps) => {
+  return (
+    <S.Container>
+      {products?.map((product) => (
+        <CartProduct key={product.id} product={product} />
+      ))}
+    </S.Container>
+  );
+};
+=======
+const CartProducts = ({ products }: CartProductsProps) => {
+  const { removeFromCart, increaseCartQuantity, decreaseCartQuantity } = useCart();
+
+  return (
+    <S.Container>
+      {products?.map((product) => (
+        <CartProduct
+          key={product.id}
+          product={product}
+          onRemove={removeFromCart}
+          onIncrease={increaseCartQuantity}
+          onDecrease={decreaseCartQuantity}
+        />
+      ))}
+    </S.Container>
+  );
+};
+>>>>>>> REPLACE
+```

@@ -1,0 +1,32 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    permanentlyEmptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n",
+      "content": "    permanentlyEmptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n\n    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) => (note.trash ? { ...note, trash: false } : note))\n    },\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "export const {\n  addNote,\n  updateNote,\n  updateNotes,\n  deleteNotes,\n  addCategoryToNote,\n  removeCategoryFromNotes,\n  updateActiveNote,\n  updateActiveCategoryId,\n  swapFolder,\n  assignFavoriteToNotes,\n  toggleFavoriteNotes,\n  assignTrashToNotes,\n  toggleTrashNotes,\n  unassignTrashFromNotes,\n  updateSelectedNotes,\n  permanentlyEmptyTrash,\n  pruneNotes,\n  searchNotes,\n  loadNotes,\n  loadNotesError,\n  loadNotesSuccess,\n  importNotes,\n} = noteSlice.actions\n",
+      "content": "export const {\n  addNote,\n  updateNote,\n  updateNotes,\n  deleteNotes,\n  addCategoryToNote,\n  removeCategoryFromNotes,\n  updateActiveNote,\n  updateActiveCategoryId,\n  swapFolder,\n  assignFavoriteToNotes,\n  toggleFavoriteNotes,\n  assignTrashToNotes,\n  toggleTrashNotes,\n  unassignTrashFromNotes,\n  updateSelectedNotes,\n  permanentlyEmptyTrash,\n  restoreAllTrash,\n  pruneNotes,\n  searchNotes,\n  loadNotes,\n  loadNotesError,\n  loadNotesSuccess,\n  importNotes,\n} = noteSlice.actions\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import {\n  permanentlyEmptyTrash,\n",
+      "content": "import {\n  permanentlyEmptyTrash,\n  restoreAllTrash,\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          <NoteListButton\n            dataTestID=\"empty-trash-button\"\n            label=\"Empty Trash\"\n            handler={() => dispatch(permanentlyEmptyTrash())}\n          />\n",
+      "content": "          <NoteListButton\n            dataTestID=\"restore-all-trash-button\"\n            label=\"Restore All\"\n            handler={() => dispatch(restoreAllTrash())}\n          />\n          <NoteListButton\n            dataTestID=\"empty-trash-button\"\n            label=\"Empty Trash\"\n            handler={() => dispatch(permanentlyEmptyTrash())}\n          />\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

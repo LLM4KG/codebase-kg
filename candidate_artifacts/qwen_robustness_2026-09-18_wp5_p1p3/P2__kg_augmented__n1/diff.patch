@@ -1,0 +1,38 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "export const permanentlyEmptyTrash = (): NoteAction => ({\n  type: 'PERMANENTLY_EMPTY_TRASH',\n})\n",
+      "content": "export const permanentlyEmptyTrash = (): NoteAction => ({\n  type: 'PERMANENTLY_EMPTY_TRASH',\n})\n\nexport const restoreAllTrash = (): NoteAction => ({\n  type: 'RESTORE_ALL_TRASH',\n})\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    case 'PERMANENTLY_EMPTY_TRASH':\n      return {\n        ...state,\n        notes: state.notes.filter((note) => !note.trash),\n      }\n",
+      "content": "    case 'PERMANENTLY_EMPTY_TRASH':\n      return {\n        ...state,\n        notes: state.notes.filter((note) => !note.trash),\n      }\n    case 'RESTORE_ALL_TRASH':\n      return {\n        ...state,\n        notes: state.notes.map((note) => (note.trash ? { ...note, trash: false } : note)),\n      }\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import {\n  permanentlyEmptyTrash,\n  pruneNotes,\n  updateActiveNote,\n  searchNotes,\n  updateSelectedNotes,\n} from '@/slices/note'\n",
+      "content": "import {\n  permanentlyEmptyTrash,\n  pruneNotes,\n  updateActiveNote,\n  searchNotes,\n  updateSelectedNotes,\n  restoreAllTrash,\n} from '@/slices/note'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())\n  const _pruneNotes = () => dispatch(pruneNotes())\n  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>\n    dispatch(updateActiveNote({ noteId, multiSelect }))\n  const _searchNotes = debounceEvent(\n    (searchValue: string) => dispatch(searchNotes(searchValue)),\n    100\n  )\n",
+      "content": "  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())\n  const _pruneNotes = () => dispatch(pruneNotes())\n  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>\n    dispatch(updateActiveNote({ noteId, multiSelect }))\n  const _searchNotes = debounceEvent(\n    (searchValue: string) => dispatch(searchNotes(searchValue)),\n    100\n  )\n  const _restoreAllTrash = () => dispatch(restoreAllTrash())\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "        {showEmptyTrash && (\n          <NoteListButton\n            dataTestID={TestID.EMPTY_TRASH_BUTTON}\n            label=\"Empty\"\n            handler={() => _permanentlyEmptyTrash()}\n          >\n            Empty Trash\n          </NoteListButton>\n        )}\n",
+      "content": "        {showEmptyTrash && (\n          <>\n            <NoteListButton\n              dataTestID={TestID.EMPTY_TRASH_BUTTON}\n              label=\"Empty\"\n              handler={() => _permanentlyEmptyTrash()}\n            >\n              Empty Trash\n            </NoteListButton>\n            <NoteListButton\n              dataTestID=\"restore-all-trash-button\"\n              label=\"Restore\"\n              handler={() => _restoreAllTrash()}\n            >\n              Restore All\n            </NoteListButton>\n          </>\n        )}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

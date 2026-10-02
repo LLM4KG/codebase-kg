@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "export const permanentlyEmptyTrash = createAction('note/permanentlyEmptyTrash')\n",
+      "content": "export const permanentlyEmptyTrash = createAction('note/permanentlyEmptyTrash')\nexport const restoreAllTrash = createAction('note/restoreAllTrash')\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

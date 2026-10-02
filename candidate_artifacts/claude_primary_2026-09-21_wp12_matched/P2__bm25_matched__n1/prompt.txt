@@ -1,0 +1,415 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+TakeNote has a "permanently empty trash" action but no way to restore all trashed notes at once. Add a `restoreAllTrash` reducer action to the note slice (`src/client/slices/note.ts`) that sets `trash: false` on every trashed note. Then add a "Restore All" button to the NoteList component (`src/client/containers/NoteList.tsx`) that appears alongside the existing "Empty Trash" button when the user is viewing the Trash folder.
+
+## Project Context
+
+You are working on the **takenote** React project.
+
+**Task type:** feature_addition
+
+---
+
+### Target Components
+
+
+#### TestID (`src/resources/TestID.ts`)
+
+
+```jsx
+// data-testid
+export enum TestID {
+  ACTION_BUTTON = 'action-button',
+  ADD_CATEGORY_BUTTON = 'add-category-button',
+  CATEGORY_EDIT = 'category-edit',
+  CATEGORY_COLLAPSE_BUTTON = 'category-collapse-button',
+  CATEGORY_LIST_DIV = 'category-list-div',
+  CATEGORY_OPTIONS_NAV = 'category-options-nav',
+  CATEGORY_OPTION_RENAME = 'category-options-rename',
+  CATEGORY_OPTION_DELETE_PERMANENTLY = 'category-option-delete-permanently',
+  EDIT_CATEGORY = 'edit-category',
+  EMPTY_TRASH_BUTTON = 'empty-trash-button',
+  FOLDER_NOTES = 'notes',
+  FOLDER_FAVORITES = 'favorites',
+  FOLDER_TRASH = 'trash',
+  NEW_CATEGORY_FORM = 'new-category-form',
+  NEW_CATEGORY_INPUT = 'new-category-label',
+  NOTE_LIST = 'note-list',
+  NOTE_LINK_ERROR = 'note-link-error',
+  NOTE_LINK_SUCCESS = 'note-link-success',
+  NOTE_LIST_ITEM = 'note-list-item-',
+  NOTE_OPTIONS_DIV = 'note-options-div-',
+  NOTE_OPTIONS_NAV = 'note-options-nav',
+  NOTE_OPTION_DELETE_PERMANENTLY = 'note-option-delete-permanently',
+  NOTE_OPTION_DOWNLOAD = 'note-option-download',
+  NOTE_OPTION_FAVORITE = 'note-option-favorite',
+  NOTE_OPTION_REMOVE_CATEGORY = 'note-option-remove-category',
+  NOTE_OPTION_RESTORE_FROM_TRASH = 'note-option-restore-from-trash',
+  NOTE_OPTION_TRASH = 'note-option-trash',
+  NOTE_SEARCH = 'note-search',
+  NOTE_TITLE = 'note-title-',
+  MOVE_TO_CATEGORY = 'note-options-move-to-category-select',
+  REMOVE_CATEGORY = 'remove-category',
+  MOVE_CATEGORY = 'move-category',
+  SIDEBAR_ACTION_CREATE_NEW_NOTE = 'sidebar-action-create-new-note',
+  SIDEBAR_ACTION_SETTINGS = 'sidebar-action-settings',
+  TOPBAR_ACTION_SYNC_NOTES = 'topbar-action-sync-notes',
+  SCRATCHPAD = 'scratchpad',
+  NOTE_OPTION_ADD_CONTENT_NOTE = 'note-option-add-content-note',
+  SETTINGS_MODAL_DOWNLOAD_NOTES = 'settings-modal-download-notes',
+  DARK_MODE_TOGGLE = 'dark-mode-toggle',
+  MARKDOWN_PREVIEW_TOGGLE = 'markdown-preview-toggle',
+  ACTIVE_LINE_HIGHLIGHT_TOGGLE = 'active-line-highlight-toggle',
+  DISPLAY_LINE_NUMS_TOGGLE = 'display-line-nums-toggle',
+  SCROLL_PAST_END_TOGGLE = 'scroll-past-end-toggle',
+  SORT_BY_DROPDOWN = 'sort-by-dropdown',
+  TEXT_DIRECTION_DROPDOWN = 'text-direction-dropdown',
+  UPLOAD_SETTINGS_BACKUP = 'upload-settings-backup',
+  UUID_MENU_BAR_COPY_ICON = 'uuid-menu-bar-copy-icon',
+  PREVIEW_MODE = 'preview-mode',
+  COPY_REFERENCE_TO_NOTE = 'copy-reference-to-note',
+  EMPTY_EDITOR = 'empty-editor',
+  ICON_BUTTON = 'icon-button',
+  ICON_BUTTON_UPLOADER = 'icon-button-uploader',
+  LAST_SYNCED_NOTIFICATION_SYNCING = 'last-synced-notification-syncing',
+  LAST_SYNCED_NOTIFICATION_UNSAVED = 'last-synced-notification-unsaved',
+  LAST_SYNCED_NOTIFICATION_DATE = 'last-synced-notification-date',
+}
+
+```
+
+
+
+
+
+
+
+
+#### LabelText (`src/resources/LabelText.ts`)
+
+
+```jsx
+// Default Labels
+export enum LabelText {
+  ADD_CATEGORY = 'Add category',
+  COLLAPSE_CATEGORY = 'Collapse Category List',
+  NOTES = 'Notes',
+  CREATE_NEW_NOTE = 'Create new note',
+  DELETE_PERMANENTLY = 'Delete permanently',
+  DOWNLOAD = 'Download',
+  FAVORITES = 'Favorites',
+  SCRATCHPAD = 'Scratchpad',
+  MARK_AS_FAVORITE = 'Mark as favorite',
+  MOVE_TO_TRASH = 'Move to trash',
+  NEW_CATEGORY = 'New category...',
+  NEW_NOTE = 'New note',
+  REMOVE_CATEGORY = 'Remove category',
+  REMOVE_FAVORITE = 'Remove favorite',
+  MOVE_CATEGORY = 'Move category',
+  RESTORE_FROM_TRASH = 'Restore from trash',
+  SETTINGS = 'Settings',
+  SYNC_NOTES = 'Sync notes',
+  TRASH = 'Trash',
+  WELCOME_TO_TAKENOTE = 'Welcome to Takenote!',
+  RENAME = 'Rename category',
+  ADD_CONTENT_NOTE = 'Please add content to this new note to access the menu options.',
+  DOWNLOAD_ALL_NOTES = 'Download all notes',
+  BACKUP_ALL_NOTES = 'Export backup',
+  IMPORT_BACKUP = 'Import backup',
+  TOGGLE_FAVORITE = 'Toggle favorite',
+  COPY_REFERENCE_TO_NOTE = 'Copy reference to note',
+}
+
+```
+
+
+
+
+
+
+
+
+#### AppSidebar (`src/client/containers/AppSidebar.tsx`)
+
+
+```tsx
+import React from 'react'
+import { Plus } from 'react-feather'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { ActionButton } from '@/components/AppSidebar/ActionButton'
+import { FolderOption } from '@/components/AppSidebar/FolderOption'
+import { ScratchpadOption } from '@/components/AppSidebar/ScratchpadOption'
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { CategoryList } from '@/containers/CategoryList'
+import {
+  addNote,
+  swapFolder,
+  updateActiveNote,
+  assignFavoriteToNotes,
+  assignTrashToNotes,
+  updateSelectedNotes,
+  unassignTrashFromNotes,
+} from '@/slices/note'
+import { togglePreviewMarkdown } from '@/slices/settings'
+import { getSettings, getNotes } from '@/selectors'
+import { NoteItem } from '@/types'
+import { newNoteHandlerHelper, getActiveNote } from '@/utils/helpers'
+
+export const AppSidebar: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { activeCategoryId, activeFolder, activeNoteId, notes } = useSelector(getNotes)
+  const { previewMarkdown, notesSortKey } = useSelector(getSettings)
+
+  const activeNote = getActiveNote(notes, activeNoteId)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _addNote = (note: NoteItem) => dispatch(addNote(note))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _swapFolder = (sortOrderKey: NotesSortKey) => (folder: Folder) =>
+    dispatch(swapFolder({ folder, sortOrderKey }))
+  const _togglePreviewMarkdown = () => dispatch(togglePreviewMarkdown())
+  const _assignTrashToNotes = (noteId: string) => dispatch(assignTrashToNotes(noteId))
+  const _unassignTrashFromNotes = (noteId: string) => dispatch(unassignTrashFromNotes(noteId))
+  const _assignFavoriteToNotes = (noteId: string) => dispatch(assignFavoriteToNotes(noteId))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const newNoteHandler = () =>
+    newNoteHandlerHelper(
+      activeFolder,
+      previewMarkdown,
+      activeNote,
+      activeCategoryId,
+      swapFolderHandler,
+      _togglePreviewMarkdown,
+      _addNote,
+      _updateActiveNote,
+      _updateSelectedNotes
+    )
+  const swapFolderHandler = _swapFolder(notesSortKey)
+
+  return (
+    <aside className="app-sidebar">
+      <ActionButton
+        dataTestID={TestID.SIDEBAR_ACTION_CREATE_NEW_NOTE}
+        handler={newNoteHandler}
+        icon={Plus}
+        label={LabelText.CREATE_NEW_NOTE}
+        text={LabelText.NEW_NOTE}
+      />
+      <section className="app-sidebar-main">
+        <ScratchpadOption
+          active={activeFolder === Folder.SCRATCHPAD}
+          swapFolder={swapFolderHandler}
+        />
+        <FolderOption
+          active={activeFolder === Folder.ALL}
+          swapFolder={swapFolderHandler}
+          text={LabelText.NOTES}
+          dataTestID={TestID.FOLDER_NOTES}
+          folder={Folder.ALL}
+          addNoteType={_unassignTrashFromNotes}
+        />
+        <FolderOption
+          active={activeFolder === Folder.FAVORITES}
+          text={LabelText.FAVORITES}
+          dataTestID={TestID.FOLDER_FAVORITES}
+          folder={Folder.FAVORITES}
+          swapFolder={swapFolderHandler}
+          addNoteType={_assignFavoriteToNotes}
+        />
+        <FolderOption
+          active={activeFolder === Folder.TRASH}
+          text={LabelText.TRASH}
+          dataTestID={TestID.FOLDER_TRASH}
+          folder={Folder.TRASH}
+          swapFolder={swapFolderHandler}
+          addNoteType={_assignTrashToNotes}
+        />
+        <CategoryList />
+      </section>
+    </aside>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/client/api/index.ts`)
+
+
+```jsx
+import { v4 as uuid } from 'uuid'
+import dayjs from 'dayjs'
+
+import { NoteItem, SyncPayload, SettingsState } from '@/types'
+
+const scratchpadNote = {
+  id: uuid(),
+  text: `# Scratchpad
+
+The easiest note to find.`,
+  category: '',
+  scratchpad: true,
+  favorite: false,
+  created: dayjs().format(),
+  lastUpdated: dayjs().format(),
+}
+
+const markdown = `# Welcome to Takenote!
+
+TakeNote is a free, open-source notes app for the web. It is a demo project only, and does not integrate with any database or cloud. Your notes are saved in local storage and will not be permanently persisted, but are available for download.
+
+View the source on [Github](https://github.com/taniarascia/takenote).
+
+## Features
+
+- **Plain text notes** - take notes in an IDE-like environment that makes no assumptions
+- **Markdown preview** - view rendered HTML
+- **Linked notes** - use \`{{uuid}}\` syntax to link to notes within other notes
+- **Syntax highlighting** - light and dark mode available (based on the beautiful [New Moon theme](https://taniarascia.github.io/new-moon/))
+- **Keyboard shortcuts** - use the keyboard for all common tasks - creating notes and categories, toggling settings, and other options
+- **Drag and drop** - drag a note or multiple notes to categories, favorites, or trash
+- **Multi-cursor editing** - supports multiple cursors and other [Codemirror](https://codemirror.net/) options
+- **Search notes** - easily search all notes, or notes within a category
+- **Prettify notes** - use Prettier on the fly for your Markdown
+- **No WYSIWYG** - made for developers, by developers
+- **No database** - notes are only stored in the browser's local storage and are available for download and export to you alone
+- **No tracking or analytics** - 'nuff said
+- **GitHub integration** - self-hosted option is available for auto-syncing to a GitHub repository (not available in the demo)
+`
+
+const welcomeNote = {
+  id: uuid(),
+  text: markdown,
+  category: '',
+  favorite: false,
+  created: dayjs().format(),
+  lastUpdated: dayjs().format(),
+}
+
+type PromiseCallback = (value?: any) => void
+type GetLocalStorage = (
+  key: string,
+  errorMessage?: string
+) => (resolve: PromiseCallback, reject: PromiseCallback) => void
+
+const getLocalStorage: GetLocalStorage = (key, errorMessage = 'Something went wrong') => (
+  resolve,
+  reject
+) => {
+  const data = localStorage.getItem(key)
+
+  if (data) {
+    resolve(JSON.parse(data))
+  } else {
+    reject({
+      message: errorMessage,
+    })
+  }
+}
+
+const getUserNotes = () => (resolve: PromiseCallback, reject: PromiseCallback) => {
+  const notes: any = localStorage.getItem('notes')
+
+  // check if there is any data in localstorage
+  if (!notes) {
+    // if there is none (i.e. new user), create the welcomeNote and scratchpadNote
+    resolve([scratchpadNote, welcomeNote])
+  } else if (Array.isArray(JSON.parse(notes))) {
+    // if there is (existing user), show the user's notes
+    resolve(
+      // find does not work if the array is empty.
+      JSON.parse(notes).length === 0 || !JSON.parse(notes).find((note: NoteItem) => note.scratchpad)
+        ? [scratchpadNote, ...JSON.parse(notes)]
+        : JSON.parse(notes)
+    )
+  } else {
+    reject({
+      message: 'Something went wrong',
+    })
+  }
+}
+
+export const saveState = ({ categories, notes }: SyncPayload) =>
+  new Promise((resolve) => {
+    localStorage.setItem('categories', JSON.stringify(categories))
+    localStorage.setItem('notes', JSON.stringify(notes))
+
+    resolve({
+      categories: JSON.parse(localStorage.getItem('categories') || '[]'),
+      notes: JSON.parse(localStorage.getItem('notes') || '[]'),
+    })
+  })
+
+export const saveSettings = ({ isOpen, ...settings }: SettingsState) =>
+  Promise.resolve(localStorage.setItem('settings', JSON.stringify(settings)))
+
+export const requestNotes = () => new Promise(getUserNotes())
+export const requestCategories = () => new Promise(getLocalStorage('categories'))
+export const requestSettings = () => new Promise(getLocalStorage('settings'))
+
+```
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

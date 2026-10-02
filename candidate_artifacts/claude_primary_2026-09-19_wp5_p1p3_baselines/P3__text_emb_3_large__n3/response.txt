@@ -1,0 +1,86 @@
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useState, useEffect } from 'react'
+
+import { copyToClipboard } from '@/utils/helpers'
+
+export function useCopyToClipboard(successMessage: string, timeout: number = 3000) {
+  const [copiedText, setCopiedText] = useState<string>('')
+
+  useEffect(() => {
+    if (copiedText === successMessage) {
+      const timer = setTimeout(() => {
+        setCopiedText('')
+      }, timeout)
+
+      return () => clearTimeout(timer)
+    }
+  }, [copiedText, successMessage, timeout])
+
+  const handleCopy = (text: string) => {
+    copyToClipboard(text)
+    setCopiedText(successMessage)
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useEffect, useState } from 'react'
+=======
+import React, { useState } from 'react'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { downloadNotes, isDraftNote, getShortUuid, copyToClipboard } from '@/utils/helpers'
+=======
+import { downloadNotes, isDraftNote, getShortUuid } from '@/utils/helpers'
+import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [uuidCopiedText, setUuidCopiedText] = useState<string>('')
+  const [isToggled, togglePreviewIcon] = useState<boolean>(false)
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    if (uuidCopiedText === successfulCopyMessage) {
+      const timer = setTimeout(() => {
+        setUuidCopiedText('')
+      }, 3000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [uuidCopiedText])
+=======
+  const [isToggled, togglePreviewIcon] = useState<boolean>(false)
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  const { copiedText: uuidCopiedText, handleCopy: handleUuidCopy } = useCopyToClipboard(
+    successfulCopyMessage,
+    3000
+  )
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+            onClick={() => {
+              copyToClipboard(`{{${shortNoteUuid}}}`)
+              setUuidCopiedText(successfulCopyMessage)
+            }}
+=======
+            onClick={() => handleUuidCopy(`{{${shortNoteUuid}}}`)}
+>>>>>>> REPLACE
+```

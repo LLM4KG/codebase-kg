@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/components/CategoryList/CategoryList.tsx",
+      "op": "replace",
+      "search": "  const handleAddCategory = (name: string) => {\n    if (categories.some(cat => cat.name === name)) {\n      setError('A category with this name already exists');\n      return;\n    }\n    addCategory(name);\n  };\n\n  const handleRenameCategory = (id: string, newName: string) => {\n    if (categories.some(cat => cat.name === newName && cat.id !== id)) {\n      setError('A category with this name already exists');\n      return;\n    }\n    renameCategory(id, newName);\n  };\n",
+      "content": "  const handleAddCategory = (name: string) => {\n    if (categories.some(cat => cat.name.toLowerCase() === name.toLowerCase())) {\n      setError('A category with this name already exists');\n      return;\n    }\n    addCategory(name);\n  };\n\n  const handleRenameCategory = (id: string, newName: string) => {\n    if (categories.some(cat => cat.name.toLowerCase() === newName.toLowerCase() && cat.id !== id)) {\n      setError('A category with this name already exists');\n      return;\n    }\n    renameCategory(id, newName);\n  };\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

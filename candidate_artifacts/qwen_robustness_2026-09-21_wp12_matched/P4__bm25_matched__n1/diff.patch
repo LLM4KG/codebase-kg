@@ -1,0 +1,26 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "import useCartTotal from './useCartTotal';\n\nconst useCart = () => {\n  const { isOpen, setIsOpen } = useCartContext();\n  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n};\n\nexport default useCart;\n",
+      "content": "import useCartTotal from './useCartTotal';\n\nconst useCart = () => {\n  const { isOpen, setIsOpen } = useCartContext();\n  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearProducts,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n  const clearCart = () => {\n    clearProducts();\n    updateCartTotal();\n  };\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    clearCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n};\n\nexport default useCart;\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "          <S.CartFooter>\n            <S.Sub>SUBTOTAL</S.Sub>\n            <S.SubPrice>\n",
+      "content": "          <S.CartFooter>\n            <S.ClearCartButton onClick={clearCart}>Clear cart</S.ClearCartButton>\n            <S.Sub>SUBTOTAL</S.Sub>\n            <S.SubPrice>\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "import formatPrice from 'utils/formatPrice';\nimport CartProducts from './CartProducts';\n\nimport { useCart } from 'contexts/cart-context';\n\nimport * as S from './style';\n\nconst Cart = () => {\n  const { products, total, isOpen, openCart, closeCart } = useCart();\n\n  const handleCheckout = () => {\n    if (total.productQuantity) {\n",
+      "content": "import formatPrice from 'utils/formatPrice';\nimport CartProducts from './CartProducts';\n\nimport { useCart } from 'contexts/cart-context';\n\nimport * as S from './style';\n\nconst Cart = () => {\n  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();\n\n  const handleCheckout = () => {\n    if (total.productQuantity) {\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

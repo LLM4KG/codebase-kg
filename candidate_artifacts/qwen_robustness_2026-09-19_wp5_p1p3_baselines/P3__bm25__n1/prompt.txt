@@ -1,0 +1,2097 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+The NoteMenuBar component (`src/client/containers/NoteMenuBar.tsx`) has inline clipboard copy logic: a useState for the "copied" feedback text, a useEffect that auto-clears it after 3 seconds, and a copyToClipboard call in the onClick handler. Extract this into a reusable custom hook `useCopyToClipboard(successMessage, timeout)` in a new file `src/client/utils/useCopyToClipboard.ts`. The hook should return `{ copiedText, handleCopy }`. Update NoteMenuBar to use the new hook.
+
+## Project Context
+
+You are working on the **takenote** React project.
+
+**Task type:** refactoring
+
+---
+
+### Target Components
+
+
+#### NoteMenuBar (`src/client/containers/NoteMenuBar.tsx`)
+
+
+```tsx
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  Eye,
+  Edit,
+  Star,
+  Trash2,
+  Download,
+  RefreshCw,
+  Loader,
+  Settings,
+  Sun,
+  Moon,
+  Clipboard as ClipboardCmp,
+} from 'react-feather'
+
+import { TestID } from '@resources/TestID'
+import { LastSyncedNotification } from '@/components/LastSyncedNotification'
+import { NoteItem, CategoryItem } from '@/types'
+import {
+  toggleSettingsModal,
+  togglePreviewMarkdown,
+  toggleDarkTheme,
+  updateCodeMirrorOption,
+} from '@/slices/settings'
+import { toggleFavoriteNotes, toggleTrashNotes } from '@/slices/note'
+import { getCategories, getNotes, getSync, getSettings } from '@/selectors'
+import { downloadNotes, isDraftNote, getShortUuid, copyToClipboard } from '@/utils/helpers'
+import { sync } from '@/slices/sync'
+
+export const NoteMenuBar = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { notes, activeNoteId } = useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+  const { syncing, lastSynced, pendingSync } = useSelector(getSync)
+  const { darkTheme } = useSelector(getSettings)
+
+  // ===========================================================================
+  // Other
+  // ===========================================================================
+
+  const copyNoteIcon = <ClipboardCmp size={18} aria-hidden="true" focusable="false" />
+  const successfulCopyMessage = 'Note copied!'
+  const activeNote = notes.find((note) => note.id === activeNoteId)!
+  const shortNoteUuid = getShortUuid(activeNoteId)
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [uuidCopiedText, setUuidCopiedText] = useState<string>('')
+  const [isToggled, togglePreviewIcon] = useState<boolean>(false)
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    if (uuidCopiedText === successfulCopyMessage) {
+      const timer = setTimeout(() => {
+        setUuidCopiedText('')
+      }, 3000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [uuidCopiedText])
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _togglePreviewMarkdown = () => dispatch(togglePreviewMarkdown())
+  const _toggleTrashNotes = (noteId: string) => dispatch(toggleTrashNotes(noteId))
+  const _toggleFavoriteNotes = (noteId: string) => dispatch(toggleFavoriteNotes(noteId))
+  const _sync = (notes: NoteItem[], categories: CategoryItem[]) =>
+    dispatch(sync({ notes, categories }))
+  const _toggleSettingsModal = () => dispatch(toggleSettingsModal())
+  const _toggleDarkTheme = () => dispatch(toggleDarkTheme())
+  const _updateCodeMirrorOption = (key: string, value: any) =>
+    dispatch(updateCodeMirrorOption({ key, value }))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const downloadNotesHandler = () => downloadNotes([activeNote], categories)
+  const favoriteNoteHandler = () => _toggleFavoriteNotes(activeNoteId)
+  const trashNoteHandler = () => _toggleTrashNotes(activeNoteId)
+  const syncNotesHandler = () => _sync(notes, categories)
+  const settingsHandler = () => _toggleSettingsModal()
+  const toggleDarkThemeHandler = () => {
+    _toggleDarkTheme()
+    _updateCodeMirrorOption('theme', darkTheme ? 'base16-light' : 'new-moon')
+  }
+  const togglePreviewHandler = () => {
+    togglePreviewIcon(!isToggled)
+    _togglePreviewMarkdown()
+  }
+
+  return (
+    <section className="note-menu-bar">
+      {activeNote && !isDraftNote(activeNote) ? (
+        <nav>
+          <button
+            className="note-menu-bar-button"
+            onClick={togglePreviewHandler}
+            data-testid={TestID.PREVIEW_MODE}
+          >
+            {isToggled ? (
+              <Edit aria-hidden="true" size={18} />
+            ) : (
+              <Eye aria-hidden="true" size={18} />
+            )}
+            <span className="sr-only">{isToggled ? 'Edit note' : 'Preview note'}</span>
+          </button>
+          {!activeNote.scratchpad && (
+            <>
+              <button className="note-menu-bar-button" onClick={favoriteNoteHandler}>
+                <Star aria-hidden="true" size={18} />
+                <span className="sr-only">Add note to favorites</span>
+              </button>
+              <button className="note-menu-bar-button trash" onClick={trashNoteHandler}>
+                <Trash2 aria-hidden="true" size={18} />
+                <span className="sr-only">Delete note</span>
+              </button>
+            </>
+          )}
+          <button className="note-menu-bar-button">
+            <Download aria-hidden="true" size={18} onClick={downloadNotesHandler} />
+            <span className="sr-only">Download note</span>
+          </button>
+          <button
+            className="note-menu-bar-button uuid"
+            onClick={() => {
+              copyToClipboard(`{{${shortNoteUuid}}}`)
+              setUuidCopiedText(successfulCopyMessage)
+            }}
+            data-testid={TestID.UUID_MENU_BAR_COPY_ICON}
+          >
+            {copyNoteIcon}
+            {uuidCopiedText && <span className="uuid-copied-text">{uuidCopiedText}</span>}
+            <span className="sr-only">Copy note</span>
+          </button>
+        </nav>
+      ) : (
+        <div />
+      )}
+      <nav>
+        <LastSyncedNotification datetime={lastSynced} pending={pendingSync} syncing={syncing} />
+        <button
+          className="note-menu-bar-button"
+          onClick={syncNotesHandler}
+          data-testid={TestID.TOPBAR_ACTION_SYNC_NOTES}
+        >
+          {syncing ? (
+            <Loader aria-hidden="true" size={18} className="rotating-svg" />
+          ) : (
+            <RefreshCw aria-hidden="true" size={18} />
+          )}
+          <span className="sr-only">Sync notes</span>
+        </button>
+        <button className="note-menu-bar-button" onClick={toggleDarkThemeHandler}>
+          {darkTheme ? <Sun aria-hidden="true" size={18} /> : <Moon aria-hidden="true" size={18} />}
+          <span className="sr-only">Themes</span>
+        </button>
+
+        <button className="note-menu-bar-button" onClick={settingsHandler}>
+          <Settings aria-hidden="true" size={18} />
+          <span className="sr-only">Settings</span>
+        </button>
+      </nav>
+    </section>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### NoteEditor (`src/client/containers/NoteEditor.tsx`)
+
+
+```tsx
+import dayjs from 'dayjs'
+import React from 'react'
+import { Controlled as CodeMirror } from 'react-codemirror2'
+import { useDispatch, useSelector } from 'react-redux'
+import { Editor } from 'codemirror'
+
+import { getActiveNote } from '@/utils/helpers'
+import { updateNote } from '@/slices/note'
+import { NoteItem } from '@/types'
+import { NoteMenuBar } from '@/containers/NoteMenuBar'
+import { EmptyEditor } from '@/components/Editor/EmptyEditor'
+import { PreviewEditor } from '@/components/Editor/PreviewEditor'
+import { getNotes, getSettings, getSync } from '@/selectors'
+import { setPendingSync } from '@/slices/sync'
+
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/base16-light.css'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/addon/selection/active-line'
+import 'codemirror/addon/scroll/scrollpastend'
+
+export const NoteEditor: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { pendingSync } = useSelector(getSync)
+  const { activeNoteId, loading, notes } = useSelector(getNotes)
+  const { codeMirrorOptions, previewMarkdown } = useSelector(getSettings)
+
+  const activeNote = getActiveNote(notes, activeNoteId)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _updateNote = (note: NoteItem) => {
+    !pendingSync && dispatch(setPendingSync())
+    dispatch(updateNote(note))
+  }
+
+  const setEditorOverlay = (editor: Editor) => {
+    const query = /\{\{[^}]*}}/g
+    editor.addOverlay({
+      token: function (stream: any) {
+        query.lastIndex = stream.pos
+        var match = query.exec(stream.string)
+        if (match && match.index == stream.pos) {
+          stream.pos += match[0].length || 1
+
+          return 'notelink'
+        } else if (match) {
+          stream.pos = match.index
+        } else {
+          stream.skipToEnd()
+        }
+      },
+    })
+  }
+
+  const renderEditor = () => {
+    if (loading) {
+      return <div className="empty-editor v-center">Loading...</div>
+    } else if (!activeNote) {
+      return <EmptyEditor />
+    } else if (previewMarkdown) {
+      return (
+        <PreviewEditor
+          directionText={codeMirrorOptions.direction}
+          noteText={activeNote.text}
+          notes={notes}
+        />
+      )
+    }
+
+    return (
+      <CodeMirror
+        data-testid="codemirror-editor"
+        className="editor mousetrap"
+        value={activeNote.text}
+        options={codeMirrorOptions}
+        editorDidMount={(editor) => {
+          setTimeout(() => {
+            editor.focus()
+          }, 0)
+          editor.setCursor(0)
+          setEditorOverlay(editor)
+        }}
+        onBeforeChange={(editor, data, value) => {
+          _updateNote({
+            id: activeNote.id,
+            text: value,
+            created: activeNote.created,
+            lastUpdated: dayjs().format(),
+          })
+        }}
+        onChange={(editor, data, value) => {
+          if (!value) {
+            editor.focus()
+          }
+        }}
+        onPaste={(editor, event: any) => {
+          // Get around pasting issue
+          // https://github.com/scniro/react-codemirror2/issues/77
+          if (!event.clipboardData || !event.clipboardData.items || !event.clipboardData.items[0])
+            return
+          event.clipboardData.items[0].getAsString((pasted: any) => {
+            if (editor.getSelection() !== pasted) return
+            const { anchor, head } = editor.listSelections()[0]
+            editor.setCursor({
+              line: Math.max(anchor.line, head.line),
+              ch: Math.max(anchor.ch, head.ch),
+            })
+          })
+        }}
+      />
+    )
+  }
+
+  return (
+    <main className="note-editor">
+      <NoteMenuBar />
+      {renderEditor()}
+    </main>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### ContextMenuOptions (`src/client/containers/ContextMenuOptions.tsx`)
+
+
+```tsx
+import React, { useContext } from 'react'
+import { ArrowUp, Download, Star, Trash, X, Edit2, Clipboard } from 'react-feather'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { ContextMenuOption } from '@/components/NoteList/ContextMenuOption'
+import { downloadNotes, isDraftNote, getShortUuid, copyToClipboard } from '@/utils/helpers'
+import {
+  deleteNotes,
+  toggleFavoriteNotes,
+  toggleTrashNotes,
+  addCategoryToNote,
+  updateActiveNote,
+  swapFolder,
+  removeCategoryFromNotes,
+} from '@/slices/note'
+import { getCategories, getNotes } from '@/selectors'
+import { Folder, ContextMenuEnum } from '@/utils/enums'
+import { CategoryItem, NoteItem } from '@/types'
+import category, { setCategoryEdit, deleteCategory } from '@/slices/category'
+import { MenuUtilitiesContext } from '@/containers/ContextMenu'
+
+export interface ContextMenuOptionsProps {
+  clickedItem: NoteItem | CategoryItem
+  type: ContextMenuEnum
+}
+
+export const ContextMenuOptions: React.FC<ContextMenuOptionsProps> = ({ clickedItem, type }) => {
+  if (type === 'CATEGORY') {
+    return <CategoryOptions clickedCategory={clickedItem as CategoryItem} />
+  } else {
+    return <NotesOptions clickedNote={clickedItem as NoteItem} />
+  }
+}
+
+interface CategoryOptionsProps {
+  clickedCategory: CategoryItem
+}
+
+const CategoryOptions: React.FC<CategoryOptionsProps> = ({ clickedCategory }) => {
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _deleteCategory = (categoryId: string) => dispatch(deleteCategory(categoryId))
+  const _removeCategoryFromNotes = (categoryId: string) =>
+    dispatch(removeCategoryFromNotes(categoryId))
+  const _swapFolder = (folder: Folder) => dispatch(swapFolder({ folder }))
+  const _setCategoryEdit = (categoryId: string, tempName: string) =>
+    dispatch(setCategoryEdit({ id: categoryId, tempName }))
+
+  // ===========================================================================
+  // Context
+  // ===========================================================================
+
+  const { setOptionsId } = useContext(MenuUtilitiesContext)
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const startRenameHandler = () => {
+    _setCategoryEdit(clickedCategory.id, clickedCategory.name)
+    setOptionsId('')
+  }
+  const removeCategoryHandler = () => {
+    _deleteCategory(clickedCategory.id)
+    _removeCategoryFromNotes(clickedCategory.id)
+    _swapFolder(Folder.ALL)
+  }
+
+  return (
+    <nav className="options-nav" data-testid={TestID.CATEGORY_OPTIONS_NAV}>
+      <ContextMenuOption
+        dataTestID={TestID.CATEGORY_OPTION_RENAME}
+        handler={startRenameHandler}
+        icon={Edit2}
+        text={LabelText.RENAME}
+      />
+      <ContextMenuOption
+        dataTestID={TestID.CATEGORY_OPTION_DELETE_PERMANENTLY}
+        handler={removeCategoryHandler}
+        icon={X}
+        text={LabelText.DELETE_PERMANENTLY}
+        optionType="delete"
+      />
+    </nav>
+  )
+}
+
+interface NotesOptionsProps {
+  clickedNote: NoteItem
+}
+
+const NotesOptions: React.FC<NotesOptionsProps> = ({ clickedNote }) => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { selectedNotesIds, notes } = useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+
+  const selectedNotes = notes.filter((note) => selectedNotesIds.includes(note.id))
+  const isSelectedNotesDiffFavor = Boolean(
+    selectedNotes.find((note) => note.favorite) && selectedNotes.find((note) => !note.favorite)
+  )
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _deleteNotes = (noteIds: string[]) => dispatch(deleteNotes(noteIds))
+  const _toggleTrashNotes = (noteId: string) => dispatch(toggleTrashNotes(noteId))
+  const _toggleFavoriteNotes = (noteId: string) => dispatch(toggleFavoriteNotes(noteId))
+  const _addCategoryToNote = (categoryId: string, noteId: string) =>
+    dispatch(addCategoryToNote({ categoryId, noteId }))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const deleteNotesHandler = () => _deleteNotes(selectedNotesIds)
+  const downloadNotesHandler = () =>
+    downloadNotes(
+      selectedNotesIds.includes(clickedNote.id) ? selectedNotes : [clickedNote],
+      categories
+    )
+  const favoriteNoteHandler = () => _toggleFavoriteNotes(clickedNote.id)
+  const trashNoteHandler = () => _toggleTrashNotes(clickedNote.id)
+  const removeCategoryFromNoteHandler = () => {
+    _addCategoryToNote('', clickedNote.id)
+    _updateActiveNote(clickedNote.id, false)
+  }
+  const copyLinkedNoteMarkdownHandler = (e: React.SyntheticEvent, note: NoteItem) => {
+    e.preventDefault()
+
+    const shortNoteUuid = getShortUuid(note.id)
+    copyToClipboard(`{{${shortNoteUuid}}}`)
+  }
+
+  return !isDraftNote(clickedNote) ? (
+    <nav className="options-nav" data-testid={TestID.NOTE_OPTIONS_NAV}>
+      {clickedNote.trash && (
+        <>
+          <ContextMenuOption
+            dataTestID={TestID.NOTE_OPTION_DELETE_PERMANENTLY}
+            handler={deleteNotesHandler}
+            icon={X}
+            text={LabelText.DELETE_PERMANENTLY}
+            optionType="delete"
+          />
+          <ContextMenuOption
+            dataTestID={TestID.NOTE_OPTION_RESTORE_FROM_TRASH}
+            handler={trashNoteHandler}
+            icon={ArrowUp}
+            text={LabelText.RESTORE_FROM_TRASH}
+          />
+        </>
+      )}
+      {!clickedNote.scratchpad && !clickedNote.trash && (
+        <>
+          <ContextMenuOption
+            dataTestID={TestID.NOTE_OPTION_FAVORITE}
+            handler={favoriteNoteHandler}
+            icon={Star}
+            text={
+              isSelectedNotesDiffFavor
+                ? LabelText.TOGGLE_FAVORITE
+                : clickedNote.favorite
+                ? LabelText.REMOVE_FAVORITE
+                : LabelText.MARK_AS_FAVORITE
+            }
+          />
+          <ContextMenuOption
+            dataTestID={TestID.NOTE_OPTION_TRASH}
+            handler={trashNoteHandler}
+            icon={Trash}
+            text={LabelText.MOVE_TO_TRASH}
+            optionType="delete"
+          />
+        </>
+      )}
+      {clickedNote.category && !clickedNote.trash && (
+        <ContextMenuOption
+          dataTestID={TestID.NOTE_OPTION_REMOVE_CATEGORY}
+          handler={removeCategoryFromNoteHandler}
+          icon={X}
+          text={LabelText.REMOVE_CATEGORY}
+        />
+      )}
+      <ContextMenuOption
+        dataTestID={TestID.NOTE_OPTION_DOWNLOAD}
+        handler={downloadNotesHandler}
+        icon={Download}
+        text={LabelText.DOWNLOAD}
+      />
+      <ContextMenuOption
+        dataTestID={TestID.COPY_REFERENCE_TO_NOTE}
+        handler={(e: React.SyntheticEvent) => copyLinkedNoteMarkdownHandler(e, clickedNote)}
+        icon={Clipboard}
+        text={LabelText.COPY_REFERENCE_TO_NOTE}
+      />
+    </nav>
+  ) : null
+}
+
+```
+
+
+
+
+
+
+
+
+#### helpers (`src/client/utils/helpers.ts`)
+
+
+```jsx
+import dayjs from 'dayjs'
+import { v4 as uuid } from 'uuid'
+import JSZip from 'jszip'
+import { Action } from 'redux'
+import * as clipboard from 'clipboard-polyfill/text'
+
+import { LabelText } from '@resources/LabelText'
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { folderMap } from '@/utils/constants'
+import { NoteItem, CategoryItem, WithPayload } from '@/types'
+
+export const getActiveNote = (notes: NoteItem[], activeNoteId: string) =>
+  notes.find((note) => note.id === activeNoteId)
+
+export const getShortUuid = (uuid: string) => {
+  return uuid.substr(0, 6)
+}
+
+export const getActiveNoteFromShortUuid = (notes: NoteItem[], shortUuid: string) => {
+  const uuidWithoutHash = shortUuid.replace('{{', '').replace('}}', '')
+
+  return notes.find((note) => note.id.startsWith(uuidWithoutHash))
+}
+
+export const getActiveCategory = (categories: CategoryItem[], activeCategoryId: string) =>
+  categories.find(({ id }) => id === activeCategoryId)
+
+export const getNoteTitle = (text: string): string => {
+  // Remove whitespace from both ends
+  // Get the first n characters
+  // Remove # from the title in the case of using markdown headers in your title
+  const noteText = text.trim().match(/[^#]{1,45}/)
+
+  // Get the first line of text after any newlines
+  // In the future, this should break on a full word
+  return noteText ? noteText[0].trim().split(/\r?\n/)[0] : LabelText.NEW_NOTE
+}
+
+export const noteWithFrontmatter = (note: NoteItem, category?: CategoryItem): string =>
+  `---
+title: ${getNoteTitle(note.text)}
+created: ${note.created}
+lastUpdated: ${note.lastUpdated}
+category: ${category?.name ?? ''}
+---
+
+${note.text}`
+
+// Downloads a single note as a markdown file or a group of notes as a zip file.
+export const downloadNotes = (notes: NoteItem[], categories: CategoryItem[]): void => {
+  if (notes.length === 1) {
+    const pom = document.createElement('a')
+
+    pom.setAttribute(
+      'href',
+      `data:text/plain;charset=utf-8,${encodeURIComponent(
+        noteWithFrontmatter(
+          notes[0],
+          categories.find((category: CategoryItem) => category.id === notes[0].category)
+        )
+      )}`
+    )
+    pom.setAttribute('download', `${getNoteTitle(notes[0].text)}.md`)
+
+    if (document.createEvent) {
+      const event = document.createEvent('MouseEvents')
+      event.initEvent('click', true, true)
+      pom.dispatchEvent(event)
+    } else {
+      pom.click()
+    }
+  } else {
+    const zip = new JSZip()
+    notes.forEach((note) =>
+      zip.file(
+        `${getNoteTitle(note.text)} (${note.id.substring(0, 6)}).md`,
+        noteWithFrontmatter(
+          note,
+          categories.find((category: CategoryItem) => category.id === note.category)
+        )
+      )
+    )
+
+    zip.generateAsync({ type: 'blob' }).then(
+      (content) => {
+        var downloadUrl = window.URL.createObjectURL(content)
+        var a = document.createElement('a')
+        a.href = downloadUrl
+        a.download = 'notes.zip'
+        document.body.appendChild(a)
+        a.click()
+        URL.revokeObjectURL(downloadUrl)
+      },
+      (err) => {
+        // TODO: error generating zip file.
+        // Generate a popup?
+      }
+    )
+  }
+}
+
+export const backupNotes = (notes: NoteItem[], categories: CategoryItem[]) => {
+  const pom = document.createElement('a')
+
+  const json = JSON.stringify({ notes, categories })
+  const blob = new Blob([json], { type: 'application/json' })
+
+  const downloadUrl = window.URL.createObjectURL(blob)
+  pom.href = downloadUrl
+  pom.download = `takenote-backup-${dayjs().format('YYYY-MM-DD')}.json`
+  document.body.appendChild(pom)
+
+  // @ts-ignore
+  if (!window.Cypress) {
+    pom.click()
+    URL.revokeObjectURL(downloadUrl)
+  }
+}
+
+const newNote = (categoryId?: string, folder?: Folder): NoteItem => ({
+  id: uuid(),
+  text: '',
+  created: dayjs().format(),
+  lastUpdated: dayjs().format(),
+  category: categoryId,
+  favorite: folder === Folder.FAVORITES,
+})
+
+export const newNoteHandlerHelper = (
+  activeFolder: Folder,
+  previewMarkdown: boolean,
+  activeNote: NoteItem | undefined,
+  activeCategoryId: string,
+  swapFolder: (
+    folder: Folder
+  ) => WithPayload<{ folder: string; sortOrderKey?: NotesSortKey }, Action<string>>,
+  togglePreviewMarkdown: () => WithPayload<undefined, Action<string>>,
+  addNote: (note: NoteItem) => WithPayload<NoteItem, Action<string>>,
+  updateActiveNote: (
+    noteId: string,
+    multiSelect: boolean
+  ) => WithPayload<
+    {
+      noteId: string
+      multiSelect: boolean
+    },
+    Action<string>
+  >,
+  updateSelectedNotes: (
+    noteId: string,
+    multiSelect: boolean
+  ) => WithPayload<
+    {
+      noteId: string
+      multiSelect: boolean
+    },
+    Action<string>
+  >
+) => {
+  if ([Folder.TRASH, Folder.SCRATCHPAD].indexOf(activeFolder) !== -1) {
+    swapFolder(Folder.ALL)
+  }
+
+  if (previewMarkdown) {
+    togglePreviewMarkdown()
+  }
+
+  if ((activeNote && activeNote.text !== '') || !activeNote) {
+    const note = newNote(
+      activeCategoryId,
+      activeFolder === Folder.TRASH ? Folder.ALL : activeFolder
+    )
+    addNote(note)
+    updateSelectedNotes(note.id, false)
+    updateActiveNote(note.id, false)
+  }
+}
+
+export const shouldOpenContextMenu = (clicked: Element) => {
+  if (!clicked.parentElement) return
+
+  const elementContainsClass = (className: string) => clicked.classList.contains(className)
+
+  const parentContainsClass = (className: string) =>
+    clicked.parentElement!.classList.contains(className)
+
+  return (
+    (clicked instanceof Element &&
+      // If the element is explicitly a context menu action
+      elementContainsClass('context-menu-action')) ||
+    // If the element is an item of the context menu
+    (!elementContainsClass('nav-item') &&
+      !elementContainsClass('options-context-menu') &&
+      !elementContainsClass('nav-item-icon') &&
+      !parentContainsClass('nav-item-icon')) ||
+    // Or if it's a sub-element of the context menu
+    (clicked.tagName === 'circle' && parentContainsClass('context-menu-action'))
+  )
+}
+
+export const getWebsiteTitle = (activeFolder: Folder, activeCategory?: CategoryItem) => {
+  // Show category name if category is active
+  if (activeFolder === Folder.CATEGORY && activeCategory) {
+    return `${activeCategory.name} | TakeNote`
+  } else {
+    // Show main folder name otherwise
+    return `${folderMap[activeFolder]} | TakeNote`
+  }
+}
+
+export const determineAppClass = (
+  darkTheme: boolean,
+  sidebarVisible: boolean,
+  activeFolder: Folder
+) => {
+  let className = 'app'
+
+  if (darkTheme) className += ' dark'
+
+  return className
+}
+
+export const determineCategoryClass = (
+  category: CategoryItem,
+  isDragging: boolean,
+  activeCategoryId: string
+) => {
+  if (category.draggedOver) {
+    return 'category-list-each dragged-over'
+  } else if (category.id === activeCategoryId) {
+    return 'category-list-each active'
+  } else if (isDragging) {
+    return 'category-list-each dragging'
+  } else {
+    return 'category-list-each'
+  }
+}
+
+export const debounceEvent = <T extends Function>(cb: T, wait = 20) => {
+  let h = 0
+  const callable = (...args: any) => {
+    clearTimeout(h)
+    h = window.setTimeout(() => cb(...args), wait)
+  }
+
+  return <T>(<any>callable)
+}
+
+export const isDraftNote = (note: NoteItem) => {
+  return !note.scratchpad && note.text === ''
+}
+
+export const getDayJsLocale = (languagetoken: string): string => {
+  try {
+    require('dayjs/locale/' + languagetoken + '.js')
+
+    return languagetoken
+  } catch (error) {
+    if (languagetoken.includes('-'))
+      return getDayJsLocale(languagetoken.substring(0, languagetoken.lastIndexOf('-')))
+
+    return 'en'
+  }
+}
+
+export const getNoteBarConf = (
+  activeFolder: Folder
+): {
+  minSize?: number
+  maxSize?: number
+  defaultSize?: number
+  allowResize?: boolean
+  resizerStyle?: React.CSSProperties
+} => {
+  switch (activeFolder) {
+    case Folder.SCRATCHPAD:
+      return {
+        minSize: 0,
+        maxSize: 0,
+        defaultSize: 0,
+        allowResize: false,
+        resizerStyle: { display: 'none' },
+      }
+
+    default:
+      return {
+        minSize: 200,
+        maxSize: 600,
+        defaultSize: 330,
+      }
+  }
+}
+
+export const copyToClipboard = (text: string) => {
+  clipboard.writeText(text)
+}
+
+```
+
+
+
+
+
+
+
+
+#### NoteList (`src/client/containers/NoteList.tsx`)
+
+
+```tsx
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { MoreHorizontal, Book, Star, Folder as FolderIcon } from 'react-feather'
+
+import { TestID } from '@resources/TestID'
+import { Folder, Shortcuts, ContextMenuEnum } from '@/utils/enums'
+import { NoteListButton } from '@/components/NoteList/NoteListButton'
+import { SearchBar } from '@/components/NoteList/SearchBar'
+import { ContextMenu } from '@/containers/ContextMenu'
+import { getNoteTitle, shouldOpenContextMenu, debounceEvent, isDraftNote } from '@/utils/helpers'
+import { useKey } from '@/utils/hooks'
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+import { NoteItem, ReactDragEvent, ReactMouseEvent } from '@/types'
+import { getNotes, getSettings, getCategories } from '@/selectors'
+import { getNotesSorter } from '@/utils/notesSortStrategies'
+
+export const NoteList: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { notesSortKey } = useSelector(getSettings)
+  const { activeCategoryId, activeFolder, selectedNotesIds, notes, searchValue } =
+    useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+
+  // ===========================================================================
+  // Refs
+  // ===========================================================================
+
+  const contextMenuRef = useRef<HTMLDivElement>(null)
+  const searchRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [optionsId, setOptionsId] = useState('')
+  const [optionsPosition, setOptionsPosition] = useState({ x: 0, y: 0 })
+
+  const re = new RegExp(searchValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+  const isMatch = (result: NoteItem) => re.test(result.text)
+
+  const filter: Record<Folder, (note: NoteItem) => boolean> = {
+    [Folder.CATEGORY]: (note) => !note.trash && note.category === activeCategoryId,
+    [Folder.SCRATCHPAD]: (note) => !!note.scratchpad,
+    [Folder.FAVORITES]: (note) => !note.trash && !!note.favorite,
+    [Folder.TRASH]: (note) => !!note.trash,
+    [Folder.ALL]: (note) => !note.trash && !note.scratchpad,
+  }
+
+  const filteredNotes: NoteItem[] = notes
+    .filter(filter[activeFolder])
+    .filter(isMatch)
+    .sort(getNotesSorter(notesSortKey))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const focusSearchHandler = () => searchRef.current.focus()
+
+  const handleDragStart = (event: ReactDragEvent, noteId: string = '') => {
+    event.stopPropagation()
+
+    event.dataTransfer.setData('text/plain', noteId)
+  }
+
+  const handleNoteOptionsClick = (event: ReactMouseEvent, noteId: string = '') => {
+    const clicked = event.target
+
+    // Make sure we aren't getting any null values. Any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    // Ensure the clicked target is supposed to open the context menu
+    if (shouldOpenContextMenu(clicked as Element)) {
+      // note: don't check for MouseEvent because Cypress MouseEvent !== Window.MouseEvent
+      if ('pageX' in event && 'pageY' in event) {
+        setOptionsPosition({ x: event.pageX, y: event.pageY })
+      }
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef.current || !contextMenuRef.current.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== noteId ? noteId : '')
+    }
+  }
+
+  const handleNoteRightClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    noteId: string = ''
+  ) => {
+    event.preventDefault()
+    const clicked = event.target
+    const RIGHT_CLICK = 2
+
+    // Make sure we aren't getting any null values .. any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    // FIXME: This feels hacky
+    if (event.ctrlKey) return
+
+    // Make sure we are not right clicking on the menu
+    if (optionsId && event.button == RIGHT_CLICK) return
+
+    if ('clientX' in event && 'clientY' in event) {
+      setOptionsPosition({ x: event.clientX, y: event.clientY })
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef.current || contextMenuRef.current.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== noteId ? noteId : '')
+    }
+  }
+
+  const showEmptyTrash = activeFolder === Folder.TRASH && filteredNotes.length > 0
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleNoteOptionsClick)
+
+    return () => {
+      document.removeEventListener('mousedown', handleNoteOptionsClick)
+    }
+  })
+
+  useKey(Shortcuts.SEARCH, () => focusSearchHandler())
+
+  return (
+    <aside className="note-sidebar">
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            label="Empty"
+            handler={() => _permanentlyEmptyTrash()}
+          >
+            Empty Trash
+          </NoteListButton>
+        )}
+      </div>
+      <div data-testid={TestID.NOTE_LIST} className="note-list">
+        {filteredNotes.map((note: NoteItem, index: number) => {
+          let noteTitle: string | React.ReactElement = getNoteTitle(note.text)
+          const noteCategory = categories.find((category) => category.id === note.category)
+
+          if (searchValue) {
+            const highlightStart = noteTitle.search(re)
+
+            if (highlightStart !== -1) {
+              const highlightEnd = highlightStart + searchValue.length
+
+              noteTitle = (
+                <>
+                  {noteTitle.slice(0, highlightStart)}
+                  <strong className="highlighted">
+                    {noteTitle.slice(highlightStart, highlightEnd)}
+                  </strong>
+                  {noteTitle.slice(highlightEnd)}
+                </>
+              )
+            }
+          }
+
+          return (
+            <div
+              data-testid={TestID.NOTE_LIST_ITEM + index}
+              className={
+                selectedNotesIds.includes(note.id) ? 'note-list-each selected' : 'note-list-each'
+              }
+              key={note.id}
+              onClick={(event) => {
+                event.stopPropagation()
+
+                _updateSelectedNotes(note.id, event.metaKey)
+                _updateActiveNote(note.id, event.metaKey)
+                _pruneNotes()
+              }}
+              onContextMenu={(event) => handleNoteRightClick(event, note.id)}
+              draggable={note.text !== ''}
+              onDragStart={(event) => handleDragStart(event, note.id)}
+            >
+              <div className="note-list-outer">
+                <div data-testid={'note-title-' + index} className="note-title">
+                  {note.favorite ? (
+                    <>
+                      <div className="icon">
+                        <Star aria-hidden="true" className="note-favorite" size={12} />
+                        <span className="sr-only">Favorite note</span>
+                      </div>
+                      <div className="truncate-text">{noteTitle}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="icon" />
+                      <div className="truncate-text"> {noteTitle}</div>
+                    </>
+                  )}
+                </div>
+                {!isDraftNote(note) ? (
+                  <div
+                    // TODO: make testID based off of index when we add that to a NoteItem object
+                    data-testid={TestID.NOTE_OPTIONS_DIV + index}
+                    className={optionsId === note.id ? 'note-options selected' : 'note-options'}
+                    onClick={(event) => handleNoteOptionsClick(event, note.id)}
+                  >
+                    <MoreHorizontal aria-hidden="true" size={15} className="context-menu-action" />
+                    <span className="sr-only">Note options</span>
+                  </div>
+                ) : (
+                  <div className="note-options">&nbsp;</div>
+                )}
+              </div>
+              {(activeFolder === Folder.ALL || activeFolder === Folder.FAVORITES) && (
+                <div className="note-category">
+                  {!!noteCategory ? (
+                    <>
+                      <FolderIcon size={12} className="context-menu-action" />
+                      {noteCategory?.name}
+                    </>
+                  ) : (
+                    <>
+                      <Book size={12} className="context-menu-action" />
+                      Notes
+                    </>
+                  )}
+                </div>
+              )}
+              {optionsId === note.id && !isDraftNote(note) && (
+                <ContextMenu
+                  contextMenuRef={contextMenuRef}
+                  item={note}
+                  optionsPosition={optionsPosition}
+                  setOptionsId={setOptionsId}
+                  type={ContextMenuEnum.NOTE}
+                />
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </aside>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### TestID (`src/resources/TestID.ts`)
+
+
+```jsx
+// data-testid
+export enum TestID {
+  ACTION_BUTTON = 'action-button',
+  ADD_CATEGORY_BUTTON = 'add-category-button',
+  CATEGORY_EDIT = 'category-edit',
+  CATEGORY_COLLAPSE_BUTTON = 'category-collapse-button',
+  CATEGORY_LIST_DIV = 'category-list-div',
+  CATEGORY_OPTIONS_NAV = 'category-options-nav',
+  CATEGORY_OPTION_RENAME = 'category-options-rename',
+  CATEGORY_OPTION_DELETE_PERMANENTLY = 'category-option-delete-permanently',
+  EDIT_CATEGORY = 'edit-category',
+  EMPTY_TRASH_BUTTON = 'empty-trash-button',
+  FOLDER_NOTES = 'notes',
+  FOLDER_FAVORITES = 'favorites',
+  FOLDER_TRASH = 'trash',
+  NEW_CATEGORY_FORM = 'new-category-form',
+  NEW_CATEGORY_INPUT = 'new-category-label',
+  NOTE_LIST = 'note-list',
+  NOTE_LINK_ERROR = 'note-link-error',
+  NOTE_LINK_SUCCESS = 'note-link-success',
+  NOTE_LIST_ITEM = 'note-list-item-',
+  NOTE_OPTIONS_DIV = 'note-options-div-',
+  NOTE_OPTIONS_NAV = 'note-options-nav',
+  NOTE_OPTION_DELETE_PERMANENTLY = 'note-option-delete-permanently',
+  NOTE_OPTION_DOWNLOAD = 'note-option-download',
+  NOTE_OPTION_FAVORITE = 'note-option-favorite',
+  NOTE_OPTION_REMOVE_CATEGORY = 'note-option-remove-category',
+  NOTE_OPTION_RESTORE_FROM_TRASH = 'note-option-restore-from-trash',
+  NOTE_OPTION_TRASH = 'note-option-trash',
+  NOTE_SEARCH = 'note-search',
+  NOTE_TITLE = 'note-title-',
+  MOVE_TO_CATEGORY = 'note-options-move-to-category-select',
+  REMOVE_CATEGORY = 'remove-category',
+  MOVE_CATEGORY = 'move-category',
+  SIDEBAR_ACTION_CREATE_NEW_NOTE = 'sidebar-action-create-new-note',
+  SIDEBAR_ACTION_SETTINGS = 'sidebar-action-settings',
+  TOPBAR_ACTION_SYNC_NOTES = 'topbar-action-sync-notes',
+  SCRATCHPAD = 'scratchpad',
+  NOTE_OPTION_ADD_CONTENT_NOTE = 'note-option-add-content-note',
+  SETTINGS_MODAL_DOWNLOAD_NOTES = 'settings-modal-download-notes',
+  DARK_MODE_TOGGLE = 'dark-mode-toggle',
+  MARKDOWN_PREVIEW_TOGGLE = 'markdown-preview-toggle',
+  ACTIVE_LINE_HIGHLIGHT_TOGGLE = 'active-line-highlight-toggle',
+  DISPLAY_LINE_NUMS_TOGGLE = 'display-line-nums-toggle',
+  SCROLL_PAST_END_TOGGLE = 'scroll-past-end-toggle',
+  SORT_BY_DROPDOWN = 'sort-by-dropdown',
+  TEXT_DIRECTION_DROPDOWN = 'text-direction-dropdown',
+  UPLOAD_SETTINGS_BACKUP = 'upload-settings-backup',
+  UUID_MENU_BAR_COPY_ICON = 'uuid-menu-bar-copy-icon',
+  PREVIEW_MODE = 'preview-mode',
+  COPY_REFERENCE_TO_NOTE = 'copy-reference-to-note',
+  EMPTY_EDITOR = 'empty-editor',
+  ICON_BUTTON = 'icon-button',
+  ICON_BUTTON_UPLOADER = 'icon-button-uploader',
+  LAST_SYNCED_NOTIFICATION_SYNCING = 'last-synced-notification-syncing',
+  LAST_SYNCED_NOTIFICATION_UNSAVED = 'last-synced-notification-unsaved',
+  LAST_SYNCED_NOTIFICATION_DATE = 'last-synced-notification-date',
+}
+
+```
+
+
+
+
+
+
+
+
+#### CategoryList (`src/client/containers/CategoryList.tsx`)
+
+
+```tsx
+import React, { useRef, useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { v4 as uuid } from 'uuid'
+import { Droppable } from 'react-beautiful-dnd'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { CategoryOption } from '@/containers/CategoryOption'
+import { getCategories } from '@/selectors'
+import { shouldOpenContextMenu } from '@/utils/helpers'
+import { ReactMouseEvent, ReactSubmitEvent, CategoryItem } from '@/types'
+import { useTempState } from '@/contexts/TempStateContext'
+import { setCategoryEdit, updateCategory, addCategory } from '@/slices/category'
+import { AddCategoryForm } from '@/components/AppSidebar/AddCategoryForm'
+import { AddCategoryButton } from '@/components/AppSidebar/AddCategoryButton'
+import { CollapseCategoryListButton } from '@/components/AppSidebar/CollapseCategoryButton'
+
+export const CategoryList: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const {
+    categories,
+    editingCategory: { id: editingCategoryId, tempName: tempCategoryName },
+  } = useSelector(getCategories)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _setCategoryEdit = (categoryId: string, tempName: string) =>
+    dispatch(setCategoryEdit({ id: categoryId, tempName }))
+  const _updateCategory = (category: CategoryItem) => dispatch(updateCategory(category))
+  const _addCategory = (category: CategoryItem) => dispatch(addCategory(category))
+
+  // ===========================================================================
+  // Refs
+  // ===========================================================================
+
+  const contextMenuRef = useRef<HTMLDivElement>(null)
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [optionsId, setOptionsId] = useState('')
+  const [optionsPosition, setOptionsPosition] = useState({ x: 0, y: 0 })
+  const [isCategoryListOpen, setCategoryListOpen] = useState(true)
+
+  // ===========================================================================
+  // Context
+  // ===========================================================================
+
+  const { addingTempCategory, setAddingTempCategory } = useTempState()
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const onAddCategory = (adding: boolean) => {
+    setCategoryListOpen(true)
+    setAddingTempCategory(adding)
+  }
+
+  const handleCategoryMenuClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId: string = ''
+  ) => {
+    const clicked = event.target
+
+    // Make sure we aren't getting any null values .. any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    if (shouldOpenContextMenu(clicked as Element)) {
+      if ('clientX' in event && 'clientY' in event) {
+        setOptionsPosition({ x: event.clientX, y: event.clientY })
+      }
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef?.current?.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== categoryId ? categoryId : '')
+    }
+  }
+
+  const handleCategoryRightClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId: string = ''
+  ) => {
+    event.preventDefault()
+    handleCategoryMenuClick(event, categoryId)
+  }
+
+  const resetTempCategory = () => {
+    setAddingTempCategory(false)
+    _setCategoryEdit('', '')
+  }
+
+  const onSubmitUpdateCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleCategoryMenuClick)
+
+    return () => {
+      document.removeEventListener('mousedown', handleCategoryMenuClick)
+    }
+  })
+
+  return (
+    <>
+      <div className="category-title">
+        <CollapseCategoryListButton
+          dataTestID={TestID.CATEGORY_COLLAPSE_BUTTON}
+          handler={() => setCategoryListOpen(!isCategoryListOpen)}
+          label={LabelText.COLLAPSE_CATEGORY}
+          isCategoryListOpen={isCategoryListOpen}
+          showIcon={categories.length > 0}
+        />
+        <AddCategoryButton
+          dataTestID={TestID.ADD_CATEGORY_BUTTON}
+          handler={onAddCategory}
+          label={LabelText.ADD_CATEGORY}
+        />
+      </div>
+      {isCategoryListOpen && (
+        <>
+          <Droppable type="CATEGORY" droppableId="Category list">
+            {(droppableProvided) => (
+              <div
+                {...droppableProvided.droppableProps}
+                ref={droppableProvided.innerRef}
+                className="category-list"
+                aria-label="Category list"
+              >
+                {categories.map((category, index) => (
+                  <CategoryOption
+                    key={category.id}
+                    index={index}
+                    category={category}
+                    contextMenuRef={contextMenuRef}
+                    handleCategoryMenuClick={handleCategoryMenuClick}
+                    handleCategoryRightClick={handleCategoryRightClick}
+                    onSubmitUpdateCategory={onSubmitUpdateCategory}
+                    optionsId={optionsId}
+                    setOptionsId={setOptionsId}
+                    optionsPosition={optionsPosition}
+                  />
+                ))}
+                {droppableProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          {addingTempCategory && (
+            <AddCategoryForm
+              dataTestID={TestID.NEW_CATEGORY_FORM}
+              submitHandler={onSubmitNewCategory}
+              changeHandler={_setCategoryEdit}
+              resetHandler={resetTempCategory}
+              editingCategoryId={editingCategoryId}
+              tempCategoryName={tempCategoryName}
+            />
+          )}
+        </>
+      )}
+    </>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### LabelText (`src/resources/LabelText.ts`)
+
+
+```jsx
+// Default Labels
+export enum LabelText {
+  ADD_CATEGORY = 'Add category',
+  COLLAPSE_CATEGORY = 'Collapse Category List',
+  NOTES = 'Notes',
+  CREATE_NEW_NOTE = 'Create new note',
+  DELETE_PERMANENTLY = 'Delete permanently',
+  DOWNLOAD = 'Download',
+  FAVORITES = 'Favorites',
+  SCRATCHPAD = 'Scratchpad',
+  MARK_AS_FAVORITE = 'Mark as favorite',
+  MOVE_TO_TRASH = 'Move to trash',
+  NEW_CATEGORY = 'New category...',
+  NEW_NOTE = 'New note',
+  REMOVE_CATEGORY = 'Remove category',
+  REMOVE_FAVORITE = 'Remove favorite',
+  MOVE_CATEGORY = 'Move category',
+  RESTORE_FROM_TRASH = 'Restore from trash',
+  SETTINGS = 'Settings',
+  SYNC_NOTES = 'Sync notes',
+  TRASH = 'Trash',
+  WELCOME_TO_TAKENOTE = 'Welcome to Takenote!',
+  RENAME = 'Rename category',
+  ADD_CONTENT_NOTE = 'Please add content to this new note to access the menu options.',
+  DOWNLOAD_ALL_NOTES = 'Download all notes',
+  BACKUP_ALL_NOTES = 'Export backup',
+  IMPORT_BACKUP = 'Import backup',
+  TOGGLE_FAVORITE = 'Toggle favorite',
+  COPY_REFERENCE_TO_NOTE = 'Copy reference to note',
+}
+
+```
+
+
+
+
+
+
+
+
+#### ContextMenu (`src/client/containers/ContextMenu.tsx`)
+
+
+```tsx
+import ReactDOM from 'react-dom'
+import React, { useEffect, useState, createContext } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { SelectCategory } from '@/components/NoteList/SelectCategory'
+import { ContextMenuOptions } from '@/containers/ContextMenuOptions'
+import { addCategoryToNote, updateActiveCategoryId, updateActiveNote } from '@/slices/note'
+import { NoteItem, CategoryItem } from '@/types'
+import { getNotes, getCategories, getSettings } from '@/selectors'
+import { ContextMenuEnum } from '@/utils/enums'
+import { isDraftNote } from '@/utils/helpers'
+
+export const MenuUtilitiesContext = createContext({
+  setOptionsId: (id: string) => {},
+})
+interface Position {
+  x: number
+  y: number
+}
+
+export interface ContextMenuProps {
+  item: NoteItem | CategoryItem
+  optionsPosition: Position
+  contextMenuRef: React.RefObject<HTMLDivElement> | null
+  setOptionsId: (id: string) => void
+  type: ContextMenuEnum
+}
+
+export const ContextMenu: React.FC<ContextMenuProps> = ({
+  item,
+  optionsPosition,
+  contextMenuRef,
+  setOptionsId,
+  type,
+}) => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { darkTheme } = useSelector(getSettings)
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [elementDimensions, setElementDimensions] = useState<{
+    offsetHeight: number | null
+    offsetWidth: number | null
+  }>({ offsetHeight: null, offsetWidth: null })
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    if (contextMenuRef?.current) {
+      const { offsetHeight, offsetWidth } = contextMenuRef.current
+      setElementDimensions({ offsetHeight, offsetWidth })
+    }
+  }, [contextMenuRef])
+
+  // ===========================================================================
+  // Other
+  // ===========================================================================
+
+  const contextValues = {
+    setOptionsId,
+  }
+
+  const getOptionsYPosition = (): Number => {
+    if (elementDimensions.offsetHeight || elementDimensions.offsetWidth) {
+      // get the max window frame
+      const MaxY = window.innerHeight
+      const optionsSize = elementDimensions.offsetHeight as number
+
+      // if window position - noteOptions position isn't bigger than options, flip it.
+      return MaxY - optionsPosition.y > optionsSize
+        ? optionsPosition.y
+        : optionsPosition.y - optionsSize
+    }
+
+    return 0
+  }
+
+  return ReactDOM.createPortal(
+    <div className={type === ContextMenuEnum.CATEGORY || darkTheme ? 'dark' : ''}>
+      <div
+        ref={contextMenuRef}
+        className="options-context-menu"
+        style={{
+          visibility: getOptionsYPosition() ? 'visible' : 'hidden',
+          position: 'absolute',
+          top: getOptionsYPosition() + 'px',
+          left: optionsPosition.x + 'px',
+        }}
+        onClick={(event) => {
+          event.stopPropagation()
+        }}
+      >
+        <MenuUtilitiesContext.Provider value={contextValues}>
+          {type === ContextMenuEnum.CATEGORY ? (
+            <CategoryMenu category={item as CategoryItem} />
+          ) : (
+            <NotesMenu note={item as NoteItem} setOptionsId={setOptionsId} />
+          )}
+        </MenuUtilitiesContext.Provider>
+      </div>
+    </div>,
+    document.getElementById('context-menu') as HTMLElement
+  )
+}
+
+interface CategoryMenuProps {
+  category: CategoryItem
+}
+
+const CategoryMenu: React.FC<CategoryMenuProps> = ({ category }) => {
+  return <ContextMenuOptions clickedItem={category} type={ContextMenuEnum.CATEGORY} />
+}
+
+interface NotesMenuProps {
+  note: NoteItem
+  setOptionsId: (id: string) => void
+}
+
+const NotesMenu: React.FC<NotesMenuProps> = ({ note, setOptionsId }) => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { categories } = useSelector(getCategories)
+  const { activeCategoryId } = useSelector(getNotes)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _addCategoryToNote = (categoryId: string, noteId: string) =>
+    dispatch(addCategoryToNote({ categoryId, noteId }))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _updateActiveCategoryId = (categoryId: string) =>
+    dispatch(updateActiveCategoryId(categoryId))
+
+  return !isDraftNote(note) ? (
+    <>
+      {!note.scratchpad && (
+        <SelectCategory
+          onChange={(event) => {
+            _addCategoryToNote(event.target.value, note.id)
+
+            if (event.target.value !== activeCategoryId) {
+              _updateActiveCategoryId(event.target.value)
+              _updateActiveNote(note.id, false)
+            }
+
+            setOptionsId('')
+          }}
+          categories={categories}
+          activeCategoryId={activeCategoryId}
+          note={note}
+        />
+      )}
+      <ContextMenuOptions type={ContextMenuEnum.NOTE} clickedItem={note} />
+    </>
+  ) : null
+}
+
+```
+
+
+
+
+
+
+
+
+#### CategoryOption (`src/client/containers/CategoryOption.tsx`)
+
+
+```tsx
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Draggable } from 'react-beautiful-dnd'
+import { Folder as FolderIcon, MoreHorizontal } from 'react-feather'
+
+import { TestID } from '@resources/TestID'
+import { CategoryItem, ReactDragEvent, ReactMouseEvent, ReactSubmitEvent } from '@/types'
+import { determineCategoryClass } from '@/utils/helpers'
+import { getNotes, getCategories, getSettings } from '@/selectors'
+import {
+  updateActiveCategoryId,
+  updateActiveNote,
+  updateSelectedNotes,
+  addCategoryToNote,
+} from '@/slices/note'
+import { setCategoryEdit, categoryDragLeave, categoryDragEnter } from '@/slices/category'
+import { iconColor } from '@/utils/constants'
+import { ContextMenuEnum } from '@/utils/enums'
+import { getNotesSorter } from '@/utils/notesSortStrategies'
+import { ContextMenu } from '@/containers/ContextMenu'
+
+interface CategoryOptionProps {
+  category: CategoryItem
+  index: number
+  contextMenuRef: React.RefObject<HTMLDivElement>
+  handleCategoryMenuClick: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId?: string
+  ) => void
+  handleCategoryRightClick: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId?: string
+  ) => void
+  onSubmitUpdateCategory: (event: ReactSubmitEvent) => void
+  optionsPosition: { x: number; y: number }
+  optionsId: string
+  setOptionsId: React.Dispatch<React.SetStateAction<string>>
+}
+
+export const CategoryOption: React.FC<CategoryOptionProps> = ({
+  category,
+  index,
+  contextMenuRef,
+  handleCategoryMenuClick,
+  handleCategoryRightClick,
+  onSubmitUpdateCategory,
+  optionsPosition,
+  optionsId,
+  setOptionsId,
+}) => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { activeCategoryId, notes } = useSelector(getNotes)
+  const {
+    editingCategory: { id: editingCategoryId, tempName: tempCategoryName },
+  } = useSelector(getCategories)
+  const { notesSortKey } = useSelector(getSettings)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _updateActiveCategoryId = (categoryId: string) =>
+    dispatch(updateActiveCategoryId(categoryId))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _setCategoryEdit = (categoryId: string, tempName: string) =>
+    dispatch(setCategoryEdit({ id: categoryId, tempName }))
+  const _addCategoryToNote = (categoryId: string, noteId: string) =>
+    dispatch(addCategoryToNote({ categoryId, noteId }))
+  const _categoryDragEnter = (category: CategoryItem) => dispatch(categoryDragEnter(category))
+  const _categoryDragLeave = (category: CategoryItem) => dispatch(categoryDragLeave(category))
+
+  return (
+    <Draggable draggableId={category.id} index={index}>
+      {(draggableProvided, snapshot) => (
+        <div
+          {...draggableProvided.dragHandleProps}
+          {...draggableProvided.draggableProps}
+          ref={draggableProvided.innerRef}
+          data-testid={TestID.CATEGORY_LIST_DIV}
+          className={determineCategoryClass(category, snapshot.isDragging, activeCategoryId)}
+          onClick={() => {
+            const notesForNewCategory = notes
+              .filter((note) => !note.trash && note.category === category.id)
+              .sort(getNotesSorter(notesSortKey))
+
+            const defaultActiveNoteId =
+              notesForNewCategory.length > 0 ? notesForNewCategory[0].id : ''
+
+            if (category.id !== activeCategoryId) {
+              _updateActiveCategoryId(category.id)
+              _updateActiveNote(defaultActiveNoteId, false)
+              _updateSelectedNotes(defaultActiveNoteId, false)
+            }
+          }}
+          onDoubleClick={() => {
+            _setCategoryEdit(category.id, category.name)
+          }}
+          onBlur={() => {
+            _setCategoryEdit('', '')
+          }}
+          onDrop={(event) => {
+            event.preventDefault()
+
+            _addCategoryToNote(category.id, event.dataTransfer.getData('text'))
+            _categoryDragLeave(category)
+          }}
+          onDragOver={(event: ReactDragEvent) => event.preventDefault()}
+          onDragEnter={() => _categoryDragEnter(category)}
+          onDragLeave={() => _categoryDragLeave(category)}
+          onContextMenu={(event) => handleCategoryRightClick(event, category.id)}
+        >
+          <form
+            className="category-list-name"
+            onSubmit={(event) => {
+              event.preventDefault()
+              _setCategoryEdit('', '')
+              onSubmitUpdateCategory(event)
+
+              if (optionsId) setOptionsId('')
+            }}
+          >
+            <FolderIcon size={15} className="app-sidebar-icon" color={iconColor} />
+            {editingCategoryId === category.id ? (
+              <input
+                data-testid={TestID.CATEGORY_EDIT}
+                className="category-edit"
+                type="text"
+                autoFocus
+                maxLength={20}
+                value={tempCategoryName}
+                onChange={(event) => {
+                  _setCategoryEdit(editingCategoryId, event.target.value)
+                }}
+                onBlur={(event) => onSubmitUpdateCategory(event)}
+              />
+            ) : (
+              category.name
+            )}
+          </form>
+          <div
+            data-testid={TestID.MOVE_CATEGORY}
+            className={optionsId === category.id ? 'category-options active' : 'category-options'}
+            onClick={(event) => handleCategoryMenuClick(event, category.id)}
+          >
+            <MoreHorizontal size={15} className="context-menu-action" />
+          </div>
+          {optionsId === category.id && (
+            <ContextMenu
+              contextMenuRef={contextMenuRef}
+              item={category}
+              optionsPosition={optionsPosition}
+              setOptionsId={setOptionsId}
+              type={ContextMenuEnum.CATEGORY}
+            />
+          )}
+        </div>
+      )}
+    </Draggable>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### TakeNoteApp (`src/client/containers/TakeNoteApp.tsx`)
+
+
+```tsx
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
+import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import SplitPane from 'react-split-pane'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+
+import { AppSidebar } from '@/containers/AppSidebar'
+import { KeyboardShortcuts } from '@/containers/KeyboardShortcuts'
+import { NoteEditor } from '@/containers/NoteEditor'
+import { NoteList } from '@/containers/NoteList'
+import { SettingsModal } from '@/containers/SettingsModal'
+import { TempStateProvider } from '@/contexts/TempStateContext'
+import { useInterval, useBeforeUnload } from '@/utils/hooks'
+import {
+  getWebsiteTitle,
+  determineAppClass,
+  getActiveCategory,
+  getDayJsLocale,
+  getNoteBarConf,
+} from '@/utils/helpers'
+import { loadCategories, swapCategories } from '@/slices/category'
+import { sync } from '@/slices/sync'
+import { NoteItem, CategoryItem } from '@/types'
+import { loadNotes } from '@/slices/note'
+import { loadSettings } from '@/slices/settings'
+import { getSettings, getNotes, getCategories, getSync } from '@/selectors'
+
+dayjs.extend(localizedFormat)
+dayjs.locale(getDayJsLocale(navigator.language))
+
+export const TakeNoteApp: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { darkTheme, sidebarVisible } = useSelector(getSettings)
+  const { activeFolder, activeCategoryId, notes } = useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+  const { pendingSync } = useSelector(getSync)
+
+  const activeCategory = getActiveCategory(categories, activeCategoryId)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _loadNotes = () => dispatch(loadNotes())
+  const _loadCategories = () => dispatch(loadCategories())
+  const _loadSettings = () => dispatch(loadSettings())
+  const _swapCategories = (categoryId: number, destinationId: number) =>
+    dispatch(swapCategories({ categoryId, destinationId }))
+  const _sync = (notes: NoteItem[], categories: CategoryItem[]) =>
+    dispatch(sync({ notes, categories }))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result
+
+    if (!destination) return
+
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return
+
+    if (result.type === 'CATEGORY') {
+      _swapCategories(source.index, destination.index)
+    }
+  }
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    _loadNotes()
+    _loadCategories()
+    _loadSettings()
+  }, [])
+
+  useInterval(() => {
+    _sync(notes, categories)
+  }, 50000)
+
+  useBeforeUnload((event: BeforeUnloadEvent) => (pendingSync ? event.preventDefault() : null))
+
+  return (
+    <HelmetProvider>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{getWebsiteTitle(activeFolder, activeCategory)}</title>
+        <link rel="canonical" href="https://takenote.dev" />
+      </Helmet>
+
+      <TempStateProvider>
+        <div className={determineAppClass(darkTheme, sidebarVisible, activeFolder)}>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <SplitPane split="vertical" minSize={150} maxSize={500} defaultSize={240}>
+              <AppSidebar />
+              <SplitPane split="vertical" {...getNoteBarConf(activeFolder)}>
+                <NoteList />
+                <NoteEditor />
+              </SplitPane>
+            </SplitPane>
+          </DragDropContext>
+          <KeyboardShortcuts />
+          <SettingsModal />
+        </div>
+      </TempStateProvider>
+    </HelmetProvider>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### ContextMenuOption (`src/client/components/NoteList/ContextMenuOption.tsx`)
+
+
+```tsx
+import React, { KeyboardEventHandler, MouseEventHandler, useContext } from 'react'
+import { Icon } from 'react-feather'
+
+import { MenuUtilitiesContext } from '@/containers/ContextMenu'
+
+export interface ContextMenuOptionProps {
+  dataTestID: string
+  handler: MouseEventHandler & KeyboardEventHandler
+  icon: Icon
+  text: string
+  optionType?: string
+}
+
+export const ContextMenuOption: React.FC<ContextMenuOptionProps> = ({
+  dataTestID,
+  handler,
+  optionType,
+  icon: IconCmp,
+  text,
+  ...rest
+}) => {
+  // ===========================================================================
+  // Context
+  // ===========================================================================
+
+  const { setOptionsId } = useContext(MenuUtilitiesContext)
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const optionHandler: MouseEventHandler & KeyboardEventHandler = (
+    event: React.MouseEvent<Element, MouseEvent> & React.KeyboardEvent<Element>
+  ) => {
+    handler(event)
+    setOptionsId('')
+  }
+
+  return (
+    <div
+      data-testid={dataTestID}
+      className={optionType === 'delete' ? 'nav-item delete-option' : 'nav-item'}
+      role="button"
+      onClick={optionHandler}
+      onKeyPress={optionHandler}
+      tabIndex={0}
+      {...rest}
+    >
+      <IconCmp className="nav-item-icon" size={18} />
+      {text}
+    </div>
+  )
+}
+
+```
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

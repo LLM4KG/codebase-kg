@@ -1,0 +1,15 @@
+{
+  "task_id": "P3",
+  "candidate_id": "P3__bm25__n4",
+  "condition": "bm25",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 46770.87208100056,
+  "timeout_used_ms": 174803,
+  "stage_detail": null,
+  "apply_mode": "exact_unique",
+  "apply_reason": null
+}

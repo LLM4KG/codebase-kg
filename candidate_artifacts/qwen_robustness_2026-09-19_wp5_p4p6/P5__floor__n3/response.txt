@@ -1,0 +1,165 @@
+```text
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+import React from 'react';
+import { useCart } from '../../hooks/useCart';
+import { Product } from '../../types';
+
+interface CartProductProps {
+  product: Product;
+  quantity: number;
+}
+
+export const CartProduct: React.FC<CartProductProps> = ({ product, quantity }) => {
+  const { removeProduct, updateQuantity } = useCart();
+
+  const handleRemove = () => {
+    removeProduct(product.id);
+  };
+
+  const handleIncrease = () => {
+    updateQuantity(product.id, quantity + 1);
+  };
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      updateQuantity(product.id, quantity - 1);
+    } else {
+      removeProduct(product.id);
+    }
+  };
+
+  return (
+    <div className="cart-product">
+      <h3>{product.name}</h3>
+      <p>Price: ${product.price}</p>
+      <p>Quantity: {quantity}</p>
+      <button onClick={handleDecrease}>-</button>
+      <button onClick={handleIncrease}>+</button>
+      <button onClick={handleRemove}>Remove</button>
+    </div>
+  );
+};
+=======
+import React from 'react';
+import { Product } from '../../types';
+
+interface CartProductProps {
+  product: Product;
+  quantity: number;
+  onRemove: (product: Product) => void;
+  onIncrease: (product: Product) => void;
+  onDecrease: (product: Product) => void;
+}
+
+export const CartProduct: React.FC<CartProductProps> = ({ 
+  product, 
+  quantity,
+  onRemove,
+  onIncrease,
+  onDecrease
+}) => {
+  const handleRemove = () => {
+    onRemove(product);
+  };
+
+  const handleIncrease = () => {
+    onIncrease(product);
+  };
+
+  const handleDecrease = () => {
+    onDecrease(product);
+  };
+
+  return (
+    <div className="cart-product">
+      <h3>{product.name}</h3>
+      <p>Price: ${product.price}</p>
+      <p>Quantity: {quantity}</p>
+      <button onClick={handleDecrease}>-</button>
+      <button onClick={handleIncrease}>+</button>
+      <button onClick={handleRemove}>Remove</button>
+    </div>
+  );
+};
+>>>>>>> REPLACE
+```
+
+```text
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+import React from 'react';
+import { useCart } from '../../hooks/useCart';
+import { CartProduct } from './CartProduct';
+
+export const CartProducts: React.FC = () => {
+  const { cartItems } = useCart();
+
+  if (cartItems.length === 0) {
+    return <p>Your cart is empty</p>;
+  }
+
+  return (
+    <div className="cart-products">
+      {cartItems.map((item) => (
+        <CartProduct 
+          key={item.product.id} 
+          product={item.product} 
+          quantity={item.quantity} 
+        />
+      ))}
+    </div>
+  );
+};
+=======
+import React from 'react';
+import { useCart } from '../../hooks/useCart';
+import { CartProduct } from './CartProduct';
+import { Product } from '../../types';
+
+export const CartProducts: React.FC = () => {
+  const { cartItems, removeProduct, updateQuantity } = useCart();
+
+  if (cartItems.length === 0) {
+    return <p>Your cart is empty</p>;
+  }
+
+  const handleRemove = (product: Product) => {
+    removeProduct(product.id);
+  };
+
+  const handleIncrease = (product: Product) => {
+    const item = cartItems.find(item => item.product.id === product.id);
+    if (item) {
+      updateQuantity(product.id, item.quantity + 1);
+    }
+  };
+
+  const handleDecrease = (product: Product) => {
+    const item = cartItems.find(item => item.product.id === product.id);
+    if (item) {
+      if (item.quantity > 1) {
+        updateQuantity(product.id, item.quantity - 1);
+      } else {
+        removeProduct(product.id);
+      }
+    }
+  };
+
+  return (
+    <div className="cart-products">
+      {cartItems.map((item) => (
+        <CartProduct 
+          key={item.product.id} 
+          product={item.product} 
+          quantity={item.quantity} 
+          onRemove={handleRemove}
+          onIncrease={handleIncrease}
+          onDecrease={handleDecrease}
+        />
+      ))}
+    </div>
+  );
+};
+>>>>>>> REPLACE
+```

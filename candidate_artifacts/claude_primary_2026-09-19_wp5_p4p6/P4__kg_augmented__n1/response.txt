@@ -1,0 +1,166 @@
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+=======
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearProducts,
+  } = useCartProducts();
+  const { total, updateCartTotal, resetCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  const clearCart = () => {
+    clearProducts();
+    resetCartTotal();
+  };
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+=======
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+=======
+            <S.ClearCartButton onClick={clearCart}>
+              Clear cart
+            </S.ClearCartButton>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+>>>>>>> REPLACE
+```
+
+Now I need to add `clearProducts` to `useCartProducts` and `resetCartTotal` to `useCartTotal`, and add the styled `ClearCartButton`. Let me check what's available and add the necessary pieces.
+
+```text
+src/contexts/cart-context/useCartProducts.tsx
+<<<<<<< SEARCH
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+=======
+  const clearProducts = () => {
+    setProducts([]);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearProducts,
+  };
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCartTotal.tsx
+<<<<<<< SEARCH
+  return { total, updateCartTotal };
+=======
+  const resetCartTotal = () =>
+    setTotal({
+      productQuantity: 0,
+      installments: 0,
+      totalPrice: 0,
+      currencyId: 'USD',
+      currencyFormat: '$',
+    });
+
+  return { total, updateCartTotal, resetCartTotal };
+>>>>>>> REPLACE
+
+src/components/Cart/style.ts
+<<<<<<< SEARCH
+export const CheckoutButton
+=======
+export const ClearCartButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors?.secondary ?? '#999'};
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  padding: 0;
+  text-decoration: underline;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors?.primary ?? '#333'};
+  }
+`;
+
+export const CheckoutButton
+>>>>>>> REPLACE
+```

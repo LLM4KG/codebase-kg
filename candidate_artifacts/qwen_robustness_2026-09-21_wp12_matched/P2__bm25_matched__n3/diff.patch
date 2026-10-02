@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "      state.notes = state.notes.map((note) =>\n        selectedIds.includes(note.id) ? { ...note, trash: true } : note\n      )\n",
+      "content": "      state.notes = state.notes.map((note) =>\n        selectedIds.includes(note.id) ? { ...note, trash: true } : note\n      )\n    },\n    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) =>\n        note.trash ? { ...note, trash: false } : note\n      )\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 1
+}

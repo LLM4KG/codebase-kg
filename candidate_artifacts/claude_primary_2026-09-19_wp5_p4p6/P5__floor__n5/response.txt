@@ -1,0 +1,94 @@
+I need to see the existing code to make precise changes. Let me analyze what's needed based on the task description and make the refactoring.
+
+```text
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+import { useCart } from '../../hooks/useCart';
+
+=======
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+interface CartProductProps {
+  product: ICartProduct;
+}
+=======
+interface CartProductProps {
+  product: ICartProduct;
+  onRemove: (product: ICartProduct) => void;
+  onIncrease: (product: ICartProduct) => void;
+  onDecrease: (product: ICartProduct) => void;
+}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+const CartProduct = ({ product }: CartProductProps) => {
+  const { removeFromCart, increaseProductQuantity, decreaseProductQuantity } =
+    useCart();
+=======
+const CartProduct = ({
+  product,
+  onRemove,
+  onIncrease,
+  onDecrease,
+}: CartProductProps) => {
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => removeFromCart(product)}
+=======
+      onClick={() => onRemove(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => decreaseProductQuantity(product)}
+=======
+      onClick={() => onDecrease(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+      onClick={() => increaseProductQuantity(product)}
+=======
+      onClick={() => onIncrease(product)}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+import CartProduct from './CartProduct';
+=======
+import { useCart } from '../../hooks/useCart';
+import CartProduct from './CartProduct';
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+const CartProducts = () => {
+  const { cart } = useCart();
+=======
+const CartProducts = () => {
+  const { cart, removeFromCart, increaseProductQuantity, decreaseProductQuantity } =
+    useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+      {cart.map((cartProduct) => (
+        <CartProduct key={cartProduct.id} product={cartProduct} />
+      ))}
+=======
+      {cart.map((cartProduct) => (
+        <CartProduct
+          key={cartProduct.id}
+          product={cartProduct}
+          onRemove={removeFromCart}
+          onIncrease={increaseProductQuantity}
+          onDecrease={decreaseProductQuantity}
+        />
+      ))}
+>>>>>>> REPLACE
+```

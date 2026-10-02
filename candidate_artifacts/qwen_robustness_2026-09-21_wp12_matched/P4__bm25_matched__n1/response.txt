@@ -1,0 +1,115 @@
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+=======
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearProducts,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+  const clearCart = () => {
+    clearProducts();
+    updateCartTotal();
+  };
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    clearCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+          <S.CartFooter>
+            <S.Sub>SUBTOTAL</S.Sub>
+            <S.SubPrice>
+=======
+          <S.CartFooter>
+            <S.ClearCartButton onClick={clearCart}>Clear cart</S.ClearCartButton>
+            <S.Sub>SUBTOTAL</S.Sub>
+            <S.SubPrice>
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+import formatPrice from 'utils/formatPrice';
+import CartProducts from './CartProducts';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+=======
+import formatPrice from 'utils/formatPrice';
+import CartProducts from './CartProducts';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+>>>>>>> REPLACE
+```

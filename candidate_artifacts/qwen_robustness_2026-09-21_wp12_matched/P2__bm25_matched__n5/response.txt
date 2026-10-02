@@ -1,0 +1,252 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = [...state.notes, payload]
+    },
+    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload.id ? { ...payload, lastUpdated: dayjs().format() } : note
+      )
+    },
+    deleteNotes: (state, { payload }: PayloadAction<string[]>) => {
+      state.notes = state.notes.filter((note) => !payload.includes(note.id))
+    },
+    assignFavoriteToNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, favorite: true } : note
+      )
+    },
+    unassignFavoriteFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, favorite: false } : note
+      )
+    },
+    assignTrashToNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, trash: true } : note
+      )
+    },
+    unassignTrashFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, trash: false } : note
+      )
+    },
+    assignCategoryToNotes: (state, { payload }: PayloadAction<{ categoryId: string; noteId: string }>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload.noteId ? { ...note, category: payload.categoryId } : note
+      )
+    },
+    unassignCategoryFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, category: '' } : note
+      )
+    },
+    updateActiveNote: (state, { payload }: PayloadAction<{ noteId: string; multiSelect: boolean }>) => {
+      state.activeNoteId = payload.noteId
+      state.selectedNotes = payload.multiSelect
+        ? [...state.selectedNotes, payload.noteId]
+        : [payload.noteId]
+    },
+    updateSelectedNotes: (state, { payload }: PayloadAction<{ noteId: string; multiSelect: boolean }>) => {
+      state.selectedNotes = payload.multiSelect
+        ? [...state.selectedNotes, payload.noteId]
+        : [payload.noteId]
+    },
+    swapFolder: (state, { payload }: PayloadAction<{ folder: Folder; sortOrderKey: NotesSortKey }>) => {
+      state.activeFolder = payload.folder
+      state.activeCategoryId = ''
+      state.activeNoteId = ''
+      state.selectedNotes = []
+    },
+    setSearch: (state, { payload }: PayloadAction<string>) => {
+      state.searchValue = payload
+    },
+  },
+})
+=======
+export const noteSlice = createSlice({
+  name: '@@app/note',
+  initialState,
+  reducers: {
+    addNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = [...state.notes, payload]
+    },
+    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload.id ? { ...payload, lastUpdated: dayjs().format() } : note
+      )
+    },
+    deleteNotes: (state, { payload }: PayloadAction<string[]>) => {
+      state.notes = state.notes.filter((note) => !payload.includes(note.id))
+    },
+    assignFavoriteToNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, favorite: true } : note
+      )
+    },
+    unassignFavoriteFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, favorite: false } : note
+      )
+    },
+    assignTrashToNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, trash: true } : note
+      )
+    },
+    unassignTrashFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, trash: false } : note
+      )
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+    assignCategoryToNotes: (state, { payload }: PayloadAction<{ categoryId: string; noteId: string }>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload.noteId ? { ...note, category: payload.categoryId } : note
+      )
+    },
+    unassignCategoryFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload ? { ...note, category: '' } : note
+      )
+    },
+    updateActiveNote: (state, { payload }: PayloadAction<{ noteId: string; multiSelect: boolean }>) => {
+      state.activeNoteId = payload.noteId
+      state.selectedNotes = payload.multiSelect
+        ? [...state.selectedNotes, payload.noteId]
+        : [payload.noteId]
+    },
+    updateSelectedNotes: (state, { payload }: PayloadAction<{ noteId: string; multiSelect: boolean }>) => {
+      state.selectedNotes = payload.multiSelect
+        ? [...state.selectedNotes, payload.noteId]
+        : [payload.noteId]
+    },
+    swapFolder: (state, { payload }: PayloadAction<{ folder: Folder; sortOrderKey: NotesSortKey }>) => {
+      state.activeFolder = payload.folder
+      state.activeCategoryId = ''
+      state.activeNoteId = ''
+      state.selectedNotes = []
+    },
+    setSearch: (state, { payload }: PayloadAction<string>) => {
+      state.searchValue = payload
+    },
+  },
+})
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Archive, CheckCircle, File, Search, Trash2 } from 'react-feather'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { NoteListitem } from '@/components/NoteList/NoteListItem'
+import { SearchBar } from '@/components/NoteList/SearchBar'
+import { SortOption } from '@/components/NoteList/SortOption'
+import { EmptyTrashButton } from '@/components/NoteList/EmptyTrashButton'
+import { NoteItem } from '@/types'
+import {
+  addNote,
+  assignFavoriteToNotes,
+  assignTrashToNotes,
+  swapFolder,
+  unassignFavoriteFromNotes,
+  unassignTrashFromNotes,
+  updateActiveNote,
+  updateSelectedNotes,
+} from '@/slices/note'
+import { getNotes, getCategories, getSettings } from '@/selectors'
+import { newNoteHandlerHelper, getActiveNote } from '@/utils/helpers'
+import { AppSidebar } from './AppSidebar'
+import { NoteEditor } from './NoteEditor'
+=======
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Archive, CheckCircle, File, Search, Trash2 } from 'react-feather'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { NoteListitem } from '@/components/NoteList/NoteListItem'
+import { SearchBar } from '@/components/NoteList/SearchBar'
+import { SortOption } from '@/components/NoteList/SortOption'
+import { EmptyTrashButton } from '@/components/NoteList/EmptyTrashButton'
+import { RestoreAllButton } from '@/components/NoteList/RestoreAllButton'
+import { NoteItem } from '@/types'
+import {
+  addNote,
+  assignFavoriteToNotes,
+  assignTrashToNotes,
+  swapFolder,
+  unassignFavoriteFromNotes,
+  unassignTrashFromNotes,
+  updateActiveNote,
+  updateSelectedNotes,
+  restoreAllTrash,
+} from '@/slices/note'
+import { getNotes, getCategories, getSettings } from '@/selectors'
+import { newNoteHandlerHelper, getActiveNote } from '@/utils/helpers'
+import { AppSidebar } from './AppSidebar'
+import { NoteEditor } from './NoteEditor'
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _assignTrashToNotes = (noteId: string) => dispatch(assignTrashToNotes(noteId))
+  const _unassignTrashFromNotes = (noteId: string) => dispatch(unassignTrashFromNotes(noteId))
+  const _assignFavoriteToNotes = (noteId: string) => dispatch(assignFavoriteToNotes(noteId))
+  const _unassignFavoriteFromNotes = (noteId: string) => dispatch(unassignFavoriteFromNotes(noteId))
+  const _swapFolder = (sortOrderKey: NotesSortKey) => (folder: Folder) =>
+    dispatch(swapFolder({ folder, sortOrderKey }))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+=======
+  const _assignTrashToNotes = (noteId: string) => dispatch(assignTrashToNotes(noteId))
+  const _unassignTrashFromNotes = (noteId: string) => dispatch(unassignTrashFromNotes(noteId))
+  const _assignFavoriteToNotes = (noteId: string) => dispatch(assignFavoriteToNotes(noteId))
+  const _unassignFavoriteFromNotes = (noteId: string) => dispatch(unassignFavoriteFromNotes(noteId))
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+  const _swapFolder = (sortOrderKey: NotesSortKey) => (folder: Folder) =>
+    dispatch(swapFolder({ folder, sortOrderKey }))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          <EmptyTrashButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            handler={deleteAllNotesHandler}
+          />
+        )}
+      </div>
+      <ul className="note-list" data-testid={TestID.NOTE_LIST}>
+=======
+          <EmptyTrashButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            handler={deleteAllNotesHandler}
+          />
+          <RestoreAllButton
+            handler={_restoreAllTrash}
+          />
+        )}
+      </div>
+      <ul className="note-list" data-testid={TestID.NOTE_LIST}>
+>>>>>>> REPLACE
+```

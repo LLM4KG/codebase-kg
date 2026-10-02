@@ -1,0 +1,25 @@
+{
+  "candidate_id": "P2__kg_augmented__n2",
+  "run_id": "qwen_robustness_2026-09-18_p2_hooksrc",
+  "run_name": "qwen_robustness",
+  "task_id": "P2",
+  "project_name": "takenote",
+  "condition": "kg_augmented",
+  "index": 2,
+  "model_id": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "timestamp": "2026-09-18T13:03:57.270851+00:00",
+  "retrieval_token_count": 1552,
+  "generator_usage": {
+    "input_tokens": 3449,
+    "output_tokens": 693
+  },
+  "generator_latency_ms": 9284.785756004567,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": null,
+  "apply_reason": "search_not_found",
+  "edit_count": 5,
+  "malformed_blocks": 0,
+  "elided": false
+}

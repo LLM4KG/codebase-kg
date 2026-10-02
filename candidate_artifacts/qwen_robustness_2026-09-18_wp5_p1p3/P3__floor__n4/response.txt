@@ -1,0 +1,117 @@
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+
+=======
+import { useState, useCallback } from 'react';
+
+interface UseCopyToClipboardProps {
+  successMessage?: string;
+  timeout?: number;
+}
+
+interface UseCopyToClipboardReturn {
+  copiedText: string;
+  handleCopy: (text: string) => Promise<boolean>;
+}
+
+export const useCopyToClipboard = ({
+  successMessage = 'Copied!',
+  timeout = 3000,
+}: UseCopyToClipboardProps = {}): UseCopyToClipboardReturn => {
+  const [copiedText, setCopiedText] = useState('');
+
+  const handleCopy = useCallback(
+    async (text: string): Promise<boolean> => {
+      try {
+        await navigator.clipboard.writeText(text);
+        setCopiedText(successMessage);
+        
+        setTimeout(() => {
+          setCopiedText('');
+        }, timeout);
+        
+        return true;
+      } catch (error) {
+        setCopiedText('');
+        return false;
+      }
+    },
+    [successMessage, timeout]
+  );
+
+  return { copiedText, handleCopy };
+};
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useState, useEffect, useCallback } from 'react';
+=======
+import React, { useCallback } from 'react';
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { useNoteEditorContext } from '../../contexts/NoteEditorContext';
+import { copyToClipboard } from '../../utils/copyToClipboard';
+import { Button } from '../Button';
+import { Icon } from '../Icon';
+=======
+import { useNoteEditorContext } from '../../contexts/NoteEditorContext';
+import { copyToClipboard } from '../../utils/copyToClipboard';
+import { Button } from '../Button';
+import { Icon } from '../Icon';
+import { useCopyToClipboard } from '../../utils/useCopyToClipboard';
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copiedText, setCopiedText] = useState('');
+  const { note } = useNoteEditorContext();
+  
+  useEffect(() => {
+    if (!copiedText) return;
+    
+    const timer = setTimeout(() => {
+      setCopiedText('');
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, [copiedText]);
+  
+  const handleCopyNote = useCallback(async () => {
+    if (!note) return;
+    
+    try {
+      await copyToClipboard(note.content);
+      setCopiedText('Note copied!');
+    } catch (error) {
+      console.error('Failed to copy note:', error);
+      setCopiedText('');
+    }
+  }, [note]);
+=======
+  const { copiedText, handleCopy } = useCopyToClipboard({ 
+    successMessage: 'Note copied!', 
+    timeout: 3000 
+  });
+  const { note } = useNoteEditorContext();
+  
+  const handleCopyNote = useCallback(async () => {
+    if (!note) return;
+    
+    try {
+      await handleCopy(note.content);
+    } catch (error) {
+      console.error('Failed to copy note:', error);
+    }
+  }, [note, handleCopy]);
+>>>>>>> REPLACE
+```

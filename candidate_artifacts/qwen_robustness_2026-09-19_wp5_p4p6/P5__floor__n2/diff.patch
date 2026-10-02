@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart'\nimport { Product } from '../../types'\n\ninterface CartProductProps {\n  product: Product\n}\n\nexport function CartProduct({ product }: CartProductProps) {\n  const { removeFromCart, updateQuantity } = useCart()\n\n  const handleRemove = () => {\n    removeFromCart(product.id)\n  }\n\n  const handleIncrease = () => {\n    updateQuantity(product.id, product.quantity + 1)\n  }\n\n  const handleDecrease = () => {\n    if (product.quantity > 1) {\n      updateQuantity(product.id, product.quantity - 1)\n    } else {\n      removeFromCart(product.id)\n    }\n  }\n\n  return (\n    <div className=\"cart-product\">\n      <img src={product.image} alt={product.name} />\n      <div className=\"product-info\">\n        <h3>{product.name}</h3>\n        <p>${product.price}</p>\n      </div>\n      <div className=\"quantity-controls\">\n        <button onClick={handleDecrease}>-</button>\n        <span>{product.quantity}</span>\n        <button onClick={handleIncrease}>+</button>\n      </div>\n      <button onClick={handleRemove}>Remove</button>\n    </div>\n  )\n}\n",
+      "content": "import { Product } from '../../types'\n\ninterface CartProductProps {\n  product: Product\n  onRemove: (product: Product) => void\n  onIncrease: (product: Product) => void\n  onDecrease: (product: Product) => void\n}\n\nexport function CartProduct({ product, onRemove, onIncrease, onDecrease }: CartProductProps) {\n  return (\n    <div className=\"cart-product\">\n      <img src={product.image} alt={product.name} />\n      <div className=\"product-info\">\n        <h3>{product.name}</h3>\n        <p>${product.price}</p>\n      </div>\n      <div className=\"quantity-controls\">\n        <button onClick={() => onDecrease(product)}>-</button>\n        <span>{product.quantity}</span>\n        <button onClick={() => onIncrease(product)}>+</button>\n      </div>\n      <button onClick={() => onRemove(product)}>Remove</button>\n    </div>\n  )\n}\n"
+    },
+    {
+      "path": "src/components/Cart/CartProducts.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart'\nimport { CartProduct } from './CartProduct'\n\nexport function CartProducts() {\n  const { cartItems } = useCart()\n\n  if (cartItems.length === 0) {\n    return <p>Your cart is empty</p>\n  }\n\n  return (\n    <div className=\"cart-products\">\n      {cartItems.map(item => (\n        <CartProduct key={item.id} product={item} />\n      ))}\n    </div>\n  )\n}\n",
+      "content": "import { useCart } from '../../hooks/useCart'\nimport { CartProduct } from './CartProduct'\n\nexport function CartProducts() {\n  const { cartItems, removeFromCart, updateQuantity } = useCart()\n\n  if (cartItems.length === 0) {\n    return <p>Your cart is empty</p>\n  }\n\n  const handleRemove = (product: any) => {\n    removeFromCart(product.id)\n  }\n\n  const handleIncrease = (product: any) => {\n    updateQuantity(product.id, product.quantity + 1)\n  }\n\n  const handleDecrease = (product: any) => {\n    if (product.quantity > 1) {\n      updateQuantity(product.id, product.quantity - 1)\n    } else {\n      removeFromCart(product.id)\n    }\n  }\n\n  return (\n    <div className=\"cart-products\">\n      {cartItems.map(item => (\n        <CartProduct \n          key={item.id} \n          product={item} \n          onRemove={handleRemove}\n          onIncrease={handleIncrease}\n          onDecrease={handleDecrease}\n        />\n      ))}\n    </div>\n  )\n}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,26 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/contexts/cart-context/useCartProducts.ts",
+      "op": "replace",
+      "search": "  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  };\n};\n\n",
+      "content": "  };\n\n  const clearCart = () => {\n    setProducts([]);\n    updateCartTotal([]);\n  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n  };\n};\n\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n};\n\n",
+      "content": "  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n    total,\n    updateCartTotal,\n  };\n};\n\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "            </S.SubPrice>\n            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n          </S.CartFooter>\n        </S.CartContent>\n      )}\n",
+      "content": "            </S.SubPrice>\n            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n            {total.productQuantity > 0 && (\n              <S.ClearCartButton onClick={clearCart}>\n                Clear cart\n              </S.ClearCartButton>\n            )}\n          </S.CartFooter>\n        </S.CartContent>\n      )}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,115 @@
+```text
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+=======
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const clearCart = () => {
+    setProducts([]);
+    updateCartTotal([]);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  };
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+=======
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  } = useCartProducts();
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+=======
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+=======
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+=======
+            <S.CheckoutButton onClick={clearCart}>
+              Clear cart
+            </S.CheckoutButton>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+>>>>>>> REPLACE
+```

@@ -1,0 +1,34 @@
+Looking at the issue, I need to fix the `decreaseProductQuantity` function in `useCartProducts.ts` so that when a product's quantity would drop to zero or below, the product is removed from the cart entirely instead of remaining with quantity 0.
+
+Let me examine the current implementation:
+
+1. The `decreaseProductQuantity` function currently just decreases the quantity by 1 using `updateQuantitySafely`
+2. The `updateQuantitySafely` function doesn't handle the case where quantity would become 0 or negative
+3. We need to modify `decreaseProductQuantity` to remove products when their quantity would become <= 0
+
+Here's my fix:
+
+```text
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+=======
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products
+      .map((product: ICartProduct) => {
+        return updateQuantitySafely(product, productToDecrease, -1);
+      })
+      .filter((product: ICartProduct) => product.quantity > 0);
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+>>>>>>> REPLACE
+```

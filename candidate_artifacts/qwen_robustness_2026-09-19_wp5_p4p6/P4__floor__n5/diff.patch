@@ -1,0 +1,26 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/hooks/useCart.ts",
+      "op": "replace",
+      "search": "  const removeFromCart = (productId: number) => {\n    setCartItems((prevItems) =>\n      prevItems.filter((item) => item.product.id !== productId)\n    );\n    recalculateTotals();\n  };\n\n  return {\n    cartItems,\n    addToCart,\n    removeFromCart,\n    subtotal,\n    tax,\n    shipping,\n    total,\n  };\n",
+      "content": "  const removeFromCart = (productId: number) => {\n    setCartItems((prevItems) =>\n      prevItems.filter((item) => item.product.id !== productId)\n    );\n    recalculateTotals();\n  };\n\n  const clearCart = () => {\n    setCartItems([]);\n    setSubtotal(0);\n    setTax(0);\n    setShipping(0);\n    setTotal(0);\n  };\n\n  return {\n    cartItems,\n    addToCart,\n    removeFromCart,\n    clearCart,\n    subtotal,\n    tax,\n    shipping,\n    total,\n  };\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart';\nimport { CartItem } from './CartItem';\nimport { CartSummary } from './CartSummary';\nimport styles from './Cart.module.css';\n\nexport const Cart = () => {\n  const { cartItems, removeFromCart, subtotal, tax, shipping, total } =\n    useCart();\n\n  return (\n",
+      "content": "import { useCart } from '../../hooks/useCart';\nimport { CartItem } from './CartItem';\nimport { CartSummary } from './CartSummary';\nimport styles from './Cart.module.css';\n\nexport const Cart = () => {\n  const { cartItems, removeFromCart, clearCart, subtotal, tax, shipping, total } =\n    useCart();\n\n  return (\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "        <div className={styles.cartFooter}>\n          <CartSummary\n            subtotal={subtotal}\n            tax={tax}\n            shipping={shipping}\n            total={total}\n          />\n        </div>\n      )}\n    </div>\n  );\n};\n",
+      "content": "        <div className={styles.cartFooter}>\n          <CartSummary\n            subtotal={subtotal}\n            tax={tax}\n            shipping={shipping}\n            total={total}\n          />\n          <button className={styles.clearCartButton} onClick={clearCart}>\n            Clear cart\n          </button>\n        </div>\n      )}\n    </div>\n  );\n};\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

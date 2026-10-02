@@ -1,0 +1,126 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) => (note.trash ? { ...note, trash: false } : note))
+    },
+>>>>>>> REPLACE
+
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const {
+  addNote,
+  updateNote,
+  updateNotes,
+  deleteNotes,
+  addCategoryToNote,
+  removeCategoryFromNotes,
+  updateActiveNote,
+  updateActiveCategoryId,
+  swapFolder,
+  assignFavoriteToNotes,
+  toggleFavoriteNotes,
+  assignTrashToNotes,
+  toggleTrashNotes,
+  unassignTrashFromNotes,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+  loadNotesError,
+  loadNotesSuccess,
+  importNotes,
+} = noteSlice.actions
+=======
+export const {
+  addNote,
+  updateNote,
+  updateNotes,
+  deleteNotes,
+  addCategoryToNote,
+  removeCategoryFromNotes,
+  updateActiveNote,
+  updateActiveCategoryId,
+  swapFolder,
+  assignFavoriteToNotes,
+  toggleFavoriteNotes,
+  assignTrashToNotes,
+  toggleTrashNotes,
+  unassignTrashFromNotes,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+  loadNotesError,
+  loadNotesSuccess,
+  importNotes,
+} = noteSlice.actions
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+=======
+import {
+  permanentlyEmptyTrash,
+  restoreAllTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+=======
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            label="Empty"
+            handler={() => _permanentlyEmptyTrash()}
+          >
+            Empty Trash
+          </NoteListButton>
+        )}
+=======
+        {showEmptyTrash && (
+          <>
+            <NoteListButton
+              dataTestID={TestID.EMPTY_TRASH_BUTTON}
+              label="Empty Trash"
+              handler={() => _permanentlyEmptyTrash()}
+            />
+            <NoteListButton
+              dataTestID="restore-all-trash-button"
+              label="Restore All"
+              handler={() => _restoreAllTrash()}
+            />
+          </>
+        )}
+>>>>>>> REPLACE
+```

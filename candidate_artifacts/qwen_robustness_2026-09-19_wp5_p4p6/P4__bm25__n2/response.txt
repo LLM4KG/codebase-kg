@@ -1,0 +1,424 @@
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+
+=======
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+  
+  const clearCart = () => {
+    useCartProducts().setProducts([]);
+    useCartTotal().updateCartTotal([]);
+  };
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    clearCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+
+>>>>>>> REPLACE
+```
+
+```text
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+import formatPrice from 'utils/formatPrice';
+import CartProducts from './CartProducts';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+      alert(
+        `Checkout - Subtotal: ${total.currencyFormat} ${formatPrice(
+          total.totalPrice,
+          total.currencyId
+        )}`
+      );
+    } else {
+      alert('Add some product in the cart!');
+    }
+  };
+
+  const handleToggleCart = (isOpen: boolean) => () =>
+    isOpen ? closeCart() : openCart();
+
+  return (
+    <S.Container isOpen={isOpen}>
+      <S.CartButton onClick={handleToggleCart(isOpen)}>
+        {isOpen ? (
+          <span>X</span>
+        ) : (
+          <S.CartIcon>
+            <S.CartQuantity title="Products in cart quantity">
+              {total.productQuantity}
+            </S.CartQuantity>
+          </S.CartIcon>
+        )}
+      </S.CartButton>
+
+      {isOpen && (
+        <S.CartContent>
+          <S.CartContentHeader>
+            <S.CartIcon large>
+              <S.CartQuantity>{total.productQuantity}</S.CartQuantity>
+            </S.CartIcon>
+            <S.HeaderTitle>Cart</S.HeaderTitle>
+          </S.CartContentHeader>
+
+          <CartProducts products={products} />
+
+          <S.CartFooter>
+            <S.Sub>SUBTOTAL</S.Sub>
+            <S.SubPrice>
+              <S.SubPriceValue>{`${total.currencyFormat} ${formatPrice(
+                total.totalPrice,
+                total.currencyId
+              )}`}</S.SubPriceValue>
+              <S.SubPriceInstallment>
+                {total.installments ? (
+                  <span>
+                    {`OR UP TO ${total.installments} x ${
+                      total.currencyFormat
+                    } ${formatPrice(
+                      total.totalPrice / total.installments,
+                      total.currencyId
+                    )}`}
+                  </span>
+                ) : null}
+              </S.SubPriceInstallment>
+            </S.SubPrice>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+    </S.Container>
+  );
+};
+
+export default Cart;
+
+=======
+import formatPrice from 'utils/formatPrice';
+import CartProducts from './CartProducts';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+      alert(
+        `Checkout - Subtotal: ${total.currencyFormat} ${formatPrice(
+          total.totalPrice,
+          total.currencyId
+        )}`
+      );
+    } else {
+      alert('Add some product in the cart!');
+    }
+  };
+
+  const handleToggleCart = (isOpen: boolean) => () =>
+    isOpen ? closeCart() : openCart();
+
+  return (
+    <S.Container isOpen={isOpen}>
+      <S.CartButton onClick={handleToggleCart(isOpen)}>
+        {isOpen ? (
+          <span>X</span>
+        ) : (
+          <S.CartIcon>
+            <S.CartQuantity title="Products in cart quantity">
+              {total.productQuantity}
+            </S.CartQuantity>
+          </S.CartIcon>
+        )}
+      </S.CartButton>
+
+      {isOpen && (
+        <S.CartContent>
+          <S.CartContentHeader>
+            <S.CartIcon large>
+              <S.CartQuantity>{total.productQuantity}</S.CartQuantity>
+            </S.CartIcon>
+            <S.HeaderTitle>Cart</S.HeaderTitle>
+          </S.CartContentHeader>
+
+          <CartProducts products={products} />
+
+          <S.CartFooter>
+            <S.Sub>SUBTOTAL</S.Sub>
+            <S.SubPrice>
+              <S.SubPriceValue>{`${total.currencyFormat} ${formatPrice(
+                total.totalPrice,
+                total.currencyId
+              )}`}</S.SubPriceValue>
+              <S.SubPriceInstallment>
+                {total.installments ? (
+                  <span>
+                    {`OR UP TO ${total.installments} x ${
+                      total.currencyFormat
+                    } ${formatPrice(
+                      total.totalPrice / total.installments,
+                      total.currencyId
+                    )}`}
+                  </span>
+                ) : null}
+              </S.SubPriceInstallment>
+            </S.SubPrice>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+            {products.length > 0 && (
+              <S.CheckoutButton onClick={clearCart}>
+                Clear cart
+              </S.CheckoutButton>
+            )}
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+    </S.Container>
+  );
+};
+
+export default Cart;
+
+>>>>>>> REPLACE
+```
+
+```text
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+import { useCartContext } from './CartContextProvider';
+import useCartTotal from './useCartTotal';
+import { ICartProduct } from 'models';
+
+const useCartProducts = () => {
+  const { products, setProducts } = useCartContext();
+  const { updateCartTotal } = useCartTotal();
+
+  const updateQuantitySafely = (
+    currentProduct: ICartProduct,
+    targetProduct: ICartProduct,
+    quantity: number
+  ): ICartProduct => {
+    if (currentProduct.id === targetProduct.id) {
+      return Object.assign({
+        ...currentProduct,
+        quantity: currentProduct.quantity + quantity,
+      });
+    } else {
+      return currentProduct;
+    }
+  };
+
+  const addProduct = (newProduct: ICartProduct) => {
+    let updatedProducts;
+    const isProductAlreadyInCart = products.some(
+      (product: ICartProduct) => newProduct.id === product.id
+    );
+
+    if (isProductAlreadyInCart) {
+      updatedProducts = products.map((product: ICartProduct) => {
+        return updateQuantitySafely(product, newProduct, newProduct.quantity);
+      });
+    } else {
+      updatedProducts = [...products, newProduct];
+    }
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const removeProduct = (productToRemove: ICartProduct) => {
+    const updatedProducts = products.filter(
+      (product: ICartProduct) => product.id !== productToRemove.id
+    );
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const increaseProductQuantity = (productToIncrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToIncrease, +1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+export default useCartProducts;
+
+=======
+import { useCartContext } from './CartContextProvider';
+import useCartTotal from './useCartTotal';
+import { ICartProduct } from 'models';
+
+const useCartProducts = () => {
+  const { products, setProducts } = useCartContext();
+  const { updateCartTotal } = useCartTotal();
+
+  const updateQuantitySafely = (
+    currentProduct: ICartProduct,
+    targetProduct: ICartProduct,
+    quantity: number
+  ): ICartProduct => {
+    if (currentProduct.id === targetProduct.id) {
+      return Object.assign({
+        ...currentProduct,
+        quantity: currentProduct.quantity + quantity,
+      });
+    } else {
+      return currentProduct;
+    }
+  };
+
+  const addProduct = (newProduct: ICartProduct) => {
+    let updatedProducts;
+    const isProductAlreadyInCart = products.some(
+      (product: ICartProduct) => newProduct.id === product.id
+    );
+
+    if (isProductAlreadyInCart) {
+      updatedProducts = products.map((product: ICartProduct) => {
+        return updateQuantitySafely(product, newProduct, newProduct.quantity);
+      });
+    } else {
+      updatedProducts = [...products, newProduct];
+    }
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const removeProduct = (productToRemove: ICartProduct) => {
+    const updatedProducts = products.filter(
+      (product: ICartProduct) => product.id !== productToRemove.id
+    );
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const increaseProductQuantity = (productToIncrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToIncrease, +1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    setProducts,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+export default useCartProducts;
+
+>>>>>>> REPLACE
+```

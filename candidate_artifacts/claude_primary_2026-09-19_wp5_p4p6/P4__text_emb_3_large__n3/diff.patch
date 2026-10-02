@@ -1,0 +1,44 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/contexts/cart-context/useCartProducts.ts",
+      "op": "replace",
+      "search": "  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  };\n",
+      "content": "  const clearCart = () => {\n    setProducts([]);\n    updateCartTotal([]);\n  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n  };\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  } = useCartProducts();\n",
+      "content": "  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n  } = useCartProducts();\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n",
+      "content": "  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n    total,\n    updateCartTotal,\n  };\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "  const { products, total, isOpen, openCart, closeCart } = useCart();\n",
+      "content": "  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n",
+      "content": "            <S.ClearCartButton onClick={clearCart}>\n              Clear cart\n            </S.ClearCartButton>\n            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n"
+    },
+    {
+      "path": "src/components/Cart/style.ts",
+      "op": "replace",
+      "search": "export const CheckoutButton = styled.button`\n",
+      "content": "export const ClearCartButton = styled.button`\n  width: 100%;\n  border: 0;\n  color: #5b5a5e;\n  text-transform: uppercase;\n  background-color: transparent;\n  text-align: center;\n  padding: 10px 0;\n  margin-top: 10px;\n  cursor: pointer;\n  outline: none;\n\n  transition: color 0.2s;\n\n  &:focus-visible {\n    outline: 3px solid ${({ theme }) => theme.colors.secondary};\n  }\n\n  &:hover {\n    color: #ececec;\n  }\n`;\n\nexport const CheckoutButton = styled.button`\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

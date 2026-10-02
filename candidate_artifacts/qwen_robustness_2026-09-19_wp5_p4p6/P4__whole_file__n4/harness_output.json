@@ -1,0 +1,15 @@
+{
+  "task_id": "P4",
+  "candidate_id": "P4__whole_file__n4",
+  "condition": "whole_file",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 3898.6322229993675,
+  "timeout_used_ms": 13072,
+  "stage_detail": null,
+  "apply_mode": "exact_unique",
+  "apply_reason": null
+}

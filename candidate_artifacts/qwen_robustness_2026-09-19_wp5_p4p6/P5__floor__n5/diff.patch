@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart';\nimport type { CartItem } from '../../types/cart';\n\ninterface CartProductProps {\n  item: CartItem;\n}\n\nexport function CartProduct({ item }: CartProductProps) {\n  const { removeItem, updateQuantity } = useCart();\n\n  const handleRemove = () => {\n    removeItem(item.product.id);\n  };\n\n  const handleIncrease = () => {\n    updateQuantity(item.product.id, item.quantity + 1);\n  };\n\n  const handleDecrease = () => {\n    if (item.quantity > 1) {\n      updateQuantity(item.product.id, item.quantity - 1);\n    } else {\n      removeItem(item.product.id);\n    }\n  };\n\n  return (\n",
+      "content": "interface CartProductProps {\n  item: CartItem;\n  onRemove: (item: CartItem) => void;\n  onIncrease: (item: CartItem) => void;\n  onDecrease: (item: CartItem) => void;\n}\n\nexport function CartProduct({ item, onRemove, onIncrease, onDecrease }: CartProductProps) {\n  const handleRemove = () => {\n    onRemove(item);\n  };\n\n  const handleIncrease = () => {\n    onIncrease(item);\n  };\n\n  const handleDecrease = () => {\n    onDecrease(item);\n  };\n\n  return (\n"
+    },
+    {
+      "path": "src/components/Cart/CartProducts.tsx",
+      "op": "replace",
+      "search": "import { CartProduct } from './CartProduct';\nimport { useCart } from '../../hooks/useCart';\nimport type { CartItem } from '../../types/cart';\n\nexport function CartProducts() {\n  const { items } = useCart();\n\n  if (items.length === 0) {\n    return (\n      <div className=\"cart-empty\">\n        <p>Your cart is empty</p>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"cart-products\">\n      {items.map((item) => (\n        <CartProduct key={item.product.id} item={item} />\n      ))}\n    </div>\n  );\n}\n",
+      "content": "import { CartProduct } from './CartProduct';\nimport { useCart } from '../../hooks/useCart';\nimport type { CartItem } from '../../types/cart';\n\nexport function CartProducts() {\n  const { items, removeItem, updateQuantity } = useCart();\n\n  const handleRemove = (item: CartItem) => {\n    removeItem(item.product.id);\n  };\n\n  const handleIncrease = (item: CartItem) => {\n    updateQuantity(item.product.id, item.quantity + 1);\n  };\n\n  const handleDecrease = (item: CartItem) => {\n    if (item.quantity > 1) {\n      updateQuantity(item.product.id, item.quantity - 1);\n    } else {\n      removeItem(item.product.id);\n    }\n  };\n\n  if (items.length === 0) {\n    return (\n      <div className=\"cart-empty\">\n        <p>Your cart is empty</p>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"cart-products\">\n      {items.map((item) => (\n        <CartProduct \n          key={item.product.id} \n          item={item} \n          onRemove={handleRemove}\n          onIncrease={handleIncrease}\n          onDecrease={handleDecrease}\n        />\n      ))}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

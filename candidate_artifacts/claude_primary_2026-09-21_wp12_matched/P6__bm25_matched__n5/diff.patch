@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/category.ts",
+      "op": "replace",
+      "search": "      const categoryNames = new Map<string, string>()\n      state.categories.forEach(({ name }) => categoryNames.set(name, name))\n\n      // Make sure duplicate category is not added\n      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))\n",
+      "content": "      const categoryNames = new Set<string>()\n      state.categories.forEach(({ name }) => categoryNames.add(name.toLowerCase()))\n\n      // Make sure duplicate category is not added (case-insensitive)\n      const toAdd = payload.filter(({ name }) => !categoryNames.has(name.toLowerCase()))\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

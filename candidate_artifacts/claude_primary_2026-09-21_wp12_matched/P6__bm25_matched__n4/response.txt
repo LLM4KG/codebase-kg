@@ -1,0 +1,79 @@
+Looking at the code, I need to find where duplicate category checks happen. The context mentions `CategoryList` but I need to look at the category slice and find where duplicates are checked when adding or renaming categories.
+
+From the slice, I can see `importCategories` does a duplicate check but it's case-sensitive. The `addCategory` and `updateCategory` reducers don't check for duplicates at all - the duplicate check must happen in the component/thunk that calls these actions.
+
+Since the project context doesn't show the `CategoryList` component directly, I need to work with what's available. The duplicate check for `importCategories` in the slice is case-sensitive. Let me also check where `addCategory` and `updateCategory` are called - that would be in the CategoryList component which isn't shown, but I can fix the `importCategories` case in the slice.
+
+For the `importCategories` reducer, the fix is straightforward - use lowercase comparison. For `addCategory` and `updateCategory`, the duplicate check happens in the component. Since I can only see the slice, let me fix what I can see and infer the rest.
+
+The `importCategories` reducer has a case-sensitive check I can fix. For the add/rename flows, the check must be in the component. Based on the task description pointing to `CategoryList`, the logic likely compares category names directly. I'll fix the `importCategories` case in the slice, and since the component isn't shown but the fix pattern is clear, I'll update the slice's import check to be case-insensitive.
+
+```text
+src/client/slices/category.ts
+<<<<<<< SEARCH
+    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {
+      const categoryNames = new Map<string, string>()
+      state.categories.forEach(({ name }) => categoryNames.set(name, name))
+
+      // Make sure duplicate category is not added
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))
+
+      state.categories.push(...toAdd)
+    },
+=======
+    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {
+      const categoryNames = new Set<string>()
+      state.categories.forEach(({ name }) => categoryNames.add(name.toLowerCase()))
+
+      // Make sure duplicate category is not added (case-insensitive)
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name.toLowerCase()))
+
+      state.categories.push(...toAdd)
+    },
+>>>>>>> REPLACE
+```
+
+Now I need to find where `addCategory` and `updateCategory` are dispatched with duplicate checks. Since the `CategoryList` component isn't in the context, let me search for the likely file path and provide the fix based on the pattern described in the task. The component is likely at `src/client/components/AppSidebar/CategoryList.tsx`. Based on typical patterns, the duplicate check would use `categories.find(cat => cat.name === newName)` or similar. I'll provide the fix assuming the standard pattern:
+
+```text
+src/client/slices/category.ts
+<<<<<<< SEARCH
+    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories.push(payload)
+    },
+=======
+    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      const isDuplicate = state.categories.some(
+        (category) => category.name.toLowerCase() === payload.name.toLowerCase()
+      )
+      if (!isDuplicate) {
+        state.categories.push(payload)
+      }
+    },
+
+    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      const isDuplicate = state.categories.some(
+        (category) =>
+          category.id !== payload.id &&
+          category.name.toLowerCase() === payload.name.toLowerCase()
+      )
+      if (!isDuplicate) {
+        state.categories = state.categories.map((category) =>
+          category.id === payload.id ? { ...category, name: payload.name } : category
+        )
+      }
+    },
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/category.ts
+<<<<<<< SEARCH
+    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories = state.categories.map((category) =>
+        category.id === payload.id ? { ...category, name: payload.name } : category
+      )
+    },
+=======
+>>>>>>> REPLACE
+```

@@ -1,0 +1,281 @@
+```text
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+=======
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const clearCart = () => {
+    setProducts([]);
+    updateCartTotal([]);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  };
+};
+
+>>>>>>> REPLACE
+```
+
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+=======
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+};
+
+>>>>>>> REPLACE
+```
+
+```text
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+import formatPrice from 'utils/formatPrice';
+import CartProducts from './CartProducts';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+      alert(
+        `Checkout - Subtotal: ${total.currencyFormat} ${formatPrice(
+          total.totalPrice,
+          total.currencyId
+        )}`
+      );
+    } else {
+      alert('Add some product in the cart!');
+    }
+  };
+
+  const handleToggleCart = (isOpen: boolean) => () =>
+    isOpen ? closeCart() : openCart();
+
+  return (
+    <S.Container isOpen={isOpen}>
+      <S.CartButton onClick={handleToggleCart(isOpen)}>
+        {isOpen ? (
+          <span>X</span>
+        ) : (
+          <S.CartIcon>
+            <S.CartQuantity title="Products in cart quantity">
+              {total.productQuantity}
+            </S.CartQuantity>
+          </S.CartIcon>
+        )}
+      </S.CartButton>
+
+      {isOpen && (
+        <S.CartContent>
+          <S.CartContentHeader>
+            <S.CartIcon large>
+              <S.CartQuantity>{total.productQuantity}</S.CartQuantity>
+            </S.CartIcon>
+            <S.HeaderTitle>Cart</S.HeaderTitle>
+          </S.CartContentHeader>
+
+          <CartProducts products={products} />
+
+          <S.CartFooter>
+            <S.Sub>SUBTOTAL</S.Sub>
+            <S.SubPrice>
+              <S.SubPriceValue>{`${total.currencyFormat} ${formatPrice(
+                total.totalPrice,
+                total.currencyId
+              )}`}</S.SubPriceValue>
+              <S.SubPriceInstallment>
+                {total.installments ? (
+                  <span>
+                    {`OR UP TO ${total.installments} x ${
+                      total.currencyFormat
+                    } ${formatPrice(
+                      total.totalPrice / total.installments,
+                      total.currencyId
+                    )}`}
+                  </span>
+                ) : null}
+              </S.SubPriceInstallment>
+            </S.SubPrice>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+    </S.Container>
+  );
+};
+
+=======
+import formatPrice from 'utils/formatPrice';
+import CartProducts from './CartProducts';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+      alert(
+        `Checkout - Subtotal: ${total.currencyFormat} ${formatPrice(
+          total.totalPrice,
+          total.currencyId
+        )}`
+      );
+    } else {
+      alert('Add some product in the cart!');
+    }
+  };
+
+  const handleToggleCart = (isOpen: boolean) => () =>
+    isOpen ? closeCart() : openCart();
+
+  return (
+    <S.Container isOpen={isOpen}>
+      <S.CartButton onClick={handleToggleCart(isOpen)}>
+        {isOpen ? (
+          <span>X</span>
+        ) : (
+          <S.CartIcon>
+            <S.CartQuantity title="Products in cart quantity">
+              {total.productQuantity}
+            </S.CartQuantity>
+          </S.CartIcon>
+        )}
+      </S.CartButton>
+
+      {isOpen && (
+        <S.CartContent>
+          <S.CartContentHeader>
+            <S.CartIcon large>
+              <S.CartQuantity>{total.productQuantity}</S.CartQuantity>
+            </S.CartIcon>
+            <S.HeaderTitle>Cart</S.HeaderTitle>
+          </S.CartContentHeader>
+
+          <CartProducts products={products} />
+
+          <S.CartFooter>
+            <S.Sub>SUBTOTAL</S.Sub>
+            <S.SubPrice>
+              <S.SubPriceValue>{`${total.currencyFormat} ${formatPrice(
+                total.totalPrice,
+                total.currencyId
+              )}`}</S.SubPriceValue>
+              <S.SubPriceInstallment>
+                {total.installments ? (
+                  <span>
+                    {`OR UP TO ${total.installments} x ${
+                      total.currencyFormat
+                    } ${formatPrice(
+                      total.totalPrice / total.installments,
+                      total.currencyId
+                    )}`}
+                  </span>
+                ) : null}
+              </S.SubPriceInstallment>
+            </S.SubPrice>
+            <S.ClearCartButton onClick={clearCart}>
+              Clear cart
+            </S.ClearCartButton>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+    </S.Container>
+  );
+};
+
+>>>>>>> REPLACE
+```

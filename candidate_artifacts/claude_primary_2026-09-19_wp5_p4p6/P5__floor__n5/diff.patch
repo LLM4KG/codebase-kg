@@ -1,0 +1,62 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart';\n\n",
+      "content": ""
+    },
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "interface CartProductProps {\n  product: ICartProduct;\n}\n",
+      "content": "interface CartProductProps {\n  product: ICartProduct;\n  onRemove: (product: ICartProduct) => void;\n  onIncrease: (product: ICartProduct) => void;\n  onDecrease: (product: ICartProduct) => void;\n}\n"
+    },
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "const CartProduct = ({ product }: CartProductProps) => {\n  const { removeFromCart, increaseProductQuantity, decreaseProductQuantity } =\n    useCart();\n",
+      "content": "const CartProduct = ({\n  product,\n  onRemove,\n  onIncrease,\n  onDecrease,\n}: CartProductProps) => {\n"
+    },
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "      onClick={() => removeFromCart(product)}\n",
+      "content": "      onClick={() => onRemove(product)}\n"
+    },
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "      onClick={() => decreaseProductQuantity(product)}\n",
+      "content": "      onClick={() => onDecrease(product)}\n"
+    },
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "      onClick={() => increaseProductQuantity(product)}\n",
+      "content": "      onClick={() => onIncrease(product)}\n"
+    },
+    {
+      "path": "src/components/Cart/CartProducts.tsx",
+      "op": "replace",
+      "search": "import CartProduct from './CartProduct';\n",
+      "content": "import { useCart } from '../../hooks/useCart';\nimport CartProduct from './CartProduct';\n"
+    },
+    {
+      "path": "src/components/Cart/CartProducts.tsx",
+      "op": "replace",
+      "search": "const CartProducts = () => {\n  const { cart } = useCart();\n",
+      "content": "const CartProducts = () => {\n  const { cart, removeFromCart, increaseProductQuantity, decreaseProductQuantity } =\n    useCart();\n"
+    },
+    {
+      "path": "src/components/Cart/CartProducts.tsx",
+      "op": "replace",
+      "search": "      {cart.map((cartProduct) => (\n        <CartProduct key={cartProduct.id} product={cartProduct} />\n      ))}\n",
+      "content": "      {cart.map((cartProduct) => (\n        <CartProduct\n          key={cartProduct.id}\n          product={cartProduct}\n          onRemove={removeFromCart}\n          onIncrease={increaseProductQuantity}\n          onDecrease={decreaseProductQuantity}\n        />\n      ))}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

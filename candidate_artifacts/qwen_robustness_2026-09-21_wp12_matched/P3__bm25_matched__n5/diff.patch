@@ -1,0 +1,31 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/utils/useCopyToClipboard.ts",
+      "op": "write",
+      "content": "import { useCallback, useEffect, useState } from 'react'\n\nimport { copyToClipboard } from './helpers'\n\ninterface UseCopyToClipboardProps {\n  successMessage: string\n  timeout?: number\n}\n\ninterface UseCopyToClipboardReturn {\n  copiedText: string\n  handleCopy: (text: string) => void\n}\n\nexport const useCopyToClipboard = ({\n  successMessage,\n  timeout = 3000,\n}: UseCopyToClipboardProps): UseCopyToClipboardReturn => {\n  const [copiedText, setCopiedText] = useState<string>('')\n\n  useEffect(() => {\n    if (copiedText === successMessage) {\n      const timer = setTimeout(() => {\n        setCopiedText('')\n      }, timeout)\n\n      return () => clearTimeout(timer)\n    }\n  }, [copiedText, successMessage, timeout])\n\n  const handleCopy = useCallback(\n    (text: string) => {\n      copyToClipboard(text)\n      setCopiedText(successMessage)\n    },\n    [successMessage]\n  )\n\n  return { copiedText, handleCopy }\n}\n\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "import React, { useEffect, useState } from 'react'\nimport { useDispatch, useSelector } from 'react-redux'\nimport {\n  Eye,\n  Edit,\n  Star,\n  Trash2,\n  Download,\n  RefreshCw,\n  Loader,\n  Settings,\n  Sun,\n  Moon,\n  Clipboard as ClipboardCmp,\n} from 'react-feather'\n\nimport { TestID } from '@resources/TestID'\nimport { LastSyncedNotification } from '@/components/LastSyncedNotification'\nimport { NoteItem, CategoryItem } from '@/types'\nimport {\n  toggleSettingsModal,\n  togglePreviewMarkdown,\n  toggleDarkTheme,\n  updateCodeMirrorOption,\n} from '@/slices/settings'\nimport { toggleFavoriteNotes, toggleTrashNotes } from '@/slices/note'\nimport { getCategories, getNotes, getSync, getSettings } from '@/selectors'\nimport { downloadNotes, isDraftNote, getShortUuid, copyToClipboard } from '@/utils/helpers'\nimport { sync } from '@/slices/sync'\n\n",
+      "content": "import React, { useState } from 'react'\nimport { useDispatch, useSelector } from 'react-redux'\nimport {\n  Eye,\n  Edit,\n  Star,\n  Trash2,\n  Download,\n  RefreshCw,\n  Loader,\n  Settings,\n  Sun,\n  Moon,\n  Clipboard as ClipboardCmp,\n} from 'react-feather'\n\nimport { TestID } from '@resources/TestID'\nimport { LastSyncedNotification } from '@/components/LastSyncedNotification'\nimport { NoteItem, CategoryItem } from '@/types'\nimport {\n  toggleSettingsModal,\n  togglePreviewMarkdown,\n  toggleDarkTheme,\n  updateCodeMirrorOption,\n} from '@/slices/settings'\nimport { toggleFavoriteNotes, toggleTrashNotes } from '@/slices/note'\nimport { getCategories, getNotes, getSync, getSettings } from '@/selectors'\nimport { downloadNotes, isDraftNote, getShortUuid } from '@/utils/helpers'\nimport { sync } from '@/slices/sync'\nimport { useCopyToClipboard } from '@/utils/useCopyToClipboard'\n\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "  // ===========================================================================\n\n  const [uuidCopiedText, setUuidCopiedText] = useState<string>('')\n  const [isToggled, togglePreviewIcon] = useState<boolean>(false)\n\n  // ===========================================================================\n  // Hooks\n  // ===========================================================================\n\n  useEffect(() => {\n    if (uuidCopiedText === successfulCopyMessage) {\n      const timer = setTimeout(() => {\n        setUuidCopiedText('')\n      }, 3000)\n\n      return () => clearTimeout(timer)\n    }\n  }, [uuidCopiedText])\n\n  // ===========================================================================\n  // Dispatch\n  // ===========================================================================\n",
+      "content": "  // ===========================================================================\n\n  const [isToggled, togglePreviewIcon] = useState<boolean>(false)\n  const { copiedText: uuidCopiedText, handleCopy: handleUuidCopy } = useCopyToClipboard({\n    successMessage: successfulCopyMessage,\n    timeout: 3000,\n  })\n\n  // ===========================================================================\n  // Dispatch\n  // ===========================================================================\n"
+    },
+    {
+      "path": "src/client/containers/NoteMenuBar.tsx",
+      "op": "replace",
+      "search": "          <button\n            className=\"note-menu-bar-button uuid\"\n            onClick={() => {\n              copyToClipboard(`{{${shortNoteUuid}}}`)\n              setUuidCopiedText(successfulCopyMessage)\n            }}\n            data-testid={TestID.UUID_MENU_BAR_COPY_ICON}\n          >\n            {copyNoteIcon}\n            {uuidCopiedText && <span className=\"uuid-copied-text\">{uuidCopiedText}</span>}\n            <span className=\"sr-only\">Copy note</span>\n          </button>\n",
+      "content": "          <button\n            className=\"note-menu-bar-button uuid\"\n            onClick={() => handleUuidCopy(`{{${shortNoteUuid}}}`)}\n            data-testid={TestID.UUID_MENU_BAR_COPY_ICON}\n          >\n            {copyNoteIcon}\n            {uuidCopiedText && <span className=\"uuid-copied-text\">{uuidCopiedText}</span>}\n            <span className=\"sr-only\">Copy note</span>\n          </button>\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

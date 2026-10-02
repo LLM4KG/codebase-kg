@@ -1,0 +1,26 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "export const noteSlice = createSlice({\n  name: '@@app/note',\n  initialState,\n  reducers: {\n    addNote(state, action: PayloadAction<Note>) {\n      state.notes.push(action.payload)\n    },\n    updateNote(state, action: PayloadAction<Note>) {\n      const index = state.notes.findIndex(note => note.id === action.payload.id)\n      if (index !== -1) {\n        state.notes[index] = action.payload\n      }\n    },\n    deleteNote(state, action: PayloadAction<string>) {\n      state.notes = state.notes.filter(note => note.id !== action.payload)\n    },\n    emptyTrash(state) {\n      state.notes = state.notes.filter(note => !note.trash)\n    },\n",
+      "content": "export const noteSlice = createSlice({\n  name: '@@app/note',\n  initialState,\n  reducers: {\n    addNote(state, action: PayloadAction<Note>) {\n      state.notes.push(action.payload)\n    },\n    updateNote(state, action: PayloadAction<Note>) {\n      const index = state.notes.findIndex(note => note.id === action.payload.id)\n      if (index !== -1) {\n        state.notes[index] = action.payload\n      }\n    },\n    deleteNote(state, action: PayloadAction<string>) {\n      state.notes = state.notes.filter(note => note.id !== action.payload)\n    },\n    emptyTrash(state) {\n      state.notes = state.notes.filter(note => !note.trash)\n    },\n    restoreAllTrash(state) {\n      state.notes.forEach(note => {\n        if (note.trash) {\n          note.trash = false\n        }\n      })\n    },\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "              {isTrash && (\n                <button className=\"btn btn-danger\" onClick={handleEmptyTrash}>\n                  Empty Trash\n                </button>\n              )}\n",
+      "content": "              {isTrash && (\n                <div className=\"d-flex gap-2\">\n                  <button className=\"btn btn-danger\" onClick={handleEmptyTrash}>\n                    Empty Trash\n                  </button>\n                  <button className=\"btn btn-secondary\" onClick={handleRestoreAll}>\n                    Restore All\n                  </button>\n                </div>\n              )}\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const handleEmptyTrash = () => {\n    dispatch(emptyTrash())\n  }\n\n  return (\n",
+      "content": "  const handleEmptyTrash = () => {\n    dispatch(emptyTrash())\n  }\n\n  const handleRestoreAll = () => {\n    dispatch(restoreAllTrash())\n  }\n\n  return (\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

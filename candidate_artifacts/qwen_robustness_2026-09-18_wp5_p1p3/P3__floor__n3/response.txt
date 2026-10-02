@@ -1,0 +1,100 @@
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+
+=======
+import { useState, useCallback } from 'react';
+
+interface UseCopyToClipboardProps {
+  successMessage?: string;
+  timeout?: number;
+}
+
+interface UseCopyToClipboardReturn {
+  copiedText: string;
+  handleCopy: (text: string) => Promise<boolean>;
+}
+
+export const useCopyToClipboard = ({
+  successMessage = 'Copied!',
+  timeout = 3000,
+}: UseCopyToClipboardProps = {}): UseCopyToClipboardReturn => {
+  const [copiedText, setCopiedText] = useState('');
+
+  const handleCopy = useCallback(
+    async (text: string): Promise<boolean> => {
+      try {
+        await navigator.clipboard.writeText(text);
+        setCopiedText(successMessage);
+        
+        setTimeout(() => {
+          setCopiedText('');
+        }, timeout);
+        
+        return true;
+      } catch (error) {
+        console.error('Failed to copy text: ', error);
+        return false;
+      }
+    },
+    [successMessage, timeout]
+  );
+
+  return { copiedText, handleCopy };
+};
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useState, useEffect, useCallback } from 'react';
+=======
+import React, { useCallback } from 'react';
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copiedText, setCopiedText] = useState('');
+  const [copyTimeoutId, setCopyTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutId) {
+        clearTimeout(copyTimeoutId);
+      }
+    };
+  }, [copyTimeoutId]);
+
+  const handleCopyNoteId = useCallback(async () => {
+    if (!note?.id) return;
+
+    try {
+      await navigator.clipboard.writeText(note.id);
+      setCopiedText('Note ID copied!');
+      
+      const timeoutId = setTimeout(() => {
+        setCopiedText('');
+        setCopyTimeoutId(null);
+      }, 3000);
+      
+      setCopyTimeoutId(timeoutId);
+    } catch (error) {
+      console.error('Failed to copy note ID:', error);
+    }
+  }, [note?.id]);
+=======
+  const { copiedText, handleCopy } = useCopyToClipboard({ 
+    successMessage: 'Note ID copied!', 
+    timeout: 3000 
+  });
+
+  const handleCopyNoteId = useCallback(async () => {
+    if (!note?.id) return;
+    
+    await handleCopy(note.id);
+  }, [note?.id, handleCopy]);
+>>>>>>> REPLACE
+```

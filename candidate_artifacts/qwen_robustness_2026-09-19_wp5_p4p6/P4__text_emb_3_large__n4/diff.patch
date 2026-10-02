@@ -1,0 +1,38 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/contexts/cart-context/useCartProducts.ts",
+      "op": "replace",
+      "search": "  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {\n    const updatedProducts = products.map((product: ICartProduct) => {\n      return updateQuantitySafely(product, productToDecrease, -1);\n    });\n\n    setProducts(updatedProducts);\n    updateCartTotal(updatedProducts);\n  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  };\n};\n\nexport default useCartProducts;\n",
+      "content": "  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {\n    const updatedProducts = products.map((product: ICartProduct) => {\n      return updateQuantitySafely(product, productToDecrease, -1);\n    });\n\n    setProducts(updatedProducts);\n    updateCartTotal(updatedProducts);\n  };\n\n  const clearCart = () => {\n    setProducts([]);\n    updateCartTotal([]);\n  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n  };\n};\n\nexport default useCartProducts;\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "const useCart = () => {\n  const { isOpen, setIsOpen } = useCartContext();\n  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n};\n\nexport default useCart;\n",
+      "content": "const useCart = () => {\n  const { isOpen, setIsOpen } = useCartContext();\n  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n    total,\n    updateCartTotal,\n  };\n};\n\nexport default useCart;\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n          </S.CartFooter>\n",
+      "content": "            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n            {total.productQuantity > 0 && (\n              <S.CheckoutButton \n                onClick={() => {\n                  if (window.confirm('Are you sure you want to clear the cart?')) {\n                    clearCart();\n                  }\n                }}\n                style={{ marginTop: '10px', backgroundColor: '#5b5a5e' }}\n              >\n                Clear cart\n              </S.CheckoutButton>\n            )}\n          </S.CartFooter>\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "import { useCart } from 'contexts/cart-context';\n",
+      "content": "import { useCart } from 'contexts/cart-context';\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "const Cart = () => {\n  const { products, total, isOpen, openCart, closeCart } = useCart();\n",
+      "content": "const Cart = () => {\n  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

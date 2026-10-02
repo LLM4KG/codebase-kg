@@ -1,0 +1,37 @@
+```text
+src/client/containers/CategoryList.tsx
+<<<<<<< SEARCH
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+=======
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/CategoryList.tsx
+<<<<<<< SEARCH
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+=======
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+>>>>>>> REPLACE
+```

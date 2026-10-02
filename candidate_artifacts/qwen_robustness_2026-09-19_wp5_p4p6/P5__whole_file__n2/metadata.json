@@ -1,0 +1,32 @@
+{
+  "candidate_id": "P5__whole_file__n2",
+  "run_id": "qwen_robustness_2026-09-19_wp5_p4p6",
+  "run_name": "qwen_robustness",
+  "task_id": "P5",
+  "project_name": "react-shopping-cart",
+  "condition": "whole_file",
+  "index": 2,
+  "model_id": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "timestamp": "2026-09-19T16:15:47.389434+00:00",
+  "retrieval_token_count": 289,
+  "generator_usage": {
+    "input_tokens": 1118,
+    "output_tokens": 1985
+  },
+  "generator_latency_ms": 16308.960549000403,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": null,
+  "apply_reason": "search_not_found",
+  "edit_count": 4,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "oracle_files_read": [
+      "src/components/Cart/CartProducts/CartProduct/CartProduct.tsx",
+      "src/components/Cart/CartProducts/CartProducts.tsx"
+    ],
+    "oracle_files_absent": []
+  }
+}
