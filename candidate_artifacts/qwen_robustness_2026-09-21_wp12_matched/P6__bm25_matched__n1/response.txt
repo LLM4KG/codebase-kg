@@ -1,0 +1,24 @@
+```text
+src/client/slices/category.ts
+<<<<<<< SEARCH
+    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {
+      const categoryNames = new Map<string, string>()
+      state.categories.forEach(({ name }) => categoryNames.set(name, name))
+
+      // Make sure duplicate category is not added
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))
+
+      state.categories.push(...toAdd)
+    },
+=======
+    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {
+      const categoryNames = new Map<string, string>()
+      state.categories.forEach(({ name }) => categoryNames.set(name.toLowerCase(), name))
+
+      // Make sure duplicate category is not added
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name.toLowerCase()))
+
+      state.categories.push(...toAdd)
+    },
+>>>>>>> REPLACE
+```

@@ -1,0 +1,112 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "App",
+        "syntax": "function",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useProducts",
+            "category": "custom",
+            "source": "contexts/products-context"
+          },
+          {
+            "name": "useEffect",
+            "category": "library",
+            "source": "react"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "default"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "products",
+        "componentName": "Products",
+        "type": "array",
+        "isRequired": null
+      }
+    ],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [],
+        "hooks": [
+          "useEffect"
+        ]
+      },
+      {
+        "from": "components/Loader",
+        "symbols": [
+          "Loader"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "components/Github",
+        "symbols": [
+          "GithubCorner",
+          "GithubStarButton"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "components/Recruiter",
+        "symbols": [
+          "Recruiter"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "components/Filter",
+        "symbols": [
+          "Filter"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "components/Products",
+        "symbols": [
+          "Products"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "components/Cart",
+        "symbols": [
+          "Cart"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "contexts/products-context",
+        "symbols": [],
+        "hooks": [
+          "useProducts"
+        ]
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

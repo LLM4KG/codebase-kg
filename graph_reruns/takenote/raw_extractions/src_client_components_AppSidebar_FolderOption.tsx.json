@@ -1,0 +1,138 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "FolderOption",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "text",
+        "componentName": "FolderOption",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "active",
+        "componentName": "FolderOption",
+        "type": "boolean",
+        "isRequired": true
+      },
+      {
+        "name": "dataTestID",
+        "componentName": "FolderOption",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "folder",
+        "componentName": "FolderOption",
+        "type": "unknown",
+        "isRequired": true
+      },
+      {
+        "name": "swapFolder",
+        "componentName": "FolderOption",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "addNoteType",
+        "componentName": "FolderOption",
+        "type": "function",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "inline_onClick",
+        "eventType": "onClick",
+        "componentName": "FolderOption",
+        "isInline": true
+      },
+      {
+        "name": "noteHandler",
+        "eventType": "onDrop",
+        "componentName": "FolderOption",
+        "isInline": false
+      },
+      {
+        "name": "inline_onDragOver",
+        "eventType": "onDragOver",
+        "componentName": "FolderOption",
+        "isInline": true
+      },
+      {
+        "name": "dragEnterHandler",
+        "eventType": "onDragEnter",
+        "componentName": "FolderOption",
+        "isInline": false
+      },
+      {
+        "name": "dragLeaveHandler",
+        "eventType": "onDragLeave",
+        "componentName": "FolderOption",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": [
+          "useState"
+        ]
+      },
+      {
+        "from": "react-feather",
+        "symbols": [
+          "Book",
+          "Star",
+          "Trash2"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": [
+      {
+        "name": "mainSectionDragState",
+        "setterName": "setMainSectionDragState",
+        "type": "object",
+        "defaultValue": "{ [Folder.ALL]: false, [Folder.FAVORITES]: false, [Folder.SCRATCHPAD]: false, [Folder.TRASH]: false, [Folder.CATEGORY]: false }",
+        "componentName": "FolderOption",
+        "declarationPattern": "useState"
+      }
+    ]
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

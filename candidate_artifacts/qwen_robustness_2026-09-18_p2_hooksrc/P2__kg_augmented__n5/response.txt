@@ -1,0 +1,21 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer action to `src/client/slices/note.ts`
+2. Add a "Restore All" button to `NoteList.tsx` that appears when viewing the Trash folder
+
+Let me first check what actions already exist in the note slice by looking at the imports and usage in NoteList.tsx:
+
+From the NoteList.tsx, I can see imports like `permanentlyEmptyTrash`, `pruneNotes`, etc. from `@/slices/note`. I also see `_permanentlyEmptyTrash` being used as a dispatch function.
+
+I'll need to add the restoreAllTrash action and then use it in the NoteList component.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const permanentlyEmptyTrash = createAction('note/permanentlyEmptyTrash')
+=======
+export const permanentlyEmptyTrash = createAction('note/permanentlyEmptyTrash')
+export const restoreAllTrash = createAction('note/restoreAllTrash')
+>>>>>>> REPLACE
+
+```

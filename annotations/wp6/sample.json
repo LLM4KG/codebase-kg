@@ -1,0 +1,991 @@
+{
+  "seed": 20260920,
+  "plan": "docs/phase_2/ijckg-2026/wp6_annotation_plan.md",
+  "quotas": {
+    "react-shopping-cart": 6,
+    "SnapShot": 5,
+    "todoist": 5,
+    "takenote": 6,
+    "jira_clone": 6
+  },
+  "strata": {
+    "content": "files with at least one LLM-extracted item (coverage pass + fill)",
+    "no_llm_items": "1 per repo from files with no LLM-extracted items",
+    "no_llm_item_files_in_graphs": {
+      "react-shopping-cart": 33,
+      "SnapShot": 1,
+      "todoist": 3,
+      "takenote": 18,
+      "jira_clone": 50
+    }
+  },
+  "graphs": {
+    "react-shopping-cart": {
+      "dump": "graph_export/react-shopping-cart/full_dump.cypherl",
+      "repo_commit_sha": "9fa56244d0f0c0d363cab744a3305c50eabc08cb",
+      "prompt_set_version": "72ef9f041851",
+      "extraction_model": "anthropic/claude-sonnet-4-6",
+      "files_in_graph": 55,
+      "package_level_items": 43,
+      "excluded_items": 0
+    },
+    "SnapShot": {
+      "dump": "graph_export/SnapShot/full_dump.cypherl",
+      "repo_commit_sha": "d6ea1fd3fd74f6bbfa8794963b6743ac5be61757",
+      "prompt_set_version": "72ef9f041851",
+      "extraction_model": "anthropic/claude-sonnet-4-6",
+      "files_in_graph": 15,
+      "package_level_items": 17,
+      "excluded_items": 0
+    },
+    "todoist": {
+      "dump": "graph_export/todoist/full_dump.cypherl",
+      "repo_commit_sha": "f998b9af73a1d533e52a9a3f5545216904faf077",
+      "prompt_set_version": "72ef9f041851",
+      "extraction_model": "anthropic/claude-sonnet-4-6",
+      "files_in_graph": 19,
+      "package_level_items": 39,
+      "excluded_items": 0
+    },
+    "takenote": {
+      "dump": "graph_export/takenote/full_dump.cypherl",
+      "repo_commit_sha": "e0eddbb9a21ae4cf4c4c7c183f29cfd666e08331",
+      "prompt_set_version": "72ef9f041851",
+      "extraction_model": "anthropic/claude-sonnet-4-6",
+      "files_in_graph": 60,
+      "package_level_items": 197,
+      "excluded_items": 0
+    },
+    "jira_clone": {
+      "dump": "graph_export/jira_clone/full_dump.cypherl",
+      "repo_commit_sha": "26a9e77b1789fef9cb43edb5d6018cf1663cf035",
+      "prompt_set_version": "72ef9f041851",
+      "extraction_model": "anthropic/claude-sonnet-4-6",
+      "files_in_graph": 134,
+      "package_level_items": 111,
+      "excluded_items": 0
+    }
+  },
+  "not_annotated": {
+    "IMPORTS": "in the schema but never created by the pipeline",
+    "Project/Library/DEPENDS_ON": "package-level; checked against package.json by WP7",
+    "Library_Hook nodes": "global; scored through their USES_LIBRARY_HOOK / PROVIDED_BY edges"
+  },
+  "coverage": {
+    "ACCEPTS_PROP": {
+      "files_with_type": 100,
+      "sampled_files": [
+        1,
+        2,
+        12,
+        13,
+        14,
+        15,
+        18,
+        23,
+        25
+      ]
+    },
+    "CONSUMES_CONTEXT": {
+      "files_with_type": 10,
+      "sampled_files": [
+        5,
+        6,
+        19
+      ]
+    },
+    "Class_Component": {
+      "files_with_type": 1,
+      "sampled_files": [
+        7
+      ]
+    },
+    "Context": {
+      "files_with_type": 7,
+      "sampled_files": [
+        5,
+        6,
+        18
+      ]
+    },
+    "Custom_Hook": {
+      "files_with_type": 18,
+      "sampled_files": [
+        5,
+        6
+      ]
+    },
+    "DECLARES_STATE": {
+      "files_with_type": 42,
+      "sampled_files": [
+        1,
+        5,
+        6,
+        12,
+        14,
+        15,
+        17,
+        18,
+        21
+      ]
+    },
+    "DEFINED_IN": {
+      "files_with_type": 156,
+      "sampled_files": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        25,
+        27
+      ]
+    },
+    "EventHandler": {
+      "files_with_type": 73,
+      "sampled_files": [
+        1,
+        7,
+        12,
+        13,
+        14,
+        15,
+        18,
+        20,
+        21,
+        23
+      ]
+    },
+    "Function_Component": {
+      "files_with_type": 142,
+      "sampled_files": [
+        1,
+        2,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        25,
+        27
+      ]
+    },
+    "HAS_HANDLER": {
+      "files_with_type": 73,
+      "sampled_files": [
+        1,
+        7,
+        12,
+        13,
+        14,
+        15,
+        18,
+        20,
+        21,
+        23
+      ]
+    },
+    "Library_Hook": {
+      "files_with_type": 70,
+      "sampled_files": [
+        1,
+        5,
+        6,
+        12,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    "PASSES_PROP": {
+      "files_with_type": 58,
+      "sampled_files": [
+        2,
+        7,
+        12,
+        15,
+        17,
+        18,
+        20,
+        21,
+        23,
+        25,
+        27
+      ]
+    },
+    "PROVIDED_BY": {
+      "files_with_type": 70,
+      "sampled_files": [
+        1,
+        5,
+        6,
+        12,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    "PROVIDES_CONTEXT": {
+      "files_with_type": 7,
+      "sampled_files": [
+        5,
+        6,
+        18
+      ]
+    },
+    "Prop": {
+      "files_with_type": 118,
+      "sampled_files": [
+        1,
+        2,
+        4,
+        12,
+        13,
+        14,
+        15,
+        18,
+        23,
+        25,
+        26
+      ]
+    },
+    "RENDERS_ROOT_COMPONENT": {
+      "files_with_type": 5,
+      "sampled_files": [
+        24
+      ]
+    },
+    "ROUTES_TO": {
+      "files_with_type": 5,
+      "sampled_files": [
+        7
+      ]
+    },
+    "State_Variable": {
+      "files_with_type": 42,
+      "sampled_files": [
+        1,
+        5,
+        6,
+        12,
+        14,
+        15,
+        17,
+        18,
+        21
+      ]
+    },
+    "USES_COMPONENT": {
+      "files_with_type": 66,
+      "sampled_files": [
+        2,
+        7,
+        12,
+        15,
+        17,
+        18,
+        20,
+        21,
+        23,
+        25,
+        27
+      ]
+    },
+    "USES_CUSTOM_HOOK": {
+      "files_with_type": 26,
+      "sampled_files": [
+        19,
+        21
+      ]
+    },
+    "USES_LIBRARY_HOOK": {
+      "files_with_type": 70,
+      "sampled_files": [
+        1,
+        5,
+        6,
+        12,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    }
+  },
+  "uncovered_types": [],
+  "files": [
+    {
+      "n": 1,
+      "project": "react-shopping-cart",
+      "path": "src/commons/Checkbox/Checkbox.tsx",
+      "file": "01_react-shopping-cart__src__commons__Checkbox__Checkbox.tsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 35,
+      "items": {
+        "llm_nodes": 6,
+        "llm_edges": 7,
+        "deterministic": 3
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "Library_Hook",
+        "PROVIDED_BY",
+        "Prop",
+        "State_Variable",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 2,
+      "project": "react-shopping-cart",
+      "path": "src/components/Cart/CartProducts/CartProducts.tsx",
+      "file": "02_react-shopping-cart__src__components__Cart__CartProducts__CartProducts.tsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": true,
+      "source_lines": 26,
+      "items": {
+        "llm_nodes": 2,
+        "llm_edges": 4,
+        "deterministic": 2
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "DEFINED_IN",
+        "Function_Component",
+        "PASSES_PROP",
+        "Prop",
+        "USES_COMPONENT"
+      ]
+    },
+    {
+      "n": 3,
+      "project": "react-shopping-cart",
+      "path": "src/components/Github/GithubStarButton/index.ts",
+      "file": "03_react-shopping-cart__src__components__Github__GithubStarButton__index.ts.md",
+      "reason": "fill: no LLM items",
+      "stratum": "no_llm_items",
+      "second_annotator": false,
+      "source_lines": 2,
+      "items": {
+        "llm_nodes": 0,
+        "llm_edges": 0,
+        "deterministic": 2
+      },
+      "types": []
+    },
+    {
+      "n": 4,
+      "project": "react-shopping-cart",
+      "path": "src/components/Products/Product/style.ts",
+      "file": "04_react-shopping-cart__src__components__Products__Product__style.ts.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 130,
+      "items": {
+        "llm_nodes": 2,
+        "llm_edges": 0,
+        "deterministic": 2
+      },
+      "types": [
+        "Prop"
+      ]
+    },
+    {
+      "n": 5,
+      "project": "react-shopping-cart",
+      "path": "src/contexts/cart-context/CartContextProvider.tsx",
+      "file": "05_react-shopping-cart__src__contexts__cart-context__CartContextProvider.tsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 50,
+      "items": {
+        "llm_nodes": 6,
+        "llm_edges": 9,
+        "deterministic": 4
+      },
+      "types": [
+        "CONSUMES_CONTEXT",
+        "Context",
+        "Custom_Hook",
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "Function_Component",
+        "Library_Hook",
+        "PROVIDED_BY",
+        "PROVIDES_CONTEXT",
+        "State_Variable",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 6,
+      "project": "react-shopping-cart",
+      "path": "src/contexts/products-context/ProductsContextProvider.tsx",
+      "file": "06_react-shopping-cart__src__contexts__products-context__ProductsContextProvider.tsx.md",
+      "reason": "covers Custom_Hook",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 45,
+      "items": {
+        "llm_nodes": 6,
+        "llm_edges": 9,
+        "deterministic": 4
+      },
+      "types": [
+        "CONSUMES_CONTEXT",
+        "Context",
+        "Custom_Hook",
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "Function_Component",
+        "Library_Hook",
+        "PROVIDED_BY",
+        "PROVIDES_CONTEXT",
+        "State_Variable",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 7,
+      "project": "SnapShot",
+      "path": "src/App.js",
+      "file": "07_SnapShot__src__App.js.md",
+      "reason": "covers Class_Component",
+      "stratum": "content",
+      "second_annotator": true,
+      "source_lines": 61,
+      "items": {
+        "llm_nodes": 2,
+        "llm_edges": 15,
+        "deterministic": 2
+      },
+      "types": [
+        "Class_Component",
+        "DEFINED_IN",
+        "EventHandler",
+        "HAS_HANDLER",
+        "PASSES_PROP",
+        "ROUTES_TO",
+        "USES_COMPONENT"
+      ]
+    },
+    {
+      "n": 8,
+      "project": "SnapShot",
+      "path": "src/api/config.js",
+      "file": "08_SnapShot__src__api__config.js.md",
+      "reason": "fill: no LLM items",
+      "stratum": "no_llm_items",
+      "second_annotator": false,
+      "source_lines": 2,
+      "items": {
+        "llm_nodes": 0,
+        "llm_edges": 0,
+        "deterministic": 2
+      },
+      "types": []
+    },
+    {
+      "n": 9,
+      "project": "SnapShot",
+      "path": "src/components/Loader.js",
+      "file": "09_SnapShot__src__components__Loader.js.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 11,
+      "items": {
+        "llm_nodes": 1,
+        "llm_edges": 1,
+        "deterministic": 2
+      },
+      "types": [
+        "DEFINED_IN",
+        "Function_Component"
+      ]
+    },
+    {
+      "n": 10,
+      "project": "SnapShot",
+      "path": "src/components/Navigation.js",
+      "file": "10_SnapShot__src__components__Navigation.js.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 18,
+      "items": {
+        "llm_nodes": 1,
+        "llm_edges": 1,
+        "deterministic": 2
+      },
+      "types": [
+        "DEFINED_IN",
+        "Function_Component"
+      ]
+    },
+    {
+      "n": 11,
+      "project": "SnapShot",
+      "path": "src/components/NoImages.js",
+      "file": "11_SnapShot__src__components__NoImages.js.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 11,
+      "items": {
+        "llm_nodes": 1,
+        "llm_edges": 1,
+        "deterministic": 2
+      },
+      "types": [
+        "DEFINED_IN",
+        "Function_Component"
+      ]
+    },
+    {
+      "n": 12,
+      "project": "todoist",
+      "path": "src/components/AddTask.js",
+      "file": "12_todoist__src__components__AddTask.js.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 196,
+      "items": {
+        "llm_nodes": 23,
+        "llm_edges": 32,
+        "deterministic": 3
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "Library_Hook",
+        "PASSES_PROP",
+        "PROVIDED_BY",
+        "Prop",
+        "State_Variable",
+        "USES_COMPONENT",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 13,
+      "project": "todoist",
+      "path": "src/components/Checkbox.js",
+      "file": "13_todoist__src__components__Checkbox.js.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": true,
+      "source_lines": 33,
+      "items": {
+        "llm_nodes": 5,
+        "llm_edges": 5,
+        "deterministic": 2
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "Prop"
+      ]
+    },
+    {
+      "n": 14,
+      "project": "todoist",
+      "path": "src/components/IndividualProject.js",
+      "file": "14_todoist__src__components__IndividualProject.js.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 72,
+      "items": {
+        "llm_nodes": 8,
+        "llm_edges": 9,
+        "deterministic": 3
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "Library_Hook",
+        "PROVIDED_BY",
+        "Prop",
+        "State_Variable",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 15,
+      "project": "todoist",
+      "path": "src/components/Projects.js",
+      "file": "15_todoist__src__components__Projects.js.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 50,
+      "items": {
+        "llm_nodes": 5,
+        "llm_edges": 8,
+        "deterministic": 3
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "Library_Hook",
+        "PASSES_PROP",
+        "PROVIDED_BY",
+        "Prop",
+        "State_Variable",
+        "USES_COMPONENT",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 16,
+      "project": "todoist",
+      "path": "src/constants/index.js",
+      "file": "16_todoist__src__constants__index.js.md",
+      "reason": "fill: no LLM items",
+      "stratum": "no_llm_items",
+      "second_annotator": false,
+      "source_lines": 6,
+      "items": {
+        "llm_nodes": 0,
+        "llm_edges": 0,
+        "deterministic": 2
+      },
+      "types": []
+    },
+    {
+      "n": 17,
+      "project": "takenote",
+      "path": "src/client/components/Tabs/Tabs.tsx",
+      "file": "17_takenote__src__client__components__Tabs__Tabs.tsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": true,
+      "source_lines": 44,
+      "items": {
+        "llm_nodes": 2,
+        "llm_edges": 8,
+        "deterministic": 3
+      },
+      "types": [
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "Function_Component",
+        "Library_Hook",
+        "PASSES_PROP",
+        "PROVIDED_BY",
+        "State_Variable",
+        "USES_COMPONENT",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 18,
+      "project": "takenote",
+      "path": "src/client/containers/ContextMenu.tsx",
+      "file": "18_takenote__src__client__containers__ContextMenu.tsx.md",
+      "reason": "covers Context",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 170,
+      "items": {
+        "llm_nodes": 15,
+        "llm_edges": 36,
+        "deterministic": 6
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "Context",
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "Library_Hook",
+        "PASSES_PROP",
+        "PROVIDED_BY",
+        "PROVIDES_CONTEXT",
+        "Prop",
+        "State_Variable",
+        "USES_COMPONENT",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 19,
+      "project": "takenote",
+      "path": "src/client/containers/KeyboardShortcuts.tsx",
+      "file": "19_takenote__src__client__containers__KeyboardShortcuts.tsx.md",
+      "reason": "covers CONSUMES_CONTEXT",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 127,
+      "items": {
+        "llm_nodes": 1,
+        "llm_edges": 6,
+        "deterministic": 4
+      },
+      "types": [
+        "CONSUMES_CONTEXT",
+        "DEFINED_IN",
+        "Function_Component",
+        "Library_Hook",
+        "PROVIDED_BY",
+        "USES_CUSTOM_HOOK",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 20,
+      "project": "takenote",
+      "path": "src/client/containers/NoteEditor.tsx",
+      "file": "20_takenote__src__client__containers__NoteEditor.tsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 129,
+      "items": {
+        "llm_nodes": 5,
+        "llm_edges": 13,
+        "deterministic": 4
+      },
+      "types": [
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "Library_Hook",
+        "PASSES_PROP",
+        "PROVIDED_BY",
+        "USES_COMPONENT",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 21,
+      "project": "takenote",
+      "path": "src/client/containers/NoteList.tsx",
+      "file": "21_takenote__src__client__containers__NoteList.tsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 274,
+      "items": {
+        "llm_nodes": 7,
+        "llm_edges": 26,
+        "deterministic": 7
+      },
+      "types": [
+        "DECLARES_STATE",
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "Library_Hook",
+        "PASSES_PROP",
+        "PROVIDED_BY",
+        "State_Variable",
+        "USES_COMPONENT",
+        "USES_CUSTOM_HOOK",
+        "USES_LIBRARY_HOOK"
+      ]
+    },
+    {
+      "n": 22,
+      "project": "takenote",
+      "path": "src/client/slices/index.ts",
+      "file": "22_takenote__src__client__slices__index.ts.md",
+      "reason": "fill: no LLM items",
+      "stratum": "no_llm_items",
+      "second_annotator": false,
+      "source_lines": 19,
+      "items": {
+        "llm_nodes": 0,
+        "llm_edges": 0,
+        "deterministic": 2
+      },
+      "types": []
+    },
+    {
+      "n": 23,
+      "project": "jira_clone",
+      "path": "src/Project/Board/IssueDetails/index.jsx",
+      "file": "23_jira_clone__src__Project__Board__IssueDetails__index.jsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 95,
+      "items": {
+        "llm_nodes": 7,
+        "llm_edges": 50,
+        "deterministic": 2
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "DEFINED_IN",
+        "EventHandler",
+        "Function_Component",
+        "HAS_HANDLER",
+        "PASSES_PROP",
+        "Prop",
+        "USES_COMPONENT"
+      ]
+    },
+    {
+      "n": 24,
+      "project": "jira_clone",
+      "path": "src/index.jsx",
+      "file": "24_jira_clone__src__index.jsx.md",
+      "reason": "covers RENDERS_ROOT_COMPONENT",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 10,
+      "items": {
+        "llm_nodes": 0,
+        "llm_edges": 1,
+        "deterministic": 2
+      },
+      "types": [
+        "RENDERS_ROOT_COMPONENT"
+      ]
+    },
+    {
+      "n": 25,
+      "project": "jira_clone",
+      "path": "src/shared/components/AboutTooltip/index.jsx",
+      "file": "25_jira_clone__src__shared__components__AboutTooltip__index.jsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 46,
+      "items": {
+        "llm_nodes": 2,
+        "llm_edges": 10,
+        "deterministic": 2
+      },
+      "types": [
+        "ACCEPTS_PROP",
+        "DEFINED_IN",
+        "Function_Component",
+        "PASSES_PROP",
+        "Prop",
+        "USES_COMPONENT"
+      ]
+    },
+    {
+      "n": 26,
+      "project": "jira_clone",
+      "path": "src/shared/components/Modal/Styles.js",
+      "file": "26_jira_clone__src__shared__components__Modal__Styles.js.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 89,
+      "items": {
+        "llm_nodes": 4,
+        "llm_edges": 0,
+        "deterministic": 2
+      },
+      "types": [
+        "Prop"
+      ]
+    },
+    {
+      "n": 27,
+      "project": "jira_clone",
+      "path": "src/shared/components/PageLoader/index.jsx",
+      "file": "27_jira_clone__src__shared__components__PageLoader__index.jsx.md",
+      "reason": "fill",
+      "stratum": "content",
+      "second_annotator": false,
+      "source_lines": 14,
+      "items": {
+        "llm_nodes": 1,
+        "llm_edges": 3,
+        "deterministic": 2
+      },
+      "types": [
+        "DEFINED_IN",
+        "Function_Component",
+        "PASSES_PROP",
+        "USES_COMPONENT"
+      ]
+    },
+    {
+      "n": 28,
+      "project": "jira_clone",
+      "path": "src/shared/components/index.js",
+      "file": "28_jira_clone__src__shared__components__index.js.md",
+      "reason": "fill: no LLM items",
+      "stratum": "no_llm_items",
+      "second_annotator": false,
+      "source_lines": 25,
+      "items": {
+        "llm_nodes": 0,
+        "llm_edges": 0,
+        "deterministic": 2
+      },
+      "types": []
+    }
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ContextMenuOptions",
+        "childComponent": "CategoryOptions",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "clickedCategory",
+            "valueExpression": "clickedItem as CategoryItem"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ContextMenuOptions",
+        "childComponent": "NotesOptions",
+        "importSource": "same_file",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "clickedNote",
+            "valueExpression": "clickedItem as NoteItem"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.CATEGORY_OPTION_RENAME"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "startRenameHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Edit2"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.RENAME"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.CATEGORY_OPTION_DELETE_PERMANENTLY"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "removeCategoryHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "X"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.DELETE_PERMANENTLY"
+          },
+          {
+            "propName": "optionType",
+            "valueExpression": "\"delete\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.NOTE_OPTION_DELETE_PERMANENTLY"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "deleteNotesHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "X"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.DELETE_PERMANENTLY"
+          },
+          {
+            "propName": "optionType",
+            "valueExpression": "\"delete\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.NOTE_OPTION_RESTORE_FROM_TRASH"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "trashNoteHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "ArrowUp"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.RESTORE_FROM_TRASH"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.NOTE_OPTION_FAVORITE"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "favoriteNoteHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Star"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "isSelectedNotesDiffFavor ? LabelText.TOGGLE_FAVORITE : clickedNote.favorite ? LabelText.REMOVE_FAVORITE : LabelText.MARK_AS_FAVORITE"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.NOTE_OPTION_TRASH"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "trashNoteHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Trash"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.MOVE_TO_TRASH"
+          },
+          {
+            "propName": "optionType",
+            "valueExpression": "\"delete\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.NOTE_OPTION_REMOVE_CATEGORY"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "removeCategoryFromNoteHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "X"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.REMOVE_CATEGORY"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.NOTE_OPTION_DOWNLOAD"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "downloadNotesHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Download"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.DOWNLOAD"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NotesOptions",
+        "childComponent": "ContextMenuOption",
+        "importSource": "@/components/NoteList/ContextMenuOption",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.COPY_REFERENCE_TO_NOTE"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "(e: React.SyntheticEvent) => copyLinkedNoteMarkdownHandler(e, clickedNote)"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Clipboard"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.COPY_REFERENCE_TO_NOTE"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": [
+      {
+        "consumerName": "CategoryOptions",
+        "consumerType": "function_component",
+        "contextName": "MenuUtilitiesContext",
+        "contextSource": "@/containers/ContextMenu",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

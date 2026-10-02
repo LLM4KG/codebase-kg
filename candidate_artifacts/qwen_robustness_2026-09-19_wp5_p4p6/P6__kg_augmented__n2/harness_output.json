@@ -1,0 +1,15 @@
+{
+  "task_id": "P6",
+  "candidate_id": "P6__kg_augmented__n2",
+  "condition": "kg_augmented",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 55433.574646000125,
+  "timeout_used_ms": 146329,
+  "stage_detail": null,
+  "apply_mode": "exact_unique",
+  "apply_reason": null
+}

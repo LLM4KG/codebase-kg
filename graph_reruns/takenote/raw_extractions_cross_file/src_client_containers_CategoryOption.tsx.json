@@ -1,0 +1,96 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "CategoryOption",
+        "childComponent": "Draggable",
+        "importSource": "react-beautiful-dnd",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "draggableId",
+            "valueExpression": "category.id"
+          },
+          {
+            "propName": "index",
+            "valueExpression": "index"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryOption",
+        "childComponent": "FolderIcon",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "15"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"app-sidebar-icon\""
+          },
+          {
+            "propName": "color",
+            "valueExpression": "iconColor"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryOption",
+        "childComponent": "MoreHorizontal",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "15"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"context-menu-action\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "CategoryOption",
+        "childComponent": "ContextMenu",
+        "importSource": "@/containers/ContextMenu",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "contextMenuRef",
+            "valueExpression": "contextMenuRef"
+          },
+          {
+            "propName": "item",
+            "valueExpression": "category"
+          },
+          {
+            "propName": "optionsPosition",
+            "valueExpression": "optionsPosition"
+          },
+          {
+            "propName": "setOptionsId",
+            "valueExpression": "setOptionsId"
+          },
+          {
+            "propName": "type",
+            "valueExpression": "ContextMenuEnum.CATEGORY"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsTitle",
+        "childComponent": "TitleTextarea",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "minRows",
+            "valueExpression": "1"
+          },
+          {
+            "propName": "placeholder",
+            "valueExpression": "\"Short summary\""
+          },
+          {
+            "propName": "defaultValue",
+            "valueExpression": "issue.title"
+          },
+          {
+            "propName": "onBlur",
+            "valueExpression": "handleTitleChange"
+          },
+          {
+            "propName": "onKeyDown",
+            "valueExpression": "event => { if (event.keyCode === KeyCodes.ENTER) { event.target.blur(); } }"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsTitle",
+        "childComponent": "ErrorText",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

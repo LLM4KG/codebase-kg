@@ -1,0 +1,139 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "DateSection",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "SelectedMonthYear",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "YearSelect",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onChange",
+            "valueExpression": "event => handleYearChange(event.target.value)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "PrevNextIcons",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "Icon",
+        "importSource": "shared/components/Icon",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"arrow-left\""
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => handleMonthChange('subtract')"
+          }
+        ]
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "Icon",
+        "importSource": "shared/components/Icon",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"arrow-right\""
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => handleMonthChange('add')"
+          }
+        ]
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "Grid",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "DayName",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "Day",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isFiller",
+            "valueExpression": "true"
+          }
+        ]
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "Day",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isToday",
+            "valueExpression": "moment().isSame(date, 'day')"
+          },
+          {
+            "propName": "isSelected",
+            "valueExpression": "moment(value).isSame(date, 'day')"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => handleDayChange(date)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "DatePickerDateSection",
+        "childComponent": "Day",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isFiller",
+            "valueExpression": "true"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

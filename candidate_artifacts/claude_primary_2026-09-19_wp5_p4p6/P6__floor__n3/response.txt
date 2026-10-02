@@ -1,0 +1,19 @@
+I need to find the CategoryList component to understand the current duplicate check implementation.
+
+Since I don't have the file contents directly, I'll need to make reasonable assumptions based on the task description. Let me construct the search/replace blocks for the case-insensitive duplicate check.
+
+```text
+src/components/CategoryList/CategoryList.tsx
+<<<<<<< SEARCH
+      if (categories.includes(newCategory)) {
+=======
+      if (categories.some(c => c.toLowerCase() === newCategory.toLowerCase())) {
+>>>>>>> REPLACE
+
+src/components/CategoryList/CategoryList.tsx
+<<<<<<< SEARCH
+      if (categories.includes(renamedCategory)) {
+=======
+      if (categories.some(c => c.toLowerCase() === renamedCategory.toLowerCase())) {
+>>>>>>> REPLACE
+```

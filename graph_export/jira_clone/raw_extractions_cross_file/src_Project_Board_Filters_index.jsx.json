@@ -1,0 +1,139 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardFilters",
+        "childComponent": "Filters",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "data-testid",
+            "valueExpression": "\"board-filters\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardFilters",
+        "childComponent": "SearchInput",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "icon",
+            "valueExpression": "\"search\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "searchTerm"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "value => mergeFilters({ searchTerm: value })"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardFilters",
+        "childComponent": "Avatars",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardFilters",
+        "childComponent": "AvatarIsActiveBorder",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isActive",
+            "valueExpression": "userIds.includes(user.id)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardFilters",
+        "childComponent": "StyledAvatar",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "avatarUrl",
+            "valueExpression": "user.avatarUrl"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "user.name"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => mergeFilters({ userIds: xor(userIds, [user.id]) })"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardFilters",
+        "childComponent": "StyledButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "isActive",
+            "valueExpression": "myOnly"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => mergeFilters({ myOnly: !myOnly })"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardFilters",
+        "childComponent": "StyledButton",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "isActive",
+            "valueExpression": "recent"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => mergeFilters({ recent: !recent })"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardFilters",
+        "childComponent": "ClearAll",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "() => mergeFilters(defaultFilters)"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

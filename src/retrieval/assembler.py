@@ -144,6 +144,38 @@ def _metadata_neighbor(entry: dict, neighbor_props: dict[str, dict] | None = Non
     )
 
 
+def routing_notes(routing_rows: list[dict] | None) -> tuple[list[str], set[str]]:
+    """Render the routing table as note lines, and return the paths it covers.
+
+    Extracted from `_build_feature_addition` (WP8, 2026-09-21) so the hardened
+    retriever's project-overview fallback can show the same table without duplicating
+    the formatting. The lines are byte-identical to what feature_addition rendered
+    before the extraction.
+    """
+    lines: list[str] = []
+    known_paths: set[str] = set()
+    if not routing_rows:
+        return lines, known_paths
+    lines.append("Project routing table:")
+    for r in routing_rows:
+        path = r.get("routePath")
+        if path:
+            known_paths.add(path)
+        flags = []
+        if r.get("isNested"):
+            flags.append("nested")
+        if r.get("isProtected"):
+            flags.append("protected")
+        if r.get("isLazy"):
+            flags.append("lazy")
+        flag_str = f" [{', '.join(flags)}]" if flags else ""
+        lines.append(
+            f"  {path} → {r.get('targetComponent')} ({r.get('targetFile')}); "
+            f"router {r.get('routerComponent')} ({r.get('routerFile')}){flag_str}"
+        )
+    return lines, known_paths
+
+
 def _handler_note(row: dict) -> str | None:
     handlers = _clean(row.get("eventHandlers"), key="handlerName")
     if not handlers:
@@ -196,11 +228,27 @@ def _build_feature_addition(
     repo_root: Path,
     neighbor_props: dict[str, dict] | None = None,
 ) -> None:
-    known_paths: set[str] = set()
+    seen_hooks: set[str] = set()
     for row in rows:
         a.anchors.append(_anchor_context(row, repo_root))
         for child in _clean(row.get("children")):
             a.neighbors.append(("child", _metadata_neighbor(child, neighbor_props)))
+        # One-hop custom-hook source, as refactoring already reads. A feature often
+        # lands in the hook rather than the component (a new action on a context
+        # hook); with only the hook's name in the prompt the model cannot write a
+        # search_replace block against a file it has never seen.
+        for hook in _clean(row.get("customHooks"), key="filePath"):
+            if hook["filePath"] in seen_hooks:
+                continue
+            seen_hooks.add(hook["filePath"])
+            a.secondary_sources.append(
+                ComponentContext(
+                    name=hook.get("name") or "",
+                    file_path=hook["filePath"],
+                    source_code=_read_source(repo_root, hook["filePath"]),
+                    component_type="Custom_Hook",
+                )
+            )
         for ctx in _clean(row.get("consumedContexts")):
             if ctx.get("providerName"):
                 a.droppable_notes.append(
@@ -210,24 +258,8 @@ def _build_feature_addition(
                 )
 
     # Routing table (Query B) — kept even at high cost; the unique KG value-add here.
-    if routing_rows:
-        a.kept_notes.append("Project routing table:")
-        for r in routing_rows:
-            path = r.get("routePath")
-            if path:
-                known_paths.add(path)
-            flags = []
-            if r.get("isNested"):
-                flags.append("nested")
-            if r.get("isProtected"):
-                flags.append("protected")
-            if r.get("isLazy"):
-                flags.append("lazy")
-            flag_str = f" [{', '.join(flags)}]" if flags else ""
-            a.kept_notes.append(
-                f"  {path} → {r.get('targetComponent')} ({r.get('targetFile')}); "
-                f"router {r.get('routerComponent')} ({r.get('routerFile')}){flag_str}"
-            )
+    lines, known_paths = routing_notes(routing_rows)
+    a.kept_notes.extend(lines)
     for route in anchor_routes:
         if route not in known_paths:
             a.kept_notes.append(
@@ -343,6 +375,7 @@ def _removal_steps(task_type: str) -> list[Callable[[_Assembly], None]]:
             lambda a: a.droppable_notes.clear(),                   # context notes (routing kept)
             _clear_neighbor_props,                                 # neighbour props/state
             lambda a: a.neighbors.clear(),                         # children metadata
+            lambda a: a.secondary_sources.clear(),                 # custom-hook source
         ]
     if task_type == "refactoring":
         return [
@@ -402,3 +435,81 @@ def assemble_context(
 
     _truncate(a, token_budget)
     return a.materialize()
+
+
+def assemble_overview(
+    *,
+    task_spec: str,
+    task_type: str,
+    rows: list[dict],
+    project_name: str = "",
+    routing_rows: list[dict] | None = None,
+    anchor_routes: list[str] | None = None,
+    token_budget: int = DEFAULT_TOKEN_BUDGET,
+) -> ContextData:
+    """Assemble the last-resort project overview from `project_overview.cypher` rows.
+
+    Reached only under `anchor_resolution = "hardened"`, and only when not one anchor
+    the classifier produced resolved to a node — the case where the anchor-scoped
+    templates would otherwise return zero rows and render an empty context (WP8).
+
+    Metadata only: names, paths, props, hooks and state, never source. Components are
+    dropped from the tail until the estimate fits `token_budget`, so the fallback is
+    bounded by construction rather than by the truncation ladder, whose priorities are
+    written for anchor-scoped context and do not apply here.
+
+    For a feature_addition the routing table is carried through as well: it is
+    project-wide by construction, so it is the one piece of anchor-independent context
+    the KG can always offer.
+
+    Kept separate from `assemble_context` on purpose: it must not be able to change what
+    the strict path assembles.
+    """
+    note = (
+        "⚠ No anchor from the task statement resolved to a component or hook in the "
+        "knowledge graph. The section below is a project-wide overview of the largest "
+        "components, not context scoped to the task — treat it as orientation only."
+    )
+    entries = [
+        ComponentContext(
+            name=row.get("componentName") or "",
+            file_path=row.get("filePath") or "",
+            source_code=None,
+            component_type=row.get("componentType") or "",
+            props=[{"name": n} for n in (row.get("propNames") or []) if n],
+            hooks=[{"name": n} for n in (row.get("hookNames") or []) if n],
+            state_variables=[{"name": n} for n in (row.get("stateNames") or []) if n],
+            relation="project_overview",
+        )
+        for row in rows
+        if row.get("componentName")
+    ]
+
+    route_lines, known_paths = routing_notes(routing_rows)
+    for route in anchor_routes or []:
+        if route not in known_paths:
+            route_lines.append(
+                f"⚠ The spec references route '{route}' — not present in the routing table above."
+            )
+
+    def estimate(kept: list[ComponentContext]) -> int:
+        total = _estimate_tokens(task_spec) + _estimate_tokens(note)
+        total += sum(_estimate_tokens(line) for line in route_lines)
+        for cc in kept:
+            total += _estimate_tokens(f"{cc.name} {cc.file_path}")
+            for items in (cc.props, cc.hooks, cc.state_variables):
+                total += _estimate_tokens(" ".join(i.get("name", "") for i in items))
+        return total
+
+    while entries and estimate(entries) > token_budget:
+        entries.pop()
+
+    return ContextData(
+        task_spec=task_spec,
+        task_type=task_type,
+        target_components=[],
+        neighbor_components=entries,
+        cross_cutting_notes=[note] + route_lines,
+        project_name=project_name,
+        retriever_name="kg_augmented",
+    )

@@ -1,0 +1,181 @@
+{
+  "candidate_id": "P6__text_emb_3_large__n2",
+  "run_id": "qwen_robustness_2026-09-19_wp5_p4p6",
+  "run_name": "qwen_robustness",
+  "task_id": "P6",
+  "project_name": "takenote",
+  "condition": "text_emb_3_large",
+  "index": 2,
+  "model_id": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "timestamp": "2026-09-19T16:25:02.964328+00:00",
+  "retrieval_token_count": 6981,
+  "generator_usage": {
+    "input_tokens": 14189,
+    "output_tokens": 461
+  },
+  "generator_latency_ms": 2266.7911859989545,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": null,
+  "apply_reason": "malformed_blocks",
+  "edit_count": 0,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "embedding_model": "text-embedding-3-large",
+    "cache_file": "embedding_cache/takenote/text-embedding-3-large.jsonl",
+    "corpus_size": 60,
+    "ranked_top": [
+      {
+        "path": "src/client/containers/CategoryList.tsx",
+        "score": 0.331581
+      },
+      {
+        "path": "src/client/slices/category.ts",
+        "score": 0.327856
+      },
+      {
+        "path": "src/client/components/NoteList/SelectCategory.tsx",
+        "score": 0.313301
+      },
+      {
+        "path": "src/client/containers/CategoryOption.tsx",
+        "score": 0.291541
+      },
+      {
+        "path": "src/client/components/AppSidebar/AddCategoryForm.tsx",
+        "score": 0.270796
+      },
+      {
+        "path": "src/client/components/AppSidebar/AddCategoryButton.tsx",
+        "score": 0.25321
+      },
+      {
+        "path": "src/resources/TestID.ts",
+        "score": 0.251114
+      },
+      {
+        "path": "src/resources/LabelText.ts",
+        "score": 0.24553
+      },
+      {
+        "path": "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+        "score": 0.233281
+      },
+      {
+        "path": "src/client/types/index.ts",
+        "score": 0.21507
+      },
+      {
+        "path": "src/client/slices/note.ts",
+        "score": 0.21273
+      },
+      {
+        "path": "src/client/utils/helpers.ts",
+        "score": 0.206517
+      },
+      {
+        "path": "src/client/utils/enums.ts",
+        "score": 0.20181
+      },
+      {
+        "path": "src/client/containers/NoteList.tsx",
+        "score": 0.199207
+      },
+      {
+        "path": "src/client/api/index.ts",
+        "score": 0.194182
+      },
+      {
+        "path": "src/client/contexts/TempStateContext.tsx",
+        "score": 0.188372
+      },
+      {
+        "path": "src/client/sagas/index.ts",
+        "score": 0.185885
+      },
+      {
+        "path": "src/client/containers/ContextMenuOptions.tsx",
+        "score": 0.185706
+      },
+      {
+        "path": "src/client/containers/AppSidebar.tsx",
+        "score": 0.181497
+      },
+      {
+        "path": "src/client/containers/ContextMenu.tsx",
+        "score": 0.180087
+      }
+    ],
+    "included_files": [
+      "src/client/containers/CategoryList.tsx",
+      "src/client/slices/category.ts",
+      "src/client/components/NoteList/SelectCategory.tsx",
+      "src/client/containers/CategoryOption.tsx",
+      "src/client/components/AppSidebar/AddCategoryForm.tsx",
+      "src/client/components/AppSidebar/AddCategoryButton.tsx",
+      "src/resources/TestID.ts",
+      "src/resources/LabelText.ts",
+      "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+      "src/client/types/index.ts",
+      "src/client/slices/note.ts",
+      "src/client/utils/helpers.ts",
+      "src/client/utils/enums.ts",
+      "src/client/containers/NoteList.tsx",
+      "src/client/contexts/TempStateContext.tsx",
+      "src/client/utils/constants.ts",
+      "src/client/components/NoteList/SearchBar.tsx"
+    ],
+    "skipped_for_budget": [
+      "src/client/api/index.ts",
+      "src/client/sagas/index.ts",
+      "src/client/containers/ContextMenuOptions.tsx",
+      "src/client/containers/AppSidebar.tsx",
+      "src/client/containers/ContextMenu.tsx",
+      "src/client/containers/NoteMenuBar.tsx",
+      "src/client/components/AppSidebar/ScratchpadOption.tsx",
+      "src/client/components/AppSidebar/FolderOption.tsx",
+      "src/client/utils/reactMarkdownPlugins.ts",
+      "src/client/utils/notesSortStrategies.ts",
+      "src/client/selectors/index.ts",
+      "src/client/containers/TakeNoteApp.tsx",
+      "src/client/containers/SettingsModal.tsx",
+      "src/client/slices/index.ts",
+      "src/client/components/Editor/NoteLink.tsx",
+      "src/client/components/Tabs/Tabs.tsx",
+      "src/client/containers/KeyboardShortcuts.tsx",
+      "src/client/components/Tabs/Tab.tsx",
+      "src/client/components/Switch.tsx",
+      "src/client/components/SettingsModal/SelectOptions.tsx",
+      "src/client/slices/settings.ts",
+      "src/client/components/NoteList/ContextMenuOption.tsx",
+      "src/client/components/SettingsModal/Option.tsx",
+      "src/client/components/Select.tsx",
+      "src/client/components/SettingsModal/IconButtonUploader.tsx",
+      "src/client/components/LastSyncedNotification.tsx",
+      "src/client/components/LandingPage.tsx",
+      "src/client/components/AppSidebar/ActionButton.tsx",
+      "src/client/components/SettingsModal/IconButton.tsx",
+      "src/client/components/Editor/PreviewEditor.tsx",
+      "src/client/components/Tabs/TabPanel.tsx",
+      "src/client/containers/NoteEditor.tsx",
+      "src/client/router/PublicRoute.tsx",
+      "src/client/slices/sync.ts",
+      "src/client/components/SettingsModal/Shortcut.tsx",
+      "src/client/router/PrivateRoute.tsx",
+      "src/client/components/Editor/EmptyEditor.tsx",
+      "src/client/containers/App.tsx",
+      "src/client/slices/auth.ts",
+      "src/client/utils/hooks.ts",
+      "src/client/index.tsx",
+      "src/client/utils/history.ts",
+      "src/client/components/NoteList/NoteListButton.tsx"
+    ],
+    "budget_tokens_used": 6911,
+    "token_budget": 7000,
+    "cache_hits": 61,
+    "api_calls": 0,
+    "api_prompt_tokens": 0
+  }
+}

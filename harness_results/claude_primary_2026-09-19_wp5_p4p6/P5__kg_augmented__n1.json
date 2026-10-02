@@ -1,0 +1,15 @@
+{
+  "task_id": "P5",
+  "candidate_id": "P5__kg_augmented__n1",
+  "condition": "kg_augmented",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 4455.806250000023,
+  "timeout_used_ms": 12653,
+  "stage_detail": null,
+  "apply_mode": "exact_unique",
+  "apply_reason": null
+}

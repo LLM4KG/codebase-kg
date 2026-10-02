@@ -1,0 +1,44 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/resources/TestID.ts",
+      "op": "replace",
+      "search": "  EMPTY_TRASH_BUTTON = 'empty-trash-button',\n",
+      "content": "  EMPTY_TRASH_BUTTON = 'empty-trash-button',\n  RESTORE_ALL_TRASH_BUTTON = 'restore-all-trash-button',\n"
+    },
+    {
+      "path": "src/resources/LabelText.ts",
+      "op": "replace",
+      "search": "  RESTORE_FROM_TRASH = 'Restore from trash',\n",
+      "content": "  RESTORE_ALL_TRASH = 'Restore all',\n  RESTORE_FROM_TRASH = 'Restore from trash',\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    emptyTrash: (state) => {\n",
+      "content": "    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) =>\n        note.trash ? { ...note, trash: false } : note\n      )\n    },\n    emptyTrash: (state) => {\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "import {\n  addNote,\n  swapFolder,\n  updateActiveNote,\n  assignFavoriteToNotes,\n  assignTrashToNotes,\n  updateSelectedNotes,\n  unassignTrashFromNotes,\n} from '@/slices/note'\n",
+      "content": "import {\n  addNote,\n  swapFolder,\n  updateActiveNote,\n  assignFavoriteToNotes,\n  assignTrashToNotes,\n  updateSelectedNotes,\n  unassignTrashFromNotes,\n  restoreAllTrash,\n} from '@/slices/note'\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "  const _emptyTrash = () => dispatch(emptyTrash())\n",
+      "content": "  const _emptyTrash = () => dispatch(emptyTrash())\n  const _restoreAllTrash = () => dispatch(restoreAllTrash())\n"
+    },
+    {
+      "path": "src/client/containers/NoteList.tsx",
+      "op": "replace",
+      "search": "          <button\n            data-testid={TestID.EMPTY_TRASH_BUTTON}\n            className=\"button-default\"\n            onClick={_emptyTrash}\n          >\n            {LabelText.EMPTY_TRASH}\n          </button>\n",
+      "content": "          <button\n            data-testid={TestID.RESTORE_ALL_TRASH_BUTTON}\n            className=\"button-default\"\n            onClick={_restoreAllTrash}\n          >\n            {LabelText.RESTORE_ALL_TRASH}\n          </button>\n          <button\n            data-testid={TestID.EMPTY_TRASH_BUTTON}\n            className=\"button-default\"\n            onClick={_emptyTrash}\n          >\n            {LabelText.EMPTY_TRASH}\n          </button>\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

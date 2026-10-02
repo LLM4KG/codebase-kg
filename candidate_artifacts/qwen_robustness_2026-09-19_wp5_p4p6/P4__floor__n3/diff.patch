@@ -1,0 +1,26 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/hooks/useCart.ts",
+      "op": "replace",
+      "search": "  const removeFromCart = (productId: string) => {\n    setCartItems((prevItems) => {\n      const newItems = { ...prevItems };\n      delete newItems[productId];\n      return newItems;\n    });\n  };\n",
+      "content": "  const removeFromCart = (productId: string) => {\n    setCartItems((prevItems) => {\n      const newItems = { ...prevItems };\n      delete newItems[productId];\n      return newItems;\n    });\n  };\n\n  const clearCart = () => {\n    setCartItems({});\n  };\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart';\nimport { CartItem } from './CartItem';\nimport { CartSummary } from './CartSummary';\nimport { CartEmptyState } from './CartEmptyState';\nimport styles from './Cart.module.css';\n\nexport const Cart = () => {\n  const { cartItems, updateQuantity, removeFromCart } = useCart();\n",
+      "content": "import { useCart } from '../../hooks/useCart';\nimport { CartItem } from './CartItem';\nimport { CartSummary } from './CartSummary';\nimport { CartEmptyState } from './CartEmptyState';\nimport styles from './Cart.module.css';\n\nexport const Cart = () => {\n  const { cartItems, updateQuantity, removeFromCart, clearCart } = useCart();\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "        </div>\n      )}\n    </div>\n  );\n};\n",
+      "content": "        </div>\n      )}\n      {Object.keys(cartItems).length > 0 && (\n        <div className={styles.footer}>\n          <button \n            className={styles.clearCartButton}\n            onClick={clearCart}\n          >\n            Clear cart\n          </button>\n        </div>\n      )}\n    </div>\n  );\n};\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

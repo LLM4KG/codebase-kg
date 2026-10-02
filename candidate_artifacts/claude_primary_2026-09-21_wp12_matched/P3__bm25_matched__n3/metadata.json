@@ -1,0 +1,254 @@
+{
+  "candidate_id": "P3__bm25_matched__n3",
+  "run_id": "claude_primary_2026-09-21_wp12_matched",
+  "run_name": "claude_primary",
+  "task_id": "P3",
+  "project_name": "takenote",
+  "condition": "bm25_matched",
+  "index": 3,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "timestamp": "2026-09-21T04:16:04.745134+00:00",
+  "retrieval_token_count": 705,
+  "generator_usage": {
+    "input_tokens": 2606,
+    "output_tokens": 1010
+  },
+  "generator_latency_ms": 12519.741880998481,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": "exact_unique",
+  "apply_reason": null,
+  "edit_count": 5,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "query_tokens": [
+      "notemenubar",
+      "note",
+      "menu",
+      "bar",
+      "component",
+      "src",
+      "client",
+      "containers",
+      "notemenubar",
+      "note",
+      "menu",
+      "bar",
+      "tsx",
+      "inline",
+      "clipboard",
+      "copy",
+      "logic",
+      "usestate",
+      "use",
+      "state",
+      "copied",
+      "feedback",
+      "text",
+      "useeffect",
+      "use",
+      "effect",
+      "auto",
+      "clears",
+      "after",
+      "seconds",
+      "copytoclipboard",
+      "copy",
+      "clipboard",
+      "call",
+      "onclick",
+      "click",
+      "handler",
+      "extract",
+      "reusable",
+      "custom",
+      "hook",
+      "usecopytoclipboard",
+      "use",
+      "copy",
+      "clipboard",
+      "successmessage",
+      "success",
+      "message",
+      "timeout",
+      "new",
+      "file",
+      "src",
+      "client",
+      "utils",
+      "usecopytoclipboard",
+      "use",
+      "copy",
+      "clipboard",
+      "ts",
+      "hook",
+      "should",
+      "return",
+      "copiedtext",
+      "copied",
+      "text",
+      "handlecopy",
+      "handle",
+      "copy",
+      "update",
+      "notemenubar",
+      "note",
+      "menu",
+      "bar",
+      "use",
+      "new",
+      "hook"
+    ],
+    "corpus_size": 60,
+    "ranked_top": [
+      {
+        "path": "src/client/containers/NoteMenuBar.tsx",
+        "score": 126.5897
+      },
+      {
+        "path": "src/client/containers/NoteEditor.tsx",
+        "score": 72.0312
+      },
+      {
+        "path": "src/client/containers/ContextMenuOptions.tsx",
+        "score": 65.9283
+      },
+      {
+        "path": "src/client/utils/helpers.ts",
+        "score": 56.4331
+      },
+      {
+        "path": "src/client/containers/NoteList.tsx",
+        "score": 52.7324
+      },
+      {
+        "path": "src/resources/TestID.ts",
+        "score": 51.9252
+      },
+      {
+        "path": "src/client/containers/CategoryList.tsx",
+        "score": 47.0743
+      },
+      {
+        "path": "src/resources/LabelText.ts",
+        "score": 41.2169
+      },
+      {
+        "path": "src/client/containers/ContextMenu.tsx",
+        "score": 39.3679
+      },
+      {
+        "path": "src/client/containers/CategoryOption.tsx",
+        "score": 38.7785
+      },
+      {
+        "path": "src/client/containers/SettingsModal.tsx",
+        "score": 33.3414
+      },
+      {
+        "path": "src/client/containers/TakeNoteApp.tsx",
+        "score": 32.2076
+      },
+      {
+        "path": "src/client/components/NoteList/ContextMenuOption.tsx",
+        "score": 31.3389
+      },
+      {
+        "path": "src/client/components/SettingsModal/IconButtonUploader.tsx",
+        "score": 31.0458
+      },
+      {
+        "path": "src/client/containers/KeyboardShortcuts.tsx",
+        "score": 30.6909
+      },
+      {
+        "path": "src/client/utils/hooks.ts",
+        "score": 30.4567
+      },
+      {
+        "path": "src/client/containers/App.tsx",
+        "score": 28.5398
+      },
+      {
+        "path": "src/client/containers/AppSidebar.tsx",
+        "score": 26.9733
+      },
+      {
+        "path": "src/client/api/index.ts",
+        "score": 26.7522
+      },
+      {
+        "path": "src/client/components/AppSidebar/FolderOption.tsx",
+        "score": 24.8777
+      }
+    ],
+    "included_files": [
+      "src/client/containers/NoteMenuBar.tsx",
+      "src/client/utils/history.ts"
+    ],
+    "skipped_for_budget": [
+      "src/client/containers/NoteEditor.tsx",
+      "src/client/containers/ContextMenuOptions.tsx",
+      "src/client/utils/helpers.ts",
+      "src/client/containers/NoteList.tsx",
+      "src/resources/TestID.ts",
+      "src/client/containers/CategoryList.tsx",
+      "src/resources/LabelText.ts",
+      "src/client/containers/ContextMenu.tsx",
+      "src/client/containers/CategoryOption.tsx",
+      "src/client/containers/SettingsModal.tsx",
+      "src/client/containers/TakeNoteApp.tsx",
+      "src/client/components/NoteList/ContextMenuOption.tsx",
+      "src/client/components/SettingsModal/IconButtonUploader.tsx",
+      "src/client/containers/KeyboardShortcuts.tsx",
+      "src/client/utils/hooks.ts",
+      "src/client/containers/App.tsx",
+      "src/client/containers/AppSidebar.tsx",
+      "src/client/api/index.ts",
+      "src/client/components/AppSidebar/FolderOption.tsx",
+      "src/client/contexts/TempStateContext.tsx",
+      "src/client/components/Editor/PreviewEditor.tsx",
+      "src/client/utils/enums.ts",
+      "src/client/utils/notesSortStrategies.ts",
+      "src/client/components/Tabs/Tabs.tsx",
+      "src/client/components/Editor/NoteLink.tsx",
+      "src/client/components/LandingPage.tsx",
+      "src/client/components/NoteList/SearchBar.tsx",
+      "src/client/slices/note.ts",
+      "src/client/utils/reactMarkdownPlugins.ts",
+      "src/client/router/PrivateRoute.tsx",
+      "src/client/router/PublicRoute.tsx",
+      "src/client/sagas/index.ts",
+      "src/client/slices/category.ts",
+      "src/client/slices/settings.ts",
+      "src/client/utils/constants.ts",
+      "src/client/components/AppSidebar/AddCategoryForm.tsx",
+      "src/client/components/NoteList/NoteListButton.tsx",
+      "src/client/components/SettingsModal/IconButton.tsx",
+      "src/client/components/AppSidebar/ActionButton.tsx",
+      "src/client/types/index.ts",
+      "src/client/slices/auth.ts",
+      "src/client/slices/index.ts",
+      "src/client/components/AppSidebar/ScratchpadOption.tsx",
+      "src/client/components/AppSidebar/AddCategoryButton.tsx",
+      "src/client/slices/sync.ts",
+      "src/client/selectors/index.ts",
+      "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+      "src/client/components/Editor/EmptyEditor.tsx",
+      "src/client/components/Tabs/Tab.tsx",
+      "src/client/components/NoteList/SelectCategory.tsx",
+      "src/client/index.tsx",
+      "src/client/components/LastSyncedNotification.tsx",
+      "src/client/components/Tabs/TabPanel.tsx",
+      "src/client/components/SettingsModal/Shortcut.tsx",
+      "src/client/components/Switch.tsx",
+      "src/client/components/Select.tsx",
+      "src/client/components/SettingsModal/Option.tsx",
+      "src/client/components/SettingsModal/SelectOptions.tsx"
+    ],
+    "budget_tokens_used": 747,
+    "token_budget": 772
+  }
+}

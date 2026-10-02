@@ -1,0 +1,48 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Avatar",
+        "childComponent": "Image",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "avatarUrl",
+            "valueExpression": "avatarUrl"
+          },
+          {
+            "propName": "...sharedProps",
+            "valueExpression": "{...sharedProps}"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Avatar",
+        "childComponent": "Letter",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "color",
+            "valueExpression": "getColorFromName(name)"
+          },
+          {
+            "propName": "...sharedProps",
+            "valueExpression": "{...sharedProps}"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,128 @@
+```text
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+=======
+  const clearCart = () => {
+    setProducts([]);
+    updateCartTotal([]);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  };
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+=======
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  } = useCartProducts();
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+=======
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+=======
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+=======
+            <S.ClearCartButton onClick={clearCart}>
+              Clear cart
+            </S.ClearCartButton>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+>>>>>>> REPLACE
+
+src/components/Cart/style.ts
+<<<<<<< SEARCH
+export const CartFooter = styled.div`
+=======
+export const ClearCartButton = styled.button`
+  width: 100%;
+  border: 0;
+  color: #ececec;
+  text-transform: uppercase;
+  background-color: transparent;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 20px;
+  cursor: pointer;
+  outline: none;
+  text-decoration: underline;
+
+  transition: opacity 0.2s;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.secondary};
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+export const CartFooter = styled.div`
+>>>>>>> REPLACE
+```

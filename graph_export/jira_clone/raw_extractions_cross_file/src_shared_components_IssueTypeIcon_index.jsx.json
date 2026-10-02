@@ -1,0 +1,40 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "IssueTypeIcon",
+        "childComponent": "TypeIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "type"
+          },
+          {
+            "propName": "color",
+            "valueExpression": "type"
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          },
+          {
+            "propName": "...otherProps",
+            "valueExpression": "{...otherProps}"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

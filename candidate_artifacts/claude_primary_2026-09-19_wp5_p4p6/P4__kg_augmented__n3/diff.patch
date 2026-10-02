@@ -1,0 +1,44 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/contexts/cart-context/useCart.ts",
+      "op": "replace",
+      "search": "import { useCartContext } from './CartContextProvider';\nimport useCartProducts from './useCartProducts';\nimport useCartTotal from './useCartTotal';\n\nconst useCart = () => {\n  const { isOpen, setIsOpen } = useCartContext();\n  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  } = useCartProducts();\n  const { total, updateCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    total,\n    updateCartTotal,\n  };\n};\n\nexport default useCart;\n",
+      "content": "import { useCartContext } from './CartContextProvider';\nimport useCartProducts from './useCartProducts';\nimport useCartTotal from './useCartTotal';\n\nconst useCart = () => {\n  const { isOpen, setIsOpen } = useCartContext();\n  const {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearProducts,\n  } = useCartProducts();\n  const { total, updateCartTotal, resetCartTotal } = useCartTotal();\n\n  const openCart = () => setIsOpen(true);\n  const closeCart = () => setIsOpen(false);\n\n  const clearCart = () => {\n    clearProducts();\n    resetCartTotal();\n  };\n\n  return {\n    isOpen,\n    openCart,\n    closeCart,\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearCart,\n    total,\n    updateCartTotal,\n  };\n};\n\nexport default useCart;\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "  const { products, total, isOpen, openCart, closeCart } = useCart();\n",
+      "content": "  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n",
+      "content": "            <S.ClearCartButton onClick={clearCart}>\n              Clear cart\n            </S.ClearCartButton>\n            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCartProducts.tsx",
+      "op": "replace",
+      "search": "  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n  };\n",
+      "content": "  const clearProducts = () => {\n    setProducts([]);\n  };\n\n  return {\n    products,\n    addProduct,\n    removeProduct,\n    increaseProductQuantity,\n    decreaseProductQuantity,\n    clearProducts,\n  };\n"
+    },
+    {
+      "path": "src/contexts/cart-context/useCartTotal.tsx",
+      "op": "replace",
+      "search": "  return { total, updateCartTotal };\n",
+      "content": "  const resetCartTotal = () => {\n    setTotal(initialState);\n  };\n\n  return { total, updateCartTotal, resetCartTotal };\n"
+    },
+    {
+      "path": "src/components/Cart/style.ts",
+      "op": "replace",
+      "search": "export const CheckoutButton\n",
+      "content": "export const ClearCartButton = styled.button`\n  background: none;\n  border: none;\n  color: ${({ theme }) => theme.colors?.secondary || '#999'};\n  cursor: pointer;\n  font-size: 0.875rem;\n  margin-bottom: 8px;\n  padding: 0;\n  text-decoration: underline;\n\n  &:hover {\n    color: ${({ theme }) => theme.colors?.primary || '#333'};\n  }\n`;\n\nexport const CheckoutButton\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

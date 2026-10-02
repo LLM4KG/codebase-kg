@@ -19,6 +19,7 @@ from src.generation.orchestrator import (
     run_pilot,
 )
 from src.generation.calibrate import calibrate_timeouts
+from src.retrieval.config import load_condition_config
 from src.harness.runner import QUARANTINED_MODES
 
 pilot_app = typer.Typer(help="Phase 2 validation pilot (Work item 4/5).")
@@ -44,6 +45,27 @@ def _preflight_keys(run_name: str) -> None:
             f"[red]Missing {needed} in the environment for run '{run_name}'.[/red]\n"
             f"Set it in .env / the shell, or use --mock (and --mock-retrieval) for an "
             f"offline dry run."
+        )
+        raise typer.Exit(1)
+
+
+def _preflight_dense_key(conditions: tuple[str, ...]) -> None:
+    """The dense condition embeds with OpenAI in every leg, mock or not.
+
+    Without this, a cold embedding cache turns every dense candidate into a
+    mid-run `harness_error`, and the run id is spent.
+
+    Asks each condition TOML which retriever it dispatches to rather than matching
+    the literal `"text_emb_3_large"`: WP12's `text_emb_3_large_matched` is the same
+    embedder under a different id, and a name test would have waved it through to a
+    cold cache.
+    """
+    dense = [c for c in conditions if load_condition_config(c).retriever == "text_emb_3_large"]
+    if dense and not os.environ.get("OPENAI_API_KEY"):
+        console.print(
+            f"[red]Missing OPENAI_API_KEY for condition(s): {', '.join(dense)}.[/red]\n"
+            "Dense retrieval embeds with OpenAI whatever the generator model, and in "
+            "--mock runs too. Set it in .env / the shell."
         )
         raise typer.Exit(1)
 
@@ -75,6 +97,11 @@ def run(
         None,
         "--conditions",
         help=f"Comma-separated conditions to run. Default: {','.join(CONDITIONS)}.",
+    ),
+    tasks: str = typer.Option(
+        None,
+        "--tasks",
+        help="Comma-separated subset of the run's tasks (e.g. P2). Default: all of them.",
     ),
     run_id: str = typer.Option(
         None,
@@ -108,6 +135,7 @@ def run(
             f"Known: {', '.join(KNOWN_CONDITIONS)}[/red]"
         )
         raise typer.Exit(1)
+    _preflight_dense_key(selected)
 
     try:
         results = asyncio.run(
@@ -120,6 +148,7 @@ def run(
                 output_format=output_format,
                 conditions=selected,
                 run_id=run_id,
+                tasks=tuple(t.strip() for t in tasks.split(",")) if tasks else None,
             )
         )
     except (RunIdInUseError, ValueError) as exc:

@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/hooks/useCart.ts",
+      "op": "replace",
+      "search": "  const removeFromCart = (productId: string) => {\n    setCartItems(prev => prev.filter(item => item.productId !== productId));\n  };\n\n  return {\n    cartItems,\n    addToCart,\n    removeFromCart,\n    totalItems,\n    totalPrice\n  };\n",
+      "content": "  const removeFromCart = (productId: string) => {\n    setCartItems(prev => prev.filter(item => item.productId !== productId));\n  };\n\n  const clearCart = () => {\n    setCartItems([]);\n  };\n\n  return {\n    cartItems,\n    addToCart,\n    removeFromCart,\n    clearCart,\n    totalItems,\n    totalPrice\n  };\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart';\nimport { CartItem } from './CartItem';\nimport { CartSummary } from './CartSummary';\n\nexport const Cart = () => {\n  const { cartItems, totalItems, totalPrice } = useCart();\n\n  if (cartItems.length === 0) {\n    return (\n      <div className=\"cart-empty\">\n        <p>Your cart is empty</p>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"cart\">\n      <div className=\"cart-items\">\n        {cartItems.map(item => (\n          <CartItem key={item.productId} item={item} />\n        ))}\n      </div>\n      <div className=\"cart-footer\">\n        <CartSummary \n          totalItems={totalItems} \n          totalPrice={totalPrice} \n        />\n      </div>\n    </div>\n  );\n};\n",
+      "content": "import { useCart } from '../../hooks/useCart';\nimport { CartItem } from './CartItem';\nimport { CartSummary } from './CartSummary';\n\nexport const Cart = () => {\n  const { cartItems, totalItems, totalPrice, clearCart } = useCart();\n\n  if (cartItems.length === 0) {\n    return (\n      <div className=\"cart-empty\">\n        <p>Your cart is empty</p>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"cart\">\n      <div className=\"cart-items\">\n        {cartItems.map(item => (\n          <CartItem key={item.productId} item={item} />\n        ))}\n      </div>\n      <div className=\"cart-footer\">\n        <CartSummary \n          totalItems={totalItems} \n          totalPrice={totalPrice} \n        />\n        <button \n          className=\"clear-cart-button\"\n          onClick={clearCart}\n        >\n          Clear cart\n        </button>\n      </div>\n    </div>\n  );\n};\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

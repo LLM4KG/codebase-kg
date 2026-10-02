@@ -1,0 +1,98 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsCreate",
+        "childComponent": "Create",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsCreate",
+        "childComponent": "UserAvatar",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "name",
+            "valueExpression": "currentUser.name"
+          },
+          {
+            "propName": "avatarUrl",
+            "valueExpression": "currentUser.avatarUrl"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsCreate",
+        "childComponent": "Right",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsCreate",
+        "childComponent": "BodyForm",
+        "importSource": "../BodyForm",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "body"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "setBody"
+          },
+          {
+            "propName": "isWorking",
+            "valueExpression": "isCreating"
+          },
+          {
+            "propName": "onSubmit",
+            "valueExpression": "handleCommentCreate"
+          },
+          {
+            "propName": "onCancel",
+            "valueExpression": "() => setFormOpen(false)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsCreate",
+        "childComponent": "FakeTextarea",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "() => setFormOpen(true)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsCommentsCreate",
+        "childComponent": "ProTip",
+        "importSource": "./ProTip",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "setFormOpen",
+            "valueExpression": "setFormOpen"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

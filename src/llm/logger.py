@@ -34,6 +34,13 @@ VALID_CALL_PURPOSES = frozenset({
     "anchor_extractor",
     "reformulator",
     "generator",
+    # Phase 1 extraction, written by src/llm/extraction_log.py — listed here so one
+    # reader can validate records from both phases.
+    "extraction_per_file",
+    "extraction_cross_file",
+    # Dense retrieval (IJCKG WP3): embedding the file corpus, and embedding a task spec.
+    "embedding_index",
+    "embedding_query",
 })
 
 _semaphore: asyncio.Semaphore | None = None
@@ -553,3 +560,111 @@ def logged_llm_call_sync(
         model_id=model,
         latency_ms=latency_ms,
     )
+
+
+# --------------------------------------------------------------------------- #
+# Embedding calls (dense retrieval, IJCKG WP3)                                #
+# --------------------------------------------------------------------------- #
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=2, min=10, max=90),
+    retry=retry_if_exception_type((litellm.RateLimitError, litellm.APIConnectionError)),
+    before_sleep=lambda retry_state: logger.warning(
+        "Retrying embedding call (attempt %d): %s",
+        retry_state.attempt_number,
+        retry_state.outcome.exception() if retry_state.outcome else "unknown",
+    ),
+)
+async def _aembedding_with_retry(*, model: str, input: list[str]) -> Any:
+    return await litellm.aembedding(model=model, input=input)
+
+
+@dataclass
+class EmbeddingResponse:
+    vectors: list[list[float]]
+    prompt_tokens: int | None
+    model_id: str
+    latency_ms: float
+
+
+async def logged_embedding_call(
+    texts: list[str],
+    labels: list[str],
+    model: str,
+    run_id: str,
+    condition_id: str,
+    call_purpose: str,
+    log_dir: Path | None = None,
+) -> EmbeddingResponse:
+    """Embed `texts` in one batched LiteLLM call and log the record to JSONL.
+
+    Same record shape as `logged_llm_call`, so one reader handles both. `prompt`
+    holds `labels` (file paths, or "<spec>"), not the embedded texts: those are
+    whole source files, already on disk. `usage.output_tokens` is null: embedding
+    calls bill input only. The record is flushed before this returns.
+    """
+    _validate_call_purpose(call_purpose)
+    if len(texts) != len(labels):
+        raise ValueError("texts and labels must have the same length")
+
+    params = {"n_inputs": len(texts)}
+    start = time.perf_counter()
+    try:
+        response = await _aembedding_with_retry(model=model, input=texts)
+    except Exception as exc:
+        record = _build_error_record(
+            messages=[{"role": "input", "content": labels}],
+            model=model,
+            run_id=run_id,
+            condition_id=condition_id,
+            call_purpose=call_purpose,
+            params=params,
+            exc=exc,
+            latency_ms=(time.perf_counter() - start) * 1000,
+        )
+        record["model_provider"] = "openai"
+        _write_log_record(record, run_id, condition_id, log_dir=log_dir)
+        raise
+    latency_ms = (time.perf_counter() - start) * 1000
+
+    data = sorted(response.data, key=lambda d: _field(d, "index"))
+    vectors = [list(_field(d, "embedding")) for d in data]
+    usage = getattr(response, "usage", None)
+    prompt_tokens = _field(usage, "prompt_tokens") if usage is not None else None
+
+    _write_log_record(
+        {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "model_id": model,
+            # `_parse_model_provider` defaults bare names to anthropic; embeddings
+            # here are always OpenAI's.
+            "model_provider": "openai",
+            "model_version": getattr(response, "model", None) or model,
+            "params": params,
+            "prompt": [{"role": "input", "content": labels}],
+            "response": "",
+            "usage": {"input_tokens": prompt_tokens, "output_tokens": None},
+            "call_purpose": call_purpose,
+            "latency_ms": latency_ms,
+            "condition_id": condition_id,
+            "run_id": run_id,
+            "openrouter_provider": None,
+            "rate_limit": _extract_rate_limit(response),
+        },
+        run_id,
+        condition_id,
+        log_dir=log_dir,
+    )
+    # Checked only after logging: the call was billed either way.
+    if len(vectors) != len(texts):
+        raise RuntimeError(f"embedding call returned {len(vectors)} vectors for {len(texts)} inputs")
+    return EmbeddingResponse(
+        vectors=vectors, prompt_tokens=prompt_tokens, model_id=model, latency_ms=latency_ms
+    )
+
+
+def _field(obj: Any, name: str) -> Any:
+    """Read `name` from a LiteLLM object or a plain dict (embedding `data` items are dicts)."""
+    if isinstance(obj, dict):
+        return obj.get(name)
+    return getattr(obj, name, None)

@@ -1,0 +1,71 @@
+Looking at the task, I need to make the duplicate category check case-insensitive in both the `CategoryList` component (for adding and renaming categories) and also ensure consistency with the existing codebase patterns.
+
+Let me analyze the relevant code:
+
+1. In `CategoryList.tsx`, there are two functions that check for duplicate categories:
+   - `onSubmitUpdateCategory` - for renaming categories
+   - `onSubmitNewCategory` - for adding new categories
+
+2. Both currently use exact case-sensitive matching: `categories.find((cat) => cat.name === category.name)`
+
+3. I need to change this to case-insensitive comparison.
+
+```text
+src/client/containers/CategoryList.tsx
+<<<<<<< SEARCH
+  const onSubmitUpdateCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+=======
+  const onSubmitUpdateCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+>>>>>>> REPLACE
+
+src/client/containers/CategoryList.tsx
+<<<<<<< SEARCH
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+  }
+=======
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+  }
+>>>>>>> REPLACE
+```

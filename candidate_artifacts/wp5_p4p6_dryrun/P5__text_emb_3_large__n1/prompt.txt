@@ -1,0 +1,2594 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+`CartProduct` calls `useCart` itself to remove a product and change its quantity. Refactor it into a presentational component that receives three callback props, `onRemove`, `onIncrease` and `onDecrease`, each called with the product. Move the `useCart` call into its parent, `CartProducts`, which should pass the callbacks down. The cart's behaviour must not change.
+
+## Project Context
+
+You are working on the **react-shopping-cart** React project.
+
+**Task type:** refactoring
+
+---
+
+### Target Components
+
+
+#### useCartProducts (`src/contexts/cart-context/useCartProducts.ts`)
+
+
+```jsx
+import { useCartContext } from './CartContextProvider';
+import useCartTotal from './useCartTotal';
+import { ICartProduct } from 'models';
+
+const useCartProducts = () => {
+  const { products, setProducts } = useCartContext();
+  const { updateCartTotal } = useCartTotal();
+
+  const updateQuantitySafely = (
+    currentProduct: ICartProduct,
+    targetProduct: ICartProduct,
+    quantity: number
+  ): ICartProduct => {
+    if (currentProduct.id === targetProduct.id) {
+      return Object.assign({
+        ...currentProduct,
+        quantity: currentProduct.quantity + quantity,
+      });
+    } else {
+      return currentProduct;
+    }
+  };
+
+  const addProduct = (newProduct: ICartProduct) => {
+    let updatedProducts;
+    const isProductAlreadyInCart = products.some(
+      (product: ICartProduct) => newProduct.id === product.id
+    );
+
+    if (isProductAlreadyInCart) {
+      updatedProducts = products.map((product: ICartProduct) => {
+        return updateQuantitySafely(product, newProduct, newProduct.quantity);
+      });
+    } else {
+      updatedProducts = [...products, newProduct];
+    }
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const removeProduct = (productToRemove: ICartProduct) => {
+    const updatedProducts = products.filter(
+      (product: ICartProduct) => product.id !== productToRemove.id
+    );
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const increaseProductQuantity = (productToIncrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToIncrease, +1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+export default useCartProducts;
+
+```
+
+
+
+
+
+
+
+
+#### CartProduct (`src/components/Cart/CartProducts/CartProduct/CartProduct.tsx`)
+
+
+```tsx
+import formatPrice from 'utils/formatPrice';
+import { ICartProduct } from 'models';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+interface IProps {
+  product: ICartProduct;
+}
+const CartProduct = ({ product }: IProps) => {
+  const { removeProduct, increaseProductQuantity, decreaseProductQuantity } =
+    useCart();
+  const {
+    sku,
+    title,
+    price,
+    style,
+    currencyId,
+    currencyFormat,
+    availableSizes,
+    quantity,
+  } = product;
+
+  const handleRemoveProduct = () => removeProduct(product);
+  const handleIncreaseProductQuantity = () => increaseProductQuantity(product);
+  const handleDecreaseProductQuantity = () => decreaseProductQuantity(product);
+
+  return (
+    <S.Container>
+      <S.DeleteButton
+        onClick={handleRemoveProduct}
+        title="remove product from cart"
+      />
+      <S.Image
+        src={require(`static/products/${sku}-1-cart.webp`)}
+        alt={title}
+      />
+      <S.Details>
+        <S.Title>{title}</S.Title>
+        <S.Desc>
+          {`${availableSizes[0]} | ${style}`} <br />
+          Quantity: {quantity}
+        </S.Desc>
+      </S.Details>
+      <S.Price>
+        <p>{`${currencyFormat}  ${formatPrice(price, currencyId)}`}</p>
+        <div>
+          <S.ChangeQuantity
+            onClick={handleDecreaseProductQuantity}
+            disabled={quantity === 1 ? true : false}
+          >
+            -
+          </S.ChangeQuantity>
+          <S.ChangeQuantity onClick={handleIncreaseProductQuantity}>
+            +
+          </S.ChangeQuantity>
+        </div>
+      </S.Price>
+    </S.Container>
+  );
+};
+
+export default CartProduct;
+
+```
+
+
+
+
+
+
+
+
+#### Cart (`src/components/Cart/Cart.tsx`)
+
+
+```tsx
+import formatPrice from 'utils/formatPrice';
+import CartProducts from './CartProducts';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+      alert(
+        `Checkout - Subtotal: ${total.currencyFormat} ${formatPrice(
+          total.totalPrice,
+          total.currencyId
+        )}`
+      );
+    } else {
+      alert('Add some product in the cart!');
+    }
+  };
+
+  const handleToggleCart = (isOpen: boolean) => () =>
+    isOpen ? closeCart() : openCart();
+
+  return (
+    <S.Container isOpen={isOpen}>
+      <S.CartButton onClick={handleToggleCart(isOpen)}>
+        {isOpen ? (
+          <span>X</span>
+        ) : (
+          <S.CartIcon>
+            <S.CartQuantity title="Products in cart quantity">
+              {total.productQuantity}
+            </S.CartQuantity>
+          </S.CartIcon>
+        )}
+      </S.CartButton>
+
+      {isOpen && (
+        <S.CartContent>
+          <S.CartContentHeader>
+            <S.CartIcon large>
+              <S.CartQuantity>{total.productQuantity}</S.CartQuantity>
+            </S.CartIcon>
+            <S.HeaderTitle>Cart</S.HeaderTitle>
+          </S.CartContentHeader>
+
+          <CartProducts products={products} />
+
+          <S.CartFooter>
+            <S.Sub>SUBTOTAL</S.Sub>
+            <S.SubPrice>
+              <S.SubPriceValue>{`${total.currencyFormat} ${formatPrice(
+                total.totalPrice,
+                total.currencyId
+              )}`}</S.SubPriceValue>
+              <S.SubPriceInstallment>
+                {total.installments ? (
+                  <span>
+                    {`OR UP TO ${total.installments} x ${
+                      total.currencyFormat
+                    } ${formatPrice(
+                      total.totalPrice / total.installments,
+                      total.currencyId
+                    )}`}
+                  </span>
+                ) : null}
+              </S.SubPriceInstallment>
+            </S.SubPrice>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+    </S.Container>
+  );
+};
+
+export default Cart;
+
+```
+
+
+
+
+
+
+
+
+#### CartProducts (`src/components/Cart/CartProducts/CartProducts.tsx`)
+
+
+```tsx
+import { ICartProduct } from 'models';
+import CartProduct from './CartProduct';
+
+import * as S from './style';
+
+interface IProps {
+  products: ICartProduct[];
+}
+
+const CartProducts = ({ products }: IProps) => {
+  return (
+    <S.Container>
+      {products?.length ? (
+        products.map((p) => <CartProduct product={p} key={p.sku} />)
+      ) : (
+        <S.CartProductsEmpty>
+          Add some products in the cart <br />
+          :)
+        </S.CartProductsEmpty>
+      )}
+    </S.Container>
+  );
+};
+
+export default CartProducts;
+
+```
+
+
+
+
+
+
+
+
+#### useCart (`src/contexts/cart-context/useCart.ts`)
+
+
+```jsx
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+
+```
+
+
+
+
+
+
+
+
+#### Product (`src/components/Products/Product/Product.tsx`)
+
+
+```tsx
+import { KeyboardEvent } from 'react';
+
+import formatPrice from 'utils/formatPrice';
+import { IProduct } from 'models';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+interface IProps {
+  product: IProduct;
+}
+
+const Product = ({ product }: IProps) => {
+  const { openCart, addProduct } = useCart();
+  const {
+    sku,
+    title,
+    price,
+    installments,
+    currencyId,
+    currencyFormat,
+    isFreeShipping,
+  } = product;
+
+  const formattedPrice = formatPrice(price, currencyId);
+  let productInstallment;
+
+  if (installments) {
+    const installmentPrice = price / installments;
+
+    productInstallment = (
+      <S.Installment>
+        <span>or {installments} x</span>
+        <b>
+          {currencyFormat}
+          {formatPrice(installmentPrice, currencyId)}
+        </b>
+      </S.Installment>
+    );
+  }
+
+  const handleAddProduct = () => {
+    addProduct({ ...product, quantity: 1 });
+    openCart();
+  };
+
+  const handleAddProductWhenEnter = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' || event.code === 'Space') {
+      addProduct({ ...product, quantity: 1 });
+      openCart();
+    }
+  };
+
+  return (
+    <S.Container onKeyUp={handleAddProductWhenEnter} sku={sku} tabIndex={1}>
+      {isFreeShipping && <S.Stopper>Free shipping</S.Stopper>}
+      <S.Image alt={title} />
+      <S.Title>{title}</S.Title>
+      <S.Price>
+        <S.Val>
+          <small>{currencyFormat}</small>
+          <b>{formattedPrice.substring(0, formattedPrice.length - 3)}</b>
+          <span>{formattedPrice.substring(formattedPrice.length - 3)}</span>
+        </S.Val>
+        {productInstallment}
+      </S.Price>
+      <S.BuyButton onClick={handleAddProduct} tabIndex={-1}>
+        Add to cart
+      </S.BuyButton>
+    </S.Container>
+  );
+};
+
+export default Product;
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Cart/CartProducts/CartProduct/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+export const Container = styled.div`
+  position: relative;
+  box-sizing: border-box;
+  padding: 5%;
+
+  transition: background-color 0.2s, opacity 0.2s;
+
+  &::before {
+    content: '';
+    width: 90%;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    left: 5%;
+  }
+`;
+
+export const Details = styled.div`
+  width: 57%;
+  display: inline-block;
+  vertical-align: middle;
+`;
+
+export const Title = styled.p`
+  color: #ececec;
+  margin: 0;
+`;
+
+export const Desc = styled.p`
+  color: #5b5a5e;
+  margin: 0;
+`;
+
+export const Price = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  color: ${({ theme }) => theme.colors.secondary};
+  text-align: right;
+  width: 25%;
+`;
+
+export const DeleteButton = styled.button`
+  width: 16px;
+  height: 16px;
+  top: 15px;
+  right: 5%;
+  border-radius: 50%;
+  position: absolute;
+  background-size: auto 100%;
+  background-image: url(${require('static/delete-icon.png')});
+  background-repeat: no-repeat;
+  z-index: 2;
+  cursor: pointer;
+  border: 0;
+  background-color: transparent;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.secondary};
+  }
+
+  &:hover {
+    background-position-x: -17px;
+  }
+`;
+
+export const ChangeQuantity = styled.button`
+  color: #b7b7b7;
+  border: 0;
+  background-color: #000;
+  width: 25px;
+  height: 25px;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.secondary};
+  }
+
+  &:disabled {
+    opacity: 0.2;
+  }
+`;
+
+export const Image = styled.img`
+  display: inline-block;
+  vertical-align: middle;
+  width: 15%;
+  height: auto;
+  margin-right: 3%;
+`;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Cart/CartProducts/index.ts`)
+
+
+```jsx
+export { default } from './CartProducts';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Cart/CartProducts/CartProduct/index.ts`)
+
+
+```jsx
+export { default } from './CartProduct';
+
+```
+
+
+
+
+
+
+
+
+#### useCartTotal (`src/contexts/cart-context/useCartTotal.ts`)
+
+
+```jsx
+import { useCartContext } from './CartContextProvider';
+import { ICartProduct } from 'models';
+
+const useCartTotal = () => {
+  const { total, setTotal } = useCartContext();
+
+  const updateCartTotal = (products: ICartProduct[]) => {
+    const productQuantity = products.reduce(
+      (sum: number, product: ICartProduct) => {
+        sum += product.quantity;
+        return sum;
+      },
+      0
+    );
+
+    const totalPrice = products.reduce((sum: number, product: ICartProduct) => {
+      sum += product.price * product.quantity;
+      return sum;
+    }, 0);
+
+    const installments = products.reduce(
+      (greater: number, product: ICartProduct) => {
+        greater =
+          product.installments > greater ? product.installments : greater;
+        return greater;
+      },
+      0
+    );
+
+    const total = {
+      productQuantity,
+      installments,
+      totalPrice,
+      currencyId: 'USD',
+      currencyFormat: '$',
+    };
+
+    setTotal(total);
+  };
+
+  return {
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCartTotal;
+
+```
+
+
+
+
+
+
+
+
+#### CartContextProvider (`src/contexts/cart-context/CartContextProvider.tsx`)
+
+
+```tsx
+import { createContext, useContext, FC, useState } from 'react';
+import { ICartProduct, ICartTotal } from 'models';
+
+export interface ICartContext {
+  isOpen: boolean;
+  setIsOpen(state: boolean): void;
+  products: ICartProduct[];
+  setProducts(products: ICartProduct[]): void;
+  total: ICartTotal;
+  setTotal(products: any): void;
+}
+
+const CartContext = createContext<ICartContext | undefined>(undefined);
+const useCartContext = (): ICartContext => {
+  const context = useContext(CartContext);
+
+  if (!context) {
+    throw new Error('useCartContext must be used within a CartProvider');
+  }
+
+  return context;
+};
+
+const totalInitialValues = {
+  productQuantity: 0,
+  installments: 0,
+  totalPrice: 0,
+  currencyId: 'USD',
+  currencyFormat: '$',
+};
+
+const CartProvider: FC = (props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [products, setProducts] = useState<ICartProduct[]>([]);
+  const [total, setTotal] = useState<ICartTotal>(totalInitialValues);
+
+  const CartContextValue: ICartContext = {
+    isOpen,
+    setIsOpen,
+    products,
+    setProducts,
+    total,
+    setTotal,
+  };
+
+  return <CartContext.Provider value={CartContextValue} {...props} />;
+};
+
+export { CartProvider, useCartContext };
+
+```
+
+
+
+
+
+
+
+
+#### useProducts (`src/contexts/products-context/useProducts.tsx`)
+
+
+```tsx
+import { useCallback } from 'react';
+
+import { useProductsContext } from './ProductsContextProvider';
+import { IProduct } from 'models';
+import { getProducts } from 'services/products';
+
+const useProducts = () => {
+  const {
+    isFetching,
+    setIsFetching,
+    products,
+    setProducts,
+    filters,
+    setFilters,
+  } = useProductsContext();
+
+  const fetchProducts = useCallback(() => {
+    setIsFetching(true);
+    getProducts().then((products: IProduct[]) => {
+      setIsFetching(false);
+      setProducts(products);
+    });
+  }, [setIsFetching, setProducts]);
+
+  const filterProducts = (filters: string[]) => {
+    setIsFetching(true);
+
+    getProducts().then((products: IProduct[]) => {
+      setIsFetching(false);
+      let filteredProducts;
+
+      if (filters && filters.length > 0) {
+        filteredProducts = products.filter((p: IProduct) =>
+          filters.find((filter: string) =>
+            p.availableSizes.find((size: string) => size === filter)
+          )
+        );
+      } else {
+        filteredProducts = products;
+      }
+
+      setFilters(filters);
+      setProducts(filteredProducts);
+    });
+  };
+
+  return {
+    isFetching,
+    fetchProducts,
+    products,
+    filterProducts,
+    filters,
+  };
+};
+
+export default useProducts;
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Cart/CartProducts/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+export const Container = styled.div`
+  position: relative;
+  min-height: 280px;
+  padding-bottom: 200px;
+`;
+
+export const CartProductsEmpty = styled.p`
+  color: #ececec;
+  text-align: center;
+  line-height: 40px;
+`;
+
+```
+
+
+
+
+
+
+
+
+#### Products (`src/components/Products/Products.tsx`)
+
+
+```tsx
+import { IProduct } from 'models';
+import Product from './Product';
+
+import * as S from './style';
+
+interface IProps {
+  products: IProduct[];
+}
+
+const Products = ({ products }: IProps) => {
+  return (
+    <S.Container>
+      {products?.map((p) => (
+        <Product product={p} key={p.sku} />
+      ))}
+    </S.Container>
+  );
+};
+
+export default Products;
+
+```
+
+
+
+
+
+
+
+
+#### App (`src/components/App/App.tsx`)
+
+
+```tsx
+import { useEffect } from 'react';
+
+import Loader from 'components/Loader';
+import { GithubCorner, GithubStarButton } from 'components/Github';
+import Recruiter from 'components/Recruiter';
+import Filter from 'components/Filter';
+import Products from 'components/Products';
+import Cart from 'components/Cart';
+
+import { useProducts } from 'contexts/products-context';
+
+import * as S from './style';
+
+function App() {
+  const { isFetching, products, fetchProducts } = useProducts();
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  return (
+    <S.Container>
+      {isFetching && <Loader />}
+      <GithubCorner />
+      <Recruiter />
+      <S.TwoColumnGrid>
+        <S.Side>
+          <Filter />
+          <GithubStarButton />
+        </S.Side>
+        <S.Main>
+          <S.MainHeader>
+            <p>{products?.length} Product(s) found</p>
+          </S.MainHeader>
+          <Products products={products} />
+        </S.Main>
+      </S.TwoColumnGrid>
+      <Cart />
+    </S.Container>
+  );
+}
+
+export default App;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/contexts/cart-context/index.ts`)
+
+
+```jsx
+export { CartProvider } from './CartContextProvider';
+export { default as useCart } from './useCart';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Cart/index.ts`)
+
+
+```jsx
+export { default } from './Cart';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Products/Product/index.tsx`)
+
+
+```tsx
+export { default } from './Product';
+
+```
+
+
+
+
+
+
+
+
+#### ProductsContextProvider (`src/contexts/products-context/ProductsContextProvider.tsx`)
+
+
+```tsx
+import { createContext, useContext, FC, useState } from 'react';
+
+import { IProduct } from 'models';
+
+export interface IProductsContext {
+  isFetching: boolean;
+  setIsFetching(state: boolean): void;
+  products: IProduct[];
+  setProducts(products: IProduct[]): void;
+  filters: string[];
+  setFilters(filters: string[]): void;
+}
+
+const ProductsContext = createContext<IProductsContext | undefined>(undefined);
+const useProductsContext = (): IProductsContext => {
+  const context = useContext(ProductsContext);
+
+  if (!context) {
+    throw new Error(
+      'useProductsContext must be used within a ProductsProvider'
+    );
+  }
+
+  return context;
+};
+
+const ProductsProvider: FC = (props) => {
+  const [isFetching, setIsFetching] = useState(false);
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [filters, setFilters] = useState<string[]>([]);
+
+  const ProductContextValue: IProductsContext = {
+    isFetching,
+    setIsFetching,
+    products,
+    setProducts,
+    filters,
+    setFilters,
+  };
+
+  return <ProductsContext.Provider value={ProductContextValue} {...props} />;
+};
+
+export { ProductsProvider, useProductsContext };
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Products/Product/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+export const BuyButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: #fff;
+  padding: 15px 0;
+  margin-top: 10px;
+  cursor: pointer;
+  width: 100%;
+  border: 0;
+
+  transition: background-color 0.2s;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.secondary};
+  }
+`;
+
+interface IImage {
+  alt: string;
+}
+export const Image = styled.div<IImage>``;
+
+interface IContainer {
+  sku: number | string;
+}
+export const Container = styled.div<IContainer>`
+  position: relative;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 10px;
+  margin-bottom: 30px;
+  cursor: default;
+  outline: none;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.secondary};
+  }
+
+  ${Image} {
+    width: 100%;
+    height: 270px;
+    position: relative;
+    background-image: ${({ sku }) =>
+      `url(${require(`static/products/${sku}-1-product.webp`)})`};
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    ::before {
+      content: '';
+      display: block;
+      position: absolute;
+      background: #eee;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+        breakpoints.tablet}) {
+      height: 320px;
+    }
+  }
+
+  &:hover {
+    ${Image} {
+      background-image: ${({ sku }) =>
+        `url(${require(`static/products/${sku}-2-product.webp`)})`};
+    }
+
+    ${BuyButton} {
+      background-color: ${({ theme }) => theme.colors.secondary};
+    }
+  }
+`;
+
+export const Stopper = styled.div`
+  position: absolute;
+  color: #ececec;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  font-size: 0.6em;
+  background-color: ${({ theme }) => theme.colors.primary};
+  cursor: default;
+  z-index: 1;
+`;
+
+export const Title = styled.p`
+  position: relative;
+  padding: 0 20px;
+  height: 45px;
+
+  &::before {
+    content: '';
+    width: 20px;
+    height: 2px;
+    background-color: ${({ theme }) => theme.colors.secondary};
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -10px;
+  }
+`;
+
+export const Price = styled.div`
+  height: 60px;
+
+  .val {
+    b {
+      font-size: 1.5em;
+      margin-left: 5px;
+    }
+  }
+`;
+
+export const Val = styled.p`
+  margin: 0;
+  b {
+    font-size: 1.5em;
+    margin-left: 5px;
+  }
+`;
+
+export const Installment = styled.p`
+  margin: 0;
+  color: #9c9b9b;
+`;
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Cart/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+export const CartButton = styled.button`
+  border: 0;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  color: #ececec;
+  background-color: ${({ theme }) => theme.colors.primary};
+  text-align: center;
+  line-height: 50px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  z-index: 2;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.secondary};
+  }
+
+  &:hover {
+    filter: brightness(85%);
+  }
+`;
+
+interface IContainer {
+  isOpen: boolean;
+}
+export const Container = styled.div<IContainer>`
+  position: fixed;
+  top: 0;
+  right: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.primary};
+  box-sizing: border-box;
+  z-index: 99;
+
+  transition: right 0.2s;
+
+  ${CartButton} {
+    left: ${({ isOpen }) => (isOpen ? '0' : '-50px')};
+    background-color: ${({ theme, isOpen }) =>
+      isOpen ? theme.colors.black : theme.colors.primary};
+  }
+
+  @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+      breakpoints.tablet}) {
+    width: 450px;
+    right: ${({ isOpen }) => (isOpen ? '0' : '-450px')};
+
+    ${CartButton} {
+      left: -50px;
+    }
+  }
+`;
+
+interface ICartIcon {
+  large?: boolean;
+}
+export const CartIcon = styled.div<ICartIcon>`
+  width: ${({ large }) => (large ? '60px' : '50px')};
+  height: ${({ large }) => (large ? '60px' : '50px')};
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 15px;
+  background-image: url(${require('static/cart-icon.png')});
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+
+  background-size: 50%;
+`;
+
+export const CartQuantity = styled.div`
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  color: #0c0b10;
+  font-weight: bold;
+  font-size: 0.7em;
+  text-align: center;
+  line-height: 18px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  position: absolute;
+  bottom: 0;
+  right: 5px;
+`;
+
+export const CartContent = styled.div`
+  height: 100%;
+  overflow-y: scroll;
+
+  /* MAC scrollbar para desktop*/
+  @media screen and (min-width: 640px) {
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 10px;
+      background-color: rgba(0, 0, 0, 0.2);
+      padding: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: #0c0b10;
+    }
+  }
+`;
+
+export const CartContentHeader = styled.div`
+  color: #ececec;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 45px 0;
+`;
+
+export const HeaderTitle = styled.span`
+  font-weight: bold;
+  font-size: 1.2em;
+  vertical-align: middle;
+`;
+
+export const Sub = styled.p`
+  width: 20%;
+  color: #5b5a5e;
+  vertical-align: middle;
+  display: inline-block;
+`;
+
+export const SubPrice = styled.div`
+  width: 80%;
+  text-align: right;
+  color: #5b5a5e;
+  vertical-align: middle;
+  display: inline-block;
+`;
+
+export const SubPriceValue = styled.p`
+  color: ${({ theme }) => theme.colors.secondary};
+  font-size: 22px;
+  margin: 0;
+`;
+
+export const SubPriceInstallment = styled.p`
+  margin: 0;
+`;
+
+export const CheckoutButton = styled.button`
+  width: 100%;
+  border: 0;
+  color: #ececec;
+  text-transform: uppercase;
+  background-color: #0c0b10;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 40px;
+  cursor: pointer;
+  outline: none;
+
+  transition: background-color 0.2s;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.secondary};
+  }
+
+  &:hover {
+    background-color: #000;
+  }
+`;
+
+export const CartFooter = styled.div`
+  box-sizing: border-box;
+  padding: 5%;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 200px;
+  z-index: 2;
+  background-color: ${({ theme }) => theme.colors.primary};
+
+  &::before {
+    content: '';
+    width: 100%;
+    height: 20px;
+    display: block;
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+  }
+`;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/utils/test/mocks/index.ts`)
+
+
+```jsx
+import mockProducts from './products';
+import mockCartProducts from './cart-products';
+import mockCartTotal from './cart-total';
+
+export { mockProducts, mockCartProducts, mockCartTotal };
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/contexts/products-context/index.ts`)
+
+
+```jsx
+export { ProductsProvider } from './ProductsContextProvider';
+export { default as useProducts } from './useProducts';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Products/index.tsx`)
+
+
+```tsx
+export { default } from './Products';
+
+```
+
+
+
+
+
+
+
+
+#### cart-products (`src/utils/test/mocks/cart-products.ts`)
+
+
+```jsx
+import { ICartProduct } from 'models';
+
+const mockProducts: ICartProduct[] = [
+  {
+    availableSizes: ['S', 'L', 'XL', 'XXL'],
+    currencyFormat: '$',
+    currencyId: 'USD',
+    description: '14/15 s/nº',
+    id: 0,
+    installments: 9,
+    isFreeShipping: true,
+    price: 10.9,
+    sku: 8552515751438644,
+    style: 'White T-shirt',
+    title: 'Cropped Stay Groovy off white',
+    quantity: 1,
+  },
+  {
+    availableSizes: ['X', 'ML', 'L'],
+    currencyFormat: '$',
+    currencyId: 'USD',
+    description: '',
+    id: 11,
+    installments: 3,
+    isFreeShipping: true,
+    price: 13.25,
+    sku: 39876704341265610,
+    style: 'Wine',
+    title: 'Basic Cactus White T-shirt',
+    quantity: 1,
+  },
+  {
+    availableSizes: ['XL'],
+    currencyFormat: '$',
+    currencyId: 'USD',
+    description: '14/15 s/nº - Jogador',
+    id: 4,
+    installments: 12,
+    isFreeShipping: false,
+    price: 25.9,
+    sku: 9197907543445676,
+    style: 'Tony Hawk',
+    title: 'Skater Black Sweatshirt',
+    quantity: 1,
+  },
+];
+
+export default mockProducts;
+
+```
+
+
+
+
+
+
+
+
+#### Filter (`src/components/Filter/Filter.tsx`)
+
+
+```tsx
+import { useProducts } from 'contexts/products-context';
+
+import * as S from './style';
+
+export const availableSizes = ['XS', 'S', 'M', 'ML', 'L', 'XL', 'XXL'];
+
+const Filter = () => {
+  const { filters, filterProducts } = useProducts();
+
+  const selectedCheckboxes = new Set(filters);
+
+  const toggleCheckbox = (label: string) => {
+    if (selectedCheckboxes.has(label)) {
+      selectedCheckboxes.delete(label);
+    } else {
+      selectedCheckboxes.add(label);
+    }
+
+    const filters = Array.from(selectedCheckboxes) as [];
+
+    filterProducts(filters);
+  };
+
+  const createCheckbox = (label: string) => (
+    <S.Checkbox label={label} handleOnChange={toggleCheckbox} key={label} />
+  );
+
+  const createCheckboxes = () => availableSizes.map(createCheckbox);
+
+  return (
+    <S.Container>
+      <S.Title>Sizes:</S.Title>
+      {createCheckboxes()}
+    </S.Container>
+  );
+};
+
+export default Filter;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/models/index.ts`)
+
+
+```jsx
+export interface IProduct {
+  id: number;
+  sku: number;
+  title: string;
+  description: string;
+  availableSizes: string[];
+  style: string;
+  price: number;
+  installments: number;
+  currencyId: string;
+  currencyFormat: string;
+  isFreeShipping: boolean;
+}
+
+export interface ICartProduct extends IProduct {
+  quantity: number;
+}
+
+export interface ICartTotal {
+  productQuantity: number;
+  installments: number;
+  totalPrice: number;
+  currencyId: string;
+  currencyFormat: string;
+}
+
+export interface IGetProductsResponse {
+  data: {
+    products: IProduct[];
+  };
+}
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/index.tsx`)
+
+
+```tsx
+import { StrictMode } from 'react';
+import * as ReactDOMClient from 'react-dom/client';
+
+/* Theme */
+import { ThemeProvider } from 'commons/style/styled-components';
+import { theme } from 'commons/style/theme';
+import GlobalStyle from 'commons/style/global-style';
+
+/* Context Providers */
+import { ProductsProvider } from 'contexts/products-context';
+import { CartProvider } from 'contexts/cart-context';
+
+import App from 'components/App';
+
+const root = document.getElementById('root')!;
+const container = ReactDOMClient.createRoot(root);
+
+container.render(
+  <StrictMode>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <ProductsProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </ProductsProvider>
+    </ThemeProvider>
+  </StrictMode>
+);
+
+```
+
+
+
+
+
+
+
+
+#### products (`src/services/products.ts`)
+
+
+```jsx
+import axios from 'axios';
+import { IGetProductsResponse } from 'models';
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+export const getProducts = async () => {
+  let response: IGetProductsResponse;
+
+  if (isProduction) {
+    response = await axios.get(
+      'https://react-shopping-cart-67954.firebaseio.com/products.json'
+    );
+  } else {
+    response = require('static/json/products.json');
+  }
+
+  const { products } = response.data || [];
+
+  return products;
+};
+
+```
+
+
+
+
+
+
+
+
+#### cart-total (`src/utils/test/mocks/cart-total.ts`)
+
+
+```jsx
+import { ICartTotal } from 'models';
+
+const mockTotal: ICartTotal = {
+  productQuantity: 1,
+  installments: 1,
+  totalPrice: 10.9,
+  currencyId: 'USD',
+  currencyFormat: '$',
+};
+
+export default mockTotal;
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Products/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+export const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+      breakpoints.tablet}) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+      breakpoints.desktop}) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`;
+
+```
+
+
+
+
+
+
+
+
+#### products (`src/utils/test/mocks/products.ts`)
+
+
+```jsx
+import { IProduct } from 'models';
+
+const mockProducts: IProduct[] = [
+  {
+    availableSizes: ['S', 'L', 'XL', 'XXL'],
+    currencyFormat: '$',
+    currencyId: 'USD',
+    description: '14/15 s/nº',
+    id: 0,
+    installments: 9,
+    isFreeShipping: true,
+    price: 10.9,
+    sku: 8552515751438644,
+    style: 'White T-shirt',
+    title: 'Cropped Stay Groovy off white',
+  },
+  {
+    availableSizes: ['X', 'ML', 'L'],
+    currencyFormat: '$',
+    currencyId: 'USD',
+    description: '',
+    id: 11,
+    installments: 3,
+    isFreeShipping: true,
+    price: 13.25,
+    sku: 39876704341265610,
+    style: 'Wine',
+    title: 'Basic Cactus White T-shirt',
+  },
+  {
+    availableSizes: ['XL'],
+    currencyFormat: '$',
+    currencyId: 'USD',
+    description: '14/15 s/nº - Jogador',
+    id: 4,
+    installments: 12,
+    isFreeShipping: false,
+    price: 25.9,
+    sku: 9197907543445676,
+    style: 'Tony Hawk',
+    title: 'Skater Black Sweatshirt',
+  },
+];
+
+export default mockProducts;
+
+```
+
+
+
+
+
+
+
+
+#### GithubStarButton (`src/components/Github/GithubStarButton/GithubStarButton.tsx`)
+
+
+```tsx
+const StarButton = () => (
+  <div className="star-button-container">
+    <p>
+      <small>Leave a star on Github if this repository was useful :)</small>
+    </p>
+    <a
+      className="github-button"
+      href="https://github.com/jeffersonRibeiro/react-shopping-cart"
+      data-icon="octicon-star"
+      data-size="large"
+      data-show-count="true"
+      aria-label="Star jeffersonRibeiro/react-shopping-cart on GitHub"
+      tabIndex={-1}
+    >
+      Star
+    </a>
+  </div>
+);
+
+export default StarButton;
+
+```
+
+
+
+
+
+
+
+
+#### GithubCorner (`src/components/Github/GithubCorner/GithubCorner.tsx`)
+
+
+```tsx
+import * as S from './style';
+
+const GithubCorner = () => (
+  <S.Container
+    href="https://github.com/jeffersonRibeiro/react-shopping-cart"
+    aria-label="View source on Github"
+  >
+    <svg
+      width="80"
+      height="80"
+      viewBox="0 0 250 250"
+      style={{
+        fill: '#151513',
+        color: '#fff',
+        position: 'absolute',
+        top: '0',
+        border: '0',
+        left: '0',
+        transform: 'scale(-1, 1)',
+      }}
+      aria-hidden="true"
+    >
+      <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z" />
+      <S.OctoArm
+        d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+        fill="currentColor"
+        style={{ transformOrigin: '130px 106px' }}
+      />
+      <path
+        d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+        fill="currentColor"
+      />
+    </svg>
+  </S.Container>
+);
+
+export default GithubCorner;
+
+```
+
+
+
+
+
+
+
+
+#### Checkbox (`src/commons/Checkbox/Checkbox.tsx`)
+
+
+```tsx
+import { useState } from 'react';
+
+interface IProps {
+  className?: string;
+  label: string;
+  handleOnChange(label: string): void;
+}
+
+const Checkbox = ({ className, label, handleOnChange }: IProps) => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const toggleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    handleOnChange(label);
+  };
+
+  return (
+    <div className={className}>
+      <label>
+        <input
+          type="checkbox"
+          value={label}
+          checked={isChecked}
+          onChange={toggleCheckboxChange}
+          data-testid="checkbox"
+        />
+
+        <span className="checkmark">{label}</span>
+      </label>
+    </div>
+  );
+};
+
+export default Checkbox;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Github/index.ts`)
+
+
+```jsx
+export { default as GithubCorner } from './GithubCorner';
+export { default as GithubStarButton } from './GithubStarButton';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Recruiter/index.tsx`)
+
+
+```tsx
+export { default } from './Recruiter';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/App/index.ts`)
+
+
+```jsx
+export { default } from './App';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Github/GithubCorner/index.ts`)
+
+
+```jsx
+export { default } from './GithubCorner';
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Filter/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+import CB from 'commons/Checkbox';
+
+export const Container = styled.div``;
+
+export const Checkbox = styled(CB)`
+  display: inline-block;
+  margin-bottom: 10px;
+
+  /* Customize the label (the container) */
+  label {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 35px;
+    height: 35px;
+    font-size: 0.8em;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    border-radius: 50%;
+    line-height: 35px;
+    text-align: center;
+
+    /* On mouse-over, add a border with the primary color */
+    &:hover input ~ .checkmark {
+      border: 1px solid ${({ theme }) => theme.colors.primary};
+    }
+
+    input:focus-visible ~ .checkmark {
+      box-sizing: border-box;
+      line-height: 30px;
+      border: 3px solid ${({ theme }) => theme.colors.secondary};
+    }
+
+    /* When the checkbox is checked, add the primary color to background */
+    & input:checked ~ .checkmark {
+      background-color: ${({ theme }) => theme.colors.primary};
+      color: #ececec;
+    }
+
+    /* Show the checkmark when checked */
+    & input:checked ~ .checkmark:after {
+      display: block;
+    }
+
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 35px;
+      height: 35px;
+      font-size: 0.8em;
+      border-radius: 50%;
+      box-sizing: border-box;
+      line-height: 35px;
+      text-align: center;
+      color: ${({ theme }) => theme.colors.primary};
+      background-color: #ececec;
+
+      border: 1px solid transparent;
+    }
+  }
+`;
+
+export const Title = styled.h4`
+  margin-top: 2px;
+  margin-bottom: 20px;
+`;
+
+```
+
+
+
+
+
+
+
+
+#### test-utils (`src/utils/test/test-utils.tsx`)
+
+
+```tsx
+import { ReactNode } from 'react';
+import { render } from '@testing-library/react';
+
+import { ThemeProvider } from 'commons/style/styled-components';
+import { theme } from 'commons/style/theme';
+
+export const renderWithThemeProvider = (children: ReactNode) => {
+  return render(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
+};
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Github/GithubCorner/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+export const OctoArm = styled.path``;
+
+export const Container = styled.a`
+  &:hover ${OctoArm} {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+
+  @keyframes octocat-wave {
+    0%,
+    100% {
+      transform: rotate(0);
+    }
+    20%,
+    60% {
+      transform: rotate(-25deg);
+    }
+    40%,
+    80% {
+      transform: rotate(10deg);
+    }
+  }
+  @media (max-width: 500px) {
+    &:hover ${OctoArm} {
+      animation: none;
+    }
+    .github-corner ${OctoArm} {
+      animation: octocat-wave 560ms ease-in-out;
+    }
+  }
+`;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Github/GithubStarButton/index.ts`)
+
+
+```jsx
+export { default } from './GithubStarButton';
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Filter/index.ts`)
+
+
+```jsx
+export { default } from './Filter';
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/App/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+export const Container = styled.div``;
+
+export const TwoColumnGrid = styled.main`
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 1200px;
+  margin: 50px auto auto;
+
+  @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+      breakpoints.tablet}) {
+    grid-template-columns: 1fr 4fr;
+    margin-top: 80px;
+  }
+`;
+
+export const Side = styled.div`
+  display: grid;
+  justify-content: center;
+  padding: 15px;
+  box-sizing: border-box;
+
+  @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+      breakpoints.tablet}) {
+    align-content: baseline;
+  }
+`;
+
+export const Main = styled.main``;
+
+export const MainHeader = styled.main`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: end;
+  padding: 0 15px;
+`;
+
+```
+
+
+
+
+
+
+
+
+#### Loader (`src/components/Loader/Loader.tsx`)
+
+
+```tsx
+import * as S from './style';
+
+const Loader = () => (
+  <S.Container>
+    <div />
+    <div />
+    <div />
+    <div />
+  </S.Container>
+);
+
+export default Loader;
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Recruiter/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+import flag from './nl-flag.png';
+
+export const Container = styled.div`
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 2px solid #eee;
+  border-radius: 4px;
+  position: fixed;
+  display: flex;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 370px;
+  height: 100px;
+  z-index: 9;
+
+  @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+      breakpoints.tablet}) {
+    top: -5px;
+    height: 90px;
+    position: absolute;
+  }
+`;
+
+export const Thumbnail = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+  height: 100%;
+
+  img {
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+  }
+`;
+
+export const Flag = styled.span`
+  display: inline-block;
+  background-image: url(${flag});
+  width: 12px;
+  height: 12px;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center;
+  margin-left: 4px;
+`;
+
+export const Description = styled.div`
+  padding: 10px 10px 0 0px;
+  width: 80%;
+
+  @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
+      breakpoints.tablet}) {
+    padding: 10px 5px 0 0px;
+  }
+
+  h4 {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  p {
+    font-size: 12px;
+
+    margin: 0;
+  }
+
+  a:link,
+  a:visited {
+    color: #000;
+  }
+`;
+
+```
+
+
+
+
+
+
+
+
+#### styled-components (`src/commons/style/styled-components.ts`)
+
+
+```jsx
+import * as styledComponents from 'styled-components';
+import { ThemedStyledComponentsModule } from 'styled-components';
+
+import { StyleClosetTheme } from './theme';
+
+const {
+  default: styled,
+  css,
+  createGlobalStyle,
+  keyframes,
+  ThemeProvider,
+} = styledComponents as ThemedStyledComponentsModule<StyleClosetTheme>;
+
+export { css, createGlobalStyle, keyframes, ThemeProvider };
+export default styled;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/commons/Checkbox/index.ts`)
+
+
+```jsx
+export { default } from './Checkbox';
+
+```
+
+
+
+
+
+
+
+
+#### style (`src/components/Loader/style.ts`)
+
+
+```jsx
+import styled from 'styled-components/macro';
+
+export const Container = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -32px;
+  margin-top: -32px;
+  width: 64px;
+  height: 64px;
+  z-index: 10;
+  border-radius: 5px;
+  background-color: #000;
+
+  div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 51px;
+    height: 51px;
+    margin: 6px;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+    &:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+    &:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+    &:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+  }
+
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/components/Loader/index.ts`)
+
+
+```jsx
+export { default } from './Loader';
+
+```
+
+
+
+
+
+
+
+
+#### Recruiter (`src/components/Recruiter/Recruiter.tsx`)
+
+
+```tsx
+import netherlandsRecruiter from './jeremy-akeze-doghouse-it-recruitment.jpg';
+import * as S from './style';
+
+const Recruiter = () => (
+  <S.Container>
+    <S.Thumbnail>
+      <img
+        alt="Jeremy Akeze - Doghouse IT Recruitment"
+        src={netherlandsRecruiter}
+      />
+    </S.Thumbnail>
+    <S.Description>
+      <h4>
+        Work in the Netherlands
+        <S.Flag />
+      </h4>
+      <p>
+        Hi! I'm Jeremy Akeze from Doghouse IT Recruitment and I'm looking for
+        skilled Software Engineers like you. If you wish to move abroad,{' '}
+        <a href="https://www.linkedin.com/in/jeremy-akeze-9542b396/">
+          <b>follow me on Linkedin.</b>
+        </a>
+      </p>
+    </S.Description>
+  </S.Container>
+);
+
+export default Recruiter;
+
+```
+
+
+
+
+
+
+
+
+#### formatPrice (`src/utils/formatPrice.ts`)
+
+
+```jsx
+const formatPrice = (price: number, currencyId: string): string => {
+  switch (currencyId) {
+    case 'BRL':
+      return price.toFixed(2).replace('.', ',');
+    default:
+      return price.toFixed(2);
+  }
+};
+
+export default formatPrice;
+
+```
+
+
+
+
+
+
+
+
+#### global-style (`src/commons/style/global-style.tsx`)
+
+
+```tsx
+import { createGlobalStyle } from './styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+`;
+
+export default GlobalStyle;
+
+```
+
+
+
+
+
+
+
+
+#### theme (`src/commons/style/theme.ts`)
+
+
+```jsx
+export interface StyleClosetTheme {
+  colors: { [key in keyof typeof colors]: string };
+  breakpoints: { [key in keyof typeof breakpoints]: string };
+}
+
+const colors = {
+  primary: '#1b1a20',
+  secondary: '#eabf00',
+};
+
+const breakpoints = {
+  mobile: '480px',
+  tablet: '768px',
+  desktop: '1025px',
+};
+
+const theme: StyleClosetTheme = {
+  colors,
+  breakpoints,
+};
+
+export { theme };
+
+```
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

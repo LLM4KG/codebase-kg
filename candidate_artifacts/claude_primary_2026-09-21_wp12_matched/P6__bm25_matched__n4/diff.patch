@@ -1,0 +1,26 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/category.ts",
+      "op": "replace",
+      "search": "    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {\n      const categoryNames = new Map<string, string>()\n      state.categories.forEach(({ name }) => categoryNames.set(name, name))\n\n      // Make sure duplicate category is not added\n      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))\n\n      state.categories.push(...toAdd)\n    },\n",
+      "content": "    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {\n      const categoryNames = new Set<string>()\n      state.categories.forEach(({ name }) => categoryNames.add(name.toLowerCase()))\n\n      // Make sure duplicate category is not added (case-insensitive)\n      const toAdd = payload.filter(({ name }) => !categoryNames.has(name.toLowerCase()))\n\n      state.categories.push(...toAdd)\n    },\n"
+    },
+    {
+      "path": "src/client/slices/category.ts",
+      "op": "replace",
+      "search": "    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {\n      state.categories.push(payload)\n    },\n",
+      "content": "    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {\n      const isDuplicate = state.categories.some(\n        (category) => category.name.toLowerCase() === payload.name.toLowerCase()\n      )\n      if (!isDuplicate) {\n        state.categories.push(payload)\n      }\n    },\n\n    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {\n      const isDuplicate = state.categories.some(\n        (category) =>\n          category.id !== payload.id &&\n          category.name.toLowerCase() === payload.name.toLowerCase()\n      )\n      if (!isDuplicate) {\n        state.categories = state.categories.map((category) =>\n          category.id === payload.id ? { ...category, name: payload.name } : category\n        )\n      }\n    },\n"
+    },
+    {
+      "path": "src/client/slices/category.ts",
+      "op": "replace",
+      "search": "    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {\n      state.categories = state.categories.map((category) =>\n        category.id === payload.id ? { ...category, name: payload.name } : category\n      )\n    },\n",
+      "content": ""
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,73 @@
+{
+  "function_components": {
+    "components": []
+  },
+  "custom_hooks": {
+    "customHooks": [
+      {
+        "name": "useInterval",
+        "syntax": "function",
+        "exportType": "named",
+        "parameters": [
+          "callback",
+          "delay"
+        ],
+        "returnShape": "void"
+      },
+      {
+        "name": "useKey",
+        "syntax": "function",
+        "exportType": "named",
+        "parameters": [
+          "key",
+          "action"
+        ],
+        "returnShape": "void"
+      },
+      {
+        "name": "useBeforeUnload",
+        "syntax": "function",
+        "exportType": "named",
+        "parameters": [
+          "handler"
+        ],
+        "returnShape": "void"
+      }
+    ]
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "mousetrap",
+        "symbols": [
+          "mousetrap"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react",
+        "symbols": [],
+        "hooks": [
+          "useEffect",
+          "useRef"
+        ]
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

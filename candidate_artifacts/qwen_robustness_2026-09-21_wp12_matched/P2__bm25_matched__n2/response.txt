@@ -1,0 +1,26 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer action to the note slice
+2. Add a "Restore All" button to the NoteList component that appears when viewing the Trash folder
+
+Let me first examine the note slice to understand its structure, then look at the NoteList component.
+
+Since I don't have the full note slice file in the context, I'll need to make reasonable assumptions based on the imports and usage patterns shown. Let me search for the relevant files and make the necessary changes.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  assignFavoriteToNotes,
+  assignTrashToNotes,
+  updateSelectedNotes,
+  unassignTrashFromNotes,
+} from '@/slices/note'
+=======
+  assignFavoriteToNotes,
+  assignTrashToNotes,
+  updateSelectedNotes,
+  unassignTrashFromNotes,
+  restoreAllTrash,
+} from '@/slices/note'
+>>>>>>> REPLACE
+```

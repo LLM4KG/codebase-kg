@@ -1,0 +1,101 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "Cart",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useCart",
+            "category": "library",
+            "source": "contexts/cart-context"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "default"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "isOpen",
+        "componentName": "S.Container",
+        "type": "unknown",
+        "isRequired": null
+      },
+      {
+        "name": "products",
+        "componentName": "CartProducts",
+        "type": "unknown",
+        "isRequired": null
+      },
+      {
+        "name": "large",
+        "componentName": "S.CartIcon",
+        "type": "unknown",
+        "isRequired": null
+      },
+      {
+        "name": "title",
+        "componentName": "S.CartQuantity",
+        "type": "unknown",
+        "isRequired": null
+      },
+      {
+        "name": "autoFocus",
+        "componentName": "S.CheckoutButton",
+        "type": "unknown",
+        "isRequired": null
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "handleCheckout",
+        "eventType": "onClick",
+        "componentName": "Cart",
+        "isInline": false
+      },
+      {
+        "name": "handleToggleCart",
+        "eventType": "onClick",
+        "componentName": "Cart",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "utils/formatPrice",
+        "symbols": [
+          "formatPrice"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "contexts/cart-context",
+        "symbols": [],
+        "hooks": [
+          "useCart"
+        ]
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

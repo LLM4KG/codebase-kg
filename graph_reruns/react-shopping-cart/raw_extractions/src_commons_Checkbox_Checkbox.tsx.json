@@ -1,0 +1,85 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "Checkbox",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "default"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "className",
+        "componentName": "Checkbox",
+        "type": "string",
+        "isRequired": false
+      },
+      {
+        "name": "label",
+        "componentName": "Checkbox",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "handleOnChange",
+        "componentName": "Checkbox",
+        "type": "function",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "toggleCheckboxChange",
+        "eventType": "onChange",
+        "componentName": "Checkbox",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [],
+        "hooks": [
+          "useState"
+        ]
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": [
+      {
+        "name": "isChecked",
+        "setterName": "setIsChecked",
+        "type": "boolean",
+        "defaultValue": "false",
+        "componentName": "Checkbox",
+        "declarationPattern": "useState"
+      }
+    ]
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

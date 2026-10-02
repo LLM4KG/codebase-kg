@@ -1,0 +1,105 @@
+```text
+src/components/Cart/CartProduct.tsx
+<<<<<<< SEARCH
+import { useCart } from '../../hooks/useCart'
+import { Product } from '../../types'
+
+interface CartProductProps {
+  product: Product
+}
+
+export function CartProduct({ product }: CartProductProps) {
+  const { removeProduct, increaseQuantity, decreaseQuantity } = useCart()
+
+  return (
+    <div className="cart-product">
+      <img src={product.image} alt={product.title} />
+      <div className="cart-product-details">
+        <h3>{product.title}</h3>
+        <p>${product.price}</p>
+        <div className="quantity-controls">
+          <button onClick={() => decreaseQuantity(product.id)}>-</button>
+          <span>{product.quantity}</span>
+          <button onClick={() => increaseQuantity(product.id)}>+</button>
+        </div>
+      </div>
+      <button onClick={() => removeProduct(product.id)}>Remove</button>
+    </div>
+  )
+}
+=======
+import { Product } from '../../types'
+
+interface CartProductProps {
+  product: Product
+  onRemove: (id: number) => void
+  onIncrease: (id: number) => void
+  onDecrease: (id: number) => void
+}
+
+export function CartProduct({ product, onRemove, onIncrease, onDecrease }: CartProductProps) {
+  return (
+    <div className="cart-product">
+      <img src={product.image} alt={product.title} />
+      <div className="cart-product-details">
+        <h3>{product.title}</h3>
+        <p>${product.price}</p>
+        <div className="quantity-controls">
+          <button onClick={() => onDecrease(product.id)}>-</button>
+          <span>{product.quantity}</span>
+          <button onClick={() => onIncrease(product.id)}>+</button>
+        </div>
+      </div>
+      <button onClick={() => onRemove(product.id)}>Remove</button>
+    </div>
+  )
+}
+>>>>>>> REPLACE
+
+src/components/Cart/CartProducts.tsx
+<<<<<<< SEARCH
+import { useCart } from '../../hooks/useCart'
+import { CartProduct } from './CartProduct'
+
+export function CartProducts() {
+  const { cartItems } = useCart()
+
+  if (cartItems.length === 0) {
+    return <p>Your cart is empty</p>
+  }
+
+  return (
+    <div className="cart-products">
+      {cartItems.map((item) => (
+        <CartProduct key={item.id} product={item} />
+      ))}
+    </div>
+  )
+}
+=======
+import { useCart } from '../../hooks/useCart'
+import { CartProduct } from './CartProduct'
+
+export function CartProducts() {
+  const { cartItems, removeProduct, increaseQuantity, decreaseQuantity } = useCart()
+
+  if (cartItems.length === 0) {
+    return <p>Your cart is empty</p>
+  }
+
+  return (
+    <div className="cart-products">
+      {cartItems.map((item) => (
+        <CartProduct 
+          key={item.id} 
+          product={item} 
+          onRemove={removeProduct}
+          onIncrease={increaseQuantity}
+          onDecrease={decreaseQuantity}
+        />
+      ))}
+    </div>
+  )
+}
+>>>>>>> REPLACE
+```

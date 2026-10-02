@@ -1,0 +1,90 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "CartProduct",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useCart",
+            "category": "custom",
+            "source": "contexts/cart-context"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "default"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "product",
+        "componentName": "CartProduct",
+        "type": "object",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "handleRemoveProduct",
+        "eventType": "onClick",
+        "componentName": "CartProduct",
+        "isInline": false
+      },
+      {
+        "name": "handleDecreaseProductQuantity",
+        "eventType": "onClick",
+        "componentName": "CartProduct",
+        "isInline": false
+      },
+      {
+        "name": "handleIncreaseProductQuantity",
+        "eventType": "onClick",
+        "componentName": "CartProduct",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "utils/formatPrice",
+        "symbols": [
+          "formatPrice"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "models",
+        "symbols": [
+          "ICartProduct"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "contexts/cart-context",
+        "symbols": [],
+        "hooks": [
+          "useCart"
+        ]
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

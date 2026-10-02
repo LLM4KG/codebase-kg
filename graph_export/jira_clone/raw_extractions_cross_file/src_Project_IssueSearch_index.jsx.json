@@ -1,0 +1,171 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "IssueSearch",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "SearchInputCont",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "SearchInputDebounced",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "autoFocus",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "placeholder",
+            "valueExpression": "\"Search issues by summary, description...\""
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "handleSearchChange"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "SearchIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"search\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "22"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "SearchSpinner",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "SectionTitle",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "SectionTitle",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "NoResults",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "NoResultsSVG",
+        "importSource": "./NoResultsSvg",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "NoResultsTitle",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectIssueSearch",
+        "childComponent": "NoResultsTip",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderIssue",
+        "childComponent": "Link",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "`/project/board/issues/${issue.id}`"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderIssue",
+        "childComponent": "Issue",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderIssue",
+        "childComponent": "IssueTypeIcon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "issue.type"
+          },
+          {
+            "propName": "size",
+            "valueExpression": "25"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderIssue",
+        "childComponent": "IssueData",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderIssue",
+        "childComponent": "IssueTitle",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderIssue",
+        "childComponent": "IssueTypeId",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

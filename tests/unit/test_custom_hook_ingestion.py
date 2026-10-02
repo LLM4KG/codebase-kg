@@ -329,6 +329,111 @@ class TestFindComponentUnderDirectory:
         from src.extraction.cross_file import _find_component_under_directory
         assert _find_component_under_directory("Nope", "src/components/Loader", self.INDEX) is None
 
+    FOLDER_INDEX = {
+        "Button::src/shared/components/Button/index.jsx": {
+            "name": "Button", "filePath": "src/shared/components/Button/index.jsx", "uid": "b",
+        },
+        "Modal::src/shared/components/Modal/Other/index.jsx": {
+            "name": "Modal", "filePath": "src/shared/components/Modal/Other/index.jsx", "uid": "m",
+        },
+        "Icon::src/shared/components/Tooltip/index.jsx": {
+            "name": "Icon", "filePath": "src/shared/components/Tooltip/index.jsx", "uid": "i",
+        },
+    }
+
+    def test_resolves_folder_per_component_barrel(self):
+        """`export { default as Button } from './Button'` -> Button/index.jsx (jira_clone)."""
+        from src.extraction.cross_file import _find_component_under_directory
+        found = _find_component_under_directory(
+            "Button", "src/shared/components", self.FOLDER_INDEX
+        )
+        assert found["filePath"] == "src/shared/components/Button/index.jsx"
+
+    def test_folder_index_must_be_named_after_the_component(self):
+        """Only `<dir>/<Name>/index.*` — not another folder's index, not deeper."""
+        from src.extraction.cross_file import _find_component_under_directory
+        assert _find_component_under_directory(
+            "Icon", "src/shared/components", self.FOLDER_INDEX
+        ) is None
+        assert _find_component_under_directory(
+            "Modal", "src/shared/components", self.FOLDER_INDEX
+        ) is None
+
+
+class TestRenamedDefaultImport:
+    """`import Board from './Board'` where the file defines `ProjectBoard` (jira_clone)."""
+
+    MANIFEST = [
+        "src/Project/index.jsx",
+        "src/Project/Board/index.jsx",
+        "src/Project/Board/Styles.js",
+        "src/shared/two.jsx",
+    ]
+    INDEX = {
+        "ProjectBoard::src/Project/Board/index.jsx": {
+            "name": "ProjectBoard", "filePath": "src/Project/Board/index.jsx", "uid": "pb",
+        },
+        "A::src/shared/two.jsx": {"name": "A", "filePath": "src/shared/two.jsx", "uid": "a"},
+        "B::src/shared/two.jsx": {"name": "B", "filePath": "src/shared/two.jsx", "uid": "b"},
+    }
+
+    def _resolve(self, name, source):
+        from src.extraction.cross_file import resolve_child_component
+        return resolve_child_component(
+            name, source, "src/Project/index.jsx", self.INDEX, self.MANIFEST, base_url="src"
+        )
+
+    def test_resolves_to_the_files_only_component(self):
+        assert self._resolve("Board", "./Board")["uid"] == "pb"
+
+    def test_file_with_several_components_is_not_guessed(self):
+        assert self._resolve("Whatever", "shared/two") is None
+
+    def test_file_with_no_component_resolves_to_nothing(self):
+        """Styled-components from ./Styles are not component nodes."""
+        assert self._resolve("Title", "./Board/Styles") is None
+
+    def test_npm_import_still_external(self):
+        assert self._resolve("Route", "react-router-dom") is None
+
+    def test_several_components_resolve_to_the_single_default_export(self):
+        """jira_clone IssueCreate: ProjectIssueCreate (default) + two render helpers."""
+        from src.extraction.cross_file import resolve_child_component
+        index = {
+            f"{name}::src/Project/Board/index.jsx": {
+                "name": name, "filePath": "src/Project/Board/index.jsx",
+                "uid": name, "type": "Function_Component", "exportType": export,
+            }
+            for name, export in (("ProjectBoard", "default"), ("renderA", "none"), ("renderB", "none"))
+        }
+        assert resolve_child_component(
+            "Board", "./Board", "src/Project/index.jsx", index, self.MANIFEST, base_url="src"
+        )["uid"] == "ProjectBoard"
+
+        index["ProjectBoard::src/Project/Board/index.jsx"]["exportType"] = "named"
+        assert resolve_child_component(
+            "Board", "./Board", "src/Project/index.jsx", index, self.MANIFEST, base_url="src"
+        ) is None
+
+    def test_custom_hook_is_not_a_component(self):
+        from src.extraction.cross_file import resolve_child_component
+        index = {
+            "useThing::src/Project/Board/index.jsx": {
+                "name": "useThing", "filePath": "src/Project/Board/index.jsx",
+                "uid": "h", "type": "Custom_Hook",
+            },
+        }
+        assert resolve_child_component(
+            "Board", "./Board", "src/Project/index.jsx", index, self.MANIFEST, base_url="src"
+        ) is None
+        index["ProjectBoard::src/Project/Board/index.jsx"] = {
+            "name": "ProjectBoard", "filePath": "src/Project/Board/index.jsx",
+            "uid": "pb", "type": "Function_Component",
+        }
+        assert resolve_child_component(
+            "Board", "./Board", "src/Project/index.jsx", index, self.MANIFEST, base_url="src"
+        )["uid"] == "pb"
+
 
 class TestStage4FileGating:
     """Hook-only files must reach Stage 4.

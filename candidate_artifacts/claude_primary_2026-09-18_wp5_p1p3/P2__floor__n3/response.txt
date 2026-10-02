@@ -1,0 +1,70 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer to `src/client/slices/note.ts`
+2. Add a "Restore All" button to `src/client/containers/NoteList.tsx`
+
+Let me analyze the existing patterns in these files.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+=======
+    emptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+    restoreAllTrash: (state) => {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+    },
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          {activeFolder === Folder.TRASH && (
+            <button
+              className="trash-button"
+              onClick={() => dispatch(emptyTrash())}
+            >
+              <Trash2 size={15} />
+              Empty Trash
+            </button>
+          )}
+=======
+          {activeFolder === Folder.TRASH && (
+            <>
+              <button
+                className="trash-button"
+                onClick={() => dispatch(restoreAllTrash())}
+              >
+                <RotateCcw size={15} />
+                Restore All
+              </button>
+              <button
+                className="trash-button"
+                onClick={() => dispatch(emptyTrash())}
+              >
+                <Trash2 size={15} />
+                Empty Trash
+              </button>
+            </>
+          )}
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { emptyTrash, pruneNotes, swapNote, searchNotes } from 'slices/note'
+=======
+import { emptyTrash, pruneNotes, restoreAllTrash, swapNote, searchNotes } from 'slices/note'
+>>>>>>> REPLACE
+
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import { Trash2 } from 'react-feather'
+=======
+import { RotateCcw, Trash2 } from 'react-feather'
+>>>>>>> REPLACE
+```

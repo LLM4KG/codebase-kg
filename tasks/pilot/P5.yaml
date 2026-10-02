@@ -1,0 +1,57 @@
+# Task P5 — Shopping Cart refactoring: make CartProduct presentational
+#
+# Exercises: refactoring Cypher template, with a prop-interface change, so the
+#            caller warning ("… will require updating 1 caller: CartProducts")
+#            is actionable (in P3 it was informational only)
+# Project:   react-shopping-cart (context + hooks only, no Redux)
+# Statement names a path: no (component and hook names only; path policy,
+#            docs/decision-log.md 2026-09-18)
+
+task_id: P5
+project_id: react-shopping-cart
+project_repo: https://github.com/jeffersonRibeiro/react-shopping-cart
+git_commit: 9fa56244d0f0c0d363cab744a3305c50eabc08cb
+task_type: refactoring
+
+spec: >
+  `CartProduct` calls `useCart` itself to remove a product and change its
+  quantity. Refactor it into a presentational component that receives three
+  callback props, `onRemove`, `onIncrease` and `onDecrease`, each called with
+  the product. Move the `useCart` call into its parent, `CartProducts`, which
+  should pass the callbacks down. The cart's behaviour must not change.
+
+# Anchor components the classifier should extract from the spec:
+expected_anchors:
+  anchor_names:
+    - CartProduct        # the component being refactored
+    - CartProducts       # its caller, also named
+  anchor_routes: []
+
+# Reference solution
+reference_patch: patches/P5.diff
+
+# Test file — placed in project before candidate diff is applied.
+# The harness runs: npm test -- --testPathPattern=P5_presentational_cart_product
+test_files:
+  - src/components/Cart/CartProducts/CartProduct/__tests__/P5_presentational_cart_product.test.tsx
+
+# Files the reference patch modifies (for retrieval recall computation)
+files_modified:
+  - src/components/Cart/CartProducts/CartProduct/CartProduct.tsx
+  - src/components/Cart/CartProducts/CartProducts.tsx
+
+# Adversarial notes (for thesis documentation):
+# - Tests written BEFORE reference patch (adversarial mode).
+# - Part 1 renders CartProduct with NO CartProvider and checks each prop is
+#   called with the product. Unpatched code throws "useCartContext must be used
+#   within a CartProvider", so part 1 fails.
+# - Part 2 renders CartProducts inside a real CartProvider and checks +, - and
+#   remove still change the cart. It is a behaviour-preservation guard and
+#   passes on unpatched code by design.
+# - Valid alternatives: callbacks bound inline or via named handlers; any
+#   wiring, as long as each callback receives the product object.
+# - Invalid alternatives: renamed props (the statement names them); keeping
+#   useCart in CartProduct as a fallback (part 1 still throws).
+# - Fixture uses quantity 2: the - button is disabled at quantity 1.
+# - The project's own CartProduct snapshot test would break; the harness runs
+#   only P5's test file, as for P1.

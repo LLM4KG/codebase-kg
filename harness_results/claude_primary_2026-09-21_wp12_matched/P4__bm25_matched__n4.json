@@ -1,0 +1,15 @@
+{
+  "task_id": "P4",
+  "candidate_id": "P4__bm25_matched__n4",
+  "condition": "bm25_matched",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1061.8336980005552,
+  "timeout_used_ms": 13072,
+  "stage_detail": "apply_edits: SEARCH text not found in src/contexts/cart-context/useCartTotal.ts\n--- SEARCH ---\n  return { total, updateCartTotal };",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

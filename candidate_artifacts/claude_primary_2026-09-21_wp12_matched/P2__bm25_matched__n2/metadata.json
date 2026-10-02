@@ -1,0 +1,237 @@
+{
+  "candidate_id": "P2__bm25_matched__n2",
+  "run_id": "claude_primary_2026-09-21_wp12_matched",
+  "run_name": "claude_primary",
+  "task_id": "P2",
+  "project_name": "takenote",
+  "condition": "bm25_matched",
+  "index": 2,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "timestamp": "2026-09-21T04:12:27.322717+00:00",
+  "retrieval_token_count": 1500,
+  "generator_usage": {
+    "input_tokens": 4506,
+    "output_tokens": 824
+  },
+  "generator_latency_ms": 22480.8494530007,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": null,
+  "apply_reason": "search_not_found",
+  "edit_count": 6,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "query_tokens": [
+      "takenote",
+      "take",
+      "note",
+      "permanently",
+      "empty",
+      "trash",
+      "action",
+      "no",
+      "way",
+      "restore",
+      "all",
+      "trashed",
+      "notes",
+      "once",
+      "add",
+      "restorealltrash",
+      "restore",
+      "all",
+      "trash",
+      "reducer",
+      "action",
+      "note",
+      "slice",
+      "src",
+      "client",
+      "slices",
+      "note",
+      "ts",
+      "sets",
+      "trash",
+      "false",
+      "every",
+      "trashed",
+      "note",
+      "add",
+      "restore",
+      "all",
+      "button",
+      "notelist",
+      "note",
+      "list",
+      "component",
+      "src",
+      "client",
+      "containers",
+      "notelist",
+      "note",
+      "list",
+      "tsx",
+      "appears",
+      "alongside",
+      "existing",
+      "empty",
+      "trash",
+      "button",
+      "user",
+      "viewing",
+      "trash",
+      "folder"
+    ],
+    "corpus_size": 60,
+    "ranked_top": [
+      {
+        "path": "src/resources/TestID.ts",
+        "score": 69.377
+      },
+      {
+        "path": "src/resources/LabelText.ts",
+        "score": 64.6571
+      },
+      {
+        "path": "src/client/containers/NoteList.tsx",
+        "score": 57.2292
+      },
+      {
+        "path": "src/client/slices/note.ts",
+        "score": 56.7116
+      },
+      {
+        "path": "src/client/containers/AppSidebar.tsx",
+        "score": 48.7161
+      },
+      {
+        "path": "src/client/containers/ContextMenuOptions.tsx",
+        "score": 46.2823
+      },
+      {
+        "path": "src/client/api/index.ts",
+        "score": 45.0288
+      },
+      {
+        "path": "src/client/utils/constants.ts",
+        "score": 37.9541
+      },
+      {
+        "path": "src/client/utils/helpers.ts",
+        "score": 37.7461
+      },
+      {
+        "path": "src/client/components/AppSidebar/FolderOption.tsx",
+        "score": 36.2102
+      },
+      {
+        "path": "src/client/components/LandingPage.tsx",
+        "score": 36.0684
+      },
+      {
+        "path": "src/client/containers/SettingsModal.tsx",
+        "score": 34.4055
+      },
+      {
+        "path": "src/client/containers/NoteMenuBar.tsx",
+        "score": 32.6686
+      },
+      {
+        "path": "src/client/utils/enums.ts",
+        "score": 32.2986
+      },
+      {
+        "path": "src/client/components/Editor/PreviewEditor.tsx",
+        "score": 29.8818
+      },
+      {
+        "path": "src/client/containers/KeyboardShortcuts.tsx",
+        "score": 29.7737
+      },
+      {
+        "path": "src/client/containers/TakeNoteApp.tsx",
+        "score": 29.4514
+      },
+      {
+        "path": "src/client/components/NoteList/NoteListButton.tsx",
+        "score": 27.1917
+      },
+      {
+        "path": "src/client/types/index.ts",
+        "score": 25.6873
+      },
+      {
+        "path": "src/client/containers/CategoryOption.tsx",
+        "score": 25.4846
+      }
+    ],
+    "included_files": [
+      "src/resources/TestID.ts",
+      "src/resources/LabelText.ts",
+      "src/client/containers/AppSidebar.tsx",
+      "src/client/api/index.ts"
+    ],
+    "skipped_for_budget": [
+      "src/client/containers/NoteList.tsx",
+      "src/client/slices/note.ts",
+      "src/client/containers/ContextMenuOptions.tsx",
+      "src/client/utils/constants.ts",
+      "src/client/utils/helpers.ts",
+      "src/client/components/AppSidebar/FolderOption.tsx",
+      "src/client/components/LandingPage.tsx",
+      "src/client/containers/SettingsModal.tsx",
+      "src/client/containers/NoteMenuBar.tsx",
+      "src/client/utils/enums.ts",
+      "src/client/components/Editor/PreviewEditor.tsx",
+      "src/client/containers/KeyboardShortcuts.tsx",
+      "src/client/containers/TakeNoteApp.tsx",
+      "src/client/components/NoteList/NoteListButton.tsx",
+      "src/client/types/index.ts",
+      "src/client/containers/CategoryOption.tsx",
+      "src/client/components/NoteList/SelectCategory.tsx",
+      "src/client/containers/NoteEditor.tsx",
+      "src/client/containers/App.tsx",
+      "src/client/sagas/index.ts",
+      "src/client/slices/auth.ts",
+      "src/client/slices/settings.ts",
+      "src/client/containers/ContextMenu.tsx",
+      "src/client/slices/category.ts",
+      "src/client/components/NoteList/SearchBar.tsx",
+      "src/client/components/NoteList/ContextMenuOption.tsx",
+      "src/client/containers/CategoryList.tsx",
+      "src/client/slices/sync.ts",
+      "src/client/slices/index.ts",
+      "src/client/components/Editor/EmptyEditor.tsx",
+      "src/client/utils/notesSortStrategies.ts",
+      "src/client/components/AppSidebar/ActionButton.tsx",
+      "src/client/utils/reactMarkdownPlugins.ts",
+      "src/client/components/AppSidebar/CollapseCategoryButton.tsx",
+      "src/client/components/AppSidebar/AddCategoryButton.tsx",
+      "src/client/components/Editor/NoteLink.tsx",
+      "src/client/index.tsx",
+      "src/client/utils/hooks.ts",
+      "src/client/selectors/index.ts",
+      "src/client/components/SettingsModal/IconButton.tsx",
+      "src/client/components/AppSidebar/ScratchpadOption.tsx",
+      "src/client/components/SettingsModal/IconButtonUploader.tsx",
+      "src/client/router/PublicRoute.tsx",
+      "src/client/contexts/TempStateContext.tsx",
+      "src/client/router/PrivateRoute.tsx",
+      "src/client/components/Tabs/Tab.tsx",
+      "src/client/components/SettingsModal/Shortcut.tsx",
+      "src/client/components/AppSidebar/AddCategoryForm.tsx",
+      "src/client/components/Tabs/Tabs.tsx",
+      "src/client/utils/history.ts",
+      "src/client/components/Tabs/TabPanel.tsx",
+      "src/client/components/Switch.tsx",
+      "src/client/components/SettingsModal/Option.tsx",
+      "src/client/components/SettingsModal/SelectOptions.tsx",
+      "src/client/components/LastSyncedNotification.tsx",
+      "src/client/components/Select.tsx"
+    ],
+    "budget_tokens_used": 1529,
+    "token_budget": 1532
+  }
+}

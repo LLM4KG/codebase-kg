@@ -1,0 +1,76 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsTrackingWidget",
+        "childComponent": "TrackingWidget",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsTrackingWidget",
+        "childComponent": "WatchIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"stopwatch\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "26"
+          },
+          {
+            "propName": "top",
+            "valueExpression": "-1"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsTrackingWidget",
+        "childComponent": "Right",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsTrackingWidget",
+        "childComponent": "BarCont",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsTrackingWidget",
+        "childComponent": "Bar",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "width",
+            "valueExpression": "calculateTrackingBarWidth(issue)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsTrackingWidget",
+        "childComponent": "Values",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

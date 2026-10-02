@@ -20,6 +20,28 @@ from src.retrieval.config import ExperimentConfig, RetrievalConditionConfig, Run
 from src.retrieval.models import RetrievalResult
 
 
+# Conditions whose `retriever` is not their own id, mirroring conditions/base/*.toml.
+# The orchestrator dispatches on the field (WP12), so a fake that assumed
+# retriever == condition_id would make `kg_augmented_hardened` resolve to a
+# retriever nothing is wired for and raise — a failure in the stand-in that reads
+# exactly like a broken KG arm. Everything absent here is its own retriever.
+CONDITION_RETRIEVERS = {
+    "kg_augmented_hardened": "kg_augmented",
+    "bm25_matched": "bm25",
+    "text_emb_3_large_matched": "text_emb_3_large",
+}
+
+# Per-task context budgets for the WP12 matched arms, as the generated TOMLs carry
+# them. Only the tasks the generation tests use need to be here.
+RETRIEVER_PARAMS = {
+    "bm25_matched": {"token_budget_by_task": {"P1": 626, "P2": 1532, "P3": 772}},
+    "text_emb_3_large_matched": {
+        "embedding_model": "text-embedding-3-large",
+        "token_budget_by_task": {"P1": 626, "P2": 1532, "P3": 772},
+    },
+}
+
+
 # --------------------------------------------------------------------------- #
 # Shared fixtures / fakes                                                     #
 # --------------------------------------------------------------------------- #
@@ -41,7 +63,10 @@ def wired(monkeypatch, tmp_path):
             max_tokens=4096,
         )
         condition = RetrievalConditionConfig(
-            condition_id=condition_name, retriever=condition_name, format_variant="A"
+            condition_id=condition_name,
+            retriever=CONDITION_RETRIEVERS.get(condition_name, condition_name),
+            format_variant="A",
+            retriever_params=dict(RETRIEVER_PARAMS.get(condition_name, {})),
         )
         return ExperimentConfig(run=run, condition=condition)
 

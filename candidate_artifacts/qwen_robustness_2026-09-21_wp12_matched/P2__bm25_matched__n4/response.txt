@@ -1,0 +1,211 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+  | ReturnType<typeof updateActiveNote>
+  | ReturnType<typeof updateSelectedNotes>
+  | ReturnType<typeof addNote>
+  | ReturnType<typeof updateNote>
+  | ReturnType<typeof deleteNotes>
+  | ReturnType<typeof addCategory>
+  | ReturnType<typeof renameCategory>
+  | ReturnType<typeof deleteCategory>
+  | ReturnType<typeof swapFolder>
+  | ReturnType<typeof assignFavoriteToNotes>
+  | ReturnType<typeof unassignFavoriteFromNotes>
+  | ReturnType<typeof assignTrashToNotes>
+  | ReturnType<typeof unassignTrashFromNotes>
+=======
+  | ReturnType<typeof updateActiveNote>
+  | ReturnType<typeof updateSelectedNotes>
+  | ReturnType<typeof addNote>
+  | ReturnType<typeof updateNote>
+  | ReturnType<typeof deleteNotes>
+  | ReturnType<typeof addCategory>
+  | ReturnType<typeof renameCategory>
+  | ReturnType<typeof deleteCategory>
+  | ReturnType<typeof swapFolder>
+  | ReturnType<typeof assignFavoriteToNotes>
+  | ReturnType<typeof unassignFavoriteFromNotes>
+  | ReturnType<typeof assignTrashToNotes>
+  | ReturnType<typeof unassignTrashFromNotes>
+  | ReturnType<typeof restoreAllTrash>
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const unassignTrashFromNotes = (noteId: string) => ({
+  type: 'UNASSIGN_TRASH_FROM_NOTES',
+  payload: { noteId },
+})
+=======
+export const unassignTrashFromNotes = (noteId: string) => ({
+  type: 'UNASSIGN_TRASH_FROM_NOTES',
+  payload: { noteId },
+})
+
+export const restoreAllTrash = () => ({
+  type: 'RESTORE_ALL_TRASH',
+})
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    case 'UNASSIGN_TRASH_FROM_NOTES': {
+      const { noteId } = action.payload
+
+      return {
+        ...state,
+        notes: state.notes.map((note) =>
+          note.id === noteId || note.id.includes(noteId)
+            ? { ...note, trash: false, tempId: undefined }
+            : note
+        ),
+      }
+    }
+=======
+    case 'UNASSIGN_TRASH_FROM_NOTES': {
+      const { noteId } = action.payload
+
+      return {
+        ...state,
+        notes: state.notes.map((note) =>
+          note.id === noteId || note.id.includes(noteId)
+            ? { ...note, trash: false, tempId: undefined }
+            : note
+        ),
+      }
+    }
+
+    case 'RESTORE_ALL_TRASH': {
+      return {
+        ...state,
+        notes: state.notes.map((note) => (note.trash ? { ...note, trash: false } : note)),
+      }
+    }
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Archive, CheckCircle, Search, XCircle, AlertCircle } from 'react-feather'
+import AutosizeInput from 'react-input-autosize'
+
+import { TestID } from '@resources/TestID'
+import { LabelText } from '@resources/LabelText'
+import { Folder } from '@/utils/enums'
+import { getNotes, getCategories, getSettings } from '@/selectors'
+import { updateNote, swapFolder, deleteNotes, assignTrashToNotes } from '@/slices/note'
+import { NoteListItems } from '@/components/NoteList/NoteListItems'
+import { NoteItem, CategoryItem, TemporaryNoteItem } from '@/types'
+import { getWebsiteTitle, getActiveNote, getActiveCategory } from '@/utils/helpers'
+import { sync } from '@/slices/sync'
+
+export interface NoteListProps {
+  activeNote: NoteItem | undefined
+  selectedNotes: NoteItem[]
+  syncNotes: () => void
+}
+=======
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Archive, CheckCircle, Search, XCircle, AlertCircle, RotateCcw } from 'react-feather'
+import AutosizeInput from 'react-input-autosize'
+
+import { TestID } from '@resources/TestID'
+import { LabelText } from '@resources/LabelText'
+import { Folder } from '@/utils/enums'
+import { getNotes, getCategories, getSettings } from '@/selectors'
+import { updateNote, swapFolder, deleteNotes, assignTrashToNotes, restoreAllTrash } from '@/slices/note'
+import { NoteListItems } from '@/components/NoteList/NoteListItems'
+import { NoteItem, CategoryItem, TemporaryNoteItem } from '@/types'
+import { getWebsiteTitle, getActiveNote, getActiveCategory } from '@/utils/helpers'
+import { sync } from '@/slices/sync'
+
+export interface NoteListProps {
+  activeNote: NoteItem | undefined
+  selectedNotes: NoteItem[]
+  syncNotes: () => void
+}
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _assignTrashToNotes = (noteId: string) => dispatch(assignTrashToNotes(noteId))
+  const _deleteNotes = (noteIds: string[]) => dispatch(deleteNotes(noteIds))
+  const _swapFolder = (folder: Folder) => dispatch(swapFolder(folder))
+  const _sync = () => dispatch(sync())
+=======
+  const _assignTrashToNotes = (noteId: string) => dispatch(assignTrashToNotes(noteId))
+  const _deleteNotes = (noteIds: string[]) => dispatch(deleteNotes(noteIds))
+  const _swapFolder = (folder: Folder) => dispatch(swapFolder(folder))
+  const _sync = () => dispatch(sync())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const handleEmptyTrash = () => {
+    if (window.confirm('Are you sure you want to permanently delete all notes in Trash?')) {
+      _deleteNotes(trashedNotes.map((note) => note.id))
+    }
+  }
+=======
+  const handleEmptyTrash = () => {
+    if (window.confirm('Are you sure you want to permanently delete all notes in Trash?')) {
+      _deleteNotes(trashedNotes.map((note) => note.id))
+    }
+  }
+
+  const handleRestoreAll = () => {
+    if (window.confirm('Are you sure you want to restore all notes from Trash?')) {
+      _restoreAllTrash()
+    }
+  }
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+          {activeFolder === Folder.TRASH && (
+            <div className="note-list-header-actions">
+              <button
+                className="btn-empty-trash"
+                data-testid={TestID.EMPTY_TRASH_BUTTON}
+                onClick={handleEmptyTrash}
+              >
+                <XCircle size={18} />
+                {LabelText.DELETE_PERMANENTLY}
+              </button>
+            </div>
+          )}
+=======
+          {activeFolder === Folder.TRASH && (
+            <div className="note-list-header-actions">
+              <button className="btn-restore-all" onClick={handleRestoreAll}>
+                <RotateCcw size={18} />
+                Restore All
+              </button>
+              <button
+                className="btn-empty-trash"
+                data-testid={TestID.EMPTY_TRASH_BUTTON}
+                onClick={handleEmptyTrash}
+              >
+                <XCircle size={18} />
+                {LabelText.DELETE_PERMANENTLY}
+              </button>
+            </div>
+          )}
+>>>>>>> REPLACE
+```

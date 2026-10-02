@@ -1,0 +1,60 @@
+Looking at the task, I need to make the duplicate category check case-insensitive in the `CategoryList` component. The issue is in both the `onSubmitUpdateCategory` and `onSubmitNewCategory` functions where they check for duplicates using exact case matching.
+
+Let me examine the relevant code in the `CategoryList.tsx` file:
+
+```text
+src/client/containers/CategoryList.tsx
+<<<<<<< SEARCH
+  const onSubmitUpdateCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+  }
+=======
+  const onSubmitUpdateCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+  }
+>>>>>>> REPLACE
+```

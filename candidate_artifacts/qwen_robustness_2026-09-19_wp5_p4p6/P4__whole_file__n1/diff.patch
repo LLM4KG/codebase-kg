@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/contexts/cart-context/useCartProducts.ts",
+      "op": "replace",
+      "search": "  const { products, setProducts } = useCartContext();\n  const { updateCartTotal } = useCartTotal();\n\n  const updateQuantitySafely = (\n    currentProduct: ICartProduct,\n    targetProduct: ICartProduct,\n    quantity: number\n  ): ICartProduct => {\n",
+      "content": "  const { products, setProducts } = useCartContext();\n  const { updateCartTotal } = useCartTotal();\n\n  const clearCart = () => {\n    setProducts([]);\n    updateCartTotal([]);\n  };\n\n  const updateQuantitySafely = (\n    currentProduct: ICartProduct,\n    targetProduct: ICartProduct,\n    quantity: number\n  ): ICartProduct => {\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

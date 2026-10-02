@@ -1,0 +1,185 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsAssigneesReporter",
+        "childComponent": "SectionTitle",
+        "importSource": "../Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsAssigneesReporter",
+        "childComponent": "Select",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isMulti",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "dropdownWidth",
+            "valueExpression": "343"
+          },
+          {
+            "propName": "placeholder",
+            "valueExpression": "\"Unassigned\""
+          },
+          {
+            "propName": "name",
+            "valueExpression": "\"assignees\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "issue.userIds"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "userOptions"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "userIds => { updateIssue({ userIds, users: userIds.map(getUserById) }); }"
+          },
+          {
+            "propName": "renderValue",
+            "valueExpression": "({ value: userId, removeOptionValue }) => renderUser(getUserById(userId), true, removeOptionValue)"
+          },
+          {
+            "propName": "renderOption",
+            "valueExpression": "({ value: userId }) => renderUser(getUserById(userId), false)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsAssigneesReporter",
+        "childComponent": "SectionTitle",
+        "importSource": "../Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsAssigneesReporter",
+        "childComponent": "Select",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "dropdownWidth",
+            "valueExpression": "343"
+          },
+          {
+            "propName": "withClearValue",
+            "valueExpression": "false"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "\"reporter\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "issue.reporterId"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "userOptions"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "userId => updateIssue({ reporterId: userId })"
+          },
+          {
+            "propName": "renderValue",
+            "valueExpression": "({ value: userId }) => renderUser(getUserById(userId), true)"
+          },
+          {
+            "propName": "renderOption",
+            "valueExpression": "({ value: userId }) => renderUser(getUserById(userId))"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderUser",
+        "childComponent": "User",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isSelectValue",
+            "valueExpression": "isSelectValue"
+          },
+          {
+            "propName": "withBottomMargin",
+            "valueExpression": "!!removeOptionValue"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => removeOptionValue && removeOptionValue()"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderUser",
+        "childComponent": "Avatar",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "avatarUrl",
+            "valueExpression": "user.avatarUrl"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "user.name"
+          },
+          {
+            "propName": "size",
+            "valueExpression": "24"
+          }
+        ]
+      },
+      {
+        "parentComponent": "renderUser",
+        "childComponent": "Username",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "renderUser",
+        "childComponent": "Icon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"close\""
+          },
+          {
+            "propName": "top",
+            "valueExpression": "1"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

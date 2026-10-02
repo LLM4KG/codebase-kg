@@ -1,0 +1,25 @@
+{
+  "candidate_id": "P3__floor__n3",
+  "run_id": "qwen_robustness_2026-09-18_wp5_p1p3",
+  "run_name": "qwen_robustness",
+  "task_id": "P3",
+  "project_name": "takenote",
+  "condition": "floor",
+  "index": 3,
+  "model_id": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "timestamp": "2026-09-18T13:54:34.705024+00:00",
+  "retrieval_token_count": 0,
+  "generator_usage": {
+    "input_tokens": 557,
+    "output_tokens": 567
+  },
+  "generator_latency_ms": 6887.803951998649,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": null,
+  "apply_reason": "search_not_found",
+  "edit_count": 3,
+  "malformed_blocks": 0,
+  "elided": false
+}

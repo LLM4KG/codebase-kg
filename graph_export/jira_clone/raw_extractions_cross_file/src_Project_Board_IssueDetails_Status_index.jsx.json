@@ -1,0 +1,111 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsStatus",
+        "childComponent": "SectionTitle",
+        "importSource": "../Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsStatus",
+        "childComponent": "Select",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "dropdownWidth",
+            "valueExpression": "343"
+          },
+          {
+            "propName": "withClearValue",
+            "valueExpression": "false"
+          },
+          {
+            "propName": "name",
+            "valueExpression": "\"status\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "issue.status"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "Object.values(IssueStatus).map(status => ({ value: status, label: IssueStatusCopy[status] }))"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "status => updateIssue({ status })"
+          },
+          {
+            "propName": "renderValue",
+            "valueExpression": "({ value: status }) => <Status isValue color={status}>...</Status>"
+          },
+          {
+            "propName": "renderOption",
+            "valueExpression": "({ value: status }) => <Status color={status}>...</Status>"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsStatus",
+        "childComponent": "Status",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isValue",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "color",
+            "valueExpression": "status"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsStatus",
+        "childComponent": "Icon",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"chevron-down\""
+          },
+          {
+            "propName": "size",
+            "valueExpression": "18"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsStatus",
+        "childComponent": "Status",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "color",
+            "valueExpression": "status"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

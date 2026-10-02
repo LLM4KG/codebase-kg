@@ -1,0 +1,167 @@
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+=======
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    setProducts,
+  } = useCartProducts();
+  const { total, updateCartTotal, resetCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  const clearCart = () => {
+    setProducts([]);
+    resetCartTotal();
+  };
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+    clearCart,
+  };
+};
+
+export default useCart;
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+=======
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+=======
+            <S.CheckoutButton onClick={clearCart}>
+              Clear cart
+            </S.CheckoutButton>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+>>>>>>> REPLACE
+```
+
+Wait, I need to check what hooks `useCartProducts` and `useCartTotal` expose. Since I don't have their source, I need to be careful. Let me reconsider — I should check if `setProducts` and `resetCartTotal` exist. Since they likely don't, I need a different approach using existing APIs.
+
+Let me use `removeProduct` in a loop or check what's available. The safest approach given the context is to add the functions to the underlying hooks. But since I don't have those files, let me use what's available.
+
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+=======
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  const clearCart = () => {
+    products.forEach((product) => removeProduct(product));
+  };
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+    clearCart,
+  };
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+=======
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+=======
+            <S.CheckoutButton onClick={clearCart}>
+              Clear cart
+            </S.CheckoutButton>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+>>>>>>> REPLACE
+```

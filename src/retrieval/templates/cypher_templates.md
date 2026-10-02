@@ -27,10 +27,22 @@ All three templates share the same parameter signature:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `$projectId` | string | always | Scopes results to one project. Prevents cross-project name collisions. |
-| `$anchorNames` | list[string] | always | Component (or custom hook) names extracted from the spec. May be empty if the classifier finds no anchors (templates handle this gracefully). |
+| `$anchorNames` | list[string] | always | Component (or custom hook) names extracted from the spec. May be empty if the classifier finds no anchors, in which case the three anchor-scoped templates return **zero rows** — see "On empty `$anchorNames`" below. |
 | `$anchorRoutes` | list[string] | optional | URL path strings extracted from the spec (e.g., `["/notes/trash"]`). Passed to all three templates; only `feature_addition` actively uses it. |
 
-**On empty `$anchorNames`:** If the anchor extractor returns no names, the templates fall back to returning project-wide structural summaries (routing table, context providers, top-level composition). This is worse context than anchor-scoped context, but better than nothing. The fallback path is noted in each template below.
+**On empty `$anchorNames` (corrected 2026-09-21, WP8):** there is no fallback. The opening
+`MATCH` of `bug_fix`, `feature_addition_a` and `refactoring` carries a **non-optional**
+`AND anchor.name IN $anchorNames`; with an empty list that predicate is false for every node, the
+query returns **zero rows**, the assembler builds no target components, and Format A renders its
+headers with nothing under them. The KG-augmented condition silently becomes the floor condition.
+Only `feature_addition_b` (the routing table) is genuinely project-wide and still returns rows.
+
+Earlier revisions of this document, and the `parse_classifier_response` docstring, described a
+project-wide fallback that was **never implemented**. No pilot candidate reached this path — all 60
+WP5 classifier calls produced at least one resolving anchor — so the defect is latent, not realised;
+the published results are unaffected. `docs/phase_2/ijckg-2026/wp8_anchor_extraction.md` has the
+measurement, and the opt-in `anchor_resolution = "hardened"` condition implements the fallback for
+real, bounded by the token budget.
 
 ---
 
@@ -136,9 +148,15 @@ RETURN
 ORDER BY componentName
 ```
 
-### Fallback (empty `$anchorNames`)
+### Empty `$anchorNames` (no fallback in the default path)
 
-If `$anchorNames` is empty, drop the `AND anchor.name IN $anchorNames` predicate. This returns all components in the project — token-budget truncation in the context assembler will keep only the top-k by component size (number of state variables + hooks). This fallback is low-quality; the classifier should be iterated before relying on it at scale.
+This template has no fallback. With an empty list the opening `MATCH` binds nothing and the query
+returns zero rows; the assembler then produces an empty `ContextData` and Format A renders headers
+only. Dropping the `AND anchor.name IN $anchorNames` predicate — which earlier revisions of this
+document proposed — would return every component in the project, so it is not done in the default
+path either. The opt-in `anchor_resolution = "hardened"` retriever setting instead resolves the
+anchor names first (exact -> case-insensitive -> fuzzy), and only when nothing resolves at all runs
+the bounded `project_overview.cypher`, capped by the same `token_budget`.
 
 ### What the context assembler does with this
 
@@ -421,10 +439,19 @@ The context assembler is responsible for staying within the 6–8K token budget 
 **feature_addition** (keep in order, drop from bottom if over budget):
 1. Anchor source
 2. Routing table (Query B) — always included even at high cost; it is the unique KG value-add for this task type
-3. Children metadata block (names, props accepted, file paths)
-4. Context notes
-5. Child source (if budget remains)
-6. Provider source (never; too rarely relevant)
+3. Custom-hook source, one hop (added 2026-09-18; see below)
+4. Children metadata block (names, props accepted, file paths)
+5. Context notes
+6. Child source (if budget remains)
+7. Provider source (never; too rarely relevant)
+
+*Custom-hook source (2026-09-18).* Before this, feature addition was the only template that
+read no source beyond the anchor, and gave a hook only as a name. Rendering draft task P4
+("add `clearCart` to `useCart`") showed the effect: `useCart.ts` appeared in the prompt with
+neither its path nor its source, so a `search_replace` edit there could only be guessed. The
+assembler now reads each one-hop `Custom_Hook`'s file, de-duplicated by path, as `refactoring`
+already did. It is the last item truncation drops before the anchor. Hooks two hops away
+(`Cart → useCart → useCartProducts`) are still not read (L1). See `docs/decision-log.md`.
 
 **refactoring** (keep in order, drop from bottom if over budget):
 1. Anchor source
@@ -444,7 +471,7 @@ These templates are designed to be good enough for the Phase 1a validation pilot
 Templates currently retrieve only direct parents and children. A bug in a grandchild component, or a feature that requires touching a grandparent's state, won't surface the full path. Iteration option: add configurable depth parameter (default 1, try 2 on pilot failures involving deeply nested components).
 
 **L2 — Custom hook internals not deeply retrieved.**  
-For `bug_fix` and `refactoring`, the query returns the hook's `filePath` but does not traverse the hook's own `DECLARES_STATE` or `USES_LIBRARY_HOOK` edges. The context assembler reads the hook source from disk, which implicitly covers this — but the metadata summary won't include the hook's state vars unless a follow-up query is run. Low priority for first-pass; revisit if pilot failures suggest the LLM needed hook-internal metadata explicitly structured rather than embedded in source.
+For all three templates (`feature_addition` since 2026-09-18), the query returns the hook's `filePath` but does not traverse the hook's own `DECLARES_STATE` or `USES_LIBRARY_HOOK` edges. The context assembler reads the hook source from disk, which implicitly covers this — but the metadata summary won't include the hook's state vars unless a follow-up query is run. Low priority for first-pass; revisit if pilot failures suggest the LLM needed hook-internal metadata explicitly structured rather than embedded in source.
 
 **L3 — `PASSES_PROP` inside `collect()` with variable scoping.**  
 The nested `collect(pp.propName)` inside the outer `collect(DISTINCT {...})` in the refactoring template may produce unexpected results in some Memgraph versions. If query execution returns malformed prop lists, split the caller subquery into a separate query (similar to the feature_addition two-query approach) and join on `caller.uid` in Python.
@@ -452,8 +479,8 @@ The nested `collect(pp.propName)` inside the outer `collect(DISTINCT {...})` in 
 **L4 — Name collisions across files.**  
 `$anchorNames` is matched by `anchor.name IN $anchorNames` with project scoping, but a project can legitimately have two components with the same name in different files (e.g., a `Button` in `components/` and a `Button` in `ui/`). The template returns both rows. The context assembler currently uses both; if the token budget is tight, it will drop the second. This can cause the wrong `Button` to be included. Iteration option: have the classifier return `name::filePath` UIDs when the spec contains enough context to disambiguate; fall back to name-only when not.
 
-**L5 — Empty anchor names fallback is low-quality.**  
-If the task classifier fails to extract anchors, all three templates degrade to project-wide scans. This will almost always blow the token budget and require heavy truncation, leaving only the largest components. Track classifier accuracy as a diagnostic metric from pilot run 1.
+**L5 — Empty anchor names return nothing (corrected 2026-09-21, WP8).**  
+If the task classifier extracts no anchors, all three anchor-scoped templates return **zero rows**, not a project-wide scan: the anchor `MATCH` is non-optional. The KG-augmented condition then renders an empty context and is indistinguishable from the floor condition, which scored 0/30 in WP5 — a silent failure, not a degraded one. Measured in WP8: 60/60 WP5 classifier calls extracted a resolving anchor, so no pilot candidate hit this path. Mitigation is opt-in and off by default: `anchor_resolution = "hardened"` (`conditions/base/kg_augmented_hardened.toml`) resolves names loosely and falls back to a budget-capped project overview, recording `anchor_fallback` in the retrieval metadata so the degradation is visible in the artifacts rather than inferred from a token count.
 
 **L6 — Routing table in `feature_addition` is always full.**  
 For large projects (TakeNote has 41 source files and multiple routes), the full routing table may consume a disproportionate share of the token budget. Iteration option: if `$anchorRoutes` is provided, first return only sibling routes (same nesting level, same router component), then extend to full table only if budget allows.

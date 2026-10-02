@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/components/Cart/CartProduct.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart'\nimport { Product } from '../../types'\n\ninterface CartProductProps {\n  product: Product\n}\n\nexport function CartProduct({ product }: CartProductProps) {\n  const { removeProduct, increaseQuantity, decreaseQuantity } = useCart()\n\n  return (\n    <div className=\"cart-product\">\n      <img src={product.image} alt={product.title} />\n      <div className=\"cart-product-details\">\n        <h3>{product.title}</h3>\n        <p>${product.price}</p>\n        <div className=\"quantity-controls\">\n          <button onClick={() => decreaseQuantity(product.id)}>-</button>\n          <span>{product.quantity}</span>\n          <button onClick={() => increaseQuantity(product.id)}>+</button>\n        </div>\n      </div>\n      <button onClick={() => removeProduct(product.id)}>Remove</button>\n    </div>\n  )\n}\n",
+      "content": "import { Product } from '../../types'\n\ninterface CartProductProps {\n  product: Product\n  onRemove: (id: number) => void\n  onIncrease: (id: number) => void\n  onDecrease: (id: number) => void\n}\n\nexport function CartProduct({ product, onRemove, onIncrease, onDecrease }: CartProductProps) {\n  return (\n    <div className=\"cart-product\">\n      <img src={product.image} alt={product.title} />\n      <div className=\"cart-product-details\">\n        <h3>{product.title}</h3>\n        <p>${product.price}</p>\n        <div className=\"quantity-controls\">\n          <button onClick={() => onDecrease(product.id)}>-</button>\n          <span>{product.quantity}</span>\n          <button onClick={() => onIncrease(product.id)}>+</button>\n        </div>\n      </div>\n      <button onClick={() => onRemove(product.id)}>Remove</button>\n    </div>\n  )\n}\n"
+    },
+    {
+      "path": "src/components/Cart/CartProducts.tsx",
+      "op": "replace",
+      "search": "import { useCart } from '../../hooks/useCart'\nimport { CartProduct } from './CartProduct'\n\nexport function CartProducts() {\n  const { cartItems } = useCart()\n\n  if (cartItems.length === 0) {\n    return <p>Your cart is empty</p>\n  }\n\n  return (\n    <div className=\"cart-products\">\n      {cartItems.map((item) => (\n        <CartProduct key={item.id} product={item} />\n      ))}\n    </div>\n  )\n}\n",
+      "content": "import { useCart } from '../../hooks/useCart'\nimport { CartProduct } from './CartProduct'\n\nexport function CartProducts() {\n  const { cartItems, removeProduct, increaseQuantity, decreaseQuantity } = useCart()\n\n  if (cartItems.length === 0) {\n    return <p>Your cart is empty</p>\n  }\n\n  return (\n    <div className=\"cart-products\">\n      {cartItems.map((item) => (\n        <CartProduct \n          key={item.id} \n          product={item} \n          onRemove={removeProduct}\n          onIncrease={increaseQuantity}\n          onDecrease={decreaseQuantity}\n        />\n      ))}\n    </div>\n  )\n}\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

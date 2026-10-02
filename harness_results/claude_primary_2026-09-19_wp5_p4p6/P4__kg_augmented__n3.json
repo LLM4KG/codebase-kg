@@ -1,0 +1,15 @@
+{
+  "task_id": "P4",
+  "candidate_id": "P4__kg_augmented__n3",
+  "condition": "kg_augmented",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1302.6001869984611,
+  "timeout_used_ms": 13072,
+  "stage_detail": "apply_edits: no such file: src/contexts/cart-context/useCartProducts.tsx",
+  "apply_mode": null,
+  "apply_reason": "file_not_found"
+}

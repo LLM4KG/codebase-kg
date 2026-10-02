@@ -1,0 +1,131 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "HelmetProvider",
+        "importSource": "react-helmet-async",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "Helmet",
+        "importSource": "react-helmet-async",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "TempStateProvider",
+        "importSource": "@/contexts/TempStateContext",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "DragDropContext",
+        "importSource": "react-beautiful-dnd",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onDragEnd",
+            "valueExpression": "onDragEnd"
+          }
+        ]
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "SplitPane",
+        "importSource": "react-split-pane",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "split",
+            "valueExpression": "\"vertical\""
+          },
+          {
+            "propName": "minSize",
+            "valueExpression": "150"
+          },
+          {
+            "propName": "maxSize",
+            "valueExpression": "500"
+          },
+          {
+            "propName": "defaultSize",
+            "valueExpression": "240"
+          }
+        ]
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "AppSidebar",
+        "importSource": "@/containers/AppSidebar",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "SplitPane",
+        "importSource": "react-split-pane",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "split",
+            "valueExpression": "\"vertical\""
+          },
+          {
+            "propName": "...getNoteBarConf(activeFolder)",
+            "valueExpression": "{...getNoteBarConf(activeFolder)}"
+          }
+        ]
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "NoteList",
+        "importSource": "@/containers/NoteList",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "NoteEditor",
+        "importSource": "@/containers/NoteEditor",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "KeyboardShortcuts",
+        "importSource": "@/containers/KeyboardShortcuts",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "TakeNoteApp",
+        "childComponent": "SettingsModal",
+        "importSource": "@/containers/SettingsModal",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [
+      {
+        "componentName": "TakeNoteApp",
+        "contextName": "TempStateProvider",
+        "contextSource": "@/contexts/TempStateContext",
+        "valueExpression": ""
+      }
+    ],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

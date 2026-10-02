@@ -1,0 +1,111 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "DatePicker",
+        "childComponent": "StyledDatePicker",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "DatePicker",
+        "childComponent": "Input",
+        "importSource": "shared/components/Input",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "icon",
+            "valueExpression": "\"calendar\""
+          },
+          {
+            "propName": "...inputProps",
+            "valueExpression": "{...inputProps}"
+          },
+          {
+            "propName": "className",
+            "valueExpression": "className"
+          },
+          {
+            "propName": "autoComplete",
+            "valueExpression": "\"off\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "getFormattedInputValue(value, withTime)"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => setDropdownOpen(true)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "DatePicker",
+        "childComponent": "Dropdown",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "withTime",
+            "valueExpression": "withTime"
+          }
+        ]
+      },
+      {
+        "parentComponent": "DatePicker",
+        "childComponent": "DateSection",
+        "importSource": "./DateSection",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "withTime",
+            "valueExpression": "withTime"
+          },
+          {
+            "propName": "value",
+            "valueExpression": "value"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "onChange"
+          },
+          {
+            "propName": "setDropdownOpen",
+            "valueExpression": "setDropdownOpen"
+          }
+        ]
+      },
+      {
+        "parentComponent": "DatePicker",
+        "childComponent": "TimeSection",
+        "importSource": "./TimeSection",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "value"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "onChange"
+          },
+          {
+            "propName": "setDropdownOpen",
+            "valueExpression": "setDropdownOpen"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/hooks/useCart.ts",
+      "op": "replace",
+      "search": "  return {\n",
+      "content": "  const clearCart = () => {\n    setItems([]);\n  };\n\n  return {\n"
+    },
+    {
+      "path": "src/hooks/useCart.ts",
+      "op": "replace",
+      "search": "    return {\n    items,\n",
+      "content": "    return {\n    clearCart,\n    items,\n"
+    },
+    {
+      "path": "src/hooks/useCart.ts",
+      "op": "replace",
+      "search": "  return {\n    items,\n",
+      "content": "  const clearCart = () => {\n    setItems([]);\n  };\n\n  return {\n    clearCart,\n    items,\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "  const { items, removeItem, updateQuantity, total, itemCount } = useCart();\n",
+      "content": "  const { items, removeItem, updateQuantity, total, itemCount, clearCart } = useCart();\n"
+    },
+    {
+      "path": "src/components/Cart/Cart.tsx",
+      "op": "replace",
+      "search": "        </div>\n      </footer>\n",
+      "content": "        </div>\n        <button onClick={clearCart} className=\"clear-cart-btn\">\n          Clear cart\n        </button>\n      </footer>\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

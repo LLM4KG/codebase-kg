@@ -1,0 +1,47 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Header",
+        "childComponent": "FaPizzaSlice",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Header",
+        "childComponent": "AddTask",
+        "importSource": "../AddTask",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "showAddTaskMain",
+            "valueExpression": "false"
+          },
+          {
+            "propName": "shouldShowMain",
+            "valueExpression": "shouldShowMain"
+          },
+          {
+            "propName": "showQuickAddTask",
+            "valueExpression": "showQuickAddTask"
+          },
+          {
+            "propName": "setShowQuickAddTask",
+            "valueExpression": "setShowQuickAddTask"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

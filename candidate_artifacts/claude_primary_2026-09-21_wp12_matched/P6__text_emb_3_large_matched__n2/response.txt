@@ -1,0 +1,34 @@
+```text
+src/client/containers/CategoryList.tsx
+<<<<<<< SEARCH
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+=======
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) || category.name === '') {
+>>>>>>> REPLACE
+```

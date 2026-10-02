@@ -1,0 +1,277 @@
+[
+  {
+    "name": "Checkbox.tsx",
+    "filePath": "src/commons/Checkbox/Checkbox.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.212823+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/commons/Checkbox/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.212823+00:00"
+  },
+  {
+    "name": "global-style.tsx",
+    "filePath": "src/commons/style/global-style.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.212823+00:00"
+  },
+  {
+    "name": "styled-components.ts",
+    "filePath": "src/commons/style/styled-components.ts",
+    "modifiedAt": "2026-03-14T18:11:55.212925+00:00"
+  },
+  {
+    "name": "theme.ts",
+    "filePath": "src/commons/style/theme.ts",
+    "modifiedAt": "2026-03-14T18:11:55.212925+00:00"
+  },
+  {
+    "name": "App.tsx",
+    "filePath": "src/components/App/App.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.213077+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/App/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213077+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/App/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213077+00:00"
+  },
+  {
+    "name": "Cart.tsx",
+    "filePath": "src/components/Cart/Cart.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.213323+00:00"
+  },
+  {
+    "name": "CartProduct.tsx",
+    "filePath": "src/components/Cart/CartProducts/CartProduct/CartProduct.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.213456+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/Cart/CartProducts/CartProduct/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213456+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Cart/CartProducts/CartProduct/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213456+00:00"
+  },
+  {
+    "name": "CartProducts.tsx",
+    "filePath": "src/components/Cart/CartProducts/CartProducts.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.213456+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/Cart/CartProducts/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213456+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Cart/CartProducts/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213456+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/Cart/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213456+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Cart/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213456+00:00"
+  },
+  {
+    "name": "Filter.tsx",
+    "filePath": "src/components/Filter/Filter.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.213987+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/Filter/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213987+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Filter/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.213987+00:00"
+  },
+  {
+    "name": "GithubCorner.tsx",
+    "filePath": "src/components/Github/GithubCorner/GithubCorner.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.214282+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/Github/GithubCorner/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.214282+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Github/GithubCorner/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.214282+00:00"
+  },
+  {
+    "name": "GithubStarButton.tsx",
+    "filePath": "src/components/Github/GithubStarButton/GithubStarButton.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.214481+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/Github/GithubStarButton/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.214481+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/Github/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.214481+00:00"
+  },
+  {
+    "name": "Loader.tsx",
+    "filePath": "src/components/Loader/Loader.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.214661+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/components/Loader/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.214661+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Loader/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.214661+00:00"
+  },
+  {
+    "name": "Product.tsx",
+    "filePath": "src/components/Products/Product/Product.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.214840+00:00"
+  },
+  {
+    "name": "index.tsx",
+    "filePath": "src/components/Products/Product/index.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.214840+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Products/Product/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.214840+00:00"
+  },
+  {
+    "name": "Products.tsx",
+    "filePath": "src/components/Products/Products.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.214840+00:00"
+  },
+  {
+    "name": "index.tsx",
+    "filePath": "src/components/Products/index.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.214840+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Products/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.214840+00:00"
+  },
+  {
+    "name": "Recruiter.tsx",
+    "filePath": "src/components/Recruiter/Recruiter.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.214840+00:00"
+  },
+  {
+    "name": "index.tsx",
+    "filePath": "src/components/Recruiter/index.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.215194+00:00"
+  },
+  {
+    "name": "style.ts",
+    "filePath": "src/components/Recruiter/style.ts",
+    "modifiedAt": "2026-03-14T18:11:55.215194+00:00"
+  },
+  {
+    "name": "CartContextProvider.tsx",
+    "filePath": "src/contexts/cart-context/CartContextProvider.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.215657+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/contexts/cart-context/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.215782+00:00"
+  },
+  {
+    "name": "useCart.ts",
+    "filePath": "src/contexts/cart-context/useCart.ts",
+    "modifiedAt": "2026-03-14T18:11:55.215782+00:00"
+  },
+  {
+    "name": "useCartProducts.ts",
+    "filePath": "src/contexts/cart-context/useCartProducts.ts",
+    "modifiedAt": "2026-03-14T18:11:55.215782+00:00"
+  },
+  {
+    "name": "useCartTotal.ts",
+    "filePath": "src/contexts/cart-context/useCartTotal.ts",
+    "modifiedAt": "2026-03-14T18:11:55.215782+00:00"
+  },
+  {
+    "name": "ProductsContextProvider.tsx",
+    "filePath": "src/contexts/products-context/ProductsContextProvider.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.215782+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/contexts/products-context/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.216168+00:00"
+  },
+  {
+    "name": "useProducts.tsx",
+    "filePath": "src/contexts/products-context/useProducts.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.216168+00:00"
+  },
+  {
+    "name": "index.tsx",
+    "filePath": "src/index.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.216168+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/models/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.216168+00:00"
+  },
+  {
+    "name": "products.ts",
+    "filePath": "src/services/products.ts",
+    "modifiedAt": "2026-03-14T18:11:55.216168+00:00"
+  },
+  {
+    "name": "formatPrice.ts",
+    "filePath": "src/utils/formatPrice.ts",
+    "modifiedAt": "2026-03-14T18:11:55.218361+00:00"
+  },
+  {
+    "name": "cart-products.ts",
+    "filePath": "src/utils/test/mocks/cart-products.ts",
+    "modifiedAt": "2026-03-14T18:11:55.218475+00:00"
+  },
+  {
+    "name": "cart-total.ts",
+    "filePath": "src/utils/test/mocks/cart-total.ts",
+    "modifiedAt": "2026-03-14T18:11:55.218525+00:00"
+  },
+  {
+    "name": "index.ts",
+    "filePath": "src/utils/test/mocks/index.ts",
+    "modifiedAt": "2026-03-14T18:11:55.218525+00:00"
+  },
+  {
+    "name": "products.ts",
+    "filePath": "src/utils/test/mocks/products.ts",
+    "modifiedAt": "2026-03-14T18:11:55.218525+00:00"
+  },
+  {
+    "name": "test-utils.tsx",
+    "filePath": "src/utils/test/test-utils.tsx",
+    "modifiedAt": "2026-03-14T18:11:55.218525+00:00"
+  }
+]

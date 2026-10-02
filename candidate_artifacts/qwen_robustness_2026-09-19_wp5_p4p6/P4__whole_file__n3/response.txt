@@ -1,0 +1,121 @@
+```text
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+=======
+  };
+
+  const clearCart = () => {
+    setProducts([]);
+    updateCartTotal([]);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  };
+};
+
+>>>>>>> REPLACE
+```
+
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+=======
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+};
+
+>>>>>>> REPLACE
+```
+
+```text
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            </S.SubPrice>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+=======
+            </S.SubPrice>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+            {total.productQuantity > 0 && (
+              <S.ClearCartButton onClick={clearCart}>
+                Clear cart
+              </S.ClearCartButton>
+            )}
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+>>>>>>> REPLACE
+```

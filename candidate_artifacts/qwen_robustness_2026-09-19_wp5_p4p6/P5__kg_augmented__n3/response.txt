@@ -1,0 +1,112 @@
+```text
+src/components/Cart/CartProducts/CartProduct/CartProduct.tsx
+<<<<<<< SEARCH
+import formatPrice from 'utils/formatPrice';
+import { ICartProduct } from 'models';
+
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+interface IProps {
+  product: ICartProduct;
+}
+const CartProduct = ({ product }: IProps) => {
+  const { removeProduct, increaseProductQuantity, decreaseProductQuantity } =
+    useCart();
+  const {
+    sku,
+    title,
+    price,
+=======
+import formatPrice from 'utils/formatPrice';
+import { ICartProduct } from 'models';
+
+import * as S from './style';
+
+interface IProps {
+  product: ICartProduct;
+  onRemove: (product: ICartProduct) => void;
+  onIncrease: (product: ICartProduct) => void;
+  onDecrease: (product: ICartProduct) => void;
+}
+const CartProduct = ({ product, onRemove, onIncrease, onDecrease }: IProps) => {
+  const {
+    sku,
+    title,
+    price,
+>>>>>>> REPLACE
+
+### src/components/Cart/CartProducts/CartProduct/CartProduct.tsx
+<<<<<<< SEARCH
+  } = product;
+
+  const handleRemoveProduct = () => removeProduct(product);
+  const handleIncreaseProductQuantity = () => increaseProductQuantity(product);
+  const handleDecreaseProductQuantity = () => decreaseProductQuantity(product);
+
+  return (
+    <S.Container>
+      <S.DeleteButton
+=======
+  } = product;
+
+  const handleRemoveProduct = () => onRemove(product);
+  const handleIncreaseProductQuantity = () => onIncrease(product);
+  const handleDecreaseProductQuantity = () => onDecrease(product);
+
+  return (
+    <S.Container>
+      <S.DeleteButton
+>>>>>>> REPLACE
+
+### src/components/Cart/CartProducts/CartProducts.tsx
+<<<<<<< SEARCH
+import { ICartProduct } from 'models';
+import CartProduct from './CartProduct';
+
+import * as S from './style';
+
+interface IProps {
+  products: ICartProduct[];
+}
+
+const CartProducts = ({ products }: IProps) => {
+  return (
+    <S.Container>
+      {products?.length ? (
+        products.map((p) => <CartProduct product={p} key={p.sku} />)
+      ) : (
+        <S.CartProductsEmpty>
+          Add some products in the cart <br />
+=======
+import { ICartProduct } from 'models';
+import CartProduct from './CartProduct';
+import { useCart } from 'contexts/cart-context';
+
+import * as S from './style';
+
+interface IProps {
+  products: ICartProduct[];
+}
+
+const CartProducts = ({ products }: IProps) => {
+  const { removeProduct, increaseProductQuantity, decreaseProductQuantity } = useCart();
+
+  return (
+    <S.Container>
+      {products?.length ? (
+        products.map((p) => (
+          <CartProduct 
+            product={p} 
+            key={p.sku} 
+            onRemove={removeProduct}
+            onIncrease={increaseProductQuantity}
+            onDecrease={decreaseProductQuantity}
+          />
+        ))
+      ) : (
+        <S.CartProductsEmpty>
+          Add some products in the cart <br />
+>>>>>>> REPLACE
+```

@@ -1,0 +1,281 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+The `decreaseProductQuantity` function in `useCartProducts.ts` allows a product's quantity to reach zero when decreased. The product remains in the cart with quantity 0 and displays a $0.00 line item. Fix `decreaseProductQuantity` so that when a product's quantity would drop to zero or below, the product is removed from the cart entirely instead.
+
+## Project Context
+
+You are working on the **react-shopping-cart** React project.
+
+**Task type:** bug_fix
+
+---
+
+### Target Components
+
+
+#### useCartProducts (`src/contexts/cart-context/useCartProducts.ts`)
+
+
+```jsx
+import { useCartContext } from './CartContextProvider';
+import useCartTotal from './useCartTotal';
+import { ICartProduct } from 'models';
+
+const useCartProducts = () => {
+  const { products, setProducts } = useCartContext();
+  const { updateCartTotal } = useCartTotal();
+
+  const updateQuantitySafely = (
+    currentProduct: ICartProduct,
+    targetProduct: ICartProduct,
+    quantity: number
+  ): ICartProduct => {
+    if (currentProduct.id === targetProduct.id) {
+      return Object.assign({
+        ...currentProduct,
+        quantity: currentProduct.quantity + quantity,
+      });
+    } else {
+      return currentProduct;
+    }
+  };
+
+  const addProduct = (newProduct: ICartProduct) => {
+    let updatedProducts;
+    const isProductAlreadyInCart = products.some(
+      (product: ICartProduct) => newProduct.id === product.id
+    );
+
+    if (isProductAlreadyInCart) {
+      updatedProducts = products.map((product: ICartProduct) => {
+        return updateQuantitySafely(product, newProduct, newProduct.quantity);
+      });
+    } else {
+      updatedProducts = [...products, newProduct];
+    }
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const removeProduct = (productToRemove: ICartProduct) => {
+    const updatedProducts = products.filter(
+      (product: ICartProduct) => product.id !== productToRemove.id
+    );
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const increaseProductQuantity = (productToIncrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToIncrease, +1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+export default useCartProducts;
+
+```
+
+
+
+**Hooks used:** useCartContext, useCartTotal
+
+
+
+
+
+
+#### useCartContext (`src/contexts/cart-context/CartContextProvider.tsx`)
+
+
+```tsx
+import { createContext, useContext, FC, useState } from 'react';
+import { ICartProduct, ICartTotal } from 'models';
+
+export interface ICartContext {
+  isOpen: boolean;
+  setIsOpen(state: boolean): void;
+  products: ICartProduct[];
+  setProducts(products: ICartProduct[]): void;
+  total: ICartTotal;
+  setTotal(products: any): void;
+}
+
+const CartContext = createContext<ICartContext | undefined>(undefined);
+const useCartContext = (): ICartContext => {
+  const context = useContext(CartContext);
+
+  if (!context) {
+    throw new Error('useCartContext must be used within a CartProvider');
+  }
+
+  return context;
+};
+
+const totalInitialValues = {
+  productQuantity: 0,
+  installments: 0,
+  totalPrice: 0,
+  currencyId: 'USD',
+  currencyFormat: '$',
+};
+
+const CartProvider: FC = (props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [products, setProducts] = useState<ICartProduct[]>([]);
+  const [total, setTotal] = useState<ICartTotal>(totalInitialValues);
+
+  const CartContextValue: ICartContext = {
+    isOpen,
+    setIsOpen,
+    products,
+    setProducts,
+    total,
+    setTotal,
+  };
+
+  return <CartContext.Provider value={CartContextValue} {...props} />;
+};
+
+export { CartProvider, useCartContext };
+
+```
+
+
+
+
+
+
+
+
+#### useCartTotal (`src/contexts/cart-context/useCartTotal.ts`)
+
+
+```jsx
+import { useCartContext } from './CartContextProvider';
+import { ICartProduct } from 'models';
+
+const useCartTotal = () => {
+  const { total, setTotal } = useCartContext();
+
+  const updateCartTotal = (products: ICartProduct[]) => {
+    const productQuantity = products.reduce(
+      (sum: number, product: ICartProduct) => {
+        sum += product.quantity;
+        return sum;
+      },
+      0
+    );
+
+    const totalPrice = products.reduce((sum: number, product: ICartProduct) => {
+      sum += product.price * product.quantity;
+      return sum;
+    }, 0);
+
+    const installments = products.reduce(
+      (greater: number, product: ICartProduct) => {
+        greater =
+          product.installments > greater ? product.installments : greater;
+        return greater;
+      },
+      0
+    );
+
+    const total = {
+      productQuantity,
+      installments,
+      totalPrice,
+      currencyId: 'USD',
+      currencyFormat: '$',
+    };
+
+    setTotal(total);
+  };
+
+  return {
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCartTotal;
+
+```
+
+
+
+
+
+
+
+
+
+---
+
+### Related Components
+
+**useCart** (`src/contexts/cart-context/useCart.ts`)
+- calls this hook
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

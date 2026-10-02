@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "    permanentlyEmptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n",
+      "content": "    permanentlyEmptyTrash: (state) => {\n      state.notes = state.notes.filter((note) => !note.trash)\n    },\n\n    restoreAllTrash: (state) => {\n      state.notes = state.notes.map((note) =>\n        note.trash ? { ...note, trash: false } : note\n      )\n    },\n"
+    },
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "replace",
+      "search": "  updateSelectedNotes,\n  permanentlyEmptyTrash,\n  pruneNotes,\n  searchNotes,\n  loadNotes,\n  loadNotesError,\n  loadNotesSuccess,\n  importNotes,\n} = noteSlice.actions\n",
+      "content": "  updateSelectedNotes,\n  permanentlyEmptyTrash,\n  restoreAllTrash,\n  pruneNotes,\n  searchNotes,\n  loadNotes,\n  loadNotesError,\n  loadNotesSuccess,\n  importNotes,\n} = noteSlice.actions\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

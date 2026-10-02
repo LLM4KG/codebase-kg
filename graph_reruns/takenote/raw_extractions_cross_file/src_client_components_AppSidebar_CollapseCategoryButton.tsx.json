@@ -1,0 +1,52 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "CollapseCategoryListButton",
+        "childComponent": "ChevronDown",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "16"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CollapseCategoryListButton",
+        "childComponent": "ChevronRight",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "16"
+          }
+        ]
+      },
+      {
+        "parentComponent": "CollapseCategoryListButton",
+        "childComponent": "Layers",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "16"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

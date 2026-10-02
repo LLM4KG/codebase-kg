@@ -1,0 +1,152 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "Comment",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "data-testid",
+            "valueExpression": "\"issue-comment\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "UserAvatar",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "name",
+            "valueExpression": "comment.user.name"
+          },
+          {
+            "propName": "avatarUrl",
+            "valueExpression": "comment.user.avatarUrl"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "Content",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "Username",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "CreatedAt",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "BodyForm",
+        "importSource": "../BodyForm",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "value",
+            "valueExpression": "body"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "setBody"
+          },
+          {
+            "propName": "isWorking",
+            "valueExpression": "isUpdating"
+          },
+          {
+            "propName": "onSubmit",
+            "valueExpression": "handleCommentUpdate"
+          },
+          {
+            "propName": "onCancel",
+            "valueExpression": "() => setFormOpen(false)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "Body",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "EditLink",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "() => setFormOpen(true)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "ConfirmModal",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Are you sure you want to delete this comment?\""
+          },
+          {
+            "propName": "message",
+            "valueExpression": "\"Once you delete, it's gone for good.\""
+          },
+          {
+            "propName": "confirmText",
+            "valueExpression": "\"Delete comment\""
+          },
+          {
+            "propName": "onConfirm",
+            "valueExpression": "handleCommentDelete"
+          },
+          {
+            "propName": "renderLink",
+            "valueExpression": "modal => <DeleteLink onClick={modal.open}>Delete</DeleteLink>"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsComment",
+        "childComponent": "DeleteLink",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "modal.open"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "candidate_id": "P2__kg_augmented__n3",
+  "run_id": "claude_primary_2026-09-18_p2_oldasm_control",
+  "run_name": "claude_primary",
+  "task_id": "P2",
+  "project_name": "takenote",
+  "condition": "kg_augmented",
+  "index": 3,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "timestamp": "2026-09-18T13:13:42.332901+00:00",
+  "retrieval_token_count": 1235,
+  "generator_usage": {
+    "input_tokens": 3730,
+    "output_tokens": 679
+  },
+  "generator_latency_ms": 9174.135090004711,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": null,
+  "apply_reason": "search_not_found",
+  "edit_count": 5,
+  "malformed_blocks": 0,
+  "elided": false
+}

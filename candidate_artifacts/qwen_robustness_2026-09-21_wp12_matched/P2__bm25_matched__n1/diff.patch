@@ -1,0 +1,13 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/note.ts",
+      "op": "write",
+      "content": ""
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,216 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "CategoryOption",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useSelector",
+            "category": "library",
+            "source": "react-redux"
+          },
+          {
+            "name": "useDispatch",
+            "category": "library",
+            "source": "react-redux"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "category",
+        "componentName": "CategoryOption",
+        "type": "object",
+        "isRequired": true
+      },
+      {
+        "name": "index",
+        "componentName": "CategoryOption",
+        "type": "number",
+        "isRequired": true
+      },
+      {
+        "name": "contextMenuRef",
+        "componentName": "CategoryOption",
+        "type": "object",
+        "isRequired": true
+      },
+      {
+        "name": "handleCategoryMenuClick",
+        "componentName": "CategoryOption",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "handleCategoryRightClick",
+        "componentName": "CategoryOption",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "onSubmitUpdateCategory",
+        "componentName": "CategoryOption",
+        "type": "function",
+        "isRequired": true
+      },
+      {
+        "name": "optionsPosition",
+        "componentName": "CategoryOption",
+        "type": "object",
+        "isRequired": true
+      },
+      {
+        "name": "optionsId",
+        "componentName": "CategoryOption",
+        "type": "string",
+        "isRequired": true
+      },
+      {
+        "name": "setOptionsId",
+        "componentName": "CategoryOption",
+        "type": "function",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "inline_onClick",
+        "eventType": "onClick",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onDoubleClick",
+        "eventType": "onDoubleClick",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onBlur",
+        "eventType": "onBlur",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onDrop",
+        "eventType": "onDrop",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onDragOver",
+        "eventType": "onDragOver",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onDragEnter",
+        "eventType": "onDragEnter",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onDragLeave",
+        "eventType": "onDragLeave",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onContextMenu",
+        "eventType": "onContextMenu",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onSubmit",
+        "eventType": "onSubmit",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "inline_onChange",
+        "eventType": "onChange",
+        "componentName": "CategoryOption",
+        "isInline": true
+      },
+      {
+        "name": "onSubmitUpdateCategory",
+        "eventType": "onBlur",
+        "componentName": "CategoryOption",
+        "isInline": false
+      },
+      {
+        "name": "handleCategoryMenuClick",
+        "eventType": "onClick",
+        "componentName": "CategoryOption",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-redux",
+        "symbols": [],
+        "hooks": [
+          "useSelector",
+          "useDispatch"
+        ]
+      },
+      {
+        "from": "react-beautiful-dnd",
+        "symbols": [
+          "Draggable"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-feather",
+        "symbols": [
+          "Folder",
+          "MoreHorizontal"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

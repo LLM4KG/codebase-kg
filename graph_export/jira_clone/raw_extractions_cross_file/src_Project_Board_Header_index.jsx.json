@@ -1,0 +1,42 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardHeader",
+        "childComponent": "Header",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardHeader",
+        "childComponent": "BoardName",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardHeader",
+        "childComponent": "Button",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "icon",
+            "valueExpression": "\"github\""
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

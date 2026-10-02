@@ -1,0 +1,15 @@
+{
+  "task_id": "P4",
+  "candidate_id": "P4__bm25__n5",
+  "condition": "bm25",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "test_fail",
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 3888.9490839992504,
+  "timeout_used_ms": 13072,
+  "stage_detail": "FAIL src/contexts/cart-context/__tests__/P4_clear_cart.test.tsx\n  ● P4 - useCart exposes clearCart, which empties the cart and resets totals › clearCart removes every product\n\n    expect(received).toEqual(expected) // deep equality\n\n    - Expected  -  1\n    + Received  + 21\n\n    - Array []\n    + Array [\n    +   Object {\n    +     \"availableSizes\": Array [\n    +       \"S\",\n    +       \"L\",\n    +       \"XL\",\n    +       \"XXL\",\n    +     ],\n    +     \"currencyFormat\": \"$\",\n    +     \"currencyId\": \"USD\",\n    +     \"description\": \"14/15 s/nº\",\n    +     \"id\": 0,\n    +     \"installments\": 9,\n    +     \"isFreeShipping\": true,\n    +     \"price\": 10.9,\n    +     \"quantity\": 1,\n    +     \"sku\": 8552515751438644,\n    +     \"style\": \"White T-shirt\",\n    +     \"title\": \"Cropped Stay Groovy off white\",\n    +   },\n    + ]\n\n      52 |       (result.current as any).clearCart();\n      53 |     });\n    > 54 |     expect(result.current.products).toEqual([]);\n         |                                     ^\n      55 |   });\n      56 |\n      57 |   test('clearCart resets the cart totals', () => {\n\n      at Object.<anonymous> (src/contexts/cart-context/__tests__/P4_clear_cart.test.tsx:54:37)\n      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)\n      at runJest (node_modules/@jest/core/build/runJest.js:404:19)\n      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)\n      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)\n\n  ● P4 - useCart exposes clearCart, which empties the cart and resets totals › clearCart resets the cart totals\n\n    expect(received).toBe(expected) // Object.is equality\n\n    Expected: 0\n    Received: 1\n\n      70 |       (result.current as any).clearCart();\n      71 |     });\n    > 72 |     expect(result.current.total.productQuantity).toBe(0);\n         |                                                  ^\n      73 |     expect(result.current.total.totalPrice).toBe(0);\n      74 |     expect(result.current.total.installments).toBe(0);\n      75 |   });\n\n      at Object.<anonymous> (src/contexts/cart-context/__tests__/P4_clear_cart.test.tsx:72:50)\n      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)\n      at runJest (node_modules/@jest/core/build/runJest.js:404:19)\n      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)\n      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)\n\nTest Suites: 1 failed, 1 total\nTests:       2 failed, 2 passed, 4 total\nSnapshots:   0 total\nTime:        1.077 s\nnpm ERR! Test failed.  See above for more details.",
+  "apply_mode": "exact_unique",
+  "apply_reason": null
+}

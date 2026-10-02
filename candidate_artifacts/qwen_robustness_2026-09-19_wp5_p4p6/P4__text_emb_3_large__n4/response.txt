@@ -1,0 +1,174 @@
+Looking at the task, I need to:
+
+1. Add a `clearCart` function to the `useCart` hook that empties the cart and resets its totals
+2. Add a "Clear cart" button to the footer of the `Cart` component that calls this function
+
+Let me analyze the code structure:
+
+- The `useCart` hook aggregates functions from `useCartProducts` and `useCartTotal`
+- `useCartProducts` has access to `setProducts` and `updateCartTotal` 
+- The cart footer is in the `Cart` component where I need to add the clear button
+
+First, I'll add the `clearCart` function to the `useCartProducts` hook:
+
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+
+export default useCartProducts;
+=======
+  const decreaseProductQuantity = (productToDecrease: ICartProduct) => {
+    const updatedProducts = products.map((product: ICartProduct) => {
+      return updateQuantitySafely(product, productToDecrease, -1);
+    });
+
+    setProducts(updatedProducts);
+    updateCartTotal(updatedProducts);
+  };
+
+  const clearCart = () => {
+    setProducts([]);
+    updateCartTotal([]);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  };
+};
+
+export default useCartProducts;
+>>>>>>> REPLACE
+
+Now I'll expose the `clearCart` function through the `useCart` hook:
+
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+=======
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+};
+
+export default useCart;
+>>>>>>> REPLACE
+
+Finally, I'll add the "Clear cart" button to the Cart footer:
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+          </S.CartFooter>
+=======
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+            {total.productQuantity > 0 && (
+              <S.CheckoutButton 
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to clear the cart?')) {
+                    clearCart();
+                  }
+                }}
+                style={{ marginTop: '10px', backgroundColor: '#5b5a5e' }}
+              >
+                Clear cart
+              </S.CheckoutButton>
+            )}
+          </S.CartFooter>
+>>>>>>> REPLACE
+
+I also need to import the clearCart function in the Cart component:
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+import { useCart } from 'contexts/cart-context';
+=======
+import { useCart } from 'contexts/cart-context';
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+=======
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+>>>>>>> REPLACE
+>>>>>>> REPLACE

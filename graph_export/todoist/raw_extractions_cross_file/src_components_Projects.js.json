@@ -1,0 +1,28 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Projects",
+        "childComponent": "IndividualProject",
+        "importSource": "./IndividualProject",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "project",
+            "valueExpression": "project"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

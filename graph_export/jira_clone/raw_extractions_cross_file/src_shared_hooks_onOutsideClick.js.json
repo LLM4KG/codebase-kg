@@ -1,0 +1,37 @@
+{
+  "composition": {
+    "componentUsages": []
+  },
+  "custom_hook_internal": {
+    "customHookUsages": [
+      {
+        "hookName": "useOnOutsideClick",
+        "libraryHooks": [
+          {
+            "name": "useRef",
+            "source": "react",
+            "count": 1
+          },
+          {
+            "name": "useEffect",
+            "source": "react",
+            "count": 1
+          }
+        ],
+        "customHooks": [
+          {
+            "name": "useDeepCompareMemoize",
+            "source": "shared/hooks/deepCompareMemoize"
+          }
+        ]
+      }
+    ]
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

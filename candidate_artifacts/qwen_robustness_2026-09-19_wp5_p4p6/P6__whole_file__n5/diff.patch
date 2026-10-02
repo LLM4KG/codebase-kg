@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/containers/CategoryList.tsx",
+      "op": "replace",
+      "search": "    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }\n\n    if (categories.find((cat) => cat.name === category.name) || category.name === '') {\n      resetTempCategory()\n    } else {\n      _updateCategory(category)\n",
+      "content": "    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }\n\n    if (\n      categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) ||\n      category.name === ''\n    ) {\n      resetTempCategory()\n    } else {\n      _updateCategory(category)\n"
+    },
+    {
+      "path": "src/client/containers/CategoryList.tsx",
+      "op": "replace",
+      "search": "    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }\n\n    if (categories.find((cat) => cat.name === category.name) || category.name === '') {\n      resetTempCategory()\n    } else {\n      _addCategory(category)\n",
+      "content": "    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }\n\n    if (\n      categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) ||\n      category.name === ''\n    ) {\n      resetTempCategory()\n    } else {\n      _addCategory(category)\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

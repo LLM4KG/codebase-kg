@@ -1,0 +1,91 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "Product",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useCart",
+            "category": "custom",
+            "source": "contexts/cart-context"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "default"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [
+      {
+        "name": "product",
+        "componentName": "Product",
+        "type": "object",
+        "isRequired": true
+      }
+    ],
+    "eventHandlers": [
+      {
+        "name": "handleAddProductWhenEnter",
+        "eventType": "onKeyUp",
+        "componentName": "Product",
+        "isInline": false
+      },
+      {
+        "name": "handleAddProduct",
+        "eventType": "onClick",
+        "componentName": "Product",
+        "isInline": false
+      }
+    ]
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "KeyboardEvent"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "utils/formatPrice",
+        "symbols": [
+          "formatPrice"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "models",
+        "symbols": [
+          "IProduct"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "contexts/cart-context",
+        "symbols": [],
+        "hooks": [
+          "useCart"
+        ]
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

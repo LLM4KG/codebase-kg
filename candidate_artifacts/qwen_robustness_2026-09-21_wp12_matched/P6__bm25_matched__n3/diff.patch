@@ -1,0 +1,14 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/category.ts",
+      "op": "replace",
+      "search": "    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {\n      state.categories.push(payload)\n    },\n\n    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {\n      const categoryNames = new Map<string, string>()\n      state.categories.forEach(({ name }) => categoryNames.set(name, name))\n\n      // Make sure duplicate category is not added\n      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))\n\n      state.categories.push(...toAdd)\n    },\n\n    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {\n      state.categories = state.categories.map((category) =>\n        category.id === payload.id ? { ...category, name: payload.name } : category\n      )\n    },\n",
+      "content": "    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {\n      const categoryName = payload.name.toLowerCase()\n      const categoryExists = state.categories.some(\n        (category) => category.name.toLowerCase() === categoryName\n      )\n\n      if (!categoryExists) {\n        state.categories.push(payload)\n      }\n    },\n\n    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {\n      const categoryNames = new Map<string, string>()\n      state.categories.forEach(({ name }) => categoryNames.set(name.toLowerCase(), name))\n\n      // Make sure duplicate category is not added\n      const toAdd = payload.filter(({ name }) => !categoryNames.has(name.toLowerCase()))\n\n      state.categories.push(...toAdd)\n    },\n\n    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {\n      const categoryName = payload.name.toLowerCase()\n      const categoryExists = state.categories.some(\n        (category) => category.id !== payload.id && category.name.toLowerCase() === categoryName\n      )\n\n      if (!categoryExists) {\n        state.categories = state.categories.map((category) =>\n          category.id === payload.id ? { ...category, name: payload.name } : category\n        )\n      }\n    },\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

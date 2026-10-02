@@ -1,0 +1,36 @@
+Looking at the code, I need to find where the duplicate category check happens when adding and renaming categories. The `CategoryList` component is not shown directly, but based on the slice code, I can see the `addCategory` and `updateCategory` reducers don't do duplicate checking - that must happen in the component.
+
+Let me look at the slice more carefully. The `importCategories` reducer does have a duplicate check but it's case-sensitive (`categoryNames.set(name, name)` and `!categoryNames.has(name)`).
+
+Since the task mentions `CategoryList`, the duplicate checks for add and rename are likely in a component file. Based on the project structure, I need to fix:
+
+1. The `importCategories` reducer in `category.ts` - make it case-insensitive
+2. The component-level checks (likely in `CategoryList.tsx`) - but that file isn't shown
+
+However, I can only work with what's provided. The `importCategories` reducer has a case-sensitive check I can fix. For the add/rename checks, they must be in the component. Since the component isn't in the context, let me focus on what I can see and infer the likely location.
+
+The most likely file for the add/rename duplicate checks is `src/client/components/AppSidebar/CategoryList.tsx`. Based on common patterns in this codebase, the checks probably look like `categories.find(cat => cat.name === newName)`.
+
+```text
+src/client/slices/category.ts
+<<<<<<< SEARCH
+      const categoryNames = new Map<string, string>()
+      state.categories.forEach(({ name }) => categoryNames.set(name, name))
+
+      // Make sure duplicate category is not added
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))
+=======
+      const categoryNames = new Map<string, string>()
+      state.categories.forEach(({ name }) => categoryNames.set(name.toLowerCase(), name))
+
+      // Make sure duplicate category is not added
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name.toLowerCase()))
+>>>>>>> REPLACE
+
+src/client/components/AppSidebar/CategoryList.tsx
+<<<<<<< SEARCH
+        categories.find((category) => category.name === tempName)
+=======
+        categories.find((category) => category.name.toLowerCase() === tempName.toLowerCase())
+>>>>>>> REPLACE
+```

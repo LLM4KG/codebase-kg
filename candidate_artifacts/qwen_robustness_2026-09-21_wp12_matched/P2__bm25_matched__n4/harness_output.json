@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__bm25_matched__n4",
+  "condition": "bm25_matched",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1305.7030559994018,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/slices/note.ts\n--- SEARCH ---\n  | ReturnType<typeof updateActiveNote>\n  | ReturnType<typeof updateSelectedNotes>\n  | ReturnType<typeof addNote>\n  | ReturnType<typeof updateNote>\n  | ReturnType<typeof deleteNotes>\n  | ReturnType<typeof addCategory>\n  | ReturnType<typeof renameCategory>\n  | ReturnType<typeof deleteCategory>\n  | ReturnType<typeof swapFolder>\n  | ReturnType<typeof assignFavoriteToNotes>\n  | ReturnType<typeof unassignFavoriteFromNotes>\n  | ReturnType<typeof assignTrashToNotes>\n  | ReturnType<typeof unassignTrashFromNotes>",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

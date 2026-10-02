@@ -1,0 +1,90 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "NoteEditor",
+        "childComponent": "NoteMenuBar",
+        "importSource": "@/containers/NoteMenuBar",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "NoteEditor",
+        "childComponent": "EmptyEditor",
+        "importSource": "@/components/Editor/EmptyEditor",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "NoteEditor",
+        "childComponent": "PreviewEditor",
+        "importSource": "@/components/Editor/PreviewEditor",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "directionText",
+            "valueExpression": "codeMirrorOptions.direction"
+          },
+          {
+            "propName": "noteText",
+            "valueExpression": "activeNote.text"
+          },
+          {
+            "propName": "notes",
+            "valueExpression": "notes"
+          }
+        ]
+      },
+      {
+        "parentComponent": "NoteEditor",
+        "childComponent": "CodeMirror",
+        "importSource": "react-codemirror2",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "data-testid",
+            "valueExpression": "\"codemirror-editor\""
+          },
+          {
+            "propName": "className",
+            "valueExpression": "\"editor mousetrap\""
+          },
+          {
+            "propName": "value",
+            "valueExpression": "activeNote.text"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "codeMirrorOptions"
+          },
+          {
+            "propName": "editorDidMount",
+            "valueExpression": "(editor) => { setTimeout(() => { editor.focus() }, 0); editor.setCursor(0); setEditorOverlay(editor) }"
+          },
+          {
+            "propName": "onBeforeChange",
+            "valueExpression": "(editor, data, value) => { _updateNote({ id: activeNote.id, text: value, created: activeNote.created, lastUpdated: dayjs().format() }) }"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "(editor, data, value) => { if (!value) { editor.focus() } }"
+          },
+          {
+            "propName": "onPaste",
+            "valueExpression": "(editor, event) => { ... }"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

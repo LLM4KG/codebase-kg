@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__text_emb_3_large_matched__n1",
+  "condition": "text_emb_3_large_matched",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 47551.064788000076,
+  "timeout_used_ms": 154105,
+  "stage_detail": null,
+  "apply_mode": "exact_unique",
+  "apply_reason": null
+}

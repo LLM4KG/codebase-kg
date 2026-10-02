@@ -1,0 +1,15 @@
+{
+  "task_id": "P6",
+  "candidate_id": "P6__whole_file__n4",
+  "condition": "whole_file",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1304.6013570001378,
+  "timeout_used_ms": 146329,
+  "stage_detail": "apply_edits: no applicable edits (malformed_blocks=1)",
+  "apply_mode": null,
+  "apply_reason": "malformed_blocks"
+}

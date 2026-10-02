@@ -1,0 +1,44 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "App",
+        "childComponent": "NormalizeStyles",
+        "importSource": "./NormalizeStyles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "BaseStyles",
+        "importSource": "./BaseStyles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Toast",
+        "importSource": "./Toast",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "App",
+        "childComponent": "Routes",
+        "importSource": "./Routes",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

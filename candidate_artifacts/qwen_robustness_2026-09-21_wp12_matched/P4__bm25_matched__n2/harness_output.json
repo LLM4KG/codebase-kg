@@ -1,0 +1,15 @@
+{
+  "task_id": "P4",
+  "candidate_id": "P4__bm25_matched__n2",
+  "condition": "bm25_matched",
+  "model": "openrouter/qwen/qwen3-coder",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1319.4365509989439,
+  "timeout_used_ms": 13072,
+  "stage_detail": "apply_edits: SEARCH text not found in src/components/Cart/Cart.tsx\n--- SEARCH ---\nimport formatPrice from 'utils/formatPrice';\nimport CartProducts from './CartProducts';\n\nimport { useCart } from 'contexts/cart-context';\n\nimport * as S from './style';\n\nconst Cart = () => {\n  const { products, total, isOpen, openCart, closeCart } = useCart();\n\n  const handleCheckout = () => {\n    if (total.productQuantity) {\n      alert(\n        `Checkout - Subtotal: ${total.currencyFormat} ${formatPrice(\n          total.totalPrice,\n          total.currencyId\n        )}`\n      );\n    } else {\n      alert('Add some product in the cart!');\n    }\n  };\n\n  const handleToggleCart = (isOpen: boolean) => () =>\n    isOpen ? closeCart() : openCart();\n\n  return (\n    <S.Container isOpen={isOpen}>\n      <S.CartButton onClick={handleToggleCart(isOpen)}>\n        {isOpen ? (\n          <span>X</span>\n        ) : (\n          <S.CartIcon>\n            <S.CartQuantity title=\"Products in cart quantity\">\n              {total.productQuantity}\n            </S.CartQuantity>\n          </S.CartIcon>\n        )}\n      </S.CartButton>\n\n      {isOpen && (\n        <S.CartContent>\n          <S.CartContentHeader>\n            <S.CartIcon large>\n              <S.CartQuantity>{total.productQuantity}</S.CartQuantity>\n            </S.CartIcon>\n            <S.HeaderTitle>Cart</S.HeaderTitle>\n          </S.CartContentHeader>\n\n          <CartProducts products={products} />\n\n          <S.CartFooter>\n            <S.Sub>SUBTOTAL</S.Sub>\n            <S.SubPrice>\n              <S.SubPriceValue>{`${total.currencyFormat} ${formatPrice(\n                total.totalPrice,\n                total.currencyId\n              )}`}</S.SubPriceValue>\n              <S.SubPriceInstallment>\n                {total.installments ? (\n                  <span>\n                    {`OR UP TO ${total.installments} x ${\n                      total.currencyFormat\n                    } ${formatPrice(\n                      total.totalPrice / total.installments,\n                      total.currencyId\n                    )}`}\n                  </span>\n                ) : null}\n              </S.SubPriceInstallment>\n            </S.SubPrice>\n            <S.CheckoutButton onClick={handleCheckout} autoFocus>\n              Checkout\n            </S.CheckoutButton>\n          </S.CartFooter>\n        </S.CartContent>\n      )}\n    </S.Container>\n  );\n};\n\nexport default Cart;",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}

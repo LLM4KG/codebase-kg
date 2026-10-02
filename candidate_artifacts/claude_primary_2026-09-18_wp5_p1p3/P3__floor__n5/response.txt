@@ -1,0 +1,126 @@
+I need to look at the NoteMenuBar component to understand the existing code structure before making changes.
+
+Based on the task description, I'll create the custom hook and update NoteMenuBar to use it.
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+
+    const timer = setTimeout(() => {
+      setCopiedText('')
+    }, timeout)
+
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(successMessage)
+    })
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copied, setCopied] = useState('')
+
+  useEffect(() => {
+    if (!copied) return
+
+    const timer = setTimeout(() => {
+      setCopied('')
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [copied])
+=======
+  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!')
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+        onClick={() => {
+            copyToClipboard(note.text)
+            setCopied('Copied!')
+          }}
+=======
+        onClick={() => {
+            handleCopy(note.text)
+          }}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { useState, useEffect } from 'react'
+=======
+import { useCopyToClipboard } from '@/client/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+```
+
+Wait, I need to be more careful about the exact existing code. Let me provide blocks that account for uncertainty in the exact format, while being precise about what I know from the task description.
+
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useEffect, useState } from 'react'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState('')
+
+  useEffect(() => {
+    if (!copiedText) return
+
+    const timer = setTimeout(() => {
+      setCopiedText('')
+    }, timeout)
+
+    return () => clearTimeout(timer)
+  }, [copiedText, timeout])
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(successMessage)
+    })
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  const [copied, setCopied] = useState('')
+
+  useEffect(() => {
+    if (!copied) return
+
+    const timer = setTimeout(() => {
+      setCopied('')
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [copied])
+=======
+  const { copiedText: copied, handleCopy } = useCopyToClipboard('Copied!')
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+            copyToClipboard(note.text)
+            setCopied('Copied!')
+=======
+            handleCopy(note.text)
+>>>>>>> REPLACE
+```

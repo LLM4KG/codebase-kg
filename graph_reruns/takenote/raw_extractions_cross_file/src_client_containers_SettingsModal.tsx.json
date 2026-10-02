@@ -1,0 +1,440 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Tabs",
+        "importSource": "@/components/Tabs/Tabs",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "TabPanel",
+        "importSource": "@/components/Tabs/TabPanel",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "label",
+            "valueExpression": "\"Preferences\""
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Settings"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Option",
+        "importSource": "@/components/SettingsModal/Option",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Active line highlight\""
+          },
+          {
+            "propName": "description",
+            "valueExpression": "\"Controls whether the editor should highlight the active line\""
+          },
+          {
+            "propName": "toggle",
+            "valueExpression": "toggleLineHighlight"
+          },
+          {
+            "propName": "checked",
+            "valueExpression": "codeMirrorOptions.styleActiveLine"
+          },
+          {
+            "propName": "testId",
+            "valueExpression": "TestID.ACTIVE_LINE_HIGHLIGHT_TOGGLE"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Option",
+        "importSource": "@/components/SettingsModal/Option",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Display line numbers\""
+          },
+          {
+            "propName": "description",
+            "valueExpression": "\"Controls whether the editor should display line numbers\""
+          },
+          {
+            "propName": "toggle",
+            "valueExpression": "toggleLineNumbersHandler"
+          },
+          {
+            "propName": "checked",
+            "valueExpression": "codeMirrorOptions.lineNumbers"
+          },
+          {
+            "propName": "testId",
+            "valueExpression": "TestID.DISPLAY_LINE_NUMS_TOGGLE"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Option",
+        "importSource": "@/components/SettingsModal/Option",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Scroll past end\""
+          },
+          {
+            "propName": "description",
+            "valueExpression": "\"Controls whether the editor will add blank space to the end of all files\""
+          },
+          {
+            "propName": "toggle",
+            "valueExpression": "toggleScrollPastEnd"
+          },
+          {
+            "propName": "checked",
+            "valueExpression": "codeMirrorOptions.scrollPastEnd"
+          },
+          {
+            "propName": "testId",
+            "valueExpression": "TestID.SCROLL_PAST_END_TOGGLE"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Option",
+        "importSource": "@/components/SettingsModal/Option",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Markdown preview\""
+          },
+          {
+            "propName": "description",
+            "valueExpression": "\"Controls whether markdown preview mode is enabled\""
+          },
+          {
+            "propName": "toggle",
+            "valueExpression": "togglePreviewMarkdownHandler"
+          },
+          {
+            "propName": "checked",
+            "valueExpression": "previewMarkdown"
+          },
+          {
+            "propName": "testId",
+            "valueExpression": "TestID.MARKDOWN_PREVIEW_TOGGLE"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Option",
+        "importSource": "@/components/SettingsModal/Option",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Dark mode\""
+          },
+          {
+            "propName": "description",
+            "valueExpression": "\"Controls the theme of the application and editor\""
+          },
+          {
+            "propName": "toggle",
+            "valueExpression": "toggleDarkThemeHandler"
+          },
+          {
+            "propName": "checked",
+            "valueExpression": "darkTheme"
+          },
+          {
+            "propName": "testId",
+            "valueExpression": "TestID.DARK_MODE_TOGGLE"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "SelectOptions",
+        "importSource": "@/components/SettingsModal/SelectOptions",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Sort By\""
+          },
+          {
+            "propName": "description",
+            "valueExpression": "\"Controls the sort strategy of the notes\""
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "updateNotesSortStrategyHandler"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "notesSortOptions"
+          },
+          {
+            "propName": "selectedValue",
+            "valueExpression": "notesSortKey"
+          },
+          {
+            "propName": "testId",
+            "valueExpression": "TestID.SORT_BY_DROPDOWN"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "SelectOptions",
+        "importSource": "@/components/SettingsModal/SelectOptions",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "title",
+            "valueExpression": "\"Text direction\""
+          },
+          {
+            "propName": "description",
+            "valueExpression": "\"Controls the direction of the text\""
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "updateNotesDirectionHandler"
+          },
+          {
+            "propName": "options",
+            "valueExpression": "directionTextOptions"
+          },
+          {
+            "propName": "selectedValue",
+            "valueExpression": "codeMirrorOptions.direction"
+          },
+          {
+            "propName": "testId",
+            "valueExpression": "TestID.TEXT_DIRECTION_DROPDOWN"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "TabPanel",
+        "importSource": "@/components/Tabs/TabPanel",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "label",
+            "valueExpression": "\"Keyboard shortcuts\""
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Command"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Shortcut",
+        "importSource": "@/components/SettingsModal/Shortcut",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "action",
+            "valueExpression": "shortcut.action"
+          },
+          {
+            "propName": "letter",
+            "valueExpression": "shortcut.key"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "TabPanel",
+        "importSource": "@/components/Tabs/TabPanel",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "label",
+            "valueExpression": "\"Data management\""
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Archive"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "IconButton",
+        "importSource": "@/components/SettingsModal/IconButton",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.SETTINGS_MODAL_DOWNLOAD_NOTES"
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "downloadNotesHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Download"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.DOWNLOAD_ALL_NOTES"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "IconButton",
+        "importSource": "@/components/SettingsModal/IconButton",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "handler",
+            "valueExpression": "backupHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "DownloadCloud"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.BACKUP_ALL_NOTES"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "IconButtonUploader",
+        "importSource": "@/components/SettingsModal/IconButtonUploader",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "dataTestID",
+            "valueExpression": "TestID.UPLOAD_SETTINGS_BACKUP"
+          },
+          {
+            "propName": "accept",
+            "valueExpression": "\".json\""
+          },
+          {
+            "propName": "handler",
+            "valueExpression": "importBackupHandler"
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "UploadCloud"
+          },
+          {
+            "propName": "text",
+            "valueExpression": "LabelText.IMPORT_BACKUP"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "TabPanel",
+        "importSource": "@/components/Tabs/TabPanel",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "label",
+            "valueExpression": "\"About TakeNote\""
+          },
+          {
+            "propName": "icon",
+            "valueExpression": "Edit2"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Settings",
+        "importSource": "react-feather",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Command",
+        "importSource": "react-feather",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Archive",
+        "importSource": "react-feather",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Edit2",
+        "importSource": "react-feather",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "Download",
+        "importSource": "react-feather",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "DownloadCloud",
+        "importSource": "react-feather",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "UploadCloud",
+        "importSource": "react-feather",
+        "usage": "prop_value",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SettingsModal",
+        "childComponent": "X",
+        "importSource": "react-feather",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "size",
+            "valueExpression": "20"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -22,11 +22,12 @@
     "DEFINED_IN": 48,
     "USES_COMPONENT": 46,
     "DECLARES_STATE": 11,
-    "PROVIDED_BY": 6,
     "USES_CUSTOM_HOOK": 6,
+    "PROVIDED_BY": 6,
     "CONSUMES_CONTEXT": 5,
     "PROVIDES_CONTEXT": 2,
-    "ROUTES_TO": 2
+    "ROUTES_TO": 2,
+    "RENDERS_ROOT_COMPONENT": 1
   },
   "provenance": {
     "project_id": "46e1e7c383ab",
@@ -46,7 +47,7 @@
       "state_class",
       "state_function"
     ],
-    "extracted_at": "2026-07-29T13:55:17+00:00",
+    "extracted_at": "2026-07-29T14:04:55+00:00",
     "file_count": 60,
     "repo_commit_sha": "e0eddbb9a21ae4cf4c4c7c183f29cfd666e08331",
     "repo_dirty": false

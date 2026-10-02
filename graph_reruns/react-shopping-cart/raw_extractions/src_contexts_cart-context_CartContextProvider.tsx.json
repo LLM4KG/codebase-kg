@@ -1,0 +1,111 @@
+{
+  "function_components": {
+    "components": [
+      {
+        "name": "CartProvider",
+        "syntax": "arrow",
+        "usesHooks": true,
+        "hookDetails": [
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          },
+          {
+            "name": "useState",
+            "category": "library",
+            "source": "react"
+          }
+        ],
+        "returnsJSX": true,
+        "exportType": "named"
+      }
+    ]
+  },
+  "custom_hooks": {
+    "customHooks": [
+      {
+        "name": "useCartContext",
+        "syntax": "arrow",
+        "exportType": "named",
+        "parameters": [],
+        "returnShape": "object"
+      }
+    ]
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "createContext",
+          "FC"
+        ],
+        "hooks": [
+          "useContext",
+          "useState"
+        ]
+      },
+      {
+        "from": "models",
+        "symbols": [
+          "ICartProduct",
+          "ICartTotal"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": [
+      {
+        "name": "isOpen",
+        "setterName": "setIsOpen",
+        "type": "boolean",
+        "defaultValue": "false",
+        "componentName": "CartProvider",
+        "declarationPattern": "useState"
+      },
+      {
+        "name": "products",
+        "setterName": "setProducts",
+        "type": "array",
+        "defaultValue": "[]",
+        "componentName": "CartProvider",
+        "declarationPattern": "useState"
+      },
+      {
+        "name": "total",
+        "setterName": "setTotal",
+        "type": "object",
+        "defaultValue": "totalInitialValues",
+        "componentName": "CartProvider",
+        "declarationPattern": "useState"
+      }
+    ]
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": [
+      {
+        "name": "CartContext",
+        "defaultValue": "undefined",
+        "exportType": "none"
+      }
+    ]
+  }
+}

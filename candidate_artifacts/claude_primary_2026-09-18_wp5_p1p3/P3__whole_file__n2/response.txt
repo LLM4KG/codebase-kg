@@ -1,0 +1,114 @@
+```text
+src/client/utils/useCopyToClipboard.ts
+<<<<<<< SEARCH
+=======
+import { useState, useEffect } from 'react'
+import { copyToClipboard } from '@/utils/helpers'
+
+export const useCopyToClipboard = (successMessage: string, timeout: number = 3000) => {
+  const [copiedText, setCopiedText] = useState<string>('')
+
+  useEffect(() => {
+    if (copiedText === successMessage) {
+      const timer = setTimeout(() => {
+        setCopiedText('')
+      }, timeout)
+
+      return () => clearTimeout(timer)
+    }
+  }, [copiedText, successMessage, timeout])
+
+  const handleCopy = (text: string) => {
+    copyToClipboard(text)
+    setCopiedText(successMessage)
+  }
+
+  return { copiedText, handleCopy }
+}
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import React, { useEffect, useState } from 'react'
+=======
+import React, { useState } from 'react'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+import { downloadNotes, isDraftNote, getShortUuid, copyToClipboard } from '@/utils/helpers'
+=======
+import { downloadNotes, isDraftNote, getShortUuid } from '@/utils/helpers'
+import { useCopyToClipboard } from '@/utils/useCopyToClipboard'
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+  // ===========================================================================
+  // Other
+  // ===========================================================================
+
+  const copyNoteIcon = <ClipboardCmp size={18} aria-hidden="true" focusable="false" />
+  const successfulCopyMessage = 'Note copied!'
+  const activeNote = notes.find((note) => note.id === activeNoteId)!
+  const shortNoteUuid = getShortUuid(activeNoteId)
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [uuidCopiedText, setUuidCopiedText] = useState<string>('')
+  const [isToggled, togglePreviewIcon] = useState<boolean>(false)
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    if (uuidCopiedText === successfulCopyMessage) {
+      const timer = setTimeout(() => {
+        setUuidCopiedText('')
+      }, 3000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [uuidCopiedText])
+=======
+  // ===========================================================================
+  // Other
+  // ===========================================================================
+
+  const copyNoteIcon = <ClipboardCmp size={18} aria-hidden="true" focusable="false" />
+  const activeNote = notes.find((note) => note.id === activeNoteId)!
+  const shortNoteUuid = getShortUuid(activeNoteId)
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [isToggled, togglePreviewIcon] = useState<boolean>(false)
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  const { copiedText: uuidCopiedText, handleCopy: handleUuidCopy } = useCopyToClipboard(
+    'Note copied!',
+    3000
+  )
+>>>>>>> REPLACE
+
+src/client/containers/NoteMenuBar.tsx
+<<<<<<< SEARCH
+          <button
+            className="note-menu-bar-button uuid"
+            onClick={() => {
+              copyToClipboard(`{{${shortNoteUuid}}}`)
+              setUuidCopiedText(successfulCopyMessage)
+            }}
+=======
+          <button
+            className="note-menu-bar-button uuid"
+            onClick={() => handleUuidCopy(`{{${shortNoteUuid}}}`)}
+>>>>>>> REPLACE
+```

@@ -1,0 +1,25 @@
+{
+  "candidate_id": "P2__whole_file__n1",
+  "run_id": "claude_primary_2026-09-18_wp5_p1p3",
+  "run_name": "claude_primary",
+  "task_id": "P2",
+  "project_name": "takenote",
+  "condition": "whole_file",
+  "index": 1,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "timestamp": "2026-09-18T13:38:59.347973+00:00",
+  "retrieval_token_count": 2611,
+  "generator_usage": {
+    "input_tokens": 7844,
+    "output_tokens": 776
+  },
+  "generator_latency_ms": 18059.8608490036,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": "exact_unique",
+  "apply_reason": null,
+  "edit_count": 6,
+  "malformed_blocks": 0,
+  "elided": false
+}

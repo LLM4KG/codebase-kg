@@ -1,0 +1,64 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Navigation",
+        "childComponent": "NavLink",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "\"/mountain\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "Navigation",
+        "childComponent": "NavLink",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "\"/beach\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "Navigation",
+        "childComponent": "NavLink",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "\"/bird\""
+          }
+        ]
+      },
+      {
+        "parentComponent": "Navigation",
+        "childComponent": "NavLink",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "\"/food\""
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

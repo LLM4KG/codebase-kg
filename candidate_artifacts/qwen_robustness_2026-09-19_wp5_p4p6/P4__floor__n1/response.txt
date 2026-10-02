@@ -1,0 +1,106 @@
+```text
+src/hooks/useCart.ts
+<<<<<<< SEARCH
+  const removeFromCart = (productId: string) => {
+    setCartItems(prev => prev.filter(item => item.productId !== productId));
+  };
+
+  return {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    totalItems,
+    totalPrice
+  };
+=======
+  const removeFromCart = (productId: string) => {
+    setCartItems(prev => prev.filter(item => item.productId !== productId));
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  return {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    totalItems,
+    totalPrice
+  };
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+import { useCart } from '../../hooks/useCart';
+import { CartItem } from './CartItem';
+import { CartSummary } from './CartSummary';
+
+export const Cart = () => {
+  const { cartItems, totalItems, totalPrice } = useCart();
+
+  if (cartItems.length === 0) {
+    return (
+      <div className="cart-empty">
+        <p>Your cart is empty</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cart">
+      <div className="cart-items">
+        {cartItems.map(item => (
+          <CartItem key={item.productId} item={item} />
+        ))}
+      </div>
+      <div className="cart-footer">
+        <CartSummary 
+          totalItems={totalItems} 
+          totalPrice={totalPrice} 
+        />
+      </div>
+    </div>
+  );
+};
+=======
+import { useCart } from '../../hooks/useCart';
+import { CartItem } from './CartItem';
+import { CartSummary } from './CartSummary';
+
+export const Cart = () => {
+  const { cartItems, totalItems, totalPrice, clearCart } = useCart();
+
+  if (cartItems.length === 0) {
+    return (
+      <div className="cart-empty">
+        <p>Your cart is empty</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cart">
+      <div className="cart-items">
+        {cartItems.map(item => (
+          <CartItem key={item.productId} item={item} />
+        ))}
+      </div>
+      <div className="cart-footer">
+        <CartSummary 
+          totalItems={totalItems} 
+          totalPrice={totalPrice} 
+        />
+        <button 
+          className="clear-cart-button"
+          onClick={clearCart}
+        >
+          Clear cart
+        </button>
+      </div>
+    </div>
+  );
+};
+>>>>>>> REPLACE
+```

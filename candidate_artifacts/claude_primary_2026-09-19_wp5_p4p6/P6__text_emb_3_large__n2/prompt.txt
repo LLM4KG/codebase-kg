@@ -1,0 +1,2187 @@
+You are a senior React.js engineer working on an existing TypeScript/JavaScript
+codebase. You make precise, minimal changes that match the project's existing
+conventions, component structure, hook usage, and styling patterns.
+
+You are given a task specification and (optionally) a context block describing the
+relevant components, their props, hooks, state, and cross-cutting architecture
+retrieved from the project's knowledge graph. Use the context to keep your change
+consistent with the surrounding code — reuse existing hooks, contexts, and prop
+interfaces rather than inventing new ones.
+
+Do not add dependencies, do not modify unrelated files, and do not change public
+component exports unless the task explicitly requires it.
+
+## Task
+
+Category names are supposed to be unique, but `CategoryList` only rejects a duplicate when the case matches exactly: with a category "Work" already present, the user can still create a new category called "work" or "WORK", or rename another category to it. Make the duplicate check case-insensitive, both when adding a category and when renaming one.
+
+## Project Context
+
+You are working on the **takenote** React project.
+
+**Task type:** bug_fix
+
+---
+
+### Target Components
+
+
+#### CategoryList (`src/client/containers/CategoryList.tsx`)
+
+
+```tsx
+import React, { useRef, useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { v4 as uuid } from 'uuid'
+import { Droppable } from 'react-beautiful-dnd'
+
+import { LabelText } from '@resources/LabelText'
+import { TestID } from '@resources/TestID'
+import { CategoryOption } from '@/containers/CategoryOption'
+import { getCategories } from '@/selectors'
+import { shouldOpenContextMenu } from '@/utils/helpers'
+import { ReactMouseEvent, ReactSubmitEvent, CategoryItem } from '@/types'
+import { useTempState } from '@/contexts/TempStateContext'
+import { setCategoryEdit, updateCategory, addCategory } from '@/slices/category'
+import { AddCategoryForm } from '@/components/AppSidebar/AddCategoryForm'
+import { AddCategoryButton } from '@/components/AppSidebar/AddCategoryButton'
+import { CollapseCategoryListButton } from '@/components/AppSidebar/CollapseCategoryButton'
+
+export const CategoryList: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const {
+    categories,
+    editingCategory: { id: editingCategoryId, tempName: tempCategoryName },
+  } = useSelector(getCategories)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _setCategoryEdit = (categoryId: string, tempName: string) =>
+    dispatch(setCategoryEdit({ id: categoryId, tempName }))
+  const _updateCategory = (category: CategoryItem) => dispatch(updateCategory(category))
+  const _addCategory = (category: CategoryItem) => dispatch(addCategory(category))
+
+  // ===========================================================================
+  // Refs
+  // ===========================================================================
+
+  const contextMenuRef = useRef<HTMLDivElement>(null)
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [optionsId, setOptionsId] = useState('')
+  const [optionsPosition, setOptionsPosition] = useState({ x: 0, y: 0 })
+  const [isCategoryListOpen, setCategoryListOpen] = useState(true)
+
+  // ===========================================================================
+  // Context
+  // ===========================================================================
+
+  const { addingTempCategory, setAddingTempCategory } = useTempState()
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const onAddCategory = (adding: boolean) => {
+    setCategoryListOpen(true)
+    setAddingTempCategory(adding)
+  }
+
+  const handleCategoryMenuClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId: string = ''
+  ) => {
+    const clicked = event.target
+
+    // Make sure we aren't getting any null values .. any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    if (shouldOpenContextMenu(clicked as Element)) {
+      if ('clientX' in event && 'clientY' in event) {
+        setOptionsPosition({ x: event.clientX, y: event.clientY })
+      }
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef?.current?.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== categoryId ? categoryId : '')
+    }
+  }
+
+  const handleCategoryRightClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId: string = ''
+  ) => {
+    event.preventDefault()
+    handleCategoryMenuClick(event, categoryId)
+  }
+
+  const resetTempCategory = () => {
+    setAddingTempCategory(false)
+    _setCategoryEdit('', '')
+  }
+
+  const onSubmitUpdateCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _updateCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  const onSubmitNewCategory = (event: ReactSubmitEvent): void => {
+    event.preventDefault()
+
+    const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+
+    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
+      resetTempCategory()
+    } else {
+      _addCategory(category)
+      resetTempCategory()
+    }
+  }
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleCategoryMenuClick)
+
+    return () => {
+      document.removeEventListener('mousedown', handleCategoryMenuClick)
+    }
+  })
+
+  return (
+    <>
+      <div className="category-title">
+        <CollapseCategoryListButton
+          dataTestID={TestID.CATEGORY_COLLAPSE_BUTTON}
+          handler={() => setCategoryListOpen(!isCategoryListOpen)}
+          label={LabelText.COLLAPSE_CATEGORY}
+          isCategoryListOpen={isCategoryListOpen}
+          showIcon={categories.length > 0}
+        />
+        <AddCategoryButton
+          dataTestID={TestID.ADD_CATEGORY_BUTTON}
+          handler={onAddCategory}
+          label={LabelText.ADD_CATEGORY}
+        />
+      </div>
+      {isCategoryListOpen && (
+        <>
+          <Droppable type="CATEGORY" droppableId="Category list">
+            {(droppableProvided) => (
+              <div
+                {...droppableProvided.droppableProps}
+                ref={droppableProvided.innerRef}
+                className="category-list"
+                aria-label="Category list"
+              >
+                {categories.map((category, index) => (
+                  <CategoryOption
+                    key={category.id}
+                    index={index}
+                    category={category}
+                    contextMenuRef={contextMenuRef}
+                    handleCategoryMenuClick={handleCategoryMenuClick}
+                    handleCategoryRightClick={handleCategoryRightClick}
+                    onSubmitUpdateCategory={onSubmitUpdateCategory}
+                    optionsId={optionsId}
+                    setOptionsId={setOptionsId}
+                    optionsPosition={optionsPosition}
+                  />
+                ))}
+                {droppableProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          {addingTempCategory && (
+            <AddCategoryForm
+              dataTestID={TestID.NEW_CATEGORY_FORM}
+              submitHandler={onSubmitNewCategory}
+              changeHandler={_setCategoryEdit}
+              resetHandler={resetTempCategory}
+              editingCategoryId={editingCategoryId}
+              tempCategoryName={tempCategoryName}
+            />
+          )}
+        </>
+      )}
+    </>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### category (`src/client/slices/category.ts`)
+
+
+```jsx
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import { CategoryItem, CategoryState } from '@/types'
+
+const _swapCategories = (categories: CategoryItem[], categoryId: number, destinationId: number) => {
+  const newCategories = [...categories]
+  newCategories.splice(categoryId, 1)
+  newCategories.splice(destinationId, 0, categories[categoryId])
+
+  return newCategories
+}
+
+export const initialState: CategoryState = {
+  categories: [],
+  editingCategory: {
+    id: '',
+    tempName: '',
+  },
+  error: '',
+  loading: true,
+}
+
+const categorySlice = createSlice({
+  name: 'category',
+  initialState,
+  reducers: {
+    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories.push(payload)
+    },
+
+    importCategories: (state, { payload }: PayloadAction<CategoryItem[]>) => {
+      const categoryNames = new Map<string, string>()
+      state.categories.forEach(({ name }) => categoryNames.set(name, name))
+
+      // Make sure duplicate category is not added
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))
+
+      state.categories.push(...toAdd)
+    },
+
+    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories = state.categories.map((category) =>
+        category.id === payload.id ? { ...category, name: payload.name } : category
+      )
+    },
+
+    deleteCategory: (state, { payload }: PayloadAction<string>) => {
+      state.categories = state.categories.filter((category) => category.id !== payload)
+    },
+
+    categoryDragEnter: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories = state.categories.map((category) =>
+        category.id === payload.id ? { ...category, draggedOver: true } : category
+      )
+    },
+
+    categoryDragLeave: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories = state.categories.map((category) =>
+        category.id === payload.id ? { ...category, draggedOver: false } : category
+      )
+    },
+
+    swapCategories: (
+      state,
+      { payload }: PayloadAction<{ categoryId: number; destinationId: number }>
+    ) => {
+      state.categories = _swapCategories(
+        state.categories,
+        payload.categoryId,
+        payload.destinationId
+      )
+    },
+
+    setCategoryEdit: (state, { payload }: PayloadAction<{ id: string; tempName: string }>) => {
+      state.editingCategory = payload
+    },
+
+    loadCategories: (state) => {
+      state.loading = true
+    },
+
+    loadCategoriesError: (state, { payload }: PayloadAction<string>) => {
+      state.loading = false
+      state.error = payload
+    },
+
+    loadCategoriesSuccess: (state, { payload }: PayloadAction<CategoryItem[]>) => {
+      state.categories = payload
+      state.loading = false
+    },
+  },
+})
+
+export const {
+  addCategory,
+  categoryDragEnter,
+  categoryDragLeave,
+  swapCategories,
+  deleteCategory,
+  loadCategories,
+  loadCategoriesError,
+  loadCategoriesSuccess,
+  updateCategory,
+  setCategoryEdit,
+  importCategories,
+} = categorySlice.actions
+
+export default categorySlice.reducer
+
+```
+
+
+
+
+
+
+
+
+#### SelectCategory (`src/client/components/NoteList/SelectCategory.tsx`)
+
+
+```tsx
+import React from 'react'
+
+import { TestID } from '@resources/TestID'
+import { NoteItem, CategoryItem } from '@/types'
+import { isDraftNote } from '@/utils/helpers'
+
+export interface SelectCategoryProps {
+  onChange: (selectedOption: any) => void
+  categories: CategoryItem[]
+  note: NoteItem
+  activeCategoryId: string
+}
+
+export const SelectCategory: React.FC<SelectCategoryProps> = ({
+  onChange,
+  categories,
+  note,
+  activeCategoryId,
+}) => {
+  const filteredCategories = categories
+    .filter(({ id }) => id !== activeCategoryId)
+    .filter((category) => category.id !== note.category)
+
+  return (
+    <>
+      {!note.trash && !isDraftNote(note) && filteredCategories.length > 0 && (
+        <select
+          data-testid={TestID.MOVE_TO_CATEGORY}
+          defaultValue=""
+          className="nav-item move-to-category-select"
+          onChange={onChange}
+        >
+          <option disabled value="">
+            Move to category...
+          </option>
+          {filteredCategories
+            .filter((category) => category.id !== note.category)
+            .map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+        </select>
+      )}
+    </>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### CategoryOption (`src/client/containers/CategoryOption.tsx`)
+
+
+```tsx
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Draggable } from 'react-beautiful-dnd'
+import { Folder as FolderIcon, MoreHorizontal } from 'react-feather'
+
+import { TestID } from '@resources/TestID'
+import { CategoryItem, ReactDragEvent, ReactMouseEvent, ReactSubmitEvent } from '@/types'
+import { determineCategoryClass } from '@/utils/helpers'
+import { getNotes, getCategories, getSettings } from '@/selectors'
+import {
+  updateActiveCategoryId,
+  updateActiveNote,
+  updateSelectedNotes,
+  addCategoryToNote,
+} from '@/slices/note'
+import { setCategoryEdit, categoryDragLeave, categoryDragEnter } from '@/slices/category'
+import { iconColor } from '@/utils/constants'
+import { ContextMenuEnum } from '@/utils/enums'
+import { getNotesSorter } from '@/utils/notesSortStrategies'
+import { ContextMenu } from '@/containers/ContextMenu'
+
+interface CategoryOptionProps {
+  category: CategoryItem
+  index: number
+  contextMenuRef: React.RefObject<HTMLDivElement>
+  handleCategoryMenuClick: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId?: string
+  ) => void
+  handleCategoryRightClick: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | ReactMouseEvent,
+    categoryId?: string
+  ) => void
+  onSubmitUpdateCategory: (event: ReactSubmitEvent) => void
+  optionsPosition: { x: number; y: number }
+  optionsId: string
+  setOptionsId: React.Dispatch<React.SetStateAction<string>>
+}
+
+export const CategoryOption: React.FC<CategoryOptionProps> = ({
+  category,
+  index,
+  contextMenuRef,
+  handleCategoryMenuClick,
+  handleCategoryRightClick,
+  onSubmitUpdateCategory,
+  optionsPosition,
+  optionsId,
+  setOptionsId,
+}) => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { activeCategoryId, notes } = useSelector(getNotes)
+  const {
+    editingCategory: { id: editingCategoryId, tempName: tempCategoryName },
+  } = useSelector(getCategories)
+  const { notesSortKey } = useSelector(getSettings)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _updateActiveCategoryId = (categoryId: string) =>
+    dispatch(updateActiveCategoryId(categoryId))
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _setCategoryEdit = (categoryId: string, tempName: string) =>
+    dispatch(setCategoryEdit({ id: categoryId, tempName }))
+  const _addCategoryToNote = (categoryId: string, noteId: string) =>
+    dispatch(addCategoryToNote({ categoryId, noteId }))
+  const _categoryDragEnter = (category: CategoryItem) => dispatch(categoryDragEnter(category))
+  const _categoryDragLeave = (category: CategoryItem) => dispatch(categoryDragLeave(category))
+
+  return (
+    <Draggable draggableId={category.id} index={index}>
+      {(draggableProvided, snapshot) => (
+        <div
+          {...draggableProvided.dragHandleProps}
+          {...draggableProvided.draggableProps}
+          ref={draggableProvided.innerRef}
+          data-testid={TestID.CATEGORY_LIST_DIV}
+          className={determineCategoryClass(category, snapshot.isDragging, activeCategoryId)}
+          onClick={() => {
+            const notesForNewCategory = notes
+              .filter((note) => !note.trash && note.category === category.id)
+              .sort(getNotesSorter(notesSortKey))
+
+            const defaultActiveNoteId =
+              notesForNewCategory.length > 0 ? notesForNewCategory[0].id : ''
+
+            if (category.id !== activeCategoryId) {
+              _updateActiveCategoryId(category.id)
+              _updateActiveNote(defaultActiveNoteId, false)
+              _updateSelectedNotes(defaultActiveNoteId, false)
+            }
+          }}
+          onDoubleClick={() => {
+            _setCategoryEdit(category.id, category.name)
+          }}
+          onBlur={() => {
+            _setCategoryEdit('', '')
+          }}
+          onDrop={(event) => {
+            event.preventDefault()
+
+            _addCategoryToNote(category.id, event.dataTransfer.getData('text'))
+            _categoryDragLeave(category)
+          }}
+          onDragOver={(event: ReactDragEvent) => event.preventDefault()}
+          onDragEnter={() => _categoryDragEnter(category)}
+          onDragLeave={() => _categoryDragLeave(category)}
+          onContextMenu={(event) => handleCategoryRightClick(event, category.id)}
+        >
+          <form
+            className="category-list-name"
+            onSubmit={(event) => {
+              event.preventDefault()
+              _setCategoryEdit('', '')
+              onSubmitUpdateCategory(event)
+
+              if (optionsId) setOptionsId('')
+            }}
+          >
+            <FolderIcon size={15} className="app-sidebar-icon" color={iconColor} />
+            {editingCategoryId === category.id ? (
+              <input
+                data-testid={TestID.CATEGORY_EDIT}
+                className="category-edit"
+                type="text"
+                autoFocus
+                maxLength={20}
+                value={tempCategoryName}
+                onChange={(event) => {
+                  _setCategoryEdit(editingCategoryId, event.target.value)
+                }}
+                onBlur={(event) => onSubmitUpdateCategory(event)}
+              />
+            ) : (
+              category.name
+            )}
+          </form>
+          <div
+            data-testid={TestID.MOVE_CATEGORY}
+            className={optionsId === category.id ? 'category-options active' : 'category-options'}
+            onClick={(event) => handleCategoryMenuClick(event, category.id)}
+          >
+            <MoreHorizontal size={15} className="context-menu-action" />
+          </div>
+          {optionsId === category.id && (
+            <ContextMenu
+              contextMenuRef={contextMenuRef}
+              item={category}
+              optionsPosition={optionsPosition}
+              setOptionsId={setOptionsId}
+              type={ContextMenuEnum.CATEGORY}
+            />
+          )}
+        </div>
+      )}
+    </Draggable>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### AddCategoryForm (`src/client/components/AppSidebar/AddCategoryForm.tsx`)
+
+
+```tsx
+import React from 'react'
+
+import { TestID } from '@resources/TestID'
+import { ReactSubmitEvent } from '@/types'
+
+export interface AddCategoryFormProps {
+  dataTestID: string
+  submitHandler: (event: ReactSubmitEvent) => void
+  changeHandler: (editingCategoryId: string, value: string) => void
+  resetHandler: () => void
+  editingCategoryId: string
+  tempCategoryName: string
+}
+
+export const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
+  dataTestID,
+  submitHandler,
+  changeHandler,
+  resetHandler,
+  editingCategoryId,
+  tempCategoryName,
+}) => {
+  return (
+    <form data-testid={dataTestID} className="category-form" onSubmit={submitHandler}>
+      <input
+        data-testid={TestID.NEW_CATEGORY_INPUT}
+        aria-label="Category name"
+        type="text"
+        autoFocus
+        maxLength={20}
+        placeholder="New category..."
+        onChange={(event) => {
+          changeHandler(editingCategoryId, event.target.value)
+        }}
+        onBlur={(event) => {
+          if (!tempCategoryName || tempCategoryName.trim() === '') {
+            resetHandler()
+          } else {
+            submitHandler(event)
+          }
+        }}
+      />
+    </form>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### AddCategoryButton (`src/client/components/AppSidebar/AddCategoryButton.tsx`)
+
+
+```tsx
+import React from 'react'
+import { Plus } from 'react-feather'
+
+import { iconColor } from '@/utils/constants'
+
+export interface AddCategoryButtonProps {
+  dataTestID: string
+  handler: (adding: boolean) => void
+  label: string
+}
+
+export const AddCategoryButton: React.FC<AddCategoryButtonProps> = ({
+  dataTestID,
+  handler,
+  label,
+}) => {
+  return (
+    <button
+      data-testid={dataTestID}
+      className="category-button"
+      onClick={() => handler(true)}
+      aria-label={label}
+    >
+      <Plus size={16} color={iconColor} />
+    </button>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### TestID (`src/resources/TestID.ts`)
+
+
+```jsx
+// data-testid
+export enum TestID {
+  ACTION_BUTTON = 'action-button',
+  ADD_CATEGORY_BUTTON = 'add-category-button',
+  CATEGORY_EDIT = 'category-edit',
+  CATEGORY_COLLAPSE_BUTTON = 'category-collapse-button',
+  CATEGORY_LIST_DIV = 'category-list-div',
+  CATEGORY_OPTIONS_NAV = 'category-options-nav',
+  CATEGORY_OPTION_RENAME = 'category-options-rename',
+  CATEGORY_OPTION_DELETE_PERMANENTLY = 'category-option-delete-permanently',
+  EDIT_CATEGORY = 'edit-category',
+  EMPTY_TRASH_BUTTON = 'empty-trash-button',
+  FOLDER_NOTES = 'notes',
+  FOLDER_FAVORITES = 'favorites',
+  FOLDER_TRASH = 'trash',
+  NEW_CATEGORY_FORM = 'new-category-form',
+  NEW_CATEGORY_INPUT = 'new-category-label',
+  NOTE_LIST = 'note-list',
+  NOTE_LINK_ERROR = 'note-link-error',
+  NOTE_LINK_SUCCESS = 'note-link-success',
+  NOTE_LIST_ITEM = 'note-list-item-',
+  NOTE_OPTIONS_DIV = 'note-options-div-',
+  NOTE_OPTIONS_NAV = 'note-options-nav',
+  NOTE_OPTION_DELETE_PERMANENTLY = 'note-option-delete-permanently',
+  NOTE_OPTION_DOWNLOAD = 'note-option-download',
+  NOTE_OPTION_FAVORITE = 'note-option-favorite',
+  NOTE_OPTION_REMOVE_CATEGORY = 'note-option-remove-category',
+  NOTE_OPTION_RESTORE_FROM_TRASH = 'note-option-restore-from-trash',
+  NOTE_OPTION_TRASH = 'note-option-trash',
+  NOTE_SEARCH = 'note-search',
+  NOTE_TITLE = 'note-title-',
+  MOVE_TO_CATEGORY = 'note-options-move-to-category-select',
+  REMOVE_CATEGORY = 'remove-category',
+  MOVE_CATEGORY = 'move-category',
+  SIDEBAR_ACTION_CREATE_NEW_NOTE = 'sidebar-action-create-new-note',
+  SIDEBAR_ACTION_SETTINGS = 'sidebar-action-settings',
+  TOPBAR_ACTION_SYNC_NOTES = 'topbar-action-sync-notes',
+  SCRATCHPAD = 'scratchpad',
+  NOTE_OPTION_ADD_CONTENT_NOTE = 'note-option-add-content-note',
+  SETTINGS_MODAL_DOWNLOAD_NOTES = 'settings-modal-download-notes',
+  DARK_MODE_TOGGLE = 'dark-mode-toggle',
+  MARKDOWN_PREVIEW_TOGGLE = 'markdown-preview-toggle',
+  ACTIVE_LINE_HIGHLIGHT_TOGGLE = 'active-line-highlight-toggle',
+  DISPLAY_LINE_NUMS_TOGGLE = 'display-line-nums-toggle',
+  SCROLL_PAST_END_TOGGLE = 'scroll-past-end-toggle',
+  SORT_BY_DROPDOWN = 'sort-by-dropdown',
+  TEXT_DIRECTION_DROPDOWN = 'text-direction-dropdown',
+  UPLOAD_SETTINGS_BACKUP = 'upload-settings-backup',
+  UUID_MENU_BAR_COPY_ICON = 'uuid-menu-bar-copy-icon',
+  PREVIEW_MODE = 'preview-mode',
+  COPY_REFERENCE_TO_NOTE = 'copy-reference-to-note',
+  EMPTY_EDITOR = 'empty-editor',
+  ICON_BUTTON = 'icon-button',
+  ICON_BUTTON_UPLOADER = 'icon-button-uploader',
+  LAST_SYNCED_NOTIFICATION_SYNCING = 'last-synced-notification-syncing',
+  LAST_SYNCED_NOTIFICATION_UNSAVED = 'last-synced-notification-unsaved',
+  LAST_SYNCED_NOTIFICATION_DATE = 'last-synced-notification-date',
+}
+
+```
+
+
+
+
+
+
+
+
+#### LabelText (`src/resources/LabelText.ts`)
+
+
+```jsx
+// Default Labels
+export enum LabelText {
+  ADD_CATEGORY = 'Add category',
+  COLLAPSE_CATEGORY = 'Collapse Category List',
+  NOTES = 'Notes',
+  CREATE_NEW_NOTE = 'Create new note',
+  DELETE_PERMANENTLY = 'Delete permanently',
+  DOWNLOAD = 'Download',
+  FAVORITES = 'Favorites',
+  SCRATCHPAD = 'Scratchpad',
+  MARK_AS_FAVORITE = 'Mark as favorite',
+  MOVE_TO_TRASH = 'Move to trash',
+  NEW_CATEGORY = 'New category...',
+  NEW_NOTE = 'New note',
+  REMOVE_CATEGORY = 'Remove category',
+  REMOVE_FAVORITE = 'Remove favorite',
+  MOVE_CATEGORY = 'Move category',
+  RESTORE_FROM_TRASH = 'Restore from trash',
+  SETTINGS = 'Settings',
+  SYNC_NOTES = 'Sync notes',
+  TRASH = 'Trash',
+  WELCOME_TO_TAKENOTE = 'Welcome to Takenote!',
+  RENAME = 'Rename category',
+  ADD_CONTENT_NOTE = 'Please add content to this new note to access the menu options.',
+  DOWNLOAD_ALL_NOTES = 'Download all notes',
+  BACKUP_ALL_NOTES = 'Export backup',
+  IMPORT_BACKUP = 'Import backup',
+  TOGGLE_FAVORITE = 'Toggle favorite',
+  COPY_REFERENCE_TO_NOTE = 'Copy reference to note',
+}
+
+```
+
+
+
+
+
+
+
+
+#### CollapseCategoryButton (`src/client/components/AppSidebar/CollapseCategoryButton.tsx`)
+
+
+```tsx
+import React from 'react'
+import { ChevronDown, ChevronRight, Layers } from 'react-feather'
+
+export interface CollapseCategoryListButton {
+  dataTestID: string
+  handler: () => void
+  label: string
+  isCategoryListOpen: boolean
+  showIcon: boolean
+}
+
+export const CollapseCategoryListButton: React.FC<CollapseCategoryListButton> = ({
+  dataTestID,
+  handler,
+  label,
+  isCategoryListOpen,
+  showIcon,
+}) => {
+  return (
+    <button
+      data-testid={dataTestID}
+      className="collapse-button"
+      onClick={handler}
+      aria-label={label}
+    >
+      {showIcon ? (
+        isCategoryListOpen ? (
+          <ChevronDown size={16} />
+        ) : (
+          <ChevronRight size={16} />
+        )
+      ) : (
+        <Layers size={16} />
+      )}
+      <h2>Categories</h2>
+    </button>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### index (`src/client/types/index.ts`)
+
+
+```jsx
+import React from 'react'
+
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { sync } from '@/slices/sync'
+
+//==============================================================================
+// Items
+//==============================================================================
+
+export interface NoteItem {
+  id: string
+  text: string
+  created: string
+  lastUpdated: string
+  /**
+   * Refers to the category UUID and not the actual name.
+   */
+  category?: string
+  scratchpad?: boolean
+  trash?: boolean
+  favorite?: boolean
+}
+
+export interface CategoryItem {
+  id: string
+  name: string
+  draggedOver: boolean
+}
+
+export interface GithubUser {
+  [anyProp: string]: any
+}
+
+//==============================================================================
+// State
+//==============================================================================
+
+export interface AuthState {
+  loading: boolean
+  currentUser: GithubUser
+  isAuthenticated: boolean
+  error?: string
+}
+
+export interface CategoryState {
+  categories: CategoryItem[]
+  error: string
+  loading: boolean
+  editingCategory: {
+    id: string
+    tempName: string
+  }
+}
+
+export interface NoteState {
+  notes: NoteItem[]
+  activeFolder: Folder
+  activeNoteId: string
+  selectedNotesIds: string[]
+  activeCategoryId: string
+  error: string
+  loading: boolean
+  searchValue: string
+}
+
+export interface SettingsState {
+  isOpen: boolean
+  previewMarkdown: boolean
+  loading: boolean
+  darkTheme: boolean
+  sidebarVisible: boolean
+  notesSortKey: NotesSortKey
+  codeMirrorOptions: { [key: string]: any }
+}
+
+export interface SyncState {
+  syncing: boolean
+  lastSynced: string
+  error: string
+  pendingSync: boolean
+}
+
+export interface RootState {
+  authState: AuthState
+  categoryState: CategoryState
+  noteState: NoteState
+  settingsState: SettingsState
+  syncState: SyncState
+}
+
+//==============================================================================
+// API
+//==============================================================================
+
+export interface SyncPayload {
+  categories: CategoryItem[]
+  notes: NoteItem[]
+}
+
+export interface SyncAction {
+  type: typeof sync.type
+  payload: SyncPayload
+}
+
+//==============================================================================
+// Events
+//==============================================================================
+
+export type ReactDragEvent = React.DragEvent<HTMLDivElement>
+
+export type ReactMouseEvent =
+  | MouseEvent
+  | React.MouseEvent<HTMLDivElement>
+  | React.ChangeEvent<HTMLSelectElement>
+
+export type ReactSubmitEvent = React.FormEvent<HTMLFormElement> | React.FocusEvent<HTMLInputElement>
+
+//==============================================================================
+// Default Types
+//==============================================================================
+
+// Taken from TypeScript private declared type within Actions
+export type WithPayload<P, T> = T & {
+  payload: P
+}
+
+```
+
+
+
+
+
+
+
+
+#### note (`src/client/slices/note.ts`)
+
+
+```jsx
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { v4 as uuid } from 'uuid'
+
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { NoteItem, NoteState } from '@/types'
+import { isDraftNote } from '@/utils/helpers'
+import { getNotesSorter } from '@/utils/notesSortStrategies'
+
+const getNewActiveNoteId = (
+  notes: NoteItem[],
+  oldNoteId: string,
+  activeCategoryId: string,
+  activeFolder: Folder
+): string => {
+  const newActiveNotes = notes
+    .filter((note) => !note.scratchpad) // filter out all scratchpad notes
+    .filter((note) => (activeFolder !== Folder.TRASH ? !note.trash : note.trash)) // trash or not trash
+    .filter((note) => (activeCategoryId ? note.category === activeCategoryId : true)) // filter category if necessary
+  const trashedNoteIndex = newActiveNotes.findIndex((note) => note.id === oldNoteId)
+
+  if (trashedNoteIndex === 0 && newActiveNotes[1]) return newActiveNotes[1].id
+  if (newActiveNotes[trashedNoteIndex - 1]) return newActiveNotes[trashedNoteIndex - 1].id
+
+  return ''
+}
+
+export const getFirstNoteId = (
+  folder: Folder,
+  notes: NoteItem[],
+  categoryId?: string,
+  sortOrderKey?: NotesSortKey
+): string => {
+  const availableNotes = !sortOrderKey
+    ? notes.filter((note) => !note.trash)
+    : notes.filter((note) => !note.trash).sort(getNotesSorter(sortOrderKey))
+
+  const firstNote = {
+    [Folder.ALL]: () => availableNotes.find((note) => !note.scratchpad),
+    [Folder.CATEGORY]: () => availableNotes.find((note) => note.category === categoryId),
+    [Folder.FAVORITES]: () => availableNotes.find((note) => note.favorite),
+    [Folder.SCRATCHPAD]: () => availableNotes.find((note) => note.scratchpad),
+    [Folder.TRASH]: () => notes.find((note) => note.trash),
+  }[folder]()
+
+  return firstNote ? firstNote.id : ''
+}
+
+export const initialState: NoteState = {
+  notes: [],
+  activeCategoryId: '',
+  activeFolder: Folder.ALL,
+  activeNoteId: '',
+  selectedNotesIds: [],
+  searchValue: '',
+  error: '',
+  loading: true,
+}
+
+const noteSlice = createSlice({
+  name: 'note',
+  initialState,
+  reducers: {
+    addNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      const draftNote = state.notes.find((note) => isDraftNote(note))
+
+      if (!draftNote) {
+        state.notes.push(payload)
+      }
+    },
+
+    importNotes: (state, { payload }: PayloadAction<NoteItem[]>) => {
+      const toAdd = payload.map((note) => {
+        note.id = uuid()
+
+        return note
+      })
+
+      state.notes.push(...toAdd)
+    },
+
+    updateNote: (state, { payload }: PayloadAction<NoteItem>) => {
+      state.notes = state.notes.map((note) =>
+        note.id === payload.id
+          ? { ...note, text: payload.text, lastUpdated: payload.lastUpdated }
+          : note
+      )
+    },
+
+    updateNotes: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        notes: NoteItem[]
+        activeFolder: Folder
+        activeCategoryId?: string
+        sortOrderKey?: NotesSortKey
+      }>
+    ) => {
+      state.notes = payload.notes
+      state.activeNoteId = getFirstNoteId(
+        payload.activeFolder,
+        payload.notes,
+        payload.activeCategoryId,
+        payload.sortOrderKey
+      )
+      state.selectedNotesIds = [
+        getFirstNoteId(
+          payload.activeFolder,
+          payload.notes,
+          payload.activeCategoryId,
+          payload.sortOrderKey
+        ),
+      ]
+    },
+
+    deleteNotes: (state, { payload }: PayloadAction<string[]>) => {
+      state.notes = state.notes.filter((note) => !payload.includes(note.id))
+      state.activeNoteId = getNewActiveNoteId(
+        state.notes,
+        state.activeNoteId,
+        state.activeCategoryId,
+        state.activeFolder
+      )
+      state.selectedNotesIds = [
+        getNewActiveNoteId(
+          state.notes,
+          state.activeNoteId,
+          state.activeCategoryId,
+          state.activeFolder
+        ),
+      ]
+    },
+
+    addCategoryToNote: (
+      state,
+      { payload }: PayloadAction<{ categoryId: string; noteId: string }>
+    ) => {
+      state.notes = state.selectedNotesIds.includes(payload.noteId)
+        ? // Multi
+          state.notes.map((note) =>
+            state.selectedNotesIds.includes(note.id)
+              ? { ...note, category: payload.categoryId }
+              : note
+          )
+        : // Single
+          state.notes.map((note) =>
+            note.id === payload.noteId ? { ...note, category: payload.categoryId } : note
+          )
+    },
+
+    removeCategoryFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes.map((note) => {
+        if (note.category === payload) {
+          note.category = ''
+        }
+      })
+    },
+
+    updateActiveNote: (
+      state,
+      { payload: { noteId, multiSelect } }: PayloadAction<{ noteId: string; multiSelect: boolean }>
+    ) => {
+      state.activeNoteId = multiSelect
+        ? state.notes.filter(({ id }) => state.selectedNotesIds.includes(id)).slice(-1)[0].id
+        : noteId
+    },
+
+    updateActiveCategoryId: (state, { payload }: PayloadAction<string>) => {
+      state.activeCategoryId = payload
+      state.activeFolder = Folder.CATEGORY
+      state.activeNoteId = getFirstNoteId(Folder.CATEGORY, state.notes, payload)
+      state.selectedNotesIds = [getFirstNoteId(Folder.CATEGORY, state.notes, payload)]
+      state.notes = state.notes.filter((note) => note.text !== '')
+    },
+
+    swapFolder: (
+      state,
+      { payload }: PayloadAction<{ folder: Folder; sortOrderKey?: NotesSortKey }>
+    ) => {
+      state.activeFolder = payload.folder
+      state.activeCategoryId = ''
+      state.activeNoteId = getFirstNoteId(
+        payload.folder,
+        state.notes,
+        undefined,
+        payload.sortOrderKey
+      )
+      state.selectedNotesIds = [
+        getFirstNoteId(payload.folder, state.notes, undefined, payload.sortOrderKey),
+      ]
+      state.notes = state.notes.filter((note) => note.scratchpad || note.text !== '')
+    },
+
+    assignFavoriteToNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) => {
+        if (state.selectedNotesIds.includes(payload)) {
+          return state.selectedNotesIds.includes(note.id) ? { ...note, favorite: true } : note
+        }
+        if (note.id === payload) {
+          return { ...note, favorite: true }
+        }
+
+        return note
+      })
+    },
+
+    toggleFavoriteNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.selectedNotesIds.includes(payload)
+        ? state.notes.map((note) =>
+            state.selectedNotesIds.includes(note.id) ? { ...note, favorite: !note.favorite } : note
+          )
+        : state.notes.map((note) =>
+            note.id === payload ? { ...note, favorite: !note.favorite } : note
+          )
+    },
+
+    assignTrashToNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) => {
+        if (state.selectedNotesIds.includes(payload)) {
+          return state.selectedNotesIds.includes(note.id) ? { ...note, trash: true } : note
+        }
+        if (note.id === payload) {
+          return { ...note, trash: true }
+        }
+
+        return note
+      })
+      state.activeNoteId = getNewActiveNoteId(
+        state.notes,
+        payload,
+        state.activeCategoryId,
+        state.activeFolder
+      )
+      state.selectedNotesIds = [
+        getNewActiveNoteId(state.notes, payload, state.activeCategoryId, state.activeFolder),
+      ]
+    },
+
+    toggleTrashNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.selectedNotesIds.includes(payload)
+        ? state.notes.map((note) =>
+            state.selectedNotesIds.includes(note.id) ? { ...note, trash: !note.trash } : note
+          )
+        : state.notes.map((note) => (note.id === payload ? { ...note, trash: !note.trash } : note))
+      state.activeNoteId = getNewActiveNoteId(
+        state.notes,
+        payload,
+        state.activeCategoryId,
+        state.activeFolder
+      )
+      state.selectedNotesIds = [
+        getNewActiveNoteId(state.notes, payload, state.activeCategoryId, state.activeFolder),
+      ]
+    },
+
+    unassignTrashFromNotes: (state, { payload }: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) => {
+        if (state.selectedNotesIds.includes(payload)) {
+          return state.selectedNotesIds.includes(note.id) && note.trash
+            ? { ...note, trash: false }
+            : note
+        }
+        if (note.id === payload) {
+          return { ...note, trash: false }
+        }
+
+        return note
+      })
+    },
+
+    updateSelectedNotes: (
+      state,
+      { payload: { noteId, multiSelect } }: PayloadAction<{ noteId: string; multiSelect: boolean }>
+    ) => {
+      state.selectedNotesIds = multiSelect
+        ? state.selectedNotesIds.length === 1 && state.selectedNotesIds[0] === noteId
+          ? state.selectedNotesIds
+          : state.selectedNotesIds.includes(noteId)
+          ? state.selectedNotesIds.filter((selectedNoteId) => selectedNoteId !== noteId)
+          : [...state.selectedNotesIds, noteId]
+        : [noteId]
+    },
+
+    permanentlyEmptyTrash: (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    },
+
+    pruneNotes: (state) => {
+      state.notes = state.notes.filter(
+        (note) => note.scratchpad || note.text !== '' || state.selectedNotesIds.includes(note.id)
+      )
+    },
+
+    searchNotes: (state, { payload }: PayloadAction<string>) => {
+      state.searchValue = payload
+    },
+
+    loadNotes: (state) => {
+      state.loading = true
+    },
+
+    loadNotesError: (state, { payload }: PayloadAction<string>) => {
+      state.loading = false
+      state.error = payload
+    },
+
+    loadNotesSuccess: (
+      state,
+      { payload }: PayloadAction<{ notes: NoteItem[]; sortOrderKey?: NotesSortKey }>
+    ) => {
+      state.notes = payload.notes
+      state.activeNoteId = getFirstNoteId(
+        Folder.ALL,
+        payload.notes,
+        undefined,
+        payload.sortOrderKey
+      )
+      state.selectedNotesIds = [
+        getFirstNoteId(Folder.ALL, payload.notes, undefined, payload.sortOrderKey),
+      ]
+      state.loading = false
+    },
+  },
+})
+
+export const {
+  addNote,
+  updateNote,
+  updateNotes,
+  deleteNotes,
+  addCategoryToNote,
+  removeCategoryFromNotes,
+  updateActiveNote,
+  updateActiveCategoryId,
+  swapFolder,
+  assignFavoriteToNotes,
+  toggleFavoriteNotes,
+  assignTrashToNotes,
+  toggleTrashNotes,
+  unassignTrashFromNotes,
+  updateSelectedNotes,
+  permanentlyEmptyTrash,
+  pruneNotes,
+  searchNotes,
+  loadNotes,
+  loadNotesError,
+  loadNotesSuccess,
+  importNotes,
+} = noteSlice.actions
+
+export default noteSlice.reducer
+
+```
+
+
+
+
+
+
+
+
+#### helpers (`src/client/utils/helpers.ts`)
+
+
+```jsx
+import dayjs from 'dayjs'
+import { v4 as uuid } from 'uuid'
+import JSZip from 'jszip'
+import { Action } from 'redux'
+import * as clipboard from 'clipboard-polyfill/text'
+
+import { LabelText } from '@resources/LabelText'
+import { Folder, NotesSortKey } from '@/utils/enums'
+import { folderMap } from '@/utils/constants'
+import { NoteItem, CategoryItem, WithPayload } from '@/types'
+
+export const getActiveNote = (notes: NoteItem[], activeNoteId: string) =>
+  notes.find((note) => note.id === activeNoteId)
+
+export const getShortUuid = (uuid: string) => {
+  return uuid.substr(0, 6)
+}
+
+export const getActiveNoteFromShortUuid = (notes: NoteItem[], shortUuid: string) => {
+  const uuidWithoutHash = shortUuid.replace('{{', '').replace('}}', '')
+
+  return notes.find((note) => note.id.startsWith(uuidWithoutHash))
+}
+
+export const getActiveCategory = (categories: CategoryItem[], activeCategoryId: string) =>
+  categories.find(({ id }) => id === activeCategoryId)
+
+export const getNoteTitle = (text: string): string => {
+  // Remove whitespace from both ends
+  // Get the first n characters
+  // Remove # from the title in the case of using markdown headers in your title
+  const noteText = text.trim().match(/[^#]{1,45}/)
+
+  // Get the first line of text after any newlines
+  // In the future, this should break on a full word
+  return noteText ? noteText[0].trim().split(/\r?\n/)[0] : LabelText.NEW_NOTE
+}
+
+export const noteWithFrontmatter = (note: NoteItem, category?: CategoryItem): string =>
+  `---
+title: ${getNoteTitle(note.text)}
+created: ${note.created}
+lastUpdated: ${note.lastUpdated}
+category: ${category?.name ?? ''}
+---
+
+${note.text}`
+
+// Downloads a single note as a markdown file or a group of notes as a zip file.
+export const downloadNotes = (notes: NoteItem[], categories: CategoryItem[]): void => {
+  if (notes.length === 1) {
+    const pom = document.createElement('a')
+
+    pom.setAttribute(
+      'href',
+      `data:text/plain;charset=utf-8,${encodeURIComponent(
+        noteWithFrontmatter(
+          notes[0],
+          categories.find((category: CategoryItem) => category.id === notes[0].category)
+        )
+      )}`
+    )
+    pom.setAttribute('download', `${getNoteTitle(notes[0].text)}.md`)
+
+    if (document.createEvent) {
+      const event = document.createEvent('MouseEvents')
+      event.initEvent('click', true, true)
+      pom.dispatchEvent(event)
+    } else {
+      pom.click()
+    }
+  } else {
+    const zip = new JSZip()
+    notes.forEach((note) =>
+      zip.file(
+        `${getNoteTitle(note.text)} (${note.id.substring(0, 6)}).md`,
+        noteWithFrontmatter(
+          note,
+          categories.find((category: CategoryItem) => category.id === note.category)
+        )
+      )
+    )
+
+    zip.generateAsync({ type: 'blob' }).then(
+      (content) => {
+        var downloadUrl = window.URL.createObjectURL(content)
+        var a = document.createElement('a')
+        a.href = downloadUrl
+        a.download = 'notes.zip'
+        document.body.appendChild(a)
+        a.click()
+        URL.revokeObjectURL(downloadUrl)
+      },
+      (err) => {
+        // TODO: error generating zip file.
+        // Generate a popup?
+      }
+    )
+  }
+}
+
+export const backupNotes = (notes: NoteItem[], categories: CategoryItem[]) => {
+  const pom = document.createElement('a')
+
+  const json = JSON.stringify({ notes, categories })
+  const blob = new Blob([json], { type: 'application/json' })
+
+  const downloadUrl = window.URL.createObjectURL(blob)
+  pom.href = downloadUrl
+  pom.download = `takenote-backup-${dayjs().format('YYYY-MM-DD')}.json`
+  document.body.appendChild(pom)
+
+  // @ts-ignore
+  if (!window.Cypress) {
+    pom.click()
+    URL.revokeObjectURL(downloadUrl)
+  }
+}
+
+const newNote = (categoryId?: string, folder?: Folder): NoteItem => ({
+  id: uuid(),
+  text: '',
+  created: dayjs().format(),
+  lastUpdated: dayjs().format(),
+  category: categoryId,
+  favorite: folder === Folder.FAVORITES,
+})
+
+export const newNoteHandlerHelper = (
+  activeFolder: Folder,
+  previewMarkdown: boolean,
+  activeNote: NoteItem | undefined,
+  activeCategoryId: string,
+  swapFolder: (
+    folder: Folder
+  ) => WithPayload<{ folder: string; sortOrderKey?: NotesSortKey }, Action<string>>,
+  togglePreviewMarkdown: () => WithPayload<undefined, Action<string>>,
+  addNote: (note: NoteItem) => WithPayload<NoteItem, Action<string>>,
+  updateActiveNote: (
+    noteId: string,
+    multiSelect: boolean
+  ) => WithPayload<
+    {
+      noteId: string
+      multiSelect: boolean
+    },
+    Action<string>
+  >,
+  updateSelectedNotes: (
+    noteId: string,
+    multiSelect: boolean
+  ) => WithPayload<
+    {
+      noteId: string
+      multiSelect: boolean
+    },
+    Action<string>
+  >
+) => {
+  if ([Folder.TRASH, Folder.SCRATCHPAD].indexOf(activeFolder) !== -1) {
+    swapFolder(Folder.ALL)
+  }
+
+  if (previewMarkdown) {
+    togglePreviewMarkdown()
+  }
+
+  if ((activeNote && activeNote.text !== '') || !activeNote) {
+    const note = newNote(
+      activeCategoryId,
+      activeFolder === Folder.TRASH ? Folder.ALL : activeFolder
+    )
+    addNote(note)
+    updateSelectedNotes(note.id, false)
+    updateActiveNote(note.id, false)
+  }
+}
+
+export const shouldOpenContextMenu = (clicked: Element) => {
+  if (!clicked.parentElement) return
+
+  const elementContainsClass = (className: string) => clicked.classList.contains(className)
+
+  const parentContainsClass = (className: string) =>
+    clicked.parentElement!.classList.contains(className)
+
+  return (
+    (clicked instanceof Element &&
+      // If the element is explicitly a context menu action
+      elementContainsClass('context-menu-action')) ||
+    // If the element is an item of the context menu
+    (!elementContainsClass('nav-item') &&
+      !elementContainsClass('options-context-menu') &&
+      !elementContainsClass('nav-item-icon') &&
+      !parentContainsClass('nav-item-icon')) ||
+    // Or if it's a sub-element of the context menu
+    (clicked.tagName === 'circle' && parentContainsClass('context-menu-action'))
+  )
+}
+
+export const getWebsiteTitle = (activeFolder: Folder, activeCategory?: CategoryItem) => {
+  // Show category name if category is active
+  if (activeFolder === Folder.CATEGORY && activeCategory) {
+    return `${activeCategory.name} | TakeNote`
+  } else {
+    // Show main folder name otherwise
+    return `${folderMap[activeFolder]} | TakeNote`
+  }
+}
+
+export const determineAppClass = (
+  darkTheme: boolean,
+  sidebarVisible: boolean,
+  activeFolder: Folder
+) => {
+  let className = 'app'
+
+  if (darkTheme) className += ' dark'
+
+  return className
+}
+
+export const determineCategoryClass = (
+  category: CategoryItem,
+  isDragging: boolean,
+  activeCategoryId: string
+) => {
+  if (category.draggedOver) {
+    return 'category-list-each dragged-over'
+  } else if (category.id === activeCategoryId) {
+    return 'category-list-each active'
+  } else if (isDragging) {
+    return 'category-list-each dragging'
+  } else {
+    return 'category-list-each'
+  }
+}
+
+export const debounceEvent = <T extends Function>(cb: T, wait = 20) => {
+  let h = 0
+  const callable = (...args: any) => {
+    clearTimeout(h)
+    h = window.setTimeout(() => cb(...args), wait)
+  }
+
+  return <T>(<any>callable)
+}
+
+export const isDraftNote = (note: NoteItem) => {
+  return !note.scratchpad && note.text === ''
+}
+
+export const getDayJsLocale = (languagetoken: string): string => {
+  try {
+    require('dayjs/locale/' + languagetoken + '.js')
+
+    return languagetoken
+  } catch (error) {
+    if (languagetoken.includes('-'))
+      return getDayJsLocale(languagetoken.substring(0, languagetoken.lastIndexOf('-')))
+
+    return 'en'
+  }
+}
+
+export const getNoteBarConf = (
+  activeFolder: Folder
+): {
+  minSize?: number
+  maxSize?: number
+  defaultSize?: number
+  allowResize?: boolean
+  resizerStyle?: React.CSSProperties
+} => {
+  switch (activeFolder) {
+    case Folder.SCRATCHPAD:
+      return {
+        minSize: 0,
+        maxSize: 0,
+        defaultSize: 0,
+        allowResize: false,
+        resizerStyle: { display: 'none' },
+      }
+
+    default:
+      return {
+        minSize: 200,
+        maxSize: 600,
+        defaultSize: 330,
+      }
+  }
+}
+
+export const copyToClipboard = (text: string) => {
+  clipboard.writeText(text)
+}
+
+```
+
+
+
+
+
+
+
+
+#### enums (`src/client/utils/enums.ts`)
+
+
+```jsx
+export enum Folder {
+  ALL = 'ALL',
+  CATEGORY = 'CATEGORY',
+  FAVORITES = 'FAVORITES',
+  SCRATCHPAD = 'SCRATCHPAD',
+  TRASH = 'TRASH',
+}
+
+export enum Shortcuts {
+  NEW_NOTE = 'ctrl+alt+n',
+  NEW_CATEGORY = 'ctrl+alt+c',
+  DELETE_NOTE = 'ctrl+alt+u',
+  SYNC_NOTES = 'ctrl+alt+l',
+  DOWNLOAD_NOTES = 'ctrl+alt+o',
+  PREVIEW = 'alt+ctrl+p',
+  TOGGLE_THEME = 'alt+ctrl+k',
+  SEARCH = 'alt+ctrl+f',
+  PRETTIFY = 'ctrl+alt+i',
+}
+
+export enum ContextMenuEnum {
+  CATEGORY = 'CATEGORY',
+  NOTE = 'NOTE',
+}
+
+export enum NotesSortKey {
+  LAST_UPDATED = 'lastUpdated',
+  TITLE = 'title',
+  CREATED_DATE = 'created_date',
+}
+
+export enum DirectionText {
+  LEFT_TO_RIGHT = 'ltr',
+  RIGHT_TO_LEFT = 'rtl',
+}
+
+export enum Errors {
+  INVALID_LINKED_NOTE_ID = '<invalid note id provided>',
+}
+
+```
+
+
+
+
+
+
+
+
+#### NoteList (`src/client/containers/NoteList.tsx`)
+
+
+```tsx
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { MoreHorizontal, Book, Star, Folder as FolderIcon } from 'react-feather'
+
+import { TestID } from '@resources/TestID'
+import { Folder, Shortcuts, ContextMenuEnum } from '@/utils/enums'
+import { NoteListButton } from '@/components/NoteList/NoteListButton'
+import { SearchBar } from '@/components/NoteList/SearchBar'
+import { ContextMenu } from '@/containers/ContextMenu'
+import { getNoteTitle, shouldOpenContextMenu, debounceEvent, isDraftNote } from '@/utils/helpers'
+import { useKey } from '@/utils/hooks'
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+import { NoteItem, ReactDragEvent, ReactMouseEvent } from '@/types'
+import { getNotes, getSettings, getCategories } from '@/selectors'
+import { getNotesSorter } from '@/utils/notesSortStrategies'
+
+export const NoteList: React.FC = () => {
+  // ===========================================================================
+  // Selectors
+  // ===========================================================================
+
+  const { notesSortKey } = useSelector(getSettings)
+  const { activeCategoryId, activeFolder, selectedNotesIds, notes, searchValue } =
+    useSelector(getNotes)
+  const { categories } = useSelector(getCategories)
+
+  // ===========================================================================
+  // Dispatch
+  // ===========================================================================
+
+  const dispatch = useDispatch()
+
+  const _updateSelectedNotes = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateSelectedNotes({ noteId, multiSelect }))
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+
+  // ===========================================================================
+  // Refs
+  // ===========================================================================
+
+  const contextMenuRef = useRef<HTMLDivElement>(null)
+  const searchRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
+
+  // ===========================================================================
+  // State
+  // ===========================================================================
+
+  const [optionsId, setOptionsId] = useState('')
+  const [optionsPosition, setOptionsPosition] = useState({ x: 0, y: 0 })
+
+  const re = new RegExp(searchValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+  const isMatch = (result: NoteItem) => re.test(result.text)
+
+  const filter: Record<Folder, (note: NoteItem) => boolean> = {
+    [Folder.CATEGORY]: (note) => !note.trash && note.category === activeCategoryId,
+    [Folder.SCRATCHPAD]: (note) => !!note.scratchpad,
+    [Folder.FAVORITES]: (note) => !note.trash && !!note.favorite,
+    [Folder.TRASH]: (note) => !!note.trash,
+    [Folder.ALL]: (note) => !note.trash && !note.scratchpad,
+  }
+
+  const filteredNotes: NoteItem[] = notes
+    .filter(filter[activeFolder])
+    .filter(isMatch)
+    .sort(getNotesSorter(notesSortKey))
+
+  // ===========================================================================
+  // Handlers
+  // ===========================================================================
+
+  const focusSearchHandler = () => searchRef.current.focus()
+
+  const handleDragStart = (event: ReactDragEvent, noteId: string = '') => {
+    event.stopPropagation()
+
+    event.dataTransfer.setData('text/plain', noteId)
+  }
+
+  const handleNoteOptionsClick = (event: ReactMouseEvent, noteId: string = '') => {
+    const clicked = event.target
+
+    // Make sure we aren't getting any null values. Any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    // Ensure the clicked target is supposed to open the context menu
+    if (shouldOpenContextMenu(clicked as Element)) {
+      // note: don't check for MouseEvent because Cypress MouseEvent !== Window.MouseEvent
+      if ('pageX' in event && 'pageY' in event) {
+        setOptionsPosition({ x: event.pageX, y: event.pageY })
+      }
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef.current || !contextMenuRef.current.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== noteId ? noteId : '')
+    }
+  }
+
+  const handleNoteRightClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    noteId: string = ''
+  ) => {
+    event.preventDefault()
+    const clicked = event.target
+    const RIGHT_CLICK = 2
+
+    // Make sure we aren't getting any null values .. any element clicked should be a sub-class of element
+    if (!clicked) return
+
+    // FIXME: This feels hacky
+    if (event.ctrlKey) return
+
+    // Make sure we are not right clicking on the menu
+    if (optionsId && event.button == RIGHT_CLICK) return
+
+    if ('clientX' in event && 'clientY' in event) {
+      setOptionsPosition({ x: event.clientX, y: event.clientY })
+    }
+
+    event.stopPropagation()
+
+    if (!contextMenuRef.current || contextMenuRef.current.contains(clicked as HTMLDivElement)) {
+      setOptionsId(!optionsId || optionsId !== noteId ? noteId : '')
+    }
+  }
+
+  const showEmptyTrash = activeFolder === Folder.TRASH && filteredNotes.length > 0
+
+  // ===========================================================================
+  // Hooks
+  // ===========================================================================
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleNoteOptionsClick)
+
+    return () => {
+      document.removeEventListener('mousedown', handleNoteOptionsClick)
+    }
+  })
+
+  useKey(Shortcuts.SEARCH, () => focusSearchHandler())
+
+  return (
+    <aside className="note-sidebar">
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            label="Empty"
+            handler={() => _permanentlyEmptyTrash()}
+          >
+            Empty Trash
+          </NoteListButton>
+        )}
+      </div>
+      <div data-testid={TestID.NOTE_LIST} className="note-list">
+        {filteredNotes.map((note: NoteItem, index: number) => {
+          let noteTitle: string | React.ReactElement = getNoteTitle(note.text)
+          const noteCategory = categories.find((category) => category.id === note.category)
+
+          if (searchValue) {
+            const highlightStart = noteTitle.search(re)
+
+            if (highlightStart !== -1) {
+              const highlightEnd = highlightStart + searchValue.length
+
+              noteTitle = (
+                <>
+                  {noteTitle.slice(0, highlightStart)}
+                  <strong className="highlighted">
+                    {noteTitle.slice(highlightStart, highlightEnd)}
+                  </strong>
+                  {noteTitle.slice(highlightEnd)}
+                </>
+              )
+            }
+          }
+
+          return (
+            <div
+              data-testid={TestID.NOTE_LIST_ITEM + index}
+              className={
+                selectedNotesIds.includes(note.id) ? 'note-list-each selected' : 'note-list-each'
+              }
+              key={note.id}
+              onClick={(event) => {
+                event.stopPropagation()
+
+                _updateSelectedNotes(note.id, event.metaKey)
+                _updateActiveNote(note.id, event.metaKey)
+                _pruneNotes()
+              }}
+              onContextMenu={(event) => handleNoteRightClick(event, note.id)}
+              draggable={note.text !== ''}
+              onDragStart={(event) => handleDragStart(event, note.id)}
+            >
+              <div className="note-list-outer">
+                <div data-testid={'note-title-' + index} className="note-title">
+                  {note.favorite ? (
+                    <>
+                      <div className="icon">
+                        <Star aria-hidden="true" className="note-favorite" size={12} />
+                        <span className="sr-only">Favorite note</span>
+                      </div>
+                      <div className="truncate-text">{noteTitle}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="icon" />
+                      <div className="truncate-text"> {noteTitle}</div>
+                    </>
+                  )}
+                </div>
+                {!isDraftNote(note) ? (
+                  <div
+                    // TODO: make testID based off of index when we add that to a NoteItem object
+                    data-testid={TestID.NOTE_OPTIONS_DIV + index}
+                    className={optionsId === note.id ? 'note-options selected' : 'note-options'}
+                    onClick={(event) => handleNoteOptionsClick(event, note.id)}
+                  >
+                    <MoreHorizontal aria-hidden="true" size={15} className="context-menu-action" />
+                    <span className="sr-only">Note options</span>
+                  </div>
+                ) : (
+                  <div className="note-options">&nbsp;</div>
+                )}
+              </div>
+              {(activeFolder === Folder.ALL || activeFolder === Folder.FAVORITES) && (
+                <div className="note-category">
+                  {!!noteCategory ? (
+                    <>
+                      <FolderIcon size={12} className="context-menu-action" />
+                      {noteCategory?.name}
+                    </>
+                  ) : (
+                    <>
+                      <Book size={12} className="context-menu-action" />
+                      Notes
+                    </>
+                  )}
+                </div>
+              )}
+              {optionsId === note.id && !isDraftNote(note) && (
+                <ContextMenu
+                  contextMenuRef={contextMenuRef}
+                  item={note}
+                  optionsPosition={optionsPosition}
+                  setOptionsId={setOptionsId}
+                  type={ContextMenuEnum.NOTE}
+                />
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </aside>
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+#### TempStateContext (`src/client/contexts/TempStateContext.tsx`)
+
+
+```tsx
+import React, { createContext, FunctionComponent, useContext, useState } from 'react'
+
+interface TempStateContextInterface {
+  addingTempCategory: boolean
+  setAddingTempCategory(adding: boolean): void
+}
+
+const initialContextValue = {
+  addingTempCategory: false,
+  setAddingTempCategory: (adding: boolean) => undefined,
+}
+
+const TempStateContext = createContext<TempStateContextInterface>(initialContextValue)
+
+const useTempState = () => {
+  const context = useContext(TempStateContext)
+
+  if (!context) {
+    throw new Error('useTempState must be used within a TempStateContext')
+  }
+
+  return context
+}
+
+const TempStateProvider: FunctionComponent = ({ children }) => {
+  const [addingTempCategory, setAddingTempCategory] = useState(false)
+
+  const value: TempStateContextInterface = {
+    addingTempCategory,
+    setAddingTempCategory,
+  }
+
+  return <TempStateContext.Provider value={value}>{children}</TempStateContext.Provider>
+}
+
+export { TempStateProvider, useTempState }
+
+```
+
+
+
+
+
+
+
+
+#### constants (`src/client/utils/constants.ts`)
+
+
+```jsx
+import { Folder, NotesSortKey, DirectionText } from '@/utils/enums'
+
+export const folderMap: Record<Folder, string> = {
+  [Folder.ALL]: 'All Notes',
+  [Folder.FAVORITES]: 'Favorites',
+  [Folder.SCRATCHPAD]: 'Scratchpad',
+  [Folder.TRASH]: 'Trash',
+  [Folder.CATEGORY]: 'Category',
+}
+
+export const iconColor = 'rgba(255, 255, 255, 0.25)'
+
+export const shortcutMap = [
+  { action: 'Create a new note', key: 'N' },
+  { action: 'Delete a note', key: 'U' },
+  { action: 'Create a category', key: 'C' },
+  { action: 'Download a note', key: 'O' },
+  { action: 'Sync all notes', key: 'L' },
+  { action: 'Markdown preview', key: 'P' },
+  { action: 'Toggle theme', key: 'K' },
+  { action: 'Search notes', key: 'F' },
+  { action: 'Prettify a note', key: 'I' },
+]
+
+export const notesSortOptions = [
+  { value: NotesSortKey.TITLE, label: 'Title' },
+  { value: NotesSortKey.CREATED_DATE, label: 'Date Created' },
+  { value: NotesSortKey.LAST_UPDATED, label: 'Last Updated' },
+]
+
+export const directionTextOptions = [
+  { value: DirectionText.LEFT_TO_RIGHT, label: 'Left to right' },
+  { value: DirectionText.RIGHT_TO_LEFT, label: 'Right to left' },
+]
+
+```
+
+
+
+
+
+
+
+
+#### SearchBar (`src/client/components/NoteList/SearchBar.tsx`)
+
+
+```tsx
+import React from 'react'
+
+import { TestID } from '@resources/TestID'
+
+export interface SearchBarProps {
+  searchRef: React.MutableRefObject<HTMLInputElement>
+  searchNotes: (searchValue: string) => void
+}
+
+export const SearchBar: React.FC<SearchBarProps> = ({ searchRef, searchNotes }) => {
+  return (
+    <input
+      ref={searchRef}
+      data-testid={TestID.NOTE_SEARCH}
+      type="search"
+      onChange={(event) => {
+        event.preventDefault()
+        searchNotes(event.target.value)
+      }}
+      placeholder="Search for notes"
+      onDragOver={(e) => {
+        e.preventDefault()
+      }}
+    />
+  )
+}
+
+```
+
+## Instructions
+
+Produce your solution as one or more SEARCH/REPLACE blocks. Requirements:
+
+- Output ONLY the blocks, inside one ```text fenced code block. No prose before or after.
+- Each block is a repo-relative path on its own line, then the block itself:
+
+      src/components/Cart/Cart.tsx
+      <<<<<<< SEARCH
+      <the exact existing lines to replace>
+      =======
+      <the lines that replace them>
+      >>>>>>> REPLACE
+
+- **The SEARCH text must match the file byte-for-byte** — exact indentation,
+  exact quotes, exact import ordering. It is matched literally, not by line
+  number. Copy it from the file; do not retype it from memory.
+- **The SEARCH text must be unique in the file.** If the lines you want appear
+  more than once, widen the block with enough surrounding lines to disambiguate.
+- Include only the lines that change plus the minimum needed for uniqueness — do
+  not reproduce the whole file.
+- Use several blocks for several edits, in the order they should be applied.
+  Repeat the path line for each file.
+- To create a new file: give the path, leave the SEARCH body empty, and put the
+  complete new file contents in the REPLACE body.
+- To delete a file, write `>>> DELETE <path>` on its own line.
+- Keep the change minimal and focused on the task.

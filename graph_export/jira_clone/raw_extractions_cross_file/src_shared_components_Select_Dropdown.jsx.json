@@ -1,0 +1,130 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "SelectDropdown",
+        "childComponent": "Dropdown",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "width",
+            "valueExpression": "dropdownWidth"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SelectDropdown",
+        "childComponent": "DropdownInput",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"text\""
+          },
+          {
+            "propName": "placeholder",
+            "valueExpression": "\"Search\""
+          },
+          {
+            "propName": "autoFocus",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "onKeyDown",
+            "valueExpression": "handleInputKeyDown"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "event => setSearchValue(event.target.value)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SelectDropdown",
+        "childComponent": "ClearIcon",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "type",
+            "valueExpression": "\"close\""
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "clearOptionValues"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SelectDropdown",
+        "childComponent": "Options",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "SelectDropdown",
+        "childComponent": "Option",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "data-select-option-value",
+            "valueExpression": "option.value"
+          },
+          {
+            "propName": "data-testid",
+            "valueExpression": "`select-option:${option.label}`"
+          },
+          {
+            "propName": "onMouseEnter",
+            "valueExpression": "handleOptionMouseEnter"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => selectOptionValue(option.value)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SelectDropdown",
+        "childComponent": "Option",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "data-create-option-label",
+            "valueExpression": "searchValue"
+          },
+          {
+            "propName": "onMouseEnter",
+            "valueExpression": "handleOptionMouseEnter"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => createOption(searchValue)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "SelectDropdown",
+        "childComponent": "OptionsNoResults",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

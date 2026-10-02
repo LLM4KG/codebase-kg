@@ -1,0 +1,110 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "ProjectBoardIssueDetailsDescription",
+        "childComponent": "Title",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsDescription",
+        "childComponent": "TextEditor",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "placeholder",
+            "valueExpression": "\"Describe the issue\""
+          },
+          {
+            "propName": "defaultValue",
+            "valueExpression": "description"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "setDescription"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsDescription",
+        "childComponent": "Actions",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsDescription",
+        "childComponent": "Button",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"primary\""
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "handleUpdate"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsDescription",
+        "childComponent": "Button",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "variant",
+            "valueExpression": "\"empty\""
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => setEditing(false)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsDescription",
+        "childComponent": "EmptyLabel",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "onClick",
+            "valueExpression": "() => setEditing(true)"
+          }
+        ]
+      },
+      {
+        "parentComponent": "ProjectBoardIssueDetailsDescription",
+        "childComponent": "TextEditedContent",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "content",
+            "valueExpression": "description"
+          },
+          {
+            "propName": "onClick",
+            "valueExpression": "() => setEditing(true)"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

@@ -1,0 +1,108 @@
+```text
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+=======
+import * as S from './style';
+
+const Cart = () => {
+  const { products, total, isOpen, openCart, closeCart, clearCart } =
+    useCart();
+
+  const handleCheckout = () => {
+    if (total.productQuantity) {
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+=======
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+            <S.CheckoutButton onClick={clearCart} title="Clear cart">
+              Clear cart
+            </S.CheckoutButton>
+          </S.CartFooter>
+        </S.CartContent>
+      )}
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+=======
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+=======
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+    updateCartTotal(updatedProducts);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+};
+=======
+    updateCartTotal(updatedProducts);
+  };
+
+  const clearCart = () => {
+    setProducts([]);
+    updateCartTotal([]);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+  };
+};
+>>>>>>> REPLACE
+```

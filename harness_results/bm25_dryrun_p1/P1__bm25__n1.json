@@ -1,0 +1,15 @@
+{
+  "task_id": "P1",
+  "candidate_id": "P1__bm25__n1",
+  "condition": "bm25",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 3869.892966002226,
+  "timeout_used_ms": 9805,
+  "stage_detail": null,
+  "apply_mode": "exact_unique",
+  "apply_reason": null
+}

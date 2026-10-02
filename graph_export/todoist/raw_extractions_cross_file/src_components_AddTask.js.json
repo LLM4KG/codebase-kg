@@ -1,0 +1,78 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "AddTask",
+        "childComponent": "ProjectOverlay",
+        "importSource": "./ProjectOverlay",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "setProject",
+            "valueExpression": "setProject"
+          },
+          {
+            "propName": "showProjectOverlay",
+            "valueExpression": "showProjectOverlay"
+          },
+          {
+            "propName": "setShowProjectOverlay",
+            "valueExpression": "setShowProjectOverlay"
+          }
+        ]
+      },
+      {
+        "parentComponent": "AddTask",
+        "childComponent": "TaskDate",
+        "importSource": "./TaskDate",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "setTaskDate",
+            "valueExpression": "setTaskDate"
+          },
+          {
+            "propName": "showTaskDate",
+            "valueExpression": "showTaskDate"
+          },
+          {
+            "propName": "setShowTaskDate",
+            "valueExpression": "setShowTaskDate"
+          }
+        ]
+      },
+      {
+        "parentComponent": "AddTask",
+        "childComponent": "FaRegListAlt",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "AddTask",
+        "childComponent": "FaRegCalendarAlt",
+        "importSource": "react-icons/fa",
+        "usage": "element",
+        "propsPassed": []
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": [
+      {
+        "consumerName": "AddTask",
+        "consumerType": "function_component",
+        "contextName": "useSelectedProjectValue",
+        "contextSource": "../context",
+        "consumptionMethod": "useContext"
+      }
+    ]
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

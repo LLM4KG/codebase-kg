@@ -1,0 +1,61 @@
+I need to see the existing code to make precise changes. Let me analyze the task and provide the solution based on typical patterns for such a codebase.
+
+```text
+src/hooks/useCart.ts
+<<<<<<< SEARCH
+  return {
+=======
+  const clearCart = () => {
+    setItems([]);
+  };
+
+  return {
+>>>>>>> REPLACE
+
+src/hooks/useCart.ts
+<<<<<<< SEARCH
+    return {
+    items,
+=======
+    return {
+    clearCart,
+    items,
+>>>>>>> REPLACE
+```
+
+Since I don't have the actual file contents, let me provide a more careful solution that covers the common patterns. Let me restructure my answer:
+
+```text
+src/hooks/useCart.ts
+<<<<<<< SEARCH
+  return {
+    items,
+=======
+  const clearCart = () => {
+    setItems([]);
+  };
+
+  return {
+    clearCart,
+    items,
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+  const { items, removeItem, updateQuantity, total, itemCount } = useCart();
+=======
+  const { items, removeItem, updateQuantity, total, itemCount, clearCart } = useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+        </div>
+      </footer>
+=======
+        </div>
+        <button onClick={clearCart} className="clear-cart-btn">
+          Clear cart
+        </button>
+      </footer>
+>>>>>>> REPLACE
+```

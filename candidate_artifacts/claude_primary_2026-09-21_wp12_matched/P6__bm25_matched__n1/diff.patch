@@ -1,0 +1,20 @@
+{
+  "format": "search_replace",
+  "edits": [
+    {
+      "path": "src/client/slices/category.ts",
+      "op": "replace",
+      "search": "      const categoryNames = new Map<string, string>()\n      state.categories.forEach(({ name }) => categoryNames.set(name, name))\n\n      // Make sure duplicate category is not added\n      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))\n",
+      "content": "      const categoryNames = new Map<string, string>()\n      state.categories.forEach(({ name }) => categoryNames.set(name.toLowerCase(), name))\n\n      // Make sure duplicate category is not added\n      const toAdd = payload.filter(({ name }) => !categoryNames.has(name.toLowerCase()))\n"
+    },
+    {
+      "path": "src/client/components/AppSidebar/CategoryList.tsx",
+      "op": "replace",
+      "search": "        categories.find((category) => category.name === tempName)\n",
+      "content": "        categories.find((category) => category.name.toLowerCase() === tempName.toLowerCase())\n"
+    }
+  ],
+  "elided": false,
+  "elision_marker": "",
+  "malformed_blocks": 0
+}

@@ -1,0 +1,71 @@
+{
+  "function_components": {
+    "components": []
+  },
+  "custom_hooks": {
+    "customHooks": []
+  },
+  "class_components": {
+    "classComponents": []
+  },
+  "props_and_handlers": {
+    "props": [],
+    "eventHandlers": []
+  },
+  "library_usage": {
+    "imports": [
+      {
+        "from": "react",
+        "symbols": [
+          "React"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-dom",
+        "symbols": [
+          "render"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-redux",
+        "symbols": [
+          "Provider"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "react-router-dom",
+        "symbols": [
+          "Router"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "redux-saga",
+        "symbols": [
+          "createSagaMiddleware"
+        ],
+        "hooks": []
+      },
+      {
+        "from": "@reduxjs/toolkit",
+        "symbols": [
+          "configureStore",
+          "getDefaultMiddleware"
+        ],
+        "hooks": []
+      }
+    ]
+  },
+  "state_function": {
+    "stateVariables": []
+  },
+  "state_class": {
+    "classStateVariables": []
+  },
+  "contexts": {
+    "contexts": []
+  }
+}

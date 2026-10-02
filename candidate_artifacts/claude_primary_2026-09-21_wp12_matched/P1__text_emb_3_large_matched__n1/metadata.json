@@ -1,0 +1,176 @@
+{
+  "candidate_id": "P1__text_emb_3_large_matched__n1",
+  "run_id": "claude_primary_2026-09-21_wp12_matched",
+  "run_name": "claude_primary",
+  "task_id": "P1",
+  "project_name": "react-shopping-cart",
+  "condition": "text_emb_3_large_matched",
+  "index": 1,
+  "model_id": "anthropic/claude-sonnet-4-6",
+  "stage": "test_pass",
+  "timestamp": "2026-09-21T04:08:06.709422+00:00",
+  "retrieval_token_count": 624,
+  "generator_usage": {
+    "input_tokens": 2191,
+    "output_tokens": 230
+  },
+  "generator_latency_ms": 4014.8669669997616,
+  "mock": false,
+  "output_format": "search_replace",
+  "apply_mode": "exact_unique",
+  "apply_reason": null,
+  "edit_count": 1,
+  "malformed_blocks": 0,
+  "elided": false,
+  "retrieval_metadata": {
+    "embedding_model": "text-embedding-3-large",
+    "cache_file": "embedding_cache/react-shopping-cart/text-embedding-3-large.jsonl",
+    "corpus_size": 55,
+    "ranked_top": [
+      {
+        "path": "src/contexts/cart-context/useCartProducts.ts",
+        "score": 0.606341
+      },
+      {
+        "path": "src/components/Cart/CartProducts/CartProduct/CartProduct.tsx",
+        "score": 0.596615
+      },
+      {
+        "path": "src/components/Cart/Cart.tsx",
+        "score": 0.541342
+      },
+      {
+        "path": "src/contexts/cart-context/useCartTotal.ts",
+        "score": 0.510843
+      },
+      {
+        "path": "src/components/Products/Product/Product.tsx",
+        "score": 0.508476
+      },
+      {
+        "path": "src/contexts/cart-context/useCart.ts",
+        "score": 0.49858
+      },
+      {
+        "path": "src/components/Cart/CartProducts/CartProducts.tsx",
+        "score": 0.493727
+      },
+      {
+        "path": "src/components/Cart/CartProducts/CartProduct/style.ts",
+        "score": 0.493235
+      },
+      {
+        "path": "src/components/Cart/CartProducts/CartProduct/index.ts",
+        "score": 0.492441
+      },
+      {
+        "path": "src/components/Cart/CartProducts/index.ts",
+        "score": 0.492229
+      },
+      {
+        "path": "src/utils/test/mocks/cart-products.ts",
+        "score": 0.453337
+      },
+      {
+        "path": "src/components/Cart/CartProducts/style.ts",
+        "score": 0.452474
+      },
+      {
+        "path": "src/utils/test/mocks/cart-total.ts",
+        "score": 0.443388
+      },
+      {
+        "path": "src/components/Cart/index.ts",
+        "score": 0.441041
+      },
+      {
+        "path": "src/utils/test/mocks/index.ts",
+        "score": 0.432507
+      },
+      {
+        "path": "src/models/index.ts",
+        "score": 0.431836
+      },
+      {
+        "path": "src/contexts/cart-context/CartContextProvider.tsx",
+        "score": 0.428121
+      },
+      {
+        "path": "src/components/Products/Product/index.tsx",
+        "score": 0.416591
+      },
+      {
+        "path": "src/components/Cart/style.ts",
+        "score": 0.415677
+      },
+      {
+        "path": "src/components/Products/Products.tsx",
+        "score": 0.405793
+      }
+    ],
+    "included_files": [
+      "src/contexts/cart-context/useCartProducts.ts",
+      "src/components/Cart/CartProducts/CartProduct/CartProduct.tsx",
+      "src/contexts/cart-context/useCart.ts",
+      "src/components/Cart/CartProducts/CartProduct/index.ts",
+      "src/components/Cart/CartProducts/index.ts",
+      "src/utils/test/mocks/cart-total.ts"
+    ],
+    "skipped_for_budget": [
+      "src/components/Cart/Cart.tsx",
+      "src/contexts/cart-context/useCartTotal.ts",
+      "src/components/Products/Product/Product.tsx",
+      "src/components/Cart/CartProducts/CartProducts.tsx",
+      "src/components/Cart/CartProducts/CartProduct/style.ts",
+      "src/utils/test/mocks/cart-products.ts",
+      "src/components/Cart/CartProducts/style.ts",
+      "src/components/Cart/index.ts",
+      "src/utils/test/mocks/index.ts",
+      "src/models/index.ts",
+      "src/contexts/cart-context/CartContextProvider.tsx",
+      "src/components/Products/Product/index.tsx",
+      "src/components/Cart/style.ts",
+      "src/components/Products/Products.tsx",
+      "src/components/Products/Product/style.ts",
+      "src/contexts/cart-context/index.ts",
+      "src/contexts/products-context/useProducts.tsx",
+      "src/components/Products/index.tsx",
+      "src/utils/test/mocks/products.ts",
+      "src/services/products.ts",
+      "src/contexts/products-context/index.ts",
+      "src/components/App/App.tsx",
+      "src/contexts/products-context/ProductsContextProvider.tsx",
+      "src/components/Filter/Filter.tsx",
+      "src/index.tsx",
+      "src/components/Products/style.ts",
+      "src/utils/formatPrice.ts",
+      "src/components/Github/GithubCorner/GithubCorner.tsx",
+      "src/commons/Checkbox/Checkbox.tsx",
+      "src/components/Github/GithubCorner/index.ts",
+      "src/components/Filter/index.ts",
+      "src/components/Github/GithubStarButton/GithubStarButton.tsx",
+      "src/components/App/index.ts",
+      "src/components/Recruiter/index.tsx",
+      "src/components/Github/GithubStarButton/index.ts",
+      "src/components/Loader/index.ts",
+      "src/commons/Checkbox/index.ts",
+      "src/components/Github/index.ts",
+      "src/commons/style/global-style.tsx",
+      "src/components/Github/GithubCorner/style.ts",
+      "src/components/Filter/style.ts",
+      "src/components/App/style.ts",
+      "src/commons/style/styled-components.ts",
+      "src/components/Recruiter/style.ts",
+      "src/utils/test/test-utils.tsx",
+      "src/components/Loader/style.ts",
+      "src/components/Loader/Loader.tsx",
+      "src/components/Recruiter/Recruiter.tsx",
+      "src/commons/style/theme.ts"
+    ],
+    "budget_tokens_used": 625,
+    "token_budget": 626,
+    "cache_hits": 56,
+    "api_calls": 0,
+    "api_prompt_tokens": 0
+  }
+}

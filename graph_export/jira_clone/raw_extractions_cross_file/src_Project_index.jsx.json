@@ -1,0 +1,264 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Project",
+        "childComponent": "PageLoader",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "PageError",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "ProjectPage",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": []
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "NavbarLeft",
+        "importSource": "./NavbarLeft",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "issueSearchModalOpen",
+            "valueExpression": "issueSearchModalHelpers.open"
+          },
+          {
+            "propName": "issueCreateModalOpen",
+            "valueExpression": "issueCreateModalHelpers.open"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "Sidebar",
+        "importSource": "./Sidebar",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "project",
+            "valueExpression": "project"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "Modal",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isOpen",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "testid",
+            "valueExpression": "\"modal:issue-search\""
+          },
+          {
+            "propName": "variant",
+            "valueExpression": "\"aside\""
+          },
+          {
+            "propName": "width",
+            "valueExpression": "600"
+          },
+          {
+            "propName": "onClose",
+            "valueExpression": "issueSearchModalHelpers.close"
+          },
+          {
+            "propName": "renderContent",
+            "valueExpression": "() => <IssueSearch project={project} />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "IssueSearch",
+        "importSource": "./IssueSearch",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "project",
+            "valueExpression": "project"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "Modal",
+        "importSource": "shared/components",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "isOpen",
+            "valueExpression": "true"
+          },
+          {
+            "propName": "testid",
+            "valueExpression": "\"modal:issue-create\""
+          },
+          {
+            "propName": "width",
+            "valueExpression": "800"
+          },
+          {
+            "propName": "withCloseIcon",
+            "valueExpression": "false"
+          },
+          {
+            "propName": "onClose",
+            "valueExpression": "issueCreateModalHelpers.close"
+          },
+          {
+            "propName": "renderContent",
+            "valueExpression": "modal => <IssueCreate project={project} fetchProject={fetchProject} onCreate={() => history.push(...)} modalClose={modal.close} />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "IssueCreate",
+        "importSource": "./IssueCreate",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "project",
+            "valueExpression": "project"
+          },
+          {
+            "propName": "fetchProject",
+            "valueExpression": "fetchProject"
+          },
+          {
+            "propName": "onCreate",
+            "valueExpression": "() => history.push(`${match.url}/board`)"
+          },
+          {
+            "propName": "modalClose",
+            "valueExpression": "modal.close"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "`${match.path}/board`"
+          },
+          {
+            "propName": "render",
+            "valueExpression": "() => <Board project={project} fetchProject={fetchProject} updateLocalProjectIssues={updateLocalProjectIssues} />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "Board",
+        "importSource": "./Board",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "project",
+            "valueExpression": "project"
+          },
+          {
+            "propName": "fetchProject",
+            "valueExpression": "fetchProject"
+          },
+          {
+            "propName": "updateLocalProjectIssues",
+            "valueExpression": "updateLocalProjectIssues"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "Route",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "path",
+            "valueExpression": "`${match.path}/settings`"
+          },
+          {
+            "propName": "render",
+            "valueExpression": "() => <ProjectSettings project={project} fetchProject={fetchProject} />"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "ProjectSettings",
+        "importSource": "./ProjectSettings",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "project",
+            "valueExpression": "project"
+          },
+          {
+            "propName": "fetchProject",
+            "valueExpression": "fetchProject"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Project",
+        "childComponent": "Redirect",
+        "importSource": "react-router-dom",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "to",
+            "valueExpression": "`${match.url}/board`"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": [
+      {
+        "routingComponent": "Project",
+        "targetComponent": "Board",
+        "importSource": "./Board",
+        "path": "${match.path}/board",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      },
+      {
+        "routingComponent": "Project",
+        "targetComponent": "ProjectSettings",
+        "importSource": "./ProjectSettings",
+        "path": "${match.path}/settings",
+        "isNested": false,
+        "isLazy": false,
+        "isProtected": false
+      }
+    ]
+  }
+}

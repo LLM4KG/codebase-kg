@@ -1,0 +1,216 @@
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+};
+=======
+import { useCartContext } from './CartContextProvider';
+import useCartProducts from './useCartProducts';
+import useCartTotal from './useCartTotal';
+
+const useCart = () => {
+  const { isOpen, setIsOpen } = useCartContext();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearProducts,
+  } = useCartProducts();
+  const { total, updateCartTotal, resetCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  const clearCart = () => {
+    clearProducts();
+    resetCartTotal();
+  };
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+};
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCartProducts.ts
+<<<<<<< SEARCH
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  };
+=======
+  const clearProducts = () => {
+    setProducts([]);
+  };
+
+  return {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearProducts,
+  };
+>>>>>>> REPLACE
+
+src/contexts/cart-context/useCartTotal.ts
+<<<<<<< SEARCH
+  return { total, updateCartTotal };
+=======
+  const resetCartTotal = () => {
+    setTotal(initialTotal);
+  };
+
+  return { total, updateCartTotal, resetCartTotal };
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+=======
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+=======
+            <S.CheckoutButton onClick={clearCart}>
+              Clear cart
+            </S.CheckoutButton>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+>>>>>>> REPLACE
+```
+
+Wait, I need to check the `useCartTotal.ts` and `useCartProducts.ts` files more carefully since they weren't provided. Let me revise to be safe with the SEARCH blocks for those files by using minimal unique context. Also, I need to check if `initialTotal` exists in `useCartTotal.ts`. Let me provide a safer approach:
+
+```text
+src/contexts/cart-context/useCart.ts
+<<<<<<< SEARCH
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+  } = useCartProducts();
+  const { total, updateCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    total,
+    updateCartTotal,
+  };
+=======
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearProducts,
+  } = useCartProducts();
+  const { total, updateCartTotal, resetCartTotal } = useCartTotal();
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  const clearCart = () => {
+    clearProducts();
+    resetCartTotal();
+  };
+
+  return {
+    isOpen,
+    openCart,
+    closeCart,
+    products,
+    addProduct,
+    removeProduct,
+    increaseProductQuantity,
+    decreaseProductQuantity,
+    clearCart,
+    total,
+    updateCartTotal,
+  };
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+  const { products, total, isOpen, openCart, closeCart } = useCart();
+=======
+  const { products, total, isOpen, openCart, closeCart, clearCart } = useCart();
+>>>>>>> REPLACE
+
+src/components/Cart/Cart.tsx
+<<<<<<< SEARCH
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+=======
+            <S.CheckoutButton onClick={clearCart}>
+              Clear cart
+            </S.CheckoutButton>
+            <S.CheckoutButton onClick={handleCheckout} autoFocus>
+              Checkout
+            </S.CheckoutButton>
+>>>>>>> REPLACE
+```

@@ -1,0 +1,116 @@
+Looking at the task, I need to:
+
+1. Add a `restoreAllTrash` reducer action to the note slice
+2. Add a "Restore All" button to the NoteList component that appears when viewing the Trash folder
+
+Let me first examine the NoteList component to understand how the "Empty Trash" button works and then add the restore functionality.
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const permanentlyEmptyTrash = createAction('notes/permanently-empty-trash')
+=======
+export const permanentlyEmptyTrash = createAction('notes/permanently-empty-trash')
+export const restoreAllTrash = createAction('notes/restore-all-trash')
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    case 'notes/permanently-empty-trash': {
+      state.notes = state.notes.filter((note) => !note.trash)
+      break
+    }
+=======
+    case 'notes/permanently-empty-trash': {
+      state.notes = state.notes.filter((note) => !note.trash)
+      break
+    }
+    case 'notes/restore-all-trash': {
+      state.notes = state.notes.map((note) =>
+        note.trash ? { ...note, trash: false } : note
+      )
+      break
+    }
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+=======
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+  restoreAllTrash,
+} from '@/slices/note'
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+=======
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            label="Empty"
+            handler={() => _permanentlyEmptyTrash()}
+          >
+            Empty Trash
+          </NoteListButton>
+        )}
+=======
+        {showEmptyTrash && (
+          <>
+            <NoteListButton
+              dataTestID={TestID.EMPTY_TRASH_BUTTON}
+              label="Empty"
+              handler={() => _permanentlyEmptyTrash()}
+            >
+              Empty Trash
+            </NoteListButton>
+            <NoteListButton
+              label="Restore"
+              handler={() => _restoreAllTrash()}
+            >
+              Restore All
+            </NoteListButton>
+          </>
+        )}
+>>>>>>> REPLACE
+```

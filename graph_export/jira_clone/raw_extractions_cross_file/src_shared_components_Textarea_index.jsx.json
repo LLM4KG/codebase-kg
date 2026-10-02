@@ -1,0 +1,52 @@
+{
+  "composition": {
+    "componentUsages": [
+      {
+        "parentComponent": "Textarea",
+        "childComponent": "StyledTextarea",
+        "importSource": "./Styles",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "className",
+            "valueExpression": "className"
+          },
+          {
+            "propName": "invalid",
+            "valueExpression": "invalid"
+          }
+        ]
+      },
+      {
+        "parentComponent": "Textarea",
+        "childComponent": "TextareaAutoSize",
+        "importSource": "react-textarea-autosize",
+        "usage": "element",
+        "propsPassed": [
+          {
+            "propName": "...textareaProps",
+            "valueExpression": "{...textareaProps}"
+          },
+          {
+            "propName": "onChange",
+            "valueExpression": "event => onChange(event.target.value, event)"
+          },
+          {
+            "propName": "inputRef",
+            "valueExpression": "ref || undefined"
+          }
+        ]
+      }
+    ]
+  },
+  "custom_hook_internal": {
+    "customHookUsages": []
+  },
+  "context_provider_consumer": {
+    "contextProviders": [],
+    "contextConsumers": []
+  },
+  "route_definitions": {
+    "routeDefinitions": []
+  }
+}

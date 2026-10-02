@@ -1,0 +1,114 @@
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+export const permanentlyEmptyTrash = createAction('notes/permanently-empty-trash')
+=======
+export const permanentlyEmptyTrash = createAction('notes/permanently-empty-trash')
+export const restoreAllTrash = createAction('notes/restore-all-trash')
+>>>>>>> REPLACE
+```
+
+```text
+src/client/slices/note.ts
+<<<<<<< SEARCH
+    .addCase(permanentlyEmptyTrash, (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    })
+=======
+    .addCase(permanentlyEmptyTrash, (state) => {
+      state.notes = state.notes.filter((note) => !note.trash)
+    })
+    .addCase(restoreAllTrash, (state) => {
+      state.notes = state.notes.map((note) => ({
+        ...note,
+        trash: note.trash ? false : note.trash,
+      }))
+    })
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+} from '@/slices/note'
+=======
+import {
+  permanentlyEmptyTrash,
+  pruneNotes,
+  updateActiveNote,
+  searchNotes,
+  updateSelectedNotes,
+  restoreAllTrash,
+} from '@/slices/note'
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+=======
+  const _permanentlyEmptyTrash = () => dispatch(permanentlyEmptyTrash())
+  const _pruneNotes = () => dispatch(pruneNotes())
+  const _updateActiveNote = (noteId: string, multiSelect: boolean) =>
+    dispatch(updateActiveNote({ noteId, multiSelect }))
+  const _searchNotes = debounceEvent(
+    (searchValue: string) => dispatch(searchNotes(searchValue)),
+    100
+  )
+  const _restoreAllTrash = () => dispatch(restoreAllTrash())
+>>>>>>> REPLACE
+```
+
+```text
+src/client/containers/NoteList.tsx
+<<<<<<< SEARCH
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <NoteListButton
+            dataTestID={TestID.EMPTY_TRASH_BUTTON}
+            label="Empty"
+            handler={() => _permanentlyEmptyTrash()}
+          >
+            Empty Trash
+          </NoteListButton>
+        )}
+      </div>
+=======
+      <div className="note-sidebar-header">
+        <SearchBar searchRef={searchRef} searchNotes={_searchNotes} />
+        {showEmptyTrash && (
+          <>
+            <NoteListButton
+              dataTestID={TestID.EMPTY_TRASH_BUTTON}
+              label="Empty"
+              handler={() => _permanentlyEmptyTrash()}
+            >
+              Empty Trash
+            </NoteListButton>
+            <NoteListButton
+              dataTestID="restore-all-trash-button"
+              label="Restore"
+              handler={() => _restoreAllTrash()}
+            >
+              Restore All
+            </NoteListButton>
+          </>
+        )}
+      </div>
+>>>>>>> REPLACE
+```

@@ -1,0 +1,63 @@
+Looking at the code, I need to find where the duplicate category check happens when adding and renaming categories. The context shows the slice, but the actual duplicate check logic must be in a component (likely `CategoryList`). Let me analyze what's provided.
+
+From the `importCategories` reducer, I can see it uses `categoryNames.has(name)` which is case-sensitive. But the task mentions `CategoryList` component handles the add/rename duplicate checks. Since that component isn't shown in context, I need to fix what I can see.
+
+The `importCategories` reducer has a case-sensitive duplicate check. I also need to fix the add and rename checks. Looking at the slice, `addCategory` doesn't check for duplicates - that check must be in the component. But I can fix `importCategories` here.
+
+For the component-level checks (add and rename), since `CategoryList` isn't provided in context but the task says to fix it, I'll need to update the slice's `importCategories` and also look for where the duplicate check happens in the component.
+
+Since only the slice is shown and the task mentions the duplicate check in `CategoryList`, let me fix what's visible - the `importCategories` reducer - and note that the add/rename checks in the component would need similar fixes. Based on the task, the fix should be in the slice or component logic.
+
+```text
+src/client/slices/category.ts
+<<<<<<< SEARCH
+      const categoryNames = new Map<string, string>()
+      state.categories.forEach(({ name }) => categoryNames.set(name, name))
+
+      // Make sure duplicate category is not added
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name))
+=======
+      const categoryNames = new Set<string>()
+      state.categories.forEach(({ name }) => categoryNames.add(name.toLowerCase()))
+
+      // Make sure duplicate category is not added (case-insensitive)
+      const toAdd = payload.filter(({ name }) => !categoryNames.has(name.toLowerCase()))
+>>>>>>> REPLACE
+
+src/client/slices/category.ts
+<<<<<<< SEARCH
+    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories.push(payload)
+    },
+=======
+    addCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      const isDuplicate = state.categories.some(
+        ({ name }) => name.toLowerCase() === payload.name.toLowerCase()
+      )
+      if (!isDuplicate) {
+        state.categories.push(payload)
+      }
+    },
+>>>>>>> REPLACE
+
+src/client/slices/category.ts
+<<<<<<< SEARCH
+    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      state.categories = state.categories.map((category) =>
+        category.id === payload.id ? { ...category, name: payload.name } : category
+      )
+    },
+=======
+    updateCategory: (state, { payload }: PayloadAction<CategoryItem>) => {
+      const isDuplicate = state.categories.some(
+        ({ name, id }) =>
+          name.toLowerCase() === payload.name.toLowerCase() && id !== payload.id
+      )
+      if (!isDuplicate) {
+        state.categories = state.categories.map((category) =>
+          category.id === payload.id ? { ...category, name: payload.name } : category
+        )
+      }
+    },
+>>>>>>> REPLACE
+```
