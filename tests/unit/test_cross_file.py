@@ -106,6 +106,34 @@ ReactDOM.render(
 """
         assert _extract_rendered_component(code) == "App"
 
+    def test_bare_render_import(self):
+        """`import { render } from 'react-dom'` — todoist's entrypoint."""
+        code = """
+import React from 'react';
+import { render } from 'react-dom';
+import { App } from './App';
+import './App.scss';
+
+render(<App />, document.getElementById('root'));
+"""
+        assert _extract_rendered_component(code) == "App"
+
+    def test_bare_hydrate_import(self):
+        code = """
+import { hydrate } from 'react-dom';
+import App from './App';
+
+hydrate(<App />, document.getElementById('root'));
+"""
+        assert _extract_rendered_component(code) == "App"
+
+    def test_identifier_ending_in_render_is_not_a_render_call(self):
+        code = """
+const rerender = (el) => el;
+rerender(<Widget />);
+"""
+        assert _extract_rendered_component(code) is None
+
     def test_no_render_call(self):
         code = """
 function MyComponent() {
@@ -130,3 +158,54 @@ root.render(
 );
 """
         assert _extract_rendered_component(code) == "App"
+
+
+class TestFindEntrypoint:
+    """Entrypoint search: only extracted files count, and a failed candidate is not final."""
+
+    RENDER = "import { render } from 'react-dom';\nrender(<App />, document.getElementById('root'));\n"
+
+    def _repo(self, tmp_path, files: dict[str, str], main: str | None = None):
+        import json as _json
+        (tmp_path / "package.json").write_text(_json.dumps({"main": main} if main else {}))
+        for rel, body in files.items():
+            (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+            (tmp_path / rel).write_text(body)
+        return tmp_path
+
+    def test_excluded_main_is_skipped(self, tmp_path):
+        """takenote: `main` is the excluded Express server; the client entry is elsewhere."""
+        from src.extraction.cross_file import find_entrypoint
+        repo = self._repo(tmp_path, {
+            "src/server/index.ts": "import express from 'express';\n",
+            "src/client/index.tsx": self.RENDER,
+            "src/client/App.tsx": "export const App = () => null;\n",
+        }, main="src/server/index.ts")
+        manifest = ["src/client/index.tsx", "src/client/App.tsx"]
+        assert find_entrypoint(repo, manifest) == ("src/client/index.tsx", "App")
+
+    def test_conventional_path_still_first(self, tmp_path):
+        from src.extraction.cross_file import find_entrypoint
+        repo = self._repo(tmp_path, {
+            "src/index.js": self.RENDER,
+            "src/other/index.js": self.RENDER.replace("App", "Other"),
+        })
+        assert find_entrypoint(repo, ["src/index.js", "src/other/index.js"]) == ("src/index.js", "App")
+
+    def test_candidate_without_render_falls_through(self, tmp_path):
+        from src.extraction.cross_file import find_entrypoint
+        repo = self._repo(tmp_path, {
+            "src/index.js": "export * from './lib';\n",
+            "src/app/main.jsx": self.RENDER,
+        })
+        assert find_entrypoint(repo, ["src/index.js", "src/app/main.jsx"]) == ("src/app/main.jsx", "App")
+
+    def test_no_render_anywhere(self, tmp_path):
+        from src.extraction.cross_file import find_entrypoint
+        repo = self._repo(tmp_path, {"src/lib.js": "export const x = 1;\n"})
+        assert find_entrypoint(repo, ["src/lib.js"]) is None
+
+    def test_without_manifest_keeps_old_behaviour(self, tmp_path):
+        from src.extraction.cross_file import find_entrypoint
+        repo = self._repo(tmp_path, {"src/index.jsx": self.RENDER})
+        assert find_entrypoint(repo) == ("src/index.jsx", "App")

@@ -113,6 +113,75 @@ def test_feature_addition_routing_and_missing_route(tmp_path):
     assert [c.name for c in cd.neighbor_components] == ["SearchBar"]
 
 
+def _feature_row(custom_hooks: list[dict]) -> dict:
+    return {
+        "componentName": "Cart",
+        "filePath": "src/Cart.tsx",
+        "componentType": "Function_Component",
+        "children": [{"name": "CartProducts", "filePath": "src/CartProducts.tsx"}],
+        "acceptedProps": EMPTY,
+        "libraryHooks": EMPTY,
+        "customHooks": custom_hooks,
+        "stateVars": EMPTY,
+        "consumedContexts": EMPTY,
+        "childConsumedContexts": EMPTY,
+    }
+
+
+def test_feature_addition_reads_one_hop_custom_hook_source(tmp_path):
+    """A feature often lands in the hook, not the component (P4: `clearCart` on
+    `useCart`). Name-only hook metadata left search_replace nothing to match."""
+    _write(tmp_path, "src/Cart.tsx", "const Cart = () => useCart();")
+    _write(tmp_path, "src/useCart.ts", "const useCart = () => ({ openCart });")
+    cd = assemble_context(
+        task_spec="Add clearCart.",
+        task_type="feature_addition",
+        rows=[_feature_row([{"name": "useCart", "filePath": "src/useCart.ts"}])],
+        repo_root=tmp_path,
+    )
+    hook = next(c for c in cd.target_components if c.name == "useCart")
+    assert hook.component_type == "Custom_Hook"
+    assert hook.file_path == "src/useCart.ts"
+    assert hook.source_code == "const useCart = () => ({ openCart });"
+
+
+def test_feature_addition_hook_source_deduplicated_per_file(tmp_path):
+    """Several hooks in one file (TakeNote's utils/hooks.ts) are read once."""
+    _write(tmp_path, "src/Cart.tsx", "x")
+    _write(tmp_path, "src/hooks.ts", "export const useKey = 1; export const useInterval = 2;")
+    hooks = [
+        {"name": "useKey", "filePath": "src/hooks.ts"},
+        {"name": "useInterval", "filePath": "src/hooks.ts"},
+    ]
+    cd = assemble_context(
+        task_spec="x", task_type="feature_addition",
+        rows=[_feature_row(hooks)], repo_root=tmp_path,
+    )
+    assert [c.file_path for c in cd.target_components] == ["src/Cart.tsx", "src/hooks.ts"]
+
+
+def test_feature_addition_hook_source_is_dropped_last(tmp_path):
+    """Truncation clears children metadata before the hook source, and never
+    the anchor source."""
+    _write(tmp_path, "src/Cart.tsx", "x")
+    _write(tmp_path, "src/useCart.ts", "word " * 6000)  # ~7.8k estimated tokens
+    row = _feature_row([{"name": "useCart", "filePath": "src/useCart.ts"}])
+
+    cd = assemble_context(
+        task_spec="x", task_type="feature_addition",
+        rows=[row], repo_root=tmp_path, token_budget=7000,
+    )
+    assert cd.neighbor_components == []
+    assert [c.file_path for c in cd.target_components] == ["src/Cart.tsx"]
+
+    cd = assemble_context(
+        task_spec="x", task_type="feature_addition",
+        rows=[row], repo_root=tmp_path, token_budget=20000,
+    )
+    assert [c.file_path for c in cd.target_components] == ["src/Cart.tsx", "src/useCart.ts"]
+    assert [c.name for c in cd.neighbor_components] == ["CartProducts"]
+
+
 def test_refactoring_caller_warning(tmp_path):
     _write(tmp_path, "src/NoteMenuBar.tsx", "export const NoteMenuBar = () => null;")
     rows = [{
