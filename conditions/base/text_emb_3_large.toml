@@ -1,7 +1,25 @@
-# Dense retrieval condition — OpenAI text-embedding-3-large
+# Dense retrieval condition — OpenAI text-embedding-3-large (IJCKG revision WP3).
+#
+# Implemented by src/retrieval/dense_retriever.py. Differs from the bm25 condition
+# only in how files are scored:
+#   corpus     bm25's: extract_files() with the project's exclude_paths, one chunk
+#              per file (every file is inside the model's 8,191-token input limit)
+#   text       documents "<path>\n<source>"; the query is the task spec verbatim
+#   scorer     cosine similarity on full-dimension embeddings; ties by path
+#   budget     the KG assembler's DEFAULT_TOKEN_BUDGET (7000) and _estimate_tokens,
+#              enforced on the rendered context
+#   fill       bm25's first-fit whole files; no zero-score cut, so it fills the budget
+#   cache      embedding_cache/<project>/<embedding_model>.jsonl, committed: OpenAI
+#              embeddings are not bit-reproducible, so the cache makes runs repeatable
+#
+# The embedder is fixed across generator models: the open-weight leg also needs
+# OPENAI_API_KEY for any cache miss.
+# Opt-in: not in the orchestrator's default CONDITIONS; run with
+# --conditions text_emb_3_large. Plan: docs/phase_2/ijckg-2026/wp3_dense_plan.md.
 condition_id = "text_emb_3_large"
 retriever = "text_emb_3_large"
 format_variant = "A"
 max_rounds = 1
 
 [retriever_params]
+embedding_model = "text-embedding-3-large"

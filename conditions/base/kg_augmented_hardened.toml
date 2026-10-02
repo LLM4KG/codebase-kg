@@ -1,0 +1,21 @@
+# KG-augmented retrieval with hardened anchor resolution (WP8, IJCKG 2026 revision).
+#
+# Identical to kg_augmented in every respect except `anchor_resolution`. It exists so
+# the hardening can be measured WITHOUT touching conditions/base/kg_augmented.toml,
+# which is the published WP5 arm — see docs/phase_2/ijckg-2026/wp8_anchor_extraction.md.
+#
+# "strict"   (kg_augmented, the default): the classifier's anchor names go straight into
+#            $anchorNames and are matched by exact, case-sensitive equality. A name the
+#            graph does not hold matches nothing, the query returns zero rows, and the
+#            rendered context is empty.
+# "hardened" (here): resolve first — exact, then case-insensitive, then a difflib
+#            near-miss — record every resolution and any absent route in the retrieval
+#            metadata, and when NOTHING resolves fall back to a bounded project overview
+#            with `anchor_fallback = true`, instead of rendering nothing.
+condition_id = "kg_augmented_hardened"
+retriever = "kg_augmented"
+format_variant = "A"
+max_rounds = 1
+
+[retriever_params]
+anchor_resolution = "hardened"

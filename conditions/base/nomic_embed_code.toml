@@ -1,4 +1,7 @@
 # Dense retrieval condition — Nomic code-specific embedding model
+#
+# Not run in the IJCKG 2026 revision leg (WP3 scope): no retriever implements it.
+# The leg reports five of the six designed conditions.
 condition_id = "nomic_embed_code"
 retriever = "nomic_embed_code"
 format_variant = "A"

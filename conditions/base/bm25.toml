@@ -1,4 +1,22 @@
-# BM25 condition — file-level chunks, rank_bm25 library
+# BM25 condition — file-level lexical baseline (IJCKG revision WP2).
+#
+# Condition 3 of the baseline ladder (phase2_design_summary.md): "file-level chunks
+# scored against the spec, top-k filling the budget". Implemented by
+# src/retrieval/bm25_retriever.py. No LLM call and no KG query, so retrieval-side
+# LLM cost is zero by construction.
+#
+# Fixed so it differs from kg_augmented only in *how files are chosen*:
+#   corpus     the KG's own file set: extract_files() with the project's
+#              exclude_paths from pipeline.toml, one chunk per file
+#   tokenizer  non-alphanumeric split + camelCase split, whole identifier kept,
+#              lowercased, small English stoplist; each document includes its path
+#   scorer     rank_bm25.BM25Okapi, library defaults (k1=1.5, b=0.75); ties by path
+#   budget     the KG assembler's DEFAULT_TOKEN_BUDGET (7000) and _estimate_tokens,
+#              enforced on the rendered context
+#   fill       whole files in rank order, first-fit; zero-score files excluded
+#
+# Opt-in: not in the orchestrator's default CONDITIONS; run with --conditions bm25.
+# Design and review log: docs/phase_2/ijckg-2026/wp2_bm25_plan.md.
 condition_id = "bm25"
 retriever = "bm25"
 format_variant = "A"
