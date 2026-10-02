@@ -1,0 +1,67 @@
+diff --git a/src/components/Cart/Cart.tsx b/src/components/Cart/Cart.tsx
+index 014a8b6..4a99f2d 100644
+--- a/src/components/Cart/Cart.tsx
++++ b/src/components/Cart/Cart.tsx
+@@ -6,7 +6,8 @@ import { useCart } from 'contexts/cart-context';
+ import * as S from './style';
+ 
+ const Cart = () => {
+-  const { products, total, isOpen, openCart, closeCart } = useCart();
++  const { products, total, isOpen, openCart, closeCart, clearCart } =
++    useCart();
+ 
+   const handleCheckout = () => {
+     if (total.productQuantity) {
+@@ -72,6 +73,9 @@ const Cart = () => {
+             <S.CheckoutButton onClick={handleCheckout} autoFocus>
+               Checkout
+             </S.CheckoutButton>
++            <S.CheckoutButton onClick={clearCart} title="Clear cart">
++              Clear cart
++            </S.CheckoutButton>
+           </S.CartFooter>
+         </S.CartContent>
+       )}
+diff --git a/src/contexts/cart-context/useCart.ts b/src/contexts/cart-context/useCart.ts
+index 7de623e..661093e 100644
+--- a/src/contexts/cart-context/useCart.ts
++++ b/src/contexts/cart-context/useCart.ts
+@@ -10,6 +10,7 @@ const useCart = () => {
+     removeProduct,
+     increaseProductQuantity,
+     decreaseProductQuantity,
++    clearCart,
+   } = useCartProducts();
+   const { total, updateCartTotal } = useCartTotal();
+ 
+@@ -25,6 +26,7 @@ const useCart = () => {
+     removeProduct,
+     increaseProductQuantity,
+     decreaseProductQuantity,
++    clearCart,
+     total,
+     updateCartTotal,
+   };
+diff --git a/src/contexts/cart-context/useCartProducts.ts b/src/contexts/cart-context/useCartProducts.ts
+index 661d692..e7995d5 100644
+--- a/src/contexts/cart-context/useCartProducts.ts
++++ b/src/contexts/cart-context/useCartProducts.ts
+@@ -66,12 +66,18 @@ const useCartProducts = () => {
+     updateCartTotal(updatedProducts);
+   };
+ 
++  const clearCart = () => {
++    setProducts([]);
++    updateCartTotal([]);
++  };
++
+   return {
+     products,
+     addProduct,
+     removeProduct,
+     increaseProductQuantity,
+     decreaseProductQuantity,
++    clearCart,
+   };
+ };
+ 

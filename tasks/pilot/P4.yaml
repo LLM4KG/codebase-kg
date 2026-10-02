@@ -1,0 +1,61 @@
+# Task P4 — Shopping Cart feature-addition: clearCart + "Clear cart" button
+#
+# Exercises: feature_addition Cypher template (anchor Cart; one-hop custom-hook
+#            source since 24796cc, so useCart.ts is in context but not
+#            useCartProducts.ts, two hops away, where the product state lives)
+# Project:   react-shopping-cart (context + hooks only, no Redux)
+# Statement names a path: no (component and hook names only; path policy,
+#            docs/decision-log.md 2026-09-18)
+
+task_id: P4
+project_id: react-shopping-cart
+project_repo: https://github.com/jeffersonRibeiro/react-shopping-cart
+git_commit: 9fa56244d0f0c0d363cab744a3305c50eabc08cb
+task_type: feature_addition
+
+spec: >
+  The shopping cart has no way to remove every product at once. Add a
+  `clearCart` function to the `useCart` hook that empties the cart and resets
+  its totals, and add a "Clear cart" button to the footer of the `Cart`
+  component that calls it.
+
+# Anchor components the classifier should extract from the spec.
+# Documentation only: no code reads this field (WP8, 2026-09-21).
+# Corrected 2026-09-21 (WP8): `useCart` added. The statement names the hook
+# explicitly ("add a `clearCart` function to the `useCart` hook") and the reference
+# patch edits useCart.ts, so listing `Cart` alone was incomplete; the classifier
+# extracted both on all 10 WP5 candidates.
+expected_anchors:
+  anchor_names:
+    - useCart            # the hook that gains clearCart
+    - Cart               # the component that gets the button
+  anchor_routes: []      # Shopping Cart has no React Router
+
+# Reference solution
+reference_patch: patches/P4.diff
+
+# Test file — placed in project before candidate diff is applied.
+# The harness runs: npm test -- --testPathPattern=P4_clear_cart
+test_files:
+  - src/contexts/cart-context/__tests__/P4_clear_cart.test.tsx
+
+# Files the reference patch modifies (for retrieval recall computation)
+files_modified:
+  - src/contexts/cart-context/useCartProducts.ts
+  - src/contexts/cart-context/useCart.ts
+  - src/components/Cart/Cart.tsx
+
+# Adversarial notes (for thesis documentation):
+# - Tests written BEFORE reference patch (adversarial mode).
+# - Tests go through useCart with the REAL CartProvider (no useContext mock,
+#   unlike P1), so they do not depend on where clearCart is implemented.
+# - Valid alternatives: clearCart in useCartProducts (reference) or directly
+#   in useCart via useCartContext; totals reset via updateCartTotal([]) or
+#   setTotal(<initial values>).
+# - Invalid alternative: emptying products without resetting totals — fails
+#   the totals test and violates the statement.
+# - Not tested: the "Clear cart" button (label, position). Same choice as P2,
+#   whose test covers the reducer only.
+# - Pre-registered expectation: KG-augmented is the hardest non-floor
+#   condition here, because the one hop it cannot follow is where the state
+#   lives (wp4_task_drafts.md).

@@ -1,0 +1,28 @@
+diff --git a/src/client/containers/CategoryList.tsx b/src/client/containers/CategoryList.tsx
+index d416dd9..f626239 100644
+--- a/src/client/containers/CategoryList.tsx
++++ b/src/client/containers/CategoryList.tsx
+@@ -105,7 +105,10 @@ export const CategoryList: React.FC = () => {
+ 
+     const category = { id: editingCategoryId, name: tempCategoryName.trim(), draggedOver: false }
+ 
+-    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
++    if (
++      categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) ||
++      category.name === ''
++    ) {
+       resetTempCategory()
+     } else {
+       _updateCategory(category)
+@@ -118,7 +121,10 @@ export const CategoryList: React.FC = () => {
+ 
+     const category = { id: uuid(), name: tempCategoryName.trim(), draggedOver: false }
+ 
+-    if (categories.find((cat) => cat.name === category.name) || category.name === '') {
++    if (
++      categories.find((cat) => cat.name.toLowerCase() === category.name.toLowerCase()) ||
++      category.name === ''
++    ) {
+       resetTempCategory()
+     } else {
+       _addCategory(category)

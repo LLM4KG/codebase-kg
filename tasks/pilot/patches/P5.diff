@@ -1,0 +1,74 @@
+diff --git a/src/components/Cart/CartProducts/CartProduct/CartProduct.tsx b/src/components/Cart/CartProducts/CartProduct/CartProduct.tsx
+index e524fba..ace55c9 100644
+--- a/src/components/Cart/CartProducts/CartProduct/CartProduct.tsx
++++ b/src/components/Cart/CartProducts/CartProduct/CartProduct.tsx
+@@ -1,16 +1,15 @@
+ import formatPrice from 'utils/formatPrice';
+ import { ICartProduct } from 'models';
+ 
+-import { useCart } from 'contexts/cart-context';
+-
+ import * as S from './style';
+ 
+ interface IProps {
+   product: ICartProduct;
++  onRemove: (product: ICartProduct) => void;
++  onIncrease: (product: ICartProduct) => void;
++  onDecrease: (product: ICartProduct) => void;
+ }
+-const CartProduct = ({ product }: IProps) => {
+-  const { removeProduct, increaseProductQuantity, decreaseProductQuantity } =
+-    useCart();
++const CartProduct = ({ product, onRemove, onIncrease, onDecrease }: IProps) => {
+   const {
+     sku,
+     title,
+@@ -22,9 +21,9 @@ const CartProduct = ({ product }: IProps) => {
+     quantity,
+   } = product;
+ 
+-  const handleRemoveProduct = () => removeProduct(product);
+-  const handleIncreaseProductQuantity = () => increaseProductQuantity(product);
+-  const handleDecreaseProductQuantity = () => decreaseProductQuantity(product);
++  const handleRemoveProduct = () => onRemove(product);
++  const handleIncreaseProductQuantity = () => onIncrease(product);
++  const handleDecreaseProductQuantity = () => onDecrease(product);
+ 
+   return (
+     <S.Container>
+diff --git a/src/components/Cart/CartProducts/CartProducts.tsx b/src/components/Cart/CartProducts/CartProducts.tsx
+index 8493a92..f2e592a 100644
+--- a/src/components/Cart/CartProducts/CartProducts.tsx
++++ b/src/components/Cart/CartProducts/CartProducts.tsx
+@@ -1,6 +1,8 @@
+ import { ICartProduct } from 'models';
+ import CartProduct from './CartProduct';
+ 
++import { useCart } from 'contexts/cart-context';
++
+ import * as S from './style';
+ 
+ interface IProps {
+@@ -8,10 +10,21 @@ interface IProps {
+ }
+ 
+ const CartProducts = ({ products }: IProps) => {
++  const { removeProduct, increaseProductQuantity, decreaseProductQuantity } =
++    useCart();
++
+   return (
+     <S.Container>
+       {products?.length ? (
+-        products.map((p) => <CartProduct product={p} key={p.sku} />)
++        products.map((p) => (
++          <CartProduct
++            product={p}
++            key={p.sku}
++            onRemove={removeProduct}
++            onIncrease={increaseProductQuantity}
++            onDecrease={decreaseProductQuantity}
++          />
++        ))
+       ) : (
+         <S.CartProductsEmpty>
+           Add some products in the cart <br />
