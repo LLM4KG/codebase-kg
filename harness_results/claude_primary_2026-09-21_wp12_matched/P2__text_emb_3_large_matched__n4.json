@@ -1,0 +1,15 @@
+{
+  "task_id": "P2",
+  "candidate_id": "P2__text_emb_3_large_matched__n4",
+  "condition": "text_emb_3_large_matched",
+  "model": "anthropic/claude-sonnet-4-6",
+  "stage": "diff_apply_fail",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "duration_ms": 1317.1583639996243,
+  "timeout_used_ms": 154105,
+  "stage_detail": "apply_edits: SEARCH text not found in src/client/containers/NoteList.tsx\n--- SEARCH ---\nimport { permanentlyEmptyTrash, pruneNotes, searchNotes } from '@/slices/note'",
+  "apply_mode": null,
+  "apply_reason": "search_not_found"
+}
