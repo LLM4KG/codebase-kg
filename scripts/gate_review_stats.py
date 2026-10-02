@@ -237,8 +237,9 @@ def call_decomposition(run: str) -> dict[str, Any]:
             slot = by_purpose[rec.get("call_purpose", "?")]
             slot["calls"] += 1
             usage = rec.get("usage") or {}
-            slot["input_tokens"] += usage.get("input_tokens", 0)
-            slot["output_tokens"] += usage.get("output_tokens", 0)
+            # Embedding calls (dense retriever) log output_tokens as None.
+            slot["input_tokens"] += usage.get("input_tokens") or 0
+            slot["output_tokens"] += usage.get("output_tokens") or 0
             providers[rec.get("openrouter_provider")] += 1
             models[rec.get("model_id")] += 1
             temperatures.add((rec.get("params") or {}).get("temperature"))
